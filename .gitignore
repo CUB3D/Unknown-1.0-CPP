@@ -29,3 +29,6 @@
 
 #visual studio files
 *.opensdf
+
+#other stuff
+Unknown++
