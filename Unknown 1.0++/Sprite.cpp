@@ -14,6 +14,9 @@ Unknown::Sprite::Sprite(const int x, const int y)
 	this->location.x = x;
 	this->location.y = y;
 
+	this->bounds.location.x = x;
+	this->bounds.location.y = y;
+
 	this->direction = Vector(0, 0);
 
 	this->setAngle(0);
@@ -51,6 +54,9 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 
 	this->location.x += velocity.x;
 	this->location.y += velocity.y;
+
+	this->bounds.location.x = this->location.x;
+	this->bounds.location.y = this->location.y;
 }
 
 // ImageSprite class
@@ -58,11 +64,13 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 Unknown::Graphics::ImageSprite::ImageSprite(const int x, const int y, Image* image) : Sprite(x, y)
 {
 	this->image = image;
+
+	this->bounds.size.width = image->textureRect.w;
+	this->bounds.size.height = image->textureRect.h;
 }
 
 Unknown::Graphics::ImageSprite::~ImageSprite()
 {
-	delete image;
 }
 
 void Unknown::Graphics::ImageSprite::render() const

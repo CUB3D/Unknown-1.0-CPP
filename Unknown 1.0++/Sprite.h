@@ -5,6 +5,7 @@
 #include "Image.h"
 #include "Vector.h"
 #include "Utils.h"
+#include "Physics.h"
 
 namespace Unknown
 {
@@ -16,6 +17,7 @@ namespace Unknown
 	public:
 		Point location;
 		Vector direction;
+		AABB bounds;
 
 		Sprite(const int x, const int y);
 		virtual ~Sprite();

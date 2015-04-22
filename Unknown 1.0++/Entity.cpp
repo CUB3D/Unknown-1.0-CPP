@@ -3,6 +3,7 @@
 
 #include "Sprite.h"
 #include "Unknown.h"
+#include "Physics.h"
 
 #include <iostream>
 
@@ -48,6 +49,19 @@ void Unknown::Entity::heal(const int health)
 const std::string Unknown::Entity::getEntityID() const
 {
 	return "Entity";
+}
+
+const std::vector<std::string> Unknown::Entity::getCollidableEntityIDS() const
+{
+	std::vector<std::string> ids;
+
+	ids.push_back("NULL");
+
+	return ids;
+}
+
+void Unknown::Entity::handleCollision(Entity* ent)
+{
 }
 
 // TwoStateEntity class
@@ -146,6 +160,33 @@ void Unknown::updateEntitys()
 	for (int i = 0; i < entitys.size(); i++)
 	{
 		entitys[i]->update();
+	}
+
+	// collision check
+
+	for (int i = 0; i < entitys.size(); i++)
+	{
+		Entity* ent1 = entitys[i];
+
+		if (ent1->isAlive())
+		{
+			for (int i = 0; i < entitys.size(); i++)
+			{
+				Entity* ent2 = entitys[i];
+
+				if (ent2->isAlive())
+				{
+					const std::vector<std::string> collidable = ent1->getCollidableEntityIDS();
+					if (std::find(collidable.begin(), collidable.end(), ent2->getEntityID()) != collidable.end())
+					{
+						if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
+						{
+							ent1->handleCollision(ent2);
+						}
+					}
+				}
+			}
+		}
 	}
 }
 

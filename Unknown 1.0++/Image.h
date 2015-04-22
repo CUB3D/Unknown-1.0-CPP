@@ -11,10 +11,11 @@ namespace Unknown
 		{
 		private:
 			SDL_Surface* texture;
-			SDL_Rect textureRect;
 			bool hasInit = false;
 
 		public:
+			SDL_Rect textureRect;
+
 			Image(const char* fileName);
 			~Image();
 

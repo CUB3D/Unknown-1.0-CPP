@@ -22,6 +22,10 @@ namespace Unknown
 		virtual void heal(const int health);
 
 		virtual const std::string getEntityID() const;
+
+		virtual const std::vector<std::string> getCollidableEntityIDS() const;
+
+		virtual void handleCollision(Entity* ent);
 	};
 
 	class TwoStateEntity : public Entity
