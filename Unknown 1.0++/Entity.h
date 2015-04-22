@@ -11,7 +11,7 @@ namespace Unknown
 		Sprite* sprite;
 
 		Entity(Sprite* sprite);
-		~Entity();
+		virtual ~Entity();
 
 		virtual void update();
 		virtual void render() const;
@@ -31,7 +31,6 @@ namespace Unknown
 
 	public:
 		TwoStateEntity(Sprite* sprite);
-		~TwoStateEntity();
 
 		virtual bool isAlive() const;
 		virtual void kill();
@@ -48,7 +47,6 @@ namespace Unknown
 	public:
 		HealthEntity(Sprite* sprite, int health);
 		HealthEntity(Sprite* sprite, int health, int maxHealth);
-		~HealthEntity();
 
 		virtual bool isAlive() const;
 		virtual void kill();
@@ -57,6 +55,17 @@ namespace Unknown
 
 		int getHealth() const;
 	};
+
+	extern std::vector<Entity*> entitys;
+	extern bool hasEntityInit;
+
+	void initEntitys();
+
+	void registerEntity(Entity* ent);
+	void updateEntitys();
+	void renderEntitys();
+
+#define UK_REGISTER_ENTITY(x) Unknown::registerEntity(x);
 }
 
 #endif

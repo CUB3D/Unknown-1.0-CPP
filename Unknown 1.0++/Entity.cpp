@@ -2,6 +2,9 @@
 #include "Entity.h"
 
 #include "Sprite.h"
+#include "Unknown.h"
+
+#include <iostream>
 
 Unknown::Entity::Entity(Sprite* sprite)
 {
@@ -11,7 +14,10 @@ Unknown::Entity::Entity(Sprite* sprite)
 
 Unknown::Entity::~Entity()
 {
-	delete sprite;
+	if (sprite)
+	{
+		//delete sprite;
+	}
 }
 
 void Unknown::Entity::update()
@@ -54,11 +60,6 @@ Unknown::TwoStateEntity::TwoStateEntity(Sprite* sprite) : Entity(sprite)
 {
 }
 
-Unknown::TwoStateEntity::~TwoStateEntity()
-{
-	delete sprite;
-}
-
 bool Unknown::TwoStateEntity::isAlive() const
 {
 	return this->alive;
@@ -94,11 +95,6 @@ Unknown::HealthEntity::HealthEntity(Sprite* sprite, int health, int maxHealth) :
 	this->maxHealth = maxHealth;
 }
 
-Unknown::HealthEntity::~HealthEntity()
-{
-	delete sprite;
-}
-
 bool Unknown::HealthEntity::isAlive() const
 {
 	return this->health > 0;
@@ -130,4 +126,37 @@ int Unknown::HealthEntity::getHealth() const
 	return this->health;
 }
 
+std::vector<Unknown::Entity*> Unknown::entitys;
+bool Unknown::hasEntityInit = false;
 
+void Unknown::initEntitys()
+{
+	registerHook(renderEntitys, HookType::RENDER);
+	registerHook(updateEntitys, HookType::UPDATE);
+
+	hasEntityInit = true;
+}
+
+void Unknown::registerEntity(Entity* ent)
+{
+	if (!hasEntityInit)
+		initEntitys();
+
+	entitys.push_back(ent);
+}
+
+void Unknown::updateEntitys()
+{
+	for (int i = 0; i < entitys.size(); i++)
+	{
+		entitys[i]->update();
+	}
+}
+
+void Unknown::renderEntitys()
+{
+	for (int i = 0; i < entitys.size(); i++)
+	{
+		entitys[i]->render();
+	}
+}

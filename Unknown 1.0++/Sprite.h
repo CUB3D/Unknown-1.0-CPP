@@ -18,6 +18,7 @@ namespace Unknown
 		Vector direction;
 
 		Sprite(const int x, const int y);
+		virtual ~Sprite();
 
 		virtual void render() const;
 
@@ -34,9 +35,10 @@ namespace Unknown
 		public:
 			Image* image;
 
-			virtual void render() const;
-
 			ImageSprite(const int x, const int y, Image* image);
+			virtual ~ImageSprite();
+
+			virtual void render() const;
 		};
 	}
 }

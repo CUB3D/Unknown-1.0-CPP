@@ -19,6 +19,10 @@ Unknown::Sprite::Sprite(const int x, const int y)
 	this->setAngle(0);
 }
 
+Unknown::Sprite::~Sprite()
+{
+}
+
 void Unknown::Sprite::render() const
 {
 	//NOOP
@@ -54,6 +58,11 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 Unknown::Graphics::ImageSprite::ImageSprite(const int x, const int y, Image* image) : Sprite(x, y)
 {
 	this->image = image;
+}
+
+Unknown::Graphics::ImageSprite::~ImageSprite()
+{
+	delete image;
 }
 
 void Unknown::Graphics::ImageSprite::render() const
