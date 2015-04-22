@@ -13,20 +13,65 @@
 #include "Sprite.h"
 #include "Input.h"
 #include "Entity.h"
+#include "Physics.h"
 
-using namespace Unknown::Graphics;
+Unknown::AABB a;
+Unknown::AABB b;
 
-ImageSprite tst(50, 50, new Image("Player.png"));
-
-Unknown::Entity* ent = new Unknown::TwoStateEntity(&tst);
+bool bb;
 
 void render()
 {
-	UK_REGISTER_ENTITY(ent);
+	if (bb)
+	{
+		UK_DRAW_RECT(a.location.x, a.location.y, a.size.width, a.size.height, UK_COLOUR_RGB(255, 0, 0));
+	}
+	else
+	{
+		UK_DRAW_RECT(a.location.x, a.location.y, a.size.width, a.size.height, UK_COLOUR_RGB(0, 255, 0));
+	}
+	UK_DRAW_RECT(b.location.x, b.location.y, b.size.width, b.size.height, UK_COLOUR_RGB(255, 255, 0));
 }
 
 void update()
 {
+	if (Unknown::getKeyState(Unknown::KeyCode::KEY_RIGHT))
+	{
+		a.location.x++;
+	}
+
+	if (Unknown::getKeyState(Unknown::KeyCode::KEY_LEFT))
+	{
+		a.location.x--;
+	}
+
+	if (Unknown::getKeyState(Unknown::KeyCode::KEY_UP))
+	{
+		a.location.y--;
+	}
+
+	if (Unknown::getKeyState(Unknown::KeyCode::KEY_DOWN))
+	{
+		a.location.y++;
+	}
+
+	bb = Unknown::isAABBIntersecting(a, b);
+
+}
+
+void init()
+{
+	a.location.x = 10;
+	a.location.y = 30;
+
+	a.size.width = 50;
+	a.size.height = 50;
+
+	b.location.x = 40;
+	b.location.y = 60;
+
+	b.size.width = 25;
+	b.size.height = 40;
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -35,6 +80,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	UK_RENDER(render);
 
 	UK_CREATE_WINDOW("Test", 100, 100);
+
+	init();
 
 	UK_INIT_GAME();
 

@@ -14,10 +14,6 @@ Unknown::Entity::Entity(Sprite* sprite)
 
 Unknown::Entity::~Entity()
 {
-	if (sprite)
-	{
-		//delete sprite;
-	}
 }
 
 void Unknown::Entity::update()
