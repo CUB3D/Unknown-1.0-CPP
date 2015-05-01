@@ -24,3 +24,21 @@ rapidjson::Document Unknown::readJSONFile(const char* filename)
 
 	return d;
 }
+
+rapidjson::Value* Unknown::getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc)
+{
+	if (doc.HasMember(name))
+	{
+		rapidjson::Value* val = &doc[name];
+
+		if (val->GetType() == type)
+		{
+			return val;
+		}
+		else
+		{
+			return NULL;
+		}
+	}
+	return NULL;
+}

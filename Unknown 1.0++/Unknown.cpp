@@ -48,38 +48,31 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 void Unknown::Unknown::createWindow()
 {
-	rapidjson::Document d = readJSONFile("Config.json");
-
-	int height = 512;
-	int width = 512;
-
+	int height = 0;
+	int width = 0;
 	std::string title;
 
-	rapidjson::Value& heightV = d["Height"];
+	rapidjson::Document doc = readJSONFile("Config.json");
 
-	rapidjson::Type heightT = heightV.GetType();
+	rapidjson::Value* heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
 
-	if (heightT == rapidjson::Type::kNumberType)
+	if (heightValue)
 	{
-		height = heightV.GetInt();
+		height = heightValue->GetInt();
 	}
 
-	rapidjson::Value& widthV = d["Height"];
+	rapidjson::Value* widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
 
-	rapidjson::Type widthT = widthV.GetType();
-
-	if (widthT == rapidjson::Type::kNumberType)
+	if (widthValue)
 	{
-		width = widthV.GetInt();
+		width = widthValue->GetInt();
 	}
 
-	rapidjson::Value& titleV = d["Title"];
+	rapidjson::Value* titleValue = getValue("Title", rapidjson::Type::kStringType, doc);
 
-	rapidjson::Type titleT = titleV.GetType();
-
-	if (titleT == rapidjson::Type::kStringType)
+	if (titleValue)
 	{
-		title = titleV.GetString();
+		title = titleValue->GetString();
 	}
 
 	createWindow(title.c_str(), width, height);

@@ -21,6 +21,8 @@ namespace Unknown
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);
+
+	::rapidjson::Value* getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc);
 }
 
 #endif
