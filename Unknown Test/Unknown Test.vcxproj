@@ -55,7 +55,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Development\c++\Libs\SDL2_Image\include;E:\Development\c++\Libs\SDL2\include;E:\Development\c++\Unknown 1.0++\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Development\c++\Libs\Rapid JSON\include;E:\Development\c++\Libs\SDL2_Image\include;E:\Development\c++\Libs\SDL2\include;E:\Development\c++\Unknown 1.0++\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -93,6 +93,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Unknown Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Config.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

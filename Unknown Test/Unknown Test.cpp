@@ -79,7 +79,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	UK_UPDATE(update);
 	UK_RENDER(render);
 
-	UK_CREATE_WINDOW("Test", 100, 100);
+	Unknown::getUnknown()->createWindow();
 
 	init();
 

@@ -40,6 +40,7 @@ namespace Unknown
 		Unknown();
 
 		void createWindow(const char* title, const int width, const int height);
+		void createWindow();
 
 		void initGameLoop();
 

@@ -9,6 +9,11 @@
 #include "UI2D.h"
 #include "Colour.h"
 
+#include <ios>
+#include <fstream>
+#include <string>
+#include "rapidjson\document.h"
+
 // unknown class
 
 Unknown::Unknown::Unknown()
@@ -39,6 +44,45 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = new Dimension { width, height };
+}
+
+void Unknown::Unknown::createWindow()
+{
+	rapidjson::Document d = readJSONFile("Config.json");
+
+	int height = 512;
+	int width = 512;
+
+	std::string title;
+
+	rapidjson::Value& heightV = d["Height"];
+
+	rapidjson::Type heightT = heightV.GetType();
+
+	if (heightT == rapidjson::Type::kNumberType)
+	{
+		height = heightV.GetInt();
+	}
+
+	rapidjson::Value& widthV = d["Height"];
+
+	rapidjson::Type widthT = widthV.GetType();
+
+	if (widthT == rapidjson::Type::kNumberType)
+	{
+		width = widthV.GetInt();
+	}
+
+	rapidjson::Value& titleV = d["Title"];
+
+	rapidjson::Type titleT = titleV.GetType();
+
+	if (titleT == rapidjson::Type::kStringType)
+	{
+		title = titleV.GetString();
+	}
+
+	createWindow(title.c_str(), width, height);
 }
 
 void Unknown::Unknown::initGameLoop()

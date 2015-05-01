@@ -3,6 +3,9 @@
 
 #define PI 3.14
 
+#include "rapidjson\document.h"
+
+
 namespace Unknown
 {
 	struct Dimension
@@ -16,6 +19,8 @@ namespace Unknown
 		double x;
 		double y;
 	};
+
+	::rapidjson::Document readJSONFile(const char* filename);
 }
 
 #endif
