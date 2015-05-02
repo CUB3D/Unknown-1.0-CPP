@@ -8,16 +8,18 @@
 
 namespace Unknown
 {
+	template < class T >
 	struct Dimension
 	{
-		double width;
-		double height;
+		T width;
+		T height;
 	};
 
+	template < class T >
 	struct Point
 	{
-		double x;
-		double y;
+		T x;
+		T y;
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);

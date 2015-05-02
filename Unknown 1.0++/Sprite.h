@@ -15,7 +15,7 @@ namespace Unknown
 		double angle;
 
 	public:
-		Point location;
+		Point<int> location;
 		Vector direction;
 		AABB bounds;
 

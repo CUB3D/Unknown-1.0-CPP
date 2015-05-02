@@ -12,7 +12,7 @@ namespace Unknown
 		int* data;
 
 	public:
-		const Dimension* mapSize;
+		const Dimension<int>* mapSize;
 
 		Map(const int width, const int height);
 		~Map();

@@ -5,7 +5,7 @@
 
 namespace Unknown
 {
-	class Vector : public Point
+	class Vector : public Point<double>
 	{
 	public:
 		Vector();

@@ -6,7 +6,7 @@
 
 Unknown::Map::Map(const int width, const int height)
 {
-	this->mapSize = new Dimension { width, height };
+	this->mapSize = new Dimension<int> { width, height };
 
 	this->map = new int[width * height];
 	this->data = new int[width * height];

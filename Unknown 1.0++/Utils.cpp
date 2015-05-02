@@ -16,8 +16,6 @@ rapidjson::Document Unknown::readJSONFile(const char* filename)
 	oss << config.rdbuf();
 	std::string doc = oss.str();
 
-	printf("DOC: %s\n", doc.c_str());
-
 	rapidjson::Document d;
 
 	d.Parse<0>(doc.c_str());

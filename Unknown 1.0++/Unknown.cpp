@@ -43,7 +43,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->tickSpeed = 1000.0 / fps;
 	this->startTime = SDL_GetTicks();
 
-	this->screenSize = new Dimension { width, height };
+	this->screenSize = new Dimension<int> { width, height };
 }
 
 void Unknown::Unknown::createWindow()

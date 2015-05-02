@@ -7,8 +7,8 @@ namespace Unknown
 {
 	struct AABB
 	{
-		Point location;
-		Dimension size;
+		Point<double> location;
+		Dimension<double> size;
 	};
 
 	bool isAABBIntersecting(AABB a, AABB b);

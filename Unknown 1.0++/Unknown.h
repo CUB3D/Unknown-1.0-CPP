@@ -30,7 +30,7 @@ namespace Unknown
 	public:
 		SDL_Window* window;
 		SDL_Surface* windowSurface;
-		const Dimension* screenSize;
+		const Dimension<int>* screenSize;
 
 		bool running = true;
 
