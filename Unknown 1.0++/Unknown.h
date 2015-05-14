@@ -58,9 +58,9 @@ namespace Unknown
 	extern Unknown* instance;
 
 	Unknown* getUnknown();
-
-	#define UK_CREATE_WINDOW(x, y, z) Unknown::getUnknown()->createWindow(x, y, z);
-	#define UK_INIT_GAME() Unknown::getUnknown()->initGameLoop()
+	
+	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
+	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()
 
 	enum HookType
 	{
@@ -71,6 +71,7 @@ namespace Unknown
 	extern std::map < HookType, std::vector < void(*) (void) > > hooks;
 
 	void registerHook(void(*hook) (void), HookType type);
+
 	#define UK_RENDER(x) Unknown::registerHook(x, Unknown::HookType::RENDER);
 	#define UK_UPDATE(x) Unknown::registerHook(x, Unknown::HookType::UPDATE);
 

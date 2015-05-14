@@ -49,3 +49,10 @@ const int* Unknown::Map::getData()
 {
 	return this->data;
 }
+
+int Unknown::Map::operator[](int pos)
+{
+	assert(pos > 0);
+	assert(pos < mapSize->height * mapSize->width);
+	return map[pos];
+}

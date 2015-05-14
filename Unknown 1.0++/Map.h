@@ -25,6 +25,8 @@ namespace Unknown
 
 		const int* getTileMap();
 		const int* getData();
+
+		int operator[](int pos);
 	};
 }
 

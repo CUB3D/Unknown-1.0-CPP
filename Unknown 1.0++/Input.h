@@ -3,6 +3,8 @@
 
 #define MAX_STATES 512
 
+#include "Utils.h"
+
 #include <vector>
 
 namespace Unknown
@@ -62,6 +64,7 @@ namespace Unknown
 		int SDLButtonCode;
 		MouseButton mouseButton;
 		InputState buttonState;
+		Point<int> location;
 	};
 
 	void postMouseEvent(MouseEvent evnt);

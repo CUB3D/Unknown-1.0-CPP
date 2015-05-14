@@ -144,6 +144,8 @@ void Unknown::Unknown::checkEvents()
 
 			evt.SDLButtonCode = evnt->button.button;
 			evt.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
+			evt.location.x = evnt->button.x;
+			evt.location.y = evnt->button.y;
 
 			postMouseEvent(evt);
 		}
