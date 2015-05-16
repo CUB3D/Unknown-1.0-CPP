@@ -23,7 +23,7 @@ namespace Unknown
 		Uint32 toSDLColour() const;
 	};
 
-	#define UK_COLOUR_RGBA(r, g, b, a) Unknown::Colour(r, g, b, c)
+	#define UK_COLOUR_RGBA(r, g, b, a) Unknown::Colour(r, g, b, a)
 	#define UK_COLOUR_RGB(r, g, b) Unknown::Colour(r, g, b)
 
 }
