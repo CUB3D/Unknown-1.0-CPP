@@ -4,6 +4,7 @@
 #include "Unknown.h"
 #include "Image.h"
 #include "Vector.h"
+#include "Utils.h"
 
 #include <Math.h>
 
@@ -59,6 +60,13 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 	this->bounds.location.y = this->location.y;
 }
 
+Unknown::Sprite* Unknown::Sprite::clone() const
+{
+	Sprite* returnValue = (Sprite*)malloc(sizeof Sprite);
+	memcpy(returnValue, this, sizeof *this);
+	return returnValue;
+}
+
 // ImageSprite class
 
 Unknown::Graphics::ImageSprite::ImageSprite(const int x, const int y, Image* image) : Sprite(x, y)
@@ -78,3 +86,9 @@ void Unknown::Graphics::ImageSprite::render() const
 	this->image->render(this->location.x, this->location.y);
 }
 
+Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
+{
+	Sprite* returnValue = (Sprite*)malloc(sizeof ImageSprite);
+	memcpy(returnValue, this, sizeof *this);
+	return returnValue;
+}

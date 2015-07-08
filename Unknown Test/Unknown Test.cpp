@@ -78,6 +78,7 @@ void init()
 	b.size.height = 40;
 
 	sprite = UK_LOAD_ENTITY("TestEntity.json");
+	sprite = UK_LOAD_ENTITY("TestEntity.json");
 }
 
 int _tmain(int argc, _TCHAR* argv[])

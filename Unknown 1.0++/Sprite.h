@@ -28,6 +28,8 @@ namespace Unknown
 		double getAngle();
 
 		void move(const int speedX, const int speedY);
+
+		virtual Sprite* clone() const;
 	};
 
 	namespace Graphics
@@ -41,6 +43,8 @@ namespace Unknown
 			virtual ~ImageSprite();
 
 			virtual void render() const;
+
+			virtual Sprite* clone() const;
 		};
 	}
 }

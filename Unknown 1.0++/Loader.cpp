@@ -6,8 +6,22 @@
 #include "Entity.h"
 #include "rapidjson\document.h"
 
+#include <map>
+
+#include <iostream>
+
+std::map<const char*, Unknown::Sprite*> Unknown::Loader::spritePool;
+std::map<const char*, Unknown::Entity*> Unknown::Loader::entityPool;
+
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 {
+	if (spritePool.find(name) != spritePool.end())
+	{
+		Sprite* spritePrefab = spritePool.find(name)->second;
+		Sprite* returnValue = spritePrefab->clone();
+		return returnValue;
+	}
+
 	int x;
 	int y;
 
@@ -54,11 +68,20 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 		}
 	}
 
+	spritePool[name] = sprite;
+
 	return sprite;
 }
 
 Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 {
+	if (entityPool.find(name) != entityPool.end())
+	{
+		Entity* entityPrefab = entityPool.find(name)->second;
+		Entity* returnValue = entityPrefab->clone();
+		return returnValue;
+	}
+
 	rapidjson::Document doc = readJSONFile(name);
 
 	rapidjson::Value* spriteValue = getValue("Sprite", rapidjson::Type::kStringType, doc);
@@ -121,6 +144,7 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 		}
 	}
 
+	entityPool[name] = entity;
 
 	return entity;
 }

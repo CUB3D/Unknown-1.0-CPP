@@ -64,6 +64,13 @@ void Unknown::Entity::handleCollision(Entity* ent)
 {
 }
 
+Unknown::Entity* Unknown::Entity::clone() const
+{
+	Entity* ent = (Entity*)malloc(sizeof Entity);
+	memcpy(ent, this, sizeof Entity);
+	return ent;
+}
+
 // TwoStateEntity class
 
 Unknown::TwoStateEntity::TwoStateEntity(Sprite* sprite) : Entity(sprite)
@@ -89,6 +96,13 @@ void Unknown::TwoStateEntity::heal(const int health)
 {
 	if (health > 0)
 		this->alive = true;
+}
+
+Unknown::Entity* Unknown::TwoStateEntity::clone() const
+{
+	TwoStateEntity* ent = (TwoStateEntity*)malloc(sizeof TwoStateEntity);
+	memcpy(ent, this, sizeof TwoStateEntity);
+	return ent;
 }
 
 // HealthEntity class
@@ -134,6 +148,13 @@ void Unknown::HealthEntity::heal(const int health)
 int Unknown::HealthEntity::getHealth() const
 {
 	return this->health;
+}
+
+Unknown::Entity* Unknown::HealthEntity::clone() const
+{
+	HealthEntity* ent = (HealthEntity*)malloc(sizeof HealthEntity);
+	memcpy(ent, this, sizeof HealthEntity);
+	return ent;
 }
 
 std::vector<Unknown::Entity*> Unknown::entitys;

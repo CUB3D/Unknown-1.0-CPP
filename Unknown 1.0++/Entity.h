@@ -26,6 +26,8 @@ namespace Unknown
 		virtual const std::vector<std::string> getCollidableEntityIDS() const;
 
 		virtual void handleCollision(Entity* ent);
+
+		virtual Entity* clone() const;
 	};
 
 	class TwoStateEntity : public Entity
@@ -40,6 +42,8 @@ namespace Unknown
 		virtual void kill();
 		virtual void damage(const int damage);
 		virtual void heal(const int health);
+
+		virtual Entity* clone() const;
 	};
 
 	class HealthEntity : public Entity
@@ -58,6 +62,8 @@ namespace Unknown
 		virtual void heal(const int health);
 
 		int getHealth() const;
+
+		virtual Entity* clone() const;
 	};
 
 	extern std::vector<Entity*> entitys;
