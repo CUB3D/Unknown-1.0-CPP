@@ -16,13 +16,20 @@ Unknown::Timer::Timer(const int seconds)
 bool Unknown::Timer::isTickComplete()
 {
 	if (lastTime == -1)
-		this->lastTime = SDL_GetTicks();
-
-	if (SDL_GetTicks() > this->lastTime + this->timerSpeed)
 	{
-		this->lastTime = SDL_GetTicks();
+		resetTimer();
+	}
+
+	if (SDL_GetTicks() >= this->lastTime + this->timerSpeed)
+	{
+		resetTimer();
 		return true;
 	}
 
 	return false;
+}
+
+void Unknown::Timer::resetTimer()
+{
+	this->lastTime = SDL_GetTicks();
 }

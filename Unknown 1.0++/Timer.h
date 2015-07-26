@@ -8,14 +8,16 @@ namespace Unknown
 		class Timer
 		{
 		private:
-			Uint32 timerSpeed;
 			Uint32 lastTime = -1;
 
 		public:
+			Uint32 timerSpeed;
+
 			Timer();
 			Timer(const int seconds);
 
 			bool isTickComplete();
+			void resetTimer();
 		};
 }
 

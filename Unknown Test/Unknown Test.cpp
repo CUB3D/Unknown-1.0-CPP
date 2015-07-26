@@ -15,65 +15,26 @@
 #include "Entity.h"
 #include "Physics.h"
 #include "Loader.h"
+#include "Animation.h"
 
-Unknown::AABB a;
-Unknown::AABB b;
+Unknown::Graphics::Image image("Test.bmp");
+Unknown::Graphics::Image player("Player.png");
 
-Unknown::Entity* sprite;
-
-bool bb;
+Unknown::Graphics::Animation animation;
 
 void render()
 {
-	if (bb)
-	{
-		UK_DRAW_RECT(a.location.x, a.location.y, a.size.width, a.size.height, UK_COLOUR_RGB(255, 0, 0));
-	}
-	else
-	{
-		UK_DRAW_RECT(a.location.x, a.location.y, a.size.width, a.size.height, UK_COLOUR_RGB(0, 255, 0));
-	}
-	UK_DRAW_RECT(b.location.x, b.location.y, b.size.width, b.size.height, UK_COLOUR_RGB(255, 255, 0));
+	animation.draw(20, 20);
 }
 
 void update()
 {
-	if (Unknown::getKeyState(Unknown::KeyCode::KEY_RIGHT))
-	{
-		a.location.x++;
-	}
-
-	if (Unknown::getKeyState(Unknown::KeyCode::KEY_LEFT))
-	{
-		a.location.x--;
-	}
-
-	if (Unknown::getKeyState(Unknown::KeyCode::KEY_UP))
-	{
-		a.location.y--;
-	}
-
-	if (Unknown::getKeyState(Unknown::KeyCode::KEY_DOWN))
-	{
-		a.location.y++;
-	}
-
-	bb = Unknown::isAABBIntersecting(a, b);
 }
 
 void init()
 {
-	a.location.x = 10;
-	a.location.y = 30;
-
-	a.size.width = 50;
-	a.size.height = 50;
-
-	b.location.x = 40;
-	b.location.y = 60;
-
-	b.size.width = 25;
-	b.size.height = 40;
+	animation.addFrame(&image, 1000);
+	animation.addFrame(&player, 100);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

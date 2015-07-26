@@ -77,6 +77,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Image.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Image.cpp" />
