@@ -34,8 +34,6 @@ void render()
 		UK_DRAW_RECT(a.location.x, a.location.y, a.size.width, a.size.height, UK_COLOUR_RGB(0, 255, 0));
 	}
 	UK_DRAW_RECT(b.location.x, b.location.y, b.size.width, b.size.height, UK_COLOUR_RGB(255, 255, 0));
-
-	sprite->render();
 }
 
 void update()
@@ -76,9 +74,6 @@ void init()
 
 	b.size.width = 25;
 	b.size.height = 40;
-
-	sprite = UK_LOAD_ENTITY("TestEntity.json");
-	sprite = UK_LOAD_ENTITY("TestEntity.json");
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -86,7 +81,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	UK_UPDATE(update);
 	UK_RENDER(render);
 
-	Unknown::getUnknown()->createWindow();
+	UK_CREATE_WINDOW();
 
 	init();
 

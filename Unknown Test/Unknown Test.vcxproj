@@ -41,9 +41,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <ExecutablePath>E:\Development\c++\Unknown 1.0++\Debug;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>B:\Visual Studio Libs\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Development\c++\Libs\SDL2_Image\lib\x86;E:\Development\c++\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <ExecutablePath>$(SolutionDir)\Unknown 1.0++\Debug;$(ExecutablePath)</ExecutablePath>
+    <IncludePath>$(SolutionDir)\Libs\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -55,12 +55,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Development\c++\Libs\Rapid JSON\include;E:\Development\c++\Libs\SDL2_Image\include;E:\Development\c++\Libs\SDL2\include;E:\Development\c++\Unknown 1.0++\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Libs\RapidJSON\include;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(SolutionDir)\Unknown++\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>E:\Development\c++\Unknown 1.0++\Debug\Unknown 1.0++.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Debug\Unknown 1.0++.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
