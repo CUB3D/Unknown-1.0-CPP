@@ -6,6 +6,7 @@
 #include "Vector.h"
 #include "Utils.h"
 #include "Physics.h"
+#include "Animation.h"
 
 namespace Unknown
 {
@@ -17,7 +18,7 @@ namespace Unknown
 	public:
 		Point<int> location;
 		Vector direction;
-		AABB bounds;
+		mutable AABB bounds;
 
 		Sprite(const int x, const int y);
 		virtual ~Sprite();
@@ -44,6 +45,17 @@ namespace Unknown
 
 			virtual void render() const;
 
+			virtual Sprite* clone() const;
+		};
+
+		class AnimatedSprite : public Sprite
+		{
+		public:
+			Animation* animation;
+
+			AnimatedSprite(const int x, const int y, Animation* animation);
+			virtual ~AnimatedSprite();
+			virtual void render() const;
 			virtual Sprite* clone() const;
 		};
 	}

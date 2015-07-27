@@ -22,9 +22,11 @@ Unknown::Graphics::Image player("Player.png");
 
 Unknown::Graphics::Animation animation;
 
+Unknown::Graphics::AnimatedSprite* animationTest;
+
 void render()
 {
-	animation.draw(20, 20);
+	animationTest->render();
 }
 
 void update()
@@ -33,8 +35,9 @@ void update()
 
 void init()
 {
-	animation.addFrame(&image, 1000);
-	animation.addFrame(&player, 100);
+	animation = UK_LOAD_ANIMATION("Animation.json");
+
+	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, &animation);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

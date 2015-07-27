@@ -148,3 +148,30 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 
 	return entity;
 }
+
+Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
+{
+	rapidjson::Document json = readJSONFile(name);
+
+	::Unknown::Graphics::Animation animation;
+
+	for (rapidjson::Value::MemberIterator member = json.MemberBegin(); member != json.MemberEnd(); member++)
+	{
+		if (member->name == "Frame")
+		{
+			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
+			Graphics::Image* image = new Graphics::Image(imageLocation.c_str());
+			
+			int delay = member->value.FindMember("Delay")->value.GetInt();
+
+			::Unknown::Graphics::AnimationFrame animationFrame;
+
+			animationFrame.delayms = delay;
+			animationFrame.frameImage = image;
+
+			animation.addFrame(animationFrame);
+		}
+	}
+
+	return animation;
+}

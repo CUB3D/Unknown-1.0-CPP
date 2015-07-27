@@ -92,3 +92,37 @@ Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
 	memcpy(returnValue, this, sizeof *this);
 	return returnValue;
 }
+
+// AnimatedSprite class
+
+Unknown::Graphics::AnimatedSprite::AnimatedSprite(const int x, const int y, Animation* animation) : Sprite(x, y)
+{
+	this->animation = animation;
+
+	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
+	
+	this->bounds.size.width = frame.frameImage->textureRect.w;
+	this->bounds.size.height = frame.frameImage->textureRect.h;
+}
+
+Unknown::Graphics::AnimatedSprite::~AnimatedSprite()
+{
+	// NOOP
+}
+
+void Unknown::Graphics::AnimatedSprite::render() const
+{
+	this->animation->draw(this->location.x, this->location.y);
+
+	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
+
+	this->bounds.size.width = frame.frameImage->textureRect.w;
+	this->bounds.size.height = frame.frameImage->textureRect.h;
+}
+
+Unknown::Sprite* Unknown::Graphics::AnimatedSprite::clone() const
+{
+	Sprite* ret = (Sprite*)malloc(sizeof AnimatedSprite);
+	memcpy(ret, this, sizeof *this);
+	return ret;
+}

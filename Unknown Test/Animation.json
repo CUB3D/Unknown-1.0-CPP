@@ -1,0 +1,10 @@
+{
+	"Frame": {
+		"Image":"Test.bmp",
+		"Delay":1000
+	},
+	"Frame": {
+		"Image":"Player.png",
+		"Delay":100
+	}
+}
