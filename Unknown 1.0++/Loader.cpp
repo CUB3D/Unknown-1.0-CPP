@@ -162,7 +162,14 @@ Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
 			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
 			Graphics::Image* image = new Graphics::Image(imageLocation.c_str());
 			
-			int delay = member->value.FindMember("Delay")->value.GetInt();
+			rapidjson::Value::MemberIterator delayMemeber = member->value.FindMember("Delay");
+
+			int delay = 0;
+
+			if (delayMemeber != member->value.MemberEnd())
+			{
+				delay = delayMemeber->value.GetInt();
+			}
 
 			::Unknown::Graphics::AnimationFrame animationFrame;
 
@@ -170,6 +177,18 @@ Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
 			animationFrame.frameImage = image;
 
 			animation.addFrame(animationFrame);
+		}
+	}
+
+	rapidjson::Value::MemberIterator overallDelayMember = json.FindMember("Delay");
+
+	if (overallDelayMember != json.MemberEnd())
+	{
+		int overallDelay = overallDelayMember->value.GetInt();
+
+		for (int i = 0; i < animation.frames.size(); i++)
+		{
+			animation.frames[i].delayms = overallDelay;
 		}
 	}
 
