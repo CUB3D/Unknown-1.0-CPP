@@ -65,6 +65,20 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 					sprite = new Graphics::ImageSprite(x, y, image);
 				}
 			}
+			else
+			{
+				if (type == "Animated")
+				{
+					rapidjson::Value* animationLocation = getValue("Animation", rapidjson::kStringType, doc);
+
+					if (animationLocation)
+					{
+						Graphics::Animation* animation = UK_LOAD_ANIMATION(animationLocation->GetString());
+
+						sprite = new Graphics::AnimatedSprite(x, y, animation);
+					}
+				}
+			}
 		}
 	}
 
@@ -149,11 +163,11 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 	return entity;
 }
 
-Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
+Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 {
 	rapidjson::Document json = readJSONFile(name);
 
-	::Unknown::Graphics::Animation animation;
+	::Unknown::Graphics::Animation* animation = new ::Unknown::Graphics::Animation();
 
 	for (rapidjson::Value::MemberIterator member = json.MemberBegin(); member != json.MemberEnd(); member++)
 	{
@@ -176,7 +190,7 @@ Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
 			animationFrame.delayms = delay;
 			animationFrame.frameImage = image;
 
-			animation.addFrame(animationFrame);
+			animation->addFrame(animationFrame);
 		}
 	}
 
@@ -186,9 +200,9 @@ Unknown::Graphics::Animation Unknown::Loader::loadAnimation(const char* name)
 	{
 		int overallDelay = overallDelayMember->value.GetInt();
 
-		for (int i = 0; i < animation.frames.size(); i++)
+		for (int i = 0; i < animation->frames.size(); i++)
 		{
-			animation.frames[i].delayms = overallDelay;
+			animation->frames[i].delayms = overallDelay;
 		}
 	}
 

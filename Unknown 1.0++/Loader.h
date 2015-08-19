@@ -15,11 +15,11 @@ namespace Unknown
 
 		::Unknown::Sprite* loadSprite(const char* name);
 		::Unknown::Entity* loadEntity(const char* name);
-		::Unknown::Graphics::Animation loadAnimation(const char* name);
+		::Unknown::Graphics::Animation* loadAnimation(const char* name);
 
-		#define UK_LOAD_SPRITE(x) ::Unknown::Loader::loadSprite(x);
-		#define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x);
-		#define UK_LOAD_ANIMATION(x) ::Unknown::Loader::loadAnimation(x);
+		#define UK_LOAD_SPRITE(x) ::Unknown::Loader::loadSprite(x)
+		#define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x)
+		#define UK_LOAD_ANIMATION(x) ::Unknown::Loader::loadAnimation(x)
 	}
 }
 
