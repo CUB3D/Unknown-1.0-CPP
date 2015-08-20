@@ -162,14 +162,15 @@ void Unknown::Unknown::checkEvents()
 
 void Unknown::Unknown::clearScreen()
 {
-	Graphics::drawRect(0, 0, (int)screenSize->width, (int)screenSize->height, Colour(0, 0, 0));
+	SDL_RenderClear(this->windowRenderer);
 }
 
 void Unknown::Unknown::quit(const int exitCode)
 {
+	SDL_DestroyRenderer(this->windowRenderer);
+	this->windowRenderer = NULL;
 	SDL_DestroyWindow(this->window);
 	this->window = NULL;
-	this->windowSurface = NULL;
 
 	SDL_Quit();
 
@@ -188,7 +189,7 @@ void Unknown::Unknown::render()
 
 void Unknown::Unknown::updateWindow()
 {
-	SDL_UpdateWindowSurface(this->window);
+	SDL_RenderPresent(this->windowRenderer);
 }
 
 Unknown::Unknown* Unknown::instance;

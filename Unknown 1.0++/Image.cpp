@@ -12,18 +12,20 @@
 Unknown::Graphics::Image::Image(const char* fileName)
 {
 	this->imageSurface = IMG_Load(fileName);
-
-	if (!imageSurface)
-	{
-		//error
-	}
 }
 
 Unknown::Graphics::Image::~Image()
 {
-	if (this->texture)
+	if (this->imageSurface)
 	{
-		SDL_FreeSurface(this->texture);
+		SDL_FreeSurface(this->imageSurface);
+		this->imageSurface = NULL;
+	}
+
+	if (this->imageTexture)
+	{
+		SDL_DestroyTexture(this->imageTexture);
+		this->imageTexture = NULL;
 	}
 }
 
@@ -31,33 +33,26 @@ void Unknown::Graphics::Image::init()
 {
 	Unknown* uk = getUnknown();
 
-	this->imageTexture = SDL_CreateTextureFromSurface(uk->windowRenderer, this->imageSurface);
-
-	if (!imageTexture)
-	{
-		//Error
-	}
-
-	SDL_FreeSurface(this->imageSurface);
-
-	if (!texture)
+	if (!imageSurface)
 	{
 		printf("Error: failed to load image, %s\n", IMG_GetError());
 		uk->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
 	}
 
-	this->texture = SDL_ConvertSurface(this->texture, uk->windowSurface->format, NULL);
+	this->imageTexture = SDL_CreateTextureFromSurface(uk->windowRenderer, this->imageSurface);
 
-	if (!this->texture)
+	if (!imageTexture)
 	{
-		printf("Error: failed to convert image, %s/n", SDL_GetError());
-		uk->quit(ErrorCodes::SDL_IMAGE_CONVERT_FAIL);
+		printf("Error: failed to create texture, %s\n", IMG_GetError());
+		uk->quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
 	}
 
 	this->textureRect.x = 0;
 	this->textureRect.y = 0;
-	this->textureRect.w = this->texture->w;
-	this->textureRect.h = this->texture->h;
+	this->textureRect.w = this->imageSurface->w;
+	this->textureRect.h = this->imageSurface->h;
+
+	SDL_FreeSurface(this->imageSurface);
 
 	this->hasInit = true;
 }
@@ -74,5 +69,5 @@ void Unknown::Graphics::Image::render(const int x, const int y)
 	this->textureRect.x = x;
 	this->textureRect.y = y;
 
-	SDL_BlitSurface(this->texture, NULL, uk->windowSurface, &textureRect);
+	SDL_RenderCopy(uk->windowRenderer, this->imageTexture, NULL, NULL); //May need to change second null
 }

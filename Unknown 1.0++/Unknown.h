@@ -17,7 +17,7 @@ namespace Unknown
 		SDL_WINDOW_RENDERER_CREATION_FAIL = -12,
 		SDL_RENDER_RECT_FAIL = -20,
 		SDL_IMAGE_LOAD_FAIL = -21,
-		SDL_IMAGE_CONVERT_FAIL = -22
+		SDL_IMAGE_TEXTURE_CREATE_FAIL = -22,
 	};
 
 	class Unknown
@@ -29,6 +29,7 @@ namespace Unknown
 		Timer fpsCounter;
 
 	public:
+		SDL_Surface* s;
 		SDL_Window* window;
 		SDL_Renderer* windowRenderer;
 		const Dimension<int>* screenSize;

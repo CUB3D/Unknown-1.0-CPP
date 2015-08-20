@@ -2,9 +2,9 @@
 #include "UI2D.h"
 
 #include <SDL.h>
-#include "Unknown.h"
-#include <iostream>
+#include <SDL_image.h>
 #include "Colour.h"
+#include "Unknown.h"
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour colour)
 {
@@ -17,7 +17,7 @@ void Unknown::Graphics::drawRect(const int x, const int y, const int width, cons
 	rect.w = width;
 	rect.h = height;
 
-	int i = SDL_FillRect(uk->windowSurface, &rect, colour.toSDLColour());
+	int i = SDL_FillRect(SDL_GetWindowSurface(uk->window), &rect, colour.toSDLColour());
 
 	if (i != 0)
 	{
