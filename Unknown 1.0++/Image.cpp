@@ -16,12 +16,6 @@ Unknown::Graphics::Image::Image(const char* fileName)
 
 Unknown::Graphics::Image::~Image()
 {
-	if (this->imageSurface)
-	{
-		SDL_FreeSurface(this->imageSurface);
-		this->imageSurface = NULL;
-	}
-
 	if (this->imageTexture)
 	{
 		SDL_DestroyTexture(this->imageTexture);
@@ -53,6 +47,7 @@ void Unknown::Graphics::Image::init()
 	this->textureRect.h = this->imageSurface->h;
 
 	SDL_FreeSurface(this->imageSurface);
+	this->imageSurface = NULL;
 
 	this->hasInit = true;
 }
@@ -69,5 +64,5 @@ void Unknown::Graphics::Image::render(const int x, const int y)
 	this->textureRect.x = x;
 	this->textureRect.y = y;
 
-	SDL_RenderCopy(uk->windowRenderer, this->imageTexture, NULL, &this->textureRect); //May need to change second null
+	SDL_RenderCopy(uk->windowRenderer, this->imageTexture, NULL, &this->textureRect);
 }

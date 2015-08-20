@@ -44,7 +44,13 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
-	SDL_SetRenderDrawColor(this->windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF); // White
+	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
+
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+	{
+		printf("Error: SDL failed to initalize PNG loading, %s\n", IMG_GetError());
+		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
+	}
 
 	int fps = 60;
 

@@ -27,6 +27,9 @@ Unknown::Graphics::AnimatedSprite* animationTest;
 void render()
 {
 	animationTest->render();
+
+	UK_DRAW_RECT(100, 100, 100, 100, Unknown::Colour::RED);
+	//player.render(100, 100);
 }
 
 void update()
@@ -35,7 +38,10 @@ void update()
 
 void init()
 {
-	animation = UK_LOAD_ANIMATION("Animation.json");
+	animation = new Unknown::Graphics::Animation();
+
+	animation->addFrame(&image, 1000);
+	animation->addFrame(&player, 1000);
 
 	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, animation);
 }
