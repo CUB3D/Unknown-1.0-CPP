@@ -20,7 +20,7 @@
 Unknown::Graphics::Image image("Test.bmp");
 Unknown::Graphics::Image player("Player.png");
 
-Unknown::Graphics::Animation animation;
+Unknown::Graphics::Animation* animation;
 
 Unknown::Graphics::AnimatedSprite* animationTest;
 
@@ -37,7 +37,7 @@ void init()
 {
 	animation = UK_LOAD_ANIMATION("Animation.json");
 
-	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, &animation);
+	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, animation);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

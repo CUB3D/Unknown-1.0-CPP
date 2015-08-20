@@ -12,11 +12,12 @@ namespace Unknown
 {
 	enum ErrorCodes
 	{
-		SDL_INITIALIZATION_FAIL = -1,
-		SDL_WINDOW_CREATION_FAIL = -2,
-		SDL_RENDER_RECT_FAIL = -3,
-		SDL_IMAGE_LOAD_FAIL = -4,
-		SDL_IMAGE_CONVERT_FAIL = -5
+		SDL_INITIALIZATION_FAIL = -10,
+		SDL_WINDOW_CREATION_FAIL = -11,
+		SDL_WINDOW_RENDERER_CREATION_FAIL = -12,
+		SDL_RENDER_RECT_FAIL = -20,
+		SDL_IMAGE_LOAD_FAIL = -21,
+		SDL_IMAGE_CONVERT_FAIL = -22
 	};
 
 	class Unknown
@@ -29,7 +30,7 @@ namespace Unknown
 
 	public:
 		SDL_Window* window;
-		SDL_Surface* windowSurface;
+		SDL_Renderer* windowRenderer;
 		const Dimension<int>* screenSize;
 
 		bool running = true;

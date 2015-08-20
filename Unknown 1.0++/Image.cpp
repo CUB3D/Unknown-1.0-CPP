@@ -11,7 +11,12 @@
 
 Unknown::Graphics::Image::Image(const char* fileName)
 {
-	this->texture = IMG_Load(fileName);
+	this->imageSurface = IMG_Load(fileName);
+
+	if (!imageSurface)
+	{
+		//error
+	}
 }
 
 Unknown::Graphics::Image::~Image()
@@ -26,7 +31,16 @@ void Unknown::Graphics::Image::init()
 {
 	Unknown* uk = getUnknown();
 
-	if (!this->texture)
+	this->imageTexture = SDL_CreateTextureFromSurface(uk->windowRenderer, this->imageSurface);
+
+	if (!imageTexture)
+	{
+		//Error
+	}
+
+	SDL_FreeSurface(this->imageSurface);
+
+	if (!texture)
 	{
 		printf("Error: failed to load image, %s\n", IMG_GetError());
 		uk->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);

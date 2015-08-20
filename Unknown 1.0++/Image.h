@@ -10,7 +10,8 @@ namespace Unknown
 		class Image
 		{
 		private:
-			SDL_Surface* texture;
+			SDL_Surface* imageSurface;
+			SDL_Texture* imageTexture;
 			bool hasInit = false;
 
 		public:

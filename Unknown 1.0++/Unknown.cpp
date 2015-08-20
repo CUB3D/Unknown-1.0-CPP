@@ -30,13 +30,21 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
 
-	if (window == NULL)
+	if (!window)
 	{
 		printf("Error: SDL failed to create a window, %s\n", SDL_GetError());
 		quit(ErrorCodes::SDL_WINDOW_CREATION_FAIL);
 	}
 
-	this->windowSurface = SDL_GetWindowSurface(this->window);
+	this->windowRenderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+
+	if (!windowRenderer)
+	{
+		printf("Error: SDL failed to create renderer, %s\n", SDL_GetError());
+		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
+	}
+
+	SDL_SetRenderDrawColor(this->windowRenderer, 0xFF, 0xFF, 0xFF, 0xFF); // White
 
 	int fps = 60;
 
