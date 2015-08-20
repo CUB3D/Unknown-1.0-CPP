@@ -28,7 +28,9 @@ void render()
 {
 	animationTest->render();
 
+	SDL_SetRenderDrawColor(Unknown::getUnknown()->windowRenderer, 0xff, 0xff, 00, 0xFF);
 	UK_DRAW_RECT(100, 100, 100, 100, Unknown::Colour::RED);
+	SDL_SetRenderDrawColor(Unknown::getUnknown()->windowRenderer, 00, 00, 00, 00);
 	//player.render(100, 100);
 }
 
