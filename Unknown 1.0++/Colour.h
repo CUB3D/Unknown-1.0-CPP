@@ -9,15 +9,15 @@ namespace Unknown
 {
 	class Colour
 	{
-	private:
-		int red;
-		int green;
-		int blue;
-		int alpha;
 	public:
 		static Colour RED;
 		static Colour GREEN;
 		static Colour BLUE;
+
+		const int red;
+		const int green;
+		const int blue;
+		const int alpha;
 
 		Colour(const int red, const int green, const int blue, const int alpha);
 		Colour(const int red, const int green, const int blue);

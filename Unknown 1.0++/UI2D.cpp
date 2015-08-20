@@ -32,3 +32,10 @@ void Unknown::Graphics::drawSquare(const int x, const int y, const int size, con
 {
 	drawRect(x, y, size, size, colour);
 }
+
+void Unknown::Graphics::setDrawColour(const Colour colour)
+{
+	Unknown* uk = getUnknown();
+
+	SDL_SetRenderDrawColor(uk->windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
+}

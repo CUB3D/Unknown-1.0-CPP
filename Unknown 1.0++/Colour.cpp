@@ -5,20 +5,12 @@
 #include <SDL_image.h>
 #include "Unknown.h"
 
-Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha)
+Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha) : red(red), green(green), blue(blue), alpha(alpha)
 {
-	this->red = red;
-	this->green = green;
-	this->blue = blue;
-	this->alpha = alpha;
 }
 
-Unknown::Colour::Colour(const int red, const int green, const int blue)
+Unknown::Colour::Colour(const int red, const int green, const int blue) : red(red), green(green), blue(blue), alpha(255)
 {
-	this->red = red;
-	this->green = green;
-	this->blue = blue;
-	this->alpha = 255;
 }
 
 Uint32 Unknown::Colour::toSDLColour() const

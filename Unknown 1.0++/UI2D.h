@@ -12,6 +12,8 @@ namespace Unknown
 	{
 		void drawRect(const int x, const int y, const int width, const int height, const Colour colour);
 		void drawSquare(const int x, const int y, const int size, const Colour colour);
+
+		void setDrawColour(const Colour colour);
 	}
 }
 
