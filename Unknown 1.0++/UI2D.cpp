@@ -17,7 +17,7 @@ void Unknown::Graphics::drawRect(const int x, const int y, const int width, cons
 	rect.w = width;
 	rect.h = height;
 
-	//TODO: fix colours
+	setDrawColour(colour);
 
 	int i = SDL_RenderFillRect(uk->windowRenderer, &rect);
 

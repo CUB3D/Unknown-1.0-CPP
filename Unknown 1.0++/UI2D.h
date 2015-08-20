@@ -17,7 +17,8 @@ namespace Unknown
 	}
 }
 
-#define UK_DRAW_RECT(x, y, w, h, c) Unknown::Graphics::drawRect(x, y, w, h, c)
-#define UK_DRAW_SQUARE(x, y, s, c) Unknown::Graphics::drawSquare(x, y, s, c)
+#define UK_SET_COLOUR(colour) ::Unknown::Graphics::setDrawColour(colour)
+#define UK_DRAW_RECT(x, y, w, h, c) ::Unknown::Graphics::drawRect(x, y, w, h, c)
+#define UK_DRAW_SQUARE(x, y, s, c) ::Unknown::Graphics::drawSquare(x, y, s, c)
 
 #endif

@@ -13,6 +13,8 @@ namespace Unknown
 		static Colour RED;
 		static Colour GREEN;
 		static Colour BLUE;
+		static Colour BLACK;
+		static Colour WHITE;
 
 		const int red;
 		const int green;

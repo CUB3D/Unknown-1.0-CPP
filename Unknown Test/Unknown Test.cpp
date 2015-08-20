@@ -28,10 +28,7 @@ void render()
 {
 	animationTest->render();
 
-	SDL_SetRenderDrawColor(Unknown::getUnknown()->windowRenderer, 0xff, 0xff, 00, 0xFF);
 	UK_DRAW_RECT(100, 100, 100, 100, Unknown::Colour::RED);
-	SDL_SetRenderDrawColor(Unknown::getUnknown()->windowRenderer, 00, 00, 00, 00);
-	//player.render(100, 100);
 }
 
 void update()
@@ -40,10 +37,7 @@ void update()
 
 void init()
 {
-	animation = new Unknown::Graphics::Animation();
-
-	animation->addFrame(&image, 1000);
-	animation->addFrame(&player, 1000);
+	animation = UK_LOAD_ANIMATION("Animation.json");
 
 	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, animation);
 }

@@ -168,6 +168,7 @@ void Unknown::Unknown::checkEvents()
 
 void Unknown::Unknown::clearScreen()
 {
+	UK_SET_COLOUR(Colour::BLACK);
 	SDL_RenderClear(this->windowRenderer);
 }
 
