@@ -69,5 +69,5 @@ void Unknown::Graphics::Image::render(const int x, const int y)
 	this->textureRect.x = x;
 	this->textureRect.y = y;
 
-	SDL_RenderCopy(uk->windowRenderer, this->imageTexture, NULL, NULL); //May need to change second null
+	SDL_RenderCopy(uk->windowRenderer, this->imageTexture, NULL, &this->textureRect); //May need to change second null
 }
