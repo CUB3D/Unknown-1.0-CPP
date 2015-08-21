@@ -42,6 +42,8 @@ void init()
 	animation = UK_LOAD_ANIMATION("Animation.json");
 
 	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, animation);
+
+	animationTest->setAngle(45);
 }
 
 int _tmain(int argc, _TCHAR* argv[])

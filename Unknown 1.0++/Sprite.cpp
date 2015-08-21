@@ -112,7 +112,7 @@ Unknown::Graphics::AnimatedSprite::~AnimatedSprite()
 
 void Unknown::Graphics::AnimatedSprite::render() const
 {
-	this->animation->draw(this->location.x, this->location.y);
+	this->animation->draw(this->location.x, this->location.y, this->getAngle());
 
 	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
 
