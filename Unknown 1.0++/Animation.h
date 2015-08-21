@@ -28,6 +28,8 @@ namespace Unknown
 
 			void addFrame(Image* frame, const int delayms);
 			void addFrame(AnimationFrame frame);
+
+			void draw(const int x, const int y, const double angle);
 			void draw(const int x, const int y);
 		};
 	}

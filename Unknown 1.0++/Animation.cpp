@@ -22,6 +22,11 @@ void Unknown::Graphics::Animation::addFrame(AnimationFrame frame)
 
 void Unknown::Graphics::Animation::draw(const int x, const int y)
 {
+	this->draw(x, y, 0);
+}
+
+void Unknown::Graphics::Animation::draw(const int x, const int y, const double angle)
+{
 	AnimationFrame currentFrame = frames[currentFrameIndex];
 
 	if (!hasInit)
@@ -31,7 +36,7 @@ void Unknown::Graphics::Animation::draw(const int x, const int y)
 		hasInit = true;
 	}
 
-	currentFrame.frameImage->render(x, y);
+	currentFrame.frameImage->render(x, y, angle);
 
 	if (frameTimer.isTickComplete())
 	{
