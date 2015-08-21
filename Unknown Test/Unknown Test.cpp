@@ -29,6 +29,8 @@ void render()
 	animationTest->render();
 
 	UK_DRAW_RECT(100, 100, 100, 100, Unknown::Colour::RED);
+
+	player.render(200, 200, 45);
 }
 
 void update()
