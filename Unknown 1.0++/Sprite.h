@@ -26,7 +26,7 @@ namespace Unknown
 		virtual void render() const;
 
 		void setAngle(double angle);
-		double getAngle();
+		double getAngle() const;
 
 		void move(const int speedX, const int speedY);
 

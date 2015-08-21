@@ -44,7 +44,7 @@ void Unknown::Sprite::setAngle(double angle)
 		direction.normalize();
 }
 
-double Unknown::Sprite::getAngle()
+double Unknown::Sprite::getAngle() const
 {
 	return this->angle;
 }
@@ -83,7 +83,7 @@ Unknown::Graphics::ImageSprite::~ImageSprite()
 
 void Unknown::Graphics::ImageSprite::render() const
 {
-	this->image->render(this->location.x, this->location.y);
+	this->image->render(this->location.x, this->location.y, getAngle());
 }
 
 Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
