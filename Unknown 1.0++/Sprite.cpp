@@ -49,16 +49,12 @@ double Unknown::Sprite::getAngle() const
 	return this->angle;
 }
 
-#include <iostream>
-
 void Unknown::Sprite::move(const int speedX, const int speedY)
 {
 	Vector velocity = Vector(direction.x * speedX, direction.y * speedY);
 
 	this->location.x += velocity.x;
 	this->location.y += velocity.y;
-
-	std::cout << "X: " << location.x << ", VX: " << velocity.x << std::endl;
 
 	this->bounds.location.x = this->location.x;
 	this->bounds.location.y = this->location.y;

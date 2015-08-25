@@ -12,6 +12,7 @@
 
 std::map<const char*, Unknown::Sprite*> Unknown::Loader::spritePool;
 std::map<const char*, Unknown::Entity*> Unknown::Loader::entityPool;
+std::map<const char*, Unknown::Graphics::Image*> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 {
@@ -207,4 +208,20 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	}
 
 	return animation;
+}
+
+::Unknown::Graphics::Image* Unknown::Loader::loadImage(const char* name)
+{
+	if (imagePool.find(name) != imagePool.end())
+	{
+		Graphics::Image* imagePrefab = imagePool.find(name)->second;
+		Graphics::Image* returnValue = imagePrefab->clone();
+		return returnValue;
+	}
+
+	Graphics::Image* image = new Graphics::Image(name);
+
+	imagePool[name] = image;
+
+	return image;
 }

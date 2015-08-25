@@ -17,12 +17,13 @@
 #include "Loader.h"
 #include "Animation.h"
 
-Unknown::Graphics::Image image("Test.bmp");
+Unknown::Graphics::Image* image = NULL;
 Unknown::Graphics::Image player("Player.png");
 Unknown::Graphics::ImageSprite playerSprite(10, 10, &player);
 
 void render()
 {
+	image->render(100, 100);
 	playerSprite.render();
 }
 
@@ -34,6 +35,10 @@ void update()
 
 void init()
 {
+	for (int i = 0; i < 2; i++)
+	{
+		image = UK_LOAD_IMAGE("Test.bmp");
+	}
 }
 
 int _tmain(int argc, _TCHAR* argv[])

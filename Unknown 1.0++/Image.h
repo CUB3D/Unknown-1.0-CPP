@@ -23,6 +23,8 @@ namespace Unknown
 			void init();
 			void render(const int x, const int y, const double angle);
 			void render(const int x, const int y);
+
+			virtual ::Unknown::Graphics::Image* clone() const;
 		};
 	}
 }
