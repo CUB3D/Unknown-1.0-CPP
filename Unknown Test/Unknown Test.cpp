@@ -19,31 +19,21 @@
 
 Unknown::Graphics::Image image("Test.bmp");
 Unknown::Graphics::Image player("Player.png");
-
-Unknown::Graphics::Animation* animation;
-
-Unknown::Graphics::AnimatedSprite* animationTest;
+Unknown::Graphics::ImageSprite playerSprite(10, 10, &player);
 
 void render()
 {
-	animationTest->render();
-
-	UK_DRAW_RECT(100, 100, 100, 100, Unknown::Colour::RED);
-
-	player.render(200, 200, 45);
+	playerSprite.render();
 }
 
 void update()
 {
+	playerSprite.setAngle(0);
+	playerSprite.move(1, 1);
 }
 
 void init()
 {
-	animation = UK_LOAD_ANIMATION("Animation.json");
-
-	animationTest = new Unknown::Graphics::AnimatedSprite(20, 20, animation);
-
-	animationTest->setAngle(45);
 }
 
 int _tmain(int argc, _TCHAR* argv[])
