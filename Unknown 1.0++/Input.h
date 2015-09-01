@@ -43,11 +43,14 @@ namespace Unknown
 	bool getKeyState(const KeyCode code);
 	KeyCode SDLToKeyCode(const int SDLCode);
 
-	extern std::vector < void(*) (const KeyEvent evnt) > keyListeners;
-	void registerKeyListener(void(*listener) (const KeyEvent evnt));
+	extern std::map<std::string, std::function<void(const KeyEvent)>> keyListeners;
+	void registerKeyListener(std::function<void(const KeyEvent)> listener, std::string listenerID);
+	void removeKeyListener(std::string listnerID);
 	void callKeyListeners(const KeyEvent evnt);
 
-	#define UK_KEY_LISTENER(x) Unknown::registerKeyListener(x);
+#define UK_ADD_KEY_LISTENER_INTERNAL(listener, id) ::Unknown::registerKeyListener([this](::Unknown::KeyEvent evnt) { listener(evnt); }, id);
+#define UK_ADD_KEY_LISTENER_EXTERNAL(listener, id) ::Unknown::registerKeyListener([](::Unknown::KeyEvent evnt) { listener(evnt); }, id);
+#define UK_REMOVE_KEY_LISTENER(id) ::Unknown::removeKeyListener(id);
 
 	// Mouse input
 
@@ -78,7 +81,9 @@ namespace Unknown
 	void removeMouseListener(std::string listnerID);
 	void callMouseListeners(const MouseEvent evnt);
 
-#define UK_ADD_MOUSE_LISTENER(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
+#define UK_ADD_MOUSE_LISTENER_INTERNAL(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
+#define UK_ADD_MOUSE_LISTENER_EXTERNAL(listener, id) ::Unknown::registerMouseListener([](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
+#define UK_REMOVE_MOUSE_LISTENER(id) ::Unknown::removeMouseListener(id);
 }
 
 #endif

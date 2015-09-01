@@ -44,18 +44,25 @@ bool Unknown::getKeyState(const KeyCode code)
 	return keyStates[code];
 }
 
-std::vector < void(*) (const Unknown::KeyEvent evnt) > Unknown::keyListeners;
+std::map <std::string, std::function<void(const Unknown::KeyEvent)> > Unknown::keyListeners;
 
-void Unknown::registerKeyListener(void(*listener) (const KeyEvent evnt))
+void Unknown::registerKeyListener(std::function<void(const KeyEvent)> listener, std::string listenerID)
 {
-	keyListeners.push_back(listener);
+	keyListeners[listenerID] = listener;
+}
+
+void Unknown::removeKeyListener(std::string listnerID)
+{
+	keyListeners.erase(listnerID);
 }
 
 void Unknown::callKeyListeners(const KeyEvent evnt)
 {
-	for (int i = 0; i < keyListeners.size(); i++)
+	std::map <std::string, std::function<void(const Unknown::KeyEvent)> >::iterator listeners;
+
+	for (listeners = keyListeners.begin(); listeners != keyListeners.end(); listeners++)
 	{
-		keyListeners[i](evnt);
+		listeners->second(evnt);
 	}
 }
 
