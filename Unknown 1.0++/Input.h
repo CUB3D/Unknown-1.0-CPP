@@ -6,6 +6,8 @@
 #include "Utils.h"
 
 #include <vector>
+#include <functional>
+#include <map>
 
 namespace Unknown
 {
@@ -71,12 +73,12 @@ namespace Unknown
 	bool getMouseButtonState(const MouseButton button);
 	MouseButton SDLTOMouseButton(const int SDLCode);
 
-	extern std::vector<void(*) (const MouseEvent evnt) > mouseListeners;
-	void registerMouseListener(void(*listener) (const MouseEvent evnt));
+	extern std::map<std::string, std::function<void(const MouseEvent)>> mouseListeners;
+	void registerMouseListener(std::function<void(const MouseEvent)> listener, std::string listenerID);
+	void removeMouseListener(std::string listnerID);
 	void callMouseListeners(const MouseEvent evnt);
 
-	#define UK_MOUSE_LISTENER(x) Unknown::registerMouseListener(x);
+#define UK_ADD_MOUSE_LISTENER(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
 }
 
 #endif
-

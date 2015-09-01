@@ -3,6 +3,8 @@
 
 #include <SDL.h>
 #include <vector>
+#include <functional>
+#include <map>
 
 void Unknown::postKeyEvent(KeyEvent evnt)
 {
@@ -92,17 +94,24 @@ Unknown::MouseButton Unknown::SDLTOMouseButton(const int SDLCode)
 	}
 }
 
-std::vector < void(*) (const Unknown::MouseEvent evnt) > Unknown::mouseListeners;
+std::map <std::string, std::function<void(const Unknown::MouseEvent)> > Unknown::mouseListeners;
 
-void Unknown::registerMouseListener(void(*listener) (const MouseEvent evnt))
+void Unknown::registerMouseListener(std::function<void(const Unknown::MouseEvent)> listener, std::string listenerID)
 {
-	mouseListeners.push_back(listener);
+	mouseListeners[listenerID] = listener;
+}
+
+void Unknown::removeMouseListener(std::string listenerID)
+{
+	mouseListeners.erase(listenerID);
 }
 
 void Unknown::callMouseListeners(const MouseEvent evnt)
 {
-	for (int i = 0; i < mouseListeners.size(); i++)
+	std::map <std::string, std::function<void(const Unknown::MouseEvent)> >::iterator listeners;
+
+	for (listeners = mouseListeners.begin(); listeners != mouseListeners.end(); listeners++)
 	{
-		mouseListeners[i](evnt);
+		listeners->second(evnt);
 	}
 }
