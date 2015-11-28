@@ -86,6 +86,7 @@
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Colour.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Loader.h" />
@@ -104,6 +105,7 @@
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Colour.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Loader.cpp" />
