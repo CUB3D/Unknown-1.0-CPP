@@ -17,17 +17,19 @@
 #include "Loader.h"
 #include "Animation.h"
 #include "Font.h"
+#include "Particle.h"
 
 Unknown::Graphics::Image font_img("Font.png");
-Unknown::Graphics::Font font(&font_img, "AB", 16);
+Unknown::Graphics::Particle part(new Unknown::Graphics::ImageSprite(10, 10, &font_img), 10);
 
 void render()
 {
-	font.drawString("AAABBABB", 10, 10);
+	part.render();
 }
 
 void update()
 {
+	part.update();
 }
 
 void init()
