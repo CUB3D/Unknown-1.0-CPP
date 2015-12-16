@@ -16,29 +16,24 @@
 #include "Physics.h"
 #include "Loader.h"
 #include "Animation.h"
+#include "Font.h"
+#include "Particle.h"
 
-Unknown::Graphics::Image* image = NULL;
-Unknown::Graphics::Image player("Player.png");
-Unknown::Graphics::ImageSprite playerSprite(10, 10, &player);
+Unknown::Graphics::Image font_img("Font.png");
+Unknown::Graphics::Particle part(new Unknown::Graphics::ImageSprite(10, 10, &font_img), 10);
 
 void render()
 {
-	image->render(100, 100);
-	playerSprite.render();
+	part.render();
 }
 
 void update()
 {
-	playerSprite.setAngle(0);
-	playerSprite.move(1, 1);
+	part.update();
 }
 
 void init()
 {
-	for (int i = 0; i < 2; i++)
-	{
-		image = UK_LOAD_IMAGE("Test.bmp");
-	}
 }
 
 int _tmain(int argc, _TCHAR* argv[])

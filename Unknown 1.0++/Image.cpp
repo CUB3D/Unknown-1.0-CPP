@@ -66,6 +66,11 @@ Unknown::Graphics::Image* Unknown::Graphics::Image::clone() const
 
 void Unknown::Graphics::Image::render(const int x, const int y, const double angle)
 {
+	this->render(x, y, angle, NULL);
+}
+
+void Unknown::Graphics::Image::render(const int x, const int y, const double angle, SDL_Rect* clip)
+{
 	if (!this->hasInit)
 	{
 		init();
@@ -76,5 +81,5 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 	this->textureRect.x = x;
 	this->textureRect.y = y;
 
-	SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, NULL, &this->textureRect, angle, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &this->textureRect, angle, NULL, SDL_FLIP_NONE);
 }

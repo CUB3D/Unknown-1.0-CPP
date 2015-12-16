@@ -21,6 +21,7 @@ namespace Unknown
 			~Image();
 
 			void init();
+			void render(const int x, const int y, const double angle, SDL_Rect* clip);
 			void render(const int x, const int y, const double angle);
 			void render(const int x, const int y);
 
