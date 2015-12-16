@@ -65,6 +65,8 @@ namespace Unknown
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()
 
+	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
+
 	enum HookType
 	{
 		RENDER,
