@@ -14,6 +14,8 @@ namespace Unknown
 	{
 	private:
 		double angle;
+	protected:
+		mutable bool hasInit = false;
 
 	public:
 		Point<double> location;
@@ -30,6 +32,8 @@ namespace Unknown
 
 		void move(const int speedX, const int speedY);
 
+		virtual void init() const;
+
 		virtual Sprite* clone() const;
 	};
 
@@ -43,7 +47,9 @@ namespace Unknown
 			ImageSprite(const int x, const int y, Image* image);
 			virtual ~ImageSprite();
 
-			virtual void render() const;
+			virtual void render() const override;
+
+			virtual void init() const override;
 
 			virtual Sprite* clone() const;
 		};
@@ -55,7 +61,10 @@ namespace Unknown
 
 			AnimatedSprite(const int x, const int y, Animation* animation);
 			virtual ~AnimatedSprite();
-			virtual void render() const;
+			virtual void render() const override;
+
+			virtual void init() const override;
+
 			virtual Sprite* clone() const;
 		};
 	}

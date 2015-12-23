@@ -60,6 +60,11 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 	this->bounds.location.y = this->location.y;
 }
 
+void Unknown::Sprite::init() const
+{
+	//NOOP
+}
+
 Unknown::Sprite* Unknown::Sprite::clone() const
 {
 	Sprite* returnValue = (Sprite*)malloc(sizeof Sprite);
@@ -72,9 +77,6 @@ Unknown::Sprite* Unknown::Sprite::clone() const
 Unknown::Graphics::ImageSprite::ImageSprite(const int x, const int y, Image* image) : Sprite(x, y)
 {
 	this->image = image;
-
-	this->bounds.size.width = image->textureRect.w;
-	this->bounds.size.height = image->textureRect.h;
 }
 
 Unknown::Graphics::ImageSprite::~ImageSprite()
@@ -83,7 +85,22 @@ Unknown::Graphics::ImageSprite::~ImageSprite()
 
 void Unknown::Graphics::ImageSprite::render() const
 {
+	if (!this->hasInit)
+	{
+		this->init();
+	}
+
 	this->image->render(this->location.x, this->location.y, getAngle());
+}
+
+void Unknown::Graphics::ImageSprite::init() const
+{
+	this->image->init();
+
+	this->bounds.size.width = image->textureRect.w;
+	this->bounds.size.height = image->textureRect.h;
+
+	this->hasInit = true;
 }
 
 Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
@@ -98,11 +115,6 @@ Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
 Unknown::Graphics::AnimatedSprite::AnimatedSprite(const int x, const int y, Animation* animation) : Sprite(x, y)
 {
 	this->animation = animation;
-
-	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
-	
-	this->bounds.size.width = frame.frameImage->textureRect.w;
-	this->bounds.size.height = frame.frameImage->textureRect.h;
 }
 
 Unknown::Graphics::AnimatedSprite::~AnimatedSprite()
@@ -112,12 +124,29 @@ Unknown::Graphics::AnimatedSprite::~AnimatedSprite()
 
 void Unknown::Graphics::AnimatedSprite::render() const
 {
+	if (!this->hasInit)
+	{
+		this->init();
+	}
+
 	this->animation->draw(this->location.x, this->location.y, this->getAngle());
 
 	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
 
 	this->bounds.size.width = frame.frameImage->textureRect.w;
 	this->bounds.size.height = frame.frameImage->textureRect.h;
+}
+
+void Unknown::Graphics::AnimatedSprite::init() const
+{
+	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
+
+	frame.frameImage->init();
+
+	this->bounds.size.width = frame.frameImage->textureRect.w;
+	this->bounds.size.height = frame.frameImage->textureRect.h;
+
+	this->hasInit = true;
 }
 
 Unknown::Sprite* Unknown::Graphics::AnimatedSprite::clone() const
