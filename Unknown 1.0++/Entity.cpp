@@ -6,6 +6,7 @@
 #include "Physics.h"
 
 #include <iostream>
+#include <algorithm>
 
 Unknown::Entity::Entity(Sprite* sprite)
 {
@@ -49,15 +50,6 @@ void Unknown::Entity::heal(const int health)
 const std::string Unknown::Entity::getEntityID() const
 {
 	return "Entity";
-}
-
-const std::vector<std::string> Unknown::Entity::getCollidableEntityIDS() const
-{
-	std::vector<std::string> ids;
-
-	ids.push_back("NULL");
-
-	return ids;
 }
 
 void Unknown::Entity::handleCollision(Entity* ent)
@@ -197,12 +189,17 @@ void Unknown::updateEntitys()
 
 				if (ent2->isAlive())
 				{
-					const std::vector<std::string> collidable = ent1->getCollidableEntityIDS();
-					if (std::find(collidable.begin(), collidable.end(), ent2->getEntityID()) != collidable.end())
+					if (entityColisionLookup.find(ent1->getEntityID()) != entityColisionLookup.end())
 					{
-						if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
+						std::vector<std::string> colliders = entityColisionLookup[ent1->getEntityID()];
+						if (std::find(colliders.begin(), colliders.end(), ent2->getEntityID()) != colliders.end())
 						{
-							ent1->handleCollision(ent2);
+							if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
+							{
+								ent1->handleCollision(ent2);
+
+								std::cout << "Test for collison patch" << std::endl;
+							}
 						}
 					}
 				}
@@ -216,5 +213,23 @@ void Unknown::renderEntitys()
 	for (int i = 0; i < entitys.size(); i++)
 	{
 		entitys[i]->render();
+	}
+}
+
+std::map<std::string, std::vector<std::string>> Unknown::entityColisionLookup;
+
+void Unknown::registerEntityCollision(std::string base, std::string collider)
+{
+	if (entityColisionLookup.find(base) != entityColisionLookup.end())
+	{
+		entityColisionLookup[base].push_back(collider);
+	}
+	else
+	{
+		std::vector<std::string> colliders;
+
+		colliders.push_back(collider);
+
+		entityColisionLookup[base] = colliders;
 	}
 }

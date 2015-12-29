@@ -23,8 +23,6 @@ namespace Unknown
 
 		virtual const std::string getEntityID() const;
 
-		virtual const std::vector<std::string> getCollidableEntityIDS() const;
-
 		virtual void handleCollision(Entity* ent);
 
 		virtual Entity* clone() const;
@@ -76,6 +74,10 @@ namespace Unknown
 	void renderEntitys();
 
 #define UK_REGISTER_ENTITY(x) Unknown::registerEntity(x);
+
+	extern std::map<std::string, std::vector<std::string>> entityColisionLookup;
+
+	void registerEntityCollision(std::string base, std::string collider);
 }
 
 #endif
