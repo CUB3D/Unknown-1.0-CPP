@@ -52,10 +52,6 @@ const std::string Unknown::Entity::getEntityID() const
 	return "Entity";
 }
 
-void Unknown::Entity::handleCollision(Entity* ent)
-{
-}
-
 Unknown::Entity* Unknown::Entity::clone() const
 {
 	Entity* ent = (Entity*)malloc(sizeof Entity);
@@ -196,9 +192,16 @@ void Unknown::updateEntitys()
 						{
 							if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
 							{
-								ent1->handleCollision(ent2);
+								//todo
 
-								std::cout << "Test for collison patch" << std::endl;
+								std::vector<std::function<void(Entity*, Entity*)>> colliders = collisionHooks[ent1->getEntityID()];
+
+								std::vector<std::function<void(Entity*, Entity*)>>::iterator itter = colliders.begin();
+
+								for (; itter != colliders.end(); itter++)
+								{
+									(*itter)(ent1, ent2);
+								}
 							}
 						}
 					}
@@ -231,5 +234,23 @@ void Unknown::registerEntityCollision(std::string base, std::string collider)
 		colliders.push_back(collider);
 
 		entityColisionLookup[base] = colliders;
+	}
+}
+
+std::map<std::string, std::vector<std::function<void(Unknown::Entity*, Unknown::Entity*)>>> Unknown::collisionHooks;
+
+void Unknown::registerCollisionListener(std::function<void(Entity*, Entity*)> handler, std::string entityID)
+{
+	if (collisionHooks.find(entityID) != collisionHooks.end())
+	{
+		collisionHooks[entityID].push_back(handler);
+	}
+	else
+	{
+		std::vector<std::function<void(Entity*, Entity*)>> handlers;
+
+		handlers.push_back(handler);
+
+		collisionHooks[entityID] = handlers;
 	}
 }

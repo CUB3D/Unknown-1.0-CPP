@@ -2,6 +2,8 @@
 #define ENTITY_H
 
 #include "Sprite.h"
+#include <functional>
+#include <map>
 
 namespace Unknown
 {
@@ -22,8 +24,6 @@ namespace Unknown
 		virtual void heal(const int health);
 
 		virtual const std::string getEntityID() const;
-
-		virtual void handleCollision(Entity* ent);
 
 		virtual Entity* clone() const;
 	};
@@ -78,6 +78,13 @@ namespace Unknown
 	extern std::map<std::string, std::vector<std::string>> entityColisionLookup;
 
 	void registerEntityCollision(std::string base, std::string collider);
+
+	extern std::map<std::string, std::vector<std::function<void(Entity*, Entity*)>>> collisionHooks;
+
+	void registerCollisionListener(std::function<void(Entity*, Entity*)> handler, std::string entityID);
+
+#define UK_ADD_COLLISION_LISTENER_INTERNAL(listener, id) ::Unknown::registerCollisionListener([this](::Unknown::Entity* ent1, ::Unknown::Entity* ent2) {listener(ent1, ent2);}, id)
+#define UK_ADD_COLLISION_LISTENER_EXTERNAL(listener, id) ::Unknown::registerCollisionListener([](::Unknown::Entity* ent1, ::Unknown::Entity* ent2) {listener(ent1, ent2);}, id)
 }
 
 #endif

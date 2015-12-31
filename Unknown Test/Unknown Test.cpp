@@ -71,6 +71,11 @@ void update()
 	}
 }
 
+void onCollide(Unknown::Entity* ent1, Unknown::Entity* ent2)
+{
+	std::cout << "Collision registeration is working" << std::endl;
+}
+
 void init()
 {
 	ent1 = new Ent(new Unknown::Graphics::ImageSprite(10, 10, new Unknown::Graphics::Image("Player.png")), "EntA");
@@ -80,6 +85,8 @@ void init()
 	UK_REGISTER_ENTITY(ent2);
 
 	Unknown::registerEntityCollision("EntA", "EntB");
+
+	UK_ADD_COLLISION_LISTENER_EXTERNAL(onCollide, "EntA");
 }
 
 int _tmain(int argc, _TCHAR* argv[])
