@@ -1,23 +1,26 @@
 #pragma once
 
-struct QuadNode
+#include "Entity.h"
+#include <vector>
+
+namespace Unknown
 {
-	QuadNode* NW;
-	QuadNode* NE;
-	QuadNode* SW;
-	QuadNode* SE;
-};
+	struct Quad
+	{
+		std::vector<Entity*> entitys;
 
-class Quadtree
-{
-public:
-	Quadtree();
+		void renderContents();
+	};
 
-	QuadNode* NW;
-	QuadNode* NE;
-	QuadNode* SW;
-	QuadNode* SE;
+	class Quadtree
+	{
+	public:
+		Quadtree();
 
-	void insert(QuadNode* node);
-};
+		Quad NW;
+		Quad NE;
+		Quad SW;
+		Quad SE;
+	};
 
+}
