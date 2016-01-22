@@ -33,6 +33,8 @@ namespace Unknown
 		void addEnity(Entity* entity);
 
 		void handleAllCollisions();
+
+		void updateEntity(Entity* entity);
 	};
 
 }

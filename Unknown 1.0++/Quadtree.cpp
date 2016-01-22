@@ -107,3 +107,7 @@ void Unknown::Quadtree::handleAllCollisions()
 	this->SE.handleCollisions();
 	this->SW.handleCollisions();
 }
+
+void Unknown::Quadtree::updateEntity(Entity* ent)
+{
+}

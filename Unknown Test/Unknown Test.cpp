@@ -44,13 +44,18 @@ Ent* e;
 
 void render()
 {
-	tree.handleAllCollisions();
 }
 
 void update()
 {
 	e->sprite->setAngle(45);
 	e->sprite->move(-1, -1);
+
+	std::cout << tree.NW.entitys.size() << std::endl;
+
+	tree.updateEntity(e);
+
+	tree.handleAllCollisions();
 }
 
 void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
@@ -60,7 +65,7 @@ void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
 
 void init()
 {
-	e = new Ent(new Unknown::Graphics::ImageSprite(330, 330, &font_img), "A");
+	e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
 	Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
 	tree.addEnity(e);
 	tree.addEnity(ee);
