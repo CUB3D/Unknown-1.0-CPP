@@ -3,11 +3,41 @@
 #include "Entity.h"
 #include "Physics.h"
 
-void Unknown::Quad::renderContents()
+void Unknown::Quad::handleCollisions()
 {
-	for (auto a : entitys)
+	for (int i = 0; i < this->entitys.size(); i++)
 	{
-		a->render();
+		Entity* ent1 = this->entitys[i];
+
+		if (ent1->isAlive())
+		{
+			for (int i = 0; i < this->entitys.size(); i++)
+			{
+				Entity* ent2 = this->entitys[i];
+
+				if (ent2->isAlive())
+				{
+					if (entityColisionLookup.find(ent1->getEntityID()) != entityColisionLookup.end())
+					{
+						std::vector<std::string> colliders = entityColisionLookup[ent1->getEntityID()];
+						if (std::find(colliders.begin(), colliders.end(), ent2->getEntityID()) != colliders.end())
+						{
+							if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
+							{
+								std::vector<std::function<void(Entity*, Entity*)>> colliders = collisionHooks[ent1->getEntityID()];
+
+								std::vector<std::function<void(Entity*, Entity*)>>::iterator itter = colliders.begin();
+
+								for (; itter != colliders.end(); itter++)
+								{
+									(*itter)(ent1, ent2);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -68,4 +98,12 @@ void Unknown::Quadtree::addEnity(Entity* ent)
 	{
 		this->SW.entitys.push_back(ent);
 	}
+}
+
+void Unknown::Quadtree::handleAllCollisions()
+{
+	this->NE.handleCollisions();
+	this->NW.handleCollisions();
+	this->SE.handleCollisions();
+	this->SW.handleCollisions();
 }

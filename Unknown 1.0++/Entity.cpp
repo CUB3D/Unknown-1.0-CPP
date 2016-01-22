@@ -172,43 +172,6 @@ void Unknown::updateEntitys()
 	}
 
 	// collision check
-
-	for (int i = 0; i < entitys.size(); i++)
-	{
-		Entity* ent1 = entitys[i];
-
-		if (ent1->isAlive())
-		{
-			for (int i = 0; i < entitys.size(); i++)
-			{
-				Entity* ent2 = entitys[i];
-
-				if (ent2->isAlive())
-				{
-					if (entityColisionLookup.find(ent1->getEntityID()) != entityColisionLookup.end())
-					{
-						std::vector<std::string> colliders = entityColisionLookup[ent1->getEntityID()];
-						if (std::find(colliders.begin(), colliders.end(), ent2->getEntityID()) != colliders.end())
-						{
-							if (isAABBIntersecting(ent1->sprite->bounds, ent2->sprite->bounds))
-							{
-								//todo
-
-								std::vector<std::function<void(Entity*, Entity*)>> colliders = collisionHooks[ent1->getEntityID()];
-
-								std::vector<std::function<void(Entity*, Entity*)>>::iterator itter = colliders.begin();
-
-								for (; itter != colliders.end(); itter++)
-								{
-									(*itter)(ent1, ent2);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 }
 
 void Unknown::renderEntitys()

@@ -31,6 +31,8 @@ namespace Unknown
 		void init();
 
 		void addEnity(Entity* entity);
+
+		void handleAllCollisions();
 	};
 
 }
