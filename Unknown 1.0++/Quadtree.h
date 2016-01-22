@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include <vector>
+#include "Utils.h"
 
 namespace Unknown
 {
@@ -9,11 +10,16 @@ namespace Unknown
 	{
 		std::vector<Entity*> entitys;
 
-		void renderContents();
+		AABB quadBounds;
+
+		void handleCollisions();
 	};
 
 	class Quadtree
 	{
+	private:
+		bool hasInit;
+
 	public:
 		Quadtree();
 
@@ -21,6 +27,10 @@ namespace Unknown
 		Quad NE;
 		Quad SW;
 		Quad SE;
+
+		void init();
+
+		void addEnity(Entity* entity);
 	};
 
 }

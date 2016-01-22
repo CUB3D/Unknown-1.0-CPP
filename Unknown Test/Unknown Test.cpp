@@ -27,6 +27,9 @@ Unknown::Quadtree tree;
 void render()
 {
 	tree.NW.renderContents();
+	tree.NE.renderContents();
+	tree.SE.renderContents();
+	tree.SW.renderContents();
 }
 
 void update()
@@ -35,8 +38,8 @@ void update()
 
 void init()
 {
-	Unknown::Entity* e = new Unknown::TwoStateEntity(new Unknown::Graphics::ImageSprite(20, 20, &font_img));
-	tree.NW.entitys.push_back(e);
+	Unknown::Entity* e = new Unknown::TwoStateEntity(new Unknown::Graphics::ImageSprite(300, 300, &font_img));
+	tree.addEnity(e);
 }
 
 int _tmain(int argc, _TCHAR* argv[])
