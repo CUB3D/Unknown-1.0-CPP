@@ -3,6 +3,7 @@
 #include "Sprite.h"
 #include "Entity.h"
 #include "Animation.h"
+#include "UI.h"
 
 #include <map>
 
@@ -18,6 +19,7 @@ namespace Unknown
 		::Unknown::Entity* loadEntity(const char* name);
 		::Unknown::Graphics::Animation* loadAnimation(const char* name);
 		::Unknown::Graphics::Image* loadImage(const char* name);
+		::Unknown::UIContainer loadUI(const char* name);
 	}
 }
 

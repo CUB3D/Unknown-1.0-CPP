@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include "Unknown.h"
 
 namespace Unknown
 {

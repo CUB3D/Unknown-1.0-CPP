@@ -4,6 +4,7 @@
 #include "Sprite.h"
 #include "Utils.h"
 #include "Entity.h"
+#include "UI.h"
 #include "rapidjson\document.h"
 
 #include <map>
@@ -224,4 +225,126 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	imagePool[name] = image;
 
 	return image;
+}
+
+::Unknown::UIContainer Unknown::Loader::loadUI(const char * name)
+{
+	rapidjson::Document doc = readJSONFile(name);
+
+	UIContainer container;
+
+	for (auto member = doc.MemberBegin(); member != doc.MemberEnd(); member++)
+	{
+		UIComponent comp;
+
+
+		for (int i = 0; i < 4; i++)
+		{
+			comp.offsetBounds[i] = 0;
+			comp.bounds[i] = 0;
+		}
+
+
+		std::string componenetName = member->name.GetString();
+		std::string type = member->value.FindMember("Type")->value.GetString();
+
+		comp.name = componenetName;
+		comp.type = type;
+
+		auto bounds = member->value.FindMember("Bounds");
+
+		if (bounds != member->value.MemberEnd())
+		{
+			int boundsArray[4];
+
+			int x = 0;
+
+			for (int x = 0; x < bounds->value.Size(); x++)
+			{
+				boundsArray[x] = bounds->value[x].GetInt();
+			}
+
+			memcpy(comp.bounds, boundsArray, sizeof(int) * 4);
+		}
+
+		auto colour = member->value.FindMember("Colour");
+
+		if (colour != member->value.MemberEnd())
+		{
+			std::string colourString = colour->value.GetString();
+			comp.colour = getColourFromString(colourString);
+
+			std::cout << "Colour loaded: (" << comp.colour->alpha << ", " << comp.colour->red << ", " << comp.colour->green << ", " << comp.colour->blue << ")" << std::endl;
+		}
+
+		auto insideComponent = member->value.FindMember("InsideComponent");
+
+		if (insideComponent != member->value.MemberEnd())
+		{
+			std::string insideComponentString = insideComponent->value.GetString();
+			comp.insideComponent = insideComponentString;
+		}
+
+		auto offsetBounds = member->value.FindMember("OffsetBounds");
+
+		if (offsetBounds != member->value.MemberEnd())
+		{
+			int boundsArray[4];
+
+			int x = 0;
+
+			for (int x = 0; x < offsetBounds->value.Size(); x++)
+			{
+				boundsArray[x] = offsetBounds->value[x].GetInt();
+			}
+
+			memcpy(comp.offsetBounds, boundsArray, sizeof(int) * 4);
+		}
+
+		auto content = member->value.FindMember("Content");
+
+		if (content != member->value.MemberEnd())
+		{
+			std::string contentString = content->value.GetString();
+			comp.content = contentString;
+		}
+
+		// calculate OffsetBounds for a component
+
+		if (!comp.insideComponent.empty())
+		{
+			UIComponent* parent = nullptr;
+
+			for (auto component2 : container.components)
+			{
+				if (comp.insideComponent == component2.name)
+				{
+					parent = &component2;
+					break;
+				}
+			}
+
+			if (parent == nullptr)
+			{
+				std::cout << "Error: no parent found for " << comp.name << std::endl;
+			}
+
+			comp.bounds[0] = parent->bounds[0] + comp.offsetBounds[0];
+			comp.bounds[1] = parent->bounds[1] + comp.offsetBounds[1];
+			comp.bounds[2] = parent->bounds[2] + comp.offsetBounds[2];
+			comp.bounds[3] = parent->bounds[3] + comp.offsetBounds[3];
+		}
+
+		container.components.push_back(comp);
+	}
+
+	std::cout << "Loaded UI data, found " << container.components.size() << " components" << std::endl;
+
+	for (auto comp : container.components)
+	{
+		std::cout << "Component: " << comp.name << ", Bounds (" << comp.bounds[0] << ", " << comp.bounds[1] << ", " << comp.bounds[2] << ", " << comp.bounds[3] << ")" << std::endl;
+		std::cout << "Component: " << comp.name << ", Bounds (" << comp.offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
+	}
+
+	return container;
 }

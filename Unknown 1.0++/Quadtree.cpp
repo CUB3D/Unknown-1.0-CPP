@@ -110,4 +110,18 @@ void Unknown::Quadtree::handleAllCollisions()
 
 void Unknown::Quadtree::updateEntity(Entity* ent)
 {
+	auto itr = NW.entitys.begin();
+	
+	for (; itr != NW.entitys.end();)
+	{
+		Entity* e = *itr;
+
+		if (e == ent)
+		{
+			NE.entitys.erase(itr);
+			break;
+		}
+
+		itr++;
+	}
 }

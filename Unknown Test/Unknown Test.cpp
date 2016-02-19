@@ -19,6 +19,7 @@
 #include "Font.h"
 #include "Particle.h"
 #include "Quadtree.h"
+#include "UI.h"
 
 Unknown::Graphics::Image font_img("Font.png");
 
@@ -40,41 +41,62 @@ public:
 	}
 };
 
-Ent* e;
+//Ent* e;
+
+Unknown::UIContainer UI;
+
+void renderUIComponentRect(Unknown::UIComponent comp)
+{
+	Unknown::Graphics::drawRect(comp.bounds[0], comp.bounds[1], comp.bounds[2], comp.bounds[3], *comp.colour);
+}
+
+void renderUIComponent(Unknown::UIComponent comp)
+{
+	if (comp.type == "Rect")
+	{
+		renderUIComponentRect(comp);
+	}
+}
 
 void render()
 {
+	for (auto comp : UI.components)
+	{
+		renderUIComponent(comp);
+	}
 }
 
 void update()
 {
-	e->sprite->setAngle(45);
-	e->sprite->move(-1, -1);
+	//e->sprite->setAngle(45);
+	//e->sprite->move(-1, -1);
 
-	std::cout << tree.NW.entitys.size() << std::endl;
+	//std::cout << tree.NW.entitys.size() << std::endl;
 
-	tree.updateEntity(e);
+	//tree.updateEntity(e);
 
-	tree.handleAllCollisions();
+	//tree.handleAllCollisions();
 }
 
 void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
 {
-	std::cout << "Test" << std::endl;
+	//std::cout << "Test" << std::endl;
 }
 
 void init()
 {
-	e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
-	Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
-	tree.addEnity(e);
-	tree.addEnity(ee);
-	Unknown::registerEntity(e);
-	Unknown::registerEntity(ee);
+	//e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
+	//Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
+	//tree.addEnity(e);
+	//tree.addEnity(ee);
+	//Unknown::registerEntity(e);
+	//Unknown::registerEntity(ee);
 
-	Unknown::registerEntityCollision(e->getEntityID(), ee->getEntityID());
+	//Unknown::registerEntityCollision(e->getEntityID(), ee->getEntityID());
 
-	UK_ADD_COLLISION_LISTENER_EXTERNAL(testCollisionListener, e->getEntityID());
+	//UK_ADD_COLLISION_LISTENER_EXTERNAL(testCollisionListener, e->getEntityID());
+
+	UI = Unknown::Loader::loadUI("TestUI.json");
 }
 
 int _tmain(int argc, _TCHAR* argv[])
