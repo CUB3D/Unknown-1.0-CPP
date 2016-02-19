@@ -24,8 +24,14 @@ namespace Unknown
 
 	class UIContainer
 	{
+	protected:
+		void renderUIComponentRect(UIComponent comp);
+		void renderUIComponent(UIComponent comp);
+
 	public:
 		std::vector<UIComponent> components;
+
+		void renderUI();
 	};
 }
 

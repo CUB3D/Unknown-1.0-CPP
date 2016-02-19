@@ -45,25 +45,9 @@ public:
 
 Unknown::UIContainer UI;
 
-void renderUIComponentRect(Unknown::UIComponent comp)
-{
-	Unknown::Graphics::drawRect(comp.bounds[0], comp.bounds[1], comp.bounds[2], comp.bounds[3], *comp.colour);
-}
-
-void renderUIComponent(Unknown::UIComponent comp)
-{
-	if (comp.type == "Rect")
-	{
-		renderUIComponentRect(comp);
-	}
-}
-
 void render()
 {
-	for (auto comp : UI.components)
-	{
-		renderUIComponent(comp);
-	}
+	UI.renderUI();
 }
 
 void update()
