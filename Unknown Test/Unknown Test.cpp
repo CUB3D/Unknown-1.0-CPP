@@ -41,7 +41,7 @@ public:
 	}
 };
 
-//Ent* e;
+Ent* e;
 
 Unknown::UIContainer UI;
 
@@ -52,7 +52,7 @@ void render()
 
 void update()
 {
-	//e->sprite->setAngle(45);
+	e->sprite->setAngle(45);
 	//e->sprite->move(-1, -1);
 
 	//std::cout << tree.NW.entitys.size() << std::endl;
@@ -69,16 +69,18 @@ void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
 
 void init()
 {
-	//e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
-	//Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
+	e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
+	Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
 	//tree.addEnity(e);
 	//tree.addEnity(ee);
-	//Unknown::registerEntity(e);
-	//Unknown::registerEntity(ee);
+	Unknown::registerEntity(e);
+	Unknown::registerEntity(ee);
 
-	//Unknown::registerEntityCollision(e->getEntityID(), ee->getEntityID());
+	Unknown::registerEntityCollision(e->getEntityID(), ee->getEntityID());
 
-	//UK_ADD_COLLISION_LISTENER_EXTERNAL(testCollisionListener, e->getEntityID());
+	UK_ADD_COLLISION_LISTENER_EXTERNAL(testCollisionListener, e->getEntityID());
+
+	Unknown::registerKeybind(Unknown::KeyCode::KEY_UP, "MoveUp");
 
 	UI = Unknown::Loader::loadUI("TestUI.json");
 }

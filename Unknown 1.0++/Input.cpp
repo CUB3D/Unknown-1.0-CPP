@@ -44,6 +44,13 @@ bool Unknown::getKeyState(const KeyCode code)
 	return keyStates[code];
 }
 
+std::map<std::string, Unknown::KeyCode> Unknown::keyBinds;
+
+void Unknown::registerKeybind(Unknown::KeyCode keycode, std::string name)
+{
+	keyBinds[name] = keycode;
+}
+
 std::map <std::string, std::function<void(const Unknown::KeyEvent)> > Unknown::keyListeners;
 
 void Unknown::registerKeyListener(std::function<void(const KeyEvent)> listener, std::string listenerID)
