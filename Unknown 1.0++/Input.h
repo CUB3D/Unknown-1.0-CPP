@@ -41,6 +41,7 @@ namespace Unknown
 
 	void postKeyEvent(KeyEvent evnt);
 	bool getKeyState(const KeyCode code);
+	bool getKeyState(std::string keyname)
 	KeyCode SDLToKeyCode(const int SDLCode);
 
 	extern std::map<std::string, Unknown::KeyCode> keyBinds;
