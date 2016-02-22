@@ -40,6 +40,7 @@ namespace Unknown
 	};
 
 	void initKeySystem();
+	void exitKeySystem();
 
 	void postKeyEvent(KeyEvent evnt);
 	bool getKeyState(const KeyCode code);

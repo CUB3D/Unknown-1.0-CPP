@@ -7,9 +7,12 @@
 #include <map>
 #include <string>
 #include <fstream>
+#include <sstream>
 
 void Unknown::initKeySystem()
 {
+	printf("Loading keybinds\n");
+
 	std::ifstream keybinds("Keybinds.ini");
 
 	if (!keybinds.good())
@@ -29,10 +32,45 @@ void Unknown::initKeySystem()
 
 		std::string value = line.substr(equalsPos + 1, line.size());
 
+		std::stringstream caster;
+
+		caster << value;
+
+		int keyCode;
+
+		caster >> keyCode;
+
+		registerKeybind((KeyCode)keyCode, name);
+
 		printf("Name: %s, Value: %s\n", name.c_str(), value.c_str());
 	}
 
 	printf("Keybinds loaded\n");
+}
+
+void Unknown::exitKeySystem()
+{
+	std::ofstream keybinds("Keybinds.ini");
+
+	if (!keybinds.good())
+	{
+		printf("No keybinds.ini found, creating\n");
+	}
+
+
+	for (auto itr = keyBinds.begin(); itr != keyBinds.end(); itr++)
+	{
+		std::stringstream output;
+		
+		output << itr->first << "=" << (int)itr->second << "\n";
+
+		keybinds << output.str();
+	}
+
+	keybinds.flush();
+	keybinds.close();
+
+	printf("Keybinds saved\n");
 }
 
 void Unknown::postKeyEvent(KeyEvent evnt)
