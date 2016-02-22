@@ -5,6 +5,35 @@
 #include <vector>
 #include <functional>
 #include <map>
+#include <string>
+#include <fstream>
+
+void Unknown::initKeySystem()
+{
+	std::ifstream keybinds("Keybinds.ini");
+
+	if (!keybinds.good())
+	{
+		printf("No keybinds.ini found, skipping\n");
+		return;
+	}
+
+
+	std::string line;
+
+	while (std::getline(keybinds, line))
+	{
+		int equalsPos = line.find('=');
+
+		std::string name = line.substr(0, equalsPos);
+
+		std::string value = line.substr(equalsPos + 1, line.size());
+
+		printf("Name: %s, Value: %s\n", name.c_str(), value.c_str());
+	}
+
+	printf("Keybinds loaded\n");
+}
 
 void Unknown::postKeyEvent(KeyEvent evnt)
 {

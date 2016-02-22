@@ -58,6 +58,10 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = new Dimension<int> { width, height };
+
+	printf("Loading keybinds\n");
+
+	initKeySystem();
 }
 
 void Unknown::Unknown::createWindow()
@@ -178,6 +182,8 @@ void Unknown::Unknown::quit(const int exitCode)
 	this->windowRenderer = NULL;
 	SDL_DestroyWindow(this->window);
 	this->window = NULL;
+
+
 
 	SDL_Quit();
 
