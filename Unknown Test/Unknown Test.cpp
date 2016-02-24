@@ -60,6 +60,13 @@ void update()
 	//tree.updateEntity(e);
 
 	//tree.handleAllCollisions();
+
+	using namespace Unknown;
+
+	if (getKeyState("MoveUp"))
+	{
+		printf("MoveUP pressed\n");
+	}
 }
 
 void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)

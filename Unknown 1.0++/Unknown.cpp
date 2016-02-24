@@ -58,8 +58,6 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = new Dimension<int> { width, height };
-
-	initKeySystem();
 }
 
 void Unknown::Unknown::createWindow()
@@ -96,6 +94,8 @@ void Unknown::Unknown::createWindow()
 
 void Unknown::Unknown::initGameLoop()
 {
+	initKeySystem();
+
 	while (running)
 	{
 		this->checkEvents();
