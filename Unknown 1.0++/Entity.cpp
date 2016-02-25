@@ -1,12 +1,9 @@
 #include "stdafx.h"
 #include "Entity.h"
 
-#include "Sprite.h"
-#include "Unknown.h"
-#include "Physics.h"
-
 #include <iostream>
 #include <algorithm>
+#include <string.h>
 
 Unknown::Entity::Entity(Sprite* sprite)
 {
@@ -52,10 +49,11 @@ const std::string Unknown::Entity::getEntityID() const
 	return "Entity";
 }
 
-Unknown::Entity* Unknown::Entity::clone() const
+
+::Unknown::Entity* Unknown::Entity::clone() const
 {
-	Entity* ent = (Entity*)malloc(sizeof Entity);
-	memcpy(ent, this, sizeof Entity);
+	Entity* ent = (Entity*)malloc(sizeof(Entity));
+	memcpy(ent, this, sizeof(Entity));
 	return ent;
 }
 
@@ -86,10 +84,10 @@ void Unknown::TwoStateEntity::heal(const int health)
 		this->alive = true;
 }
 
-Unknown::Entity* Unknown::TwoStateEntity::clone() const
+::Unknown::Entity* Unknown::TwoStateEntity::clone() const
 {
-	TwoStateEntity* ent = (TwoStateEntity*)malloc(sizeof TwoStateEntity);
-	memcpy(ent, this, sizeof TwoStateEntity);
+	TwoStateEntity* ent = (TwoStateEntity*)malloc(sizeof(TwoStateEntity));
+	memcpy(ent, this, sizeof(TwoStateEntity));
 	return ent;
 }
 
@@ -138,10 +136,10 @@ int Unknown::HealthEntity::getHealth() const
 	return this->health;
 }
 
-Unknown::Entity* Unknown::HealthEntity::clone() const
+::Unknown::Entity* Unknown::HealthEntity::clone() const
 {
-	HealthEntity* ent = (HealthEntity*)malloc(sizeof HealthEntity);
-	memcpy(ent, this, sizeof HealthEntity);
+	HealthEntity* ent = (HealthEntity*)malloc(sizeof(HealthEntity));
+	memcpy(ent, this, sizeof(HealthEntity));
 	return ent;
 }
 

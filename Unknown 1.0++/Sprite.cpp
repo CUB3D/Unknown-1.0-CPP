@@ -1,12 +1,8 @@
 #include "stdafx.h"
 #include "Sprite.h"
 
-#include "Unknown.h"
-#include "Image.h"
-#include "Vector.h"
-#include "Utils.h"
-
 #include <Math.h>
+#include <string.h>
 
 // Sprite class
 
@@ -65,9 +61,9 @@ void Unknown::Sprite::init() const
 	//NOOP
 }
 
-Unknown::Sprite* Unknown::Sprite::clone() const
+::Unknown::Sprite* Unknown::Sprite::clone() const
 {
-	Sprite* returnValue = (Sprite*)malloc(sizeof Sprite);
+	Sprite* returnValue = (Sprite*)malloc(sizeof(Sprite));
 	memcpy(returnValue, this, sizeof *this);
 	return returnValue;
 }
@@ -103,9 +99,9 @@ void Unknown::Graphics::ImageSprite::init() const
 	this->hasInit = true;
 }
 
-Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
+::Unknown::Sprite* Unknown::Graphics::ImageSprite::clone() const
 {
-	Sprite* returnValue = (Sprite*)malloc(sizeof ImageSprite);
+	Sprite* returnValue = (Sprite*)malloc(sizeof(ImageSprite));
 	memcpy(returnValue, this, sizeof *this);
 	return returnValue;
 }
@@ -149,9 +145,9 @@ void Unknown::Graphics::AnimatedSprite::init() const
 	this->hasInit = true;
 }
 
-Unknown::Sprite* Unknown::Graphics::AnimatedSprite::clone() const
+::Unknown::Sprite* Unknown::Graphics::AnimatedSprite::clone() const
 {
-	Sprite* ret = (Sprite*)malloc(sizeof AnimatedSprite);
+	Sprite* ret = (Sprite*)malloc(sizeof(AnimatedSprite));
 	memcpy(ret, this, sizeof *this);
 	return ret;
 }

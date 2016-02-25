@@ -1,13 +1,11 @@
 #include "stdafx.h"
 #include "Image.h"
 
-#include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
-#include <string>
+#include <string.h>
 
 #include "Unknown.h"
-
 
 Unknown::Graphics::Image::Image(const char* fileName)
 {
@@ -57,9 +55,9 @@ void Unknown::Graphics::Image::render(const int x, const int y)
 	this->render(x, y, 0);
 }
 
-Unknown::Graphics::Image* Unknown::Graphics::Image::clone() const
+::Unknown::Graphics::Image* Unknown::Graphics::Image::clone() const
 {
-	Image* clone = (Image*)malloc(sizeof Image);
+	Image* clone = (Image*)malloc(sizeof(Image));
 	memcpy(clone, this, sizeof *this);
 	return clone;
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Input.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Quadtree.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Animation.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Particle.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/targetver.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Input.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Particle.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/stdafx.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Loader.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Physics.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Utils.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Unknown.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Colour.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Animation.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Loader.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Image.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Vector.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Physics.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Timer.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Vector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Colour.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Font.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Map.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Sprite.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Quadtree.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Map.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Timer.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI2D.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI2D.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Entity.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Entity.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Font.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Utils.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Sprite.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/stdafx.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Unknown.h" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/Output" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file://B:/Programs/Cygwin/lib/gcc/x86_64-pc-cygwin/5.3.0/include" />
+          <root url="file://B:/Programs/Cygwin/usr/include" />
+          <root url="file://$MODULE_DIR$/Libs/RapidJSON/include" />
+          <root url="file://$MODULE_DIR$/Libs/SDL2/include" />
+          <root url="file://$MODULE_DIR$/Libs/SDL2_image/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://B:/Programs/Cygwin/lib/gcc/x86_64-pc-cygwin/5.3.0/include" />
+          <root url="file://B:/Programs/Cygwin/usr/include" />
+          <root url="file://$MODULE_DIR$/Libs/RapidJSON/include" />
+          <root url="file://$MODULE_DIR$/Libs/SDL2/include" />
+          <root url="file://$MODULE_DIR$/Libs/SDL2_image/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>

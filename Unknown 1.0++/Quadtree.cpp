@@ -3,6 +3,8 @@
 #include "Entity.h"
 #include "Physics.h"
 
+#include <algorithm>
+
 void Unknown::Quad::handleCollisions()
 {
 	for (int i = 0; i < this->entitys.size(); i++)
