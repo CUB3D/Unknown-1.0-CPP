@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.3)
 project(Unknown_1_0_CPP)
 
 #SDL stuff
-set(SDL2_Flags "-mwindows -Wl,--no-undefined -static-libgcc")
+set(SDL2_Flags "")
 #paths
 set(SDL2_ROOT     "Libs/SDL2")
 set(SDL2_Includes "${SDL2_ROOT}/include")
@@ -75,7 +75,9 @@ set(SOURCE_FILES
 
 add_library(Unknown_1_0_CPP STATIC ${SOURCE_FILES})
 
+add_custom_target(combined ALL COMMAND ${CMAKE_CXX_ARCHIVE_CREATE} libcombined.a $<TARGET_FILE:Unknown_1_0_CPP>)
+
 #SDL2 includes
 target_include_directories(Unknown_1_0_CPP SYSTEM PRIVATE ${SDL2_Includes} ${SDL2_IMAGE_Includes} ${RapidJSON_Includes})
 # link against the SDL (and its dependencies)
-target_link_libraries(Unknown_1_0_CPP ${SDL2_Libs} ${SDL2_IMAGE_Libs})
+target_link_libraries(Unknown_1_0_CPP ${SDL2_Libs} ${SDL2_IMAGE_Libs} "--no-undefined -static-libgcc")
