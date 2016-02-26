@@ -194,3 +194,10 @@ ModelManifest.xml
 Unknown++
 
 *.vc.opendb
+
+
+#CLion stuff
+.idea/workspace.xml
+.idea/tasks.xml
+
+*.iws
