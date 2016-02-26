@@ -75,7 +75,6 @@ set(SOURCE_FILES
 
 add_library(Unknown_1_0_CPP STATIC ${SOURCE_FILES})
 
-
 #SDL2 includes
 target_include_directories(Unknown_1_0_CPP SYSTEM PRIVATE ${SDL2_Includes} ${SDL2_IMAGE_Includes} ${RapidJSON_Includes})
 # link against the SDL (and its dependencies)
