@@ -3,23 +3,22 @@
 
 #include "stdafx.h"
 
-#include <Unknown.h>
-
-#include "UI2D.h"
 #include <iostream>
-#include "Colour.h"
-#include "Map.h"
-#include "Image.h"
-#include "Sprite.h"
-#include "Input.h"
-#include "Entity.h"
-#include "Physics.h"
-#include "Loader.h"
-#include "Animation.h"
-#include "Font.h"
-#include "Particle.h"
-#include "Quadtree.h"
-#include "UI.h"
+#include "../Unknown 1.0++/Colour.h"
+#include "../Unknown 1.0++/Map.h"
+#include "../Unknown 1.0++/Image.h"
+#include "../Unknown 1.0++/Sprite.h"
+#include "../Unknown 1.0++/Input.h"
+#include "../Unknown 1.0++/Entity.h"
+#include "../Unknown 1.0++/Physics.h"
+#include "../Unknown 1.0++/Loader.h"
+#include "../Unknown 1.0++/Animation.h"
+#include "../Unknown 1.0++/Font.h"
+#include "../Unknown 1.0++/Particle.h"
+#include "../Unknown 1.0++/Quadtree.h"
+#include "../Unknown 1.0++/UI.h"
+#include "../Unknown 1.0++/Image.h"
+#include "../Unknown 1.0++/Unknown.h"
 
 Unknown::Graphics::Image font_img("Font.png");
 

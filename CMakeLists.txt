@@ -79,3 +79,16 @@ add_library(Unknown_1_0_CPP STATIC ${SOURCE_FILES})
 target_include_directories(Unknown_1_0_CPP SYSTEM PRIVATE ${SDL2_Includes} ${SDL2_IMAGE_Includes} ${RapidJSON_Includes})
 # link against the SDL (and its dependencies)
 target_link_libraries(Unknown_1_0_CPP ${SDL2_Libs} ${SDL2_IMAGE_Libs})
+
+#Now for the test stuff
+
+set(TEST_SOURCE_FILES
+        "Unknown Test/Unknown Test.cpp"
+        "Unknown Test/stdafx.cpp"
+        "Unknown Test/stdafx.h"
+        "Unknown Test/targetver.h")
+
+add_executable(Unknown_1_0_CPP_TEST ${TEST_SOURCE_FILES})
+
+target_include_directories(Unknown_1_0_CPP_TEST SYSTEM PRIVATE ${SDL2_Includes} ${SDL2_IMAGE_Includes} ${RapidJSON_Includes} "Unknown 1.0++")
+target_link_libraries(Unknown_1_0_CPP_TEST ${SDL2_Libs} ${SDL2_IMAGE_Libs} "Output/Debug/libUnknown_1_0_CPP.a")
