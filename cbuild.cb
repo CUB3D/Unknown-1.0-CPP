@@ -1,12 +1,17 @@
-$compile = g++ -IUK_SRC/headers -ILibs/rapidjson -std=gnu++11 -lSDL2 -lSDL2main -lSDL2_image
+$compile = g++ -c -fpic -IUK_SRC/headers -ILibs/rapidjson -std=gnu++11 -lSDL2 -lSDL2main -lSDL2_image
 $cp = cp
+$mv = mv
 $srcDir = Unknown 1.0++
 $testDir = Unknown Test
 
 run rm UK_SRC -r
+run rm UK_TEST -r
 
 mkdir UK_SRC/src
 mkdir UK_SRC/headers
+
+mkdir UK_TEST/src
+mkdir UK_TEST/headers
 
 forall (ending)>.cpp in $srcDir
 $cp "$name" UK_SRC/src
@@ -17,11 +22,11 @@ $cp "$name" UK_SRC/headers
 endfor
 
 forall (ending)>.cpp in $testDir
-$cp "$name" UK_SRC/src
+$cp "$name" UK_TEST/src
 endfor
 
 forall (ending)>.h in $testDir
-$cp "$name" UK_SRC/headers
+$cp "$name" UK_TEST/headers
 endfor
 
 run echo "Preparing for linux compilation..."
@@ -33,11 +38,26 @@ run rpl -R "#include <SDL.h>" "#include <SDL2/SDL.h>" UK_SRC/*
 run rpl -R "#include <SDL_image.h>" "#include <SDL2/SDL_image.h>" UK_SRC/*
 run rpl -R '#include "rapidjson\document.h"' '#include "document.h"' UK_SRC/*
 run rpl -R '#include <Math.h>' '#include <cmath>' UK_SRC/*
-run rpl -R '#include "../Unknown 1.0++/' '#include "' UK_SRC/*
+run rpl -R '#include "../Unknown 1.0++/' '#include "' UK_TEST/*
+run echo "" > UK_TEST/headers/stdafx.h
 run echo "Patching tmain to main"
-run rpl -R 'int _tmain(int argc, _TCHAR* argv[])' 'int main(int argc, char* argv[])' UK_SRC/*
+run rpl -R 'int _tmain(int argc, _TCHAR* argv[])' 'int main(int argc, char* argv[])' UK_TEST/*
 run echo "done"
+
+run echo "" > UK_TEST/headers/stdafx.h
 
 mkdir UK_SRC/obj
 
 compileAll * in UK_SRC/src
+
+forall (ending)>.o
+$mv "$name" UK_SRC/obj
+endfor
+
+$compile = g++ -shared -o libUK.so
+
+compileAll * in UK_SRC/obj
+
+$compile = g++ -IUK_TEST/headers -IUK_SRC/headers -ILibs/rapidjson -L. -std=gnu++11 -lUK -lSDL2 -lSDL2main -lSDL2_image
+
+compileAll * in UK_TEST/src
