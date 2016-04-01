@@ -1,0 +1,43 @@
+$compile = g++ -IUK_SRC/headers -ILibs/rapidjson -std=gnu++11 -lSDL2 -lSDL2main -lSDL2_image
+$cp = cp
+$srcDir = Unknown 1.0++
+$testDir = Unknown Test
+
+run rm UK_SRC -r
+
+mkdir UK_SRC/src
+mkdir UK_SRC/headers
+
+forall (ending)>.cpp in $srcDir
+$cp "$name" UK_SRC/src
+endfor
+
+forall (ending)>.h in $srcDir
+$cp "$name" UK_SRC/headers
+endfor
+
+forall (ending)>.cpp in $testDir
+$cp "$name" UK_SRC/src
+endfor
+
+forall (ending)>.h in $testDir
+$cp "$name" UK_SRC/headers
+endfor
+
+run echo "Preparing for linux compilation..."
+run echo "Patching windows-specific headers"
+run echo "" > UK_SRC/headers/stdafx.h
+run rm UK_SRC/headers/targetver.h
+run echo "Patching SDL includes for compatability"
+run rpl -R "#include <SDL.h>" "#include <SDL2/SDL.h>" UK_SRC/*
+run rpl -R "#include <SDL_image.h>" "#include <SDL2/SDL_image.h>" UK_SRC/*
+run rpl -R '#include "rapidjson\document.h"' '#include "document.h"' UK_SRC/*
+run rpl -R '#include <Math.h>' '#include <cmath>' UK_SRC/*
+run rpl -R '#include "../Unknown 1.0++/' '#include "' UK_SRC/*
+run echo "Patching tmain to main"
+run rpl -R 'int _tmain(int argc, _TCHAR* argv[])' 'int main(int argc, char* argv[])' UK_SRC/*
+run echo "done"
+
+mkdir UK_SRC/obj
+
+compileAll * in UK_SRC/src
