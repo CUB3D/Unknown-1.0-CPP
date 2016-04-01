@@ -6,12 +6,15 @@ import re
 # find the cbuild.cb file
 cbuild = open("cbuild.cb")
 
+verboseOutput = False
+
 
 def findAllDirectories(filter, startdir):
     dirs = []
     for dirPath, subs, files in os.walk(startdir):
         for file in files:
-            print("Checking file", file)
+            if verboseOutput:
+                print("Checking file", file)
             if filter.split(">")[0] == "(ending)":
                 if file.endswith(filter.split(">")[1].replace("\n", "")):
                     dirs.append(os.path.join(dirPath, file))
@@ -51,7 +54,7 @@ def exec_forall():
             return
         for file in dirs:
             commandNew = command.replace("$name", file).replace("$fileName", "".join(file.split("/")[-1:]))
-            print(commandNew)
+            print("[EXEC]", commandNew)
             os.system(commandNew)
 
 while lineNumber < len(lines):
@@ -70,7 +73,7 @@ while lineNumber < len(lines):
 
     if data[0] == "run":
         programName = strip_string(" ".join(data[1:]))
-        print("Running", programName)
+        print("[EXEC]", programName)
         os.system(programName)
     if data[0].startswith("$"):
         variableName = data[0]
@@ -81,8 +84,9 @@ while lineNumber < len(lines):
         if len(data) >= 3 and data[2] == "in":
             startDir = data[3].replace("\n", "")
         sourceFiles = findAllDirectories(data[1], replace_vars(startDir))
-        print(" ".join(sourceFiles))
         temp = ""
         for x in sourceFiles:
             temp += '"' + x + '" '
         os.system(replace_vars(variables["$compile"]) + " " + temp)
+    if data[0] == "log":
+        print("[INFO]", " ".join(data[1:]))

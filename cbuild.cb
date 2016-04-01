@@ -1,4 +1,3 @@
-$compile = g++ -c -fpic -IUK_SRC/headers -ILibs/rapidjson -std=gnu++11 -lSDL2 -lSDL2main -lSDL2_image
 $cp = cp
 $mv = mv
 $srcDir = Unknown 1.0++
@@ -29,24 +28,26 @@ forall (ending)>.h in $testDir
 $cp "$name" UK_TEST/headers
 endfor
 
-run echo "Preparing for linux compilation..."
-run echo "Patching windows-specific headers"
+log Preparing for linux compilation...
+log Patching windows-specific headers
 run echo "" > UK_SRC/headers/stdafx.h
 run rm UK_SRC/headers/targetver.h
-run echo "Patching SDL includes for compatability"
+log Patching SDL includes for compatability
 run rpl -R "#include <SDL.h>" "#include <SDL2/SDL.h>" UK_SRC/*
 run rpl -R "#include <SDL_image.h>" "#include <SDL2/SDL_image.h>" UK_SRC/*
 run rpl -R '#include "rapidjson\document.h"' '#include "document.h"' UK_SRC/*
 run rpl -R '#include <Math.h>' '#include <cmath>' UK_SRC/*
 run rpl -R '#include "../Unknown 1.0++/' '#include "' UK_TEST/*
 run echo "" > UK_TEST/headers/stdafx.h
-run echo "Patching tmain to main"
+log Patching tmain to main
 run rpl -R 'int _tmain(int argc, _TCHAR* argv[])' 'int main(int argc, char* argv[])' UK_TEST/*
-run echo "done"
+log Patching done
 
 run echo "" > UK_TEST/headers/stdafx.h
 
 mkdir UK_SRC/obj
+
+$compile = g++ -c -fpic -IUK_SRC/headers -ILibs/rapidjson -std=gnu++11 -lSDL2 -lSDL2main -lSDL2_image
 
 compileAll * in UK_SRC/src
 
@@ -61,3 +62,5 @@ compileAll * in UK_SRC/obj
 $compile = g++ -IUK_TEST/headers -IUK_SRC/headers -ILibs/rapidjson -L. -std=gnu++11 -lUK -lSDL2 -lSDL2main -lSDL2_image
 
 compileAll * in UK_TEST/src
+
+log Compilation completed successfully
