@@ -88,9 +88,10 @@ namespace Unknown
 	void removeMouseListener(std::string listnerID);
 	void callMouseListeners(const MouseEvent evnt);
 
-#define UK_ADD_MOUSE_LISTENER_INTERNAL(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
-#define UK_ADD_MOUSE_LISTENER_EXTERNAL(listener, id) ::Unknown::registerMouseListener([](::Unknown::MouseEvent evnt) {listener(evnt);}, id);
-#define UK_REMOVE_MOUSE_LISTENER(id) ::Unknown::removeMouseListener(id);
+#define UK_ADD_MOUSE_LISTENER_INTERNAL(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id)
+#define UK_ADD_MOUSE_LISTENER_EXTERNAL(listener, id) ::Unknown::registerMouseListener([](::Unknown::MouseEvent evnt) {listener(evnt);}, id)
+#define UK_REMOVE_MOUSE_LISTENER(id) ::Unknown::removeMouseListener(id)
+#define UK_GET_MOUSE_POS(point) SDL_GetMouseState(&p.x, &p.y)
 }
 
 #endif
