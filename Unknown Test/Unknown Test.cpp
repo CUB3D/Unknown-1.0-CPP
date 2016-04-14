@@ -76,7 +76,7 @@ void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
 
 void init()
 {
-	Unknown::log(0, "This is an infomation log");
+	UK_LOG_INFO_VERBOSE("This is an infomation log");
 
 	e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
 	Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
