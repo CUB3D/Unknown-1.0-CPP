@@ -19,6 +19,7 @@
 #include "../Unknown 1.0++/UI.h"
 #include "../Unknown 1.0++/Image.h"
 #include "../Unknown 1.0++/Unknown.h"
+#include "../Unknown 1.0++/Log.h"
 
 Unknown::Graphics::Image font_img("Font.png");
 
@@ -75,9 +76,11 @@ void testCollisionListener(Unknown::Entity* ent, Unknown::Entity* ent2)
 
 void init()
 {
+	Unknown::log(0, "This is an infomation log");
+
 	e = new Ent(new Unknown::Graphics::ImageSprite(30, 30, &font_img), "A");
 	Ent* ee = new Ent(new Unknown::Graphics::ImageSprite(300, 300, new Unknown::Graphics::Image("Font.png")), "B");
-	//tree.addEnity(e);
+	//tree.addEnity(e)
 	//tree.addEnity(ee);
 	Unknown::registerEntity(e);
 	Unknown::registerEntity(ee);

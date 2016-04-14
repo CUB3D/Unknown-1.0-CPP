@@ -90,6 +90,7 @@
     <ClInclude Include="Image.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Loader.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Physics.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="Log.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Physics.cpp" />

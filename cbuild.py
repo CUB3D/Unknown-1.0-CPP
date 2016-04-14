@@ -1,13 +1,27 @@
 # a project to make the compilation of code simpler
 
 import os
-import re
-
-# find the cbuild.cb file
-cbuild = open("cbuild.cb")
+import sys
 
 verboseOutput = False
 
+if "-v" in sys.argv:
+    verboseOutput = True
+
+projects = [x for x in sys.argv[1:] if not x.startswith("-")]
+
+if verboseOutput:
+    print("Compiling ", " ".join(projects))
+
+# find the cbuild.cb file
+cbuild = open("cbuild-" + projects[0] + ".cb")
+
+lines = []
+
+for a in cbuild:
+    lines.append(a)
+
+lineNumber = 0
 
 def findAllDirectories(filter, startdir):
     dirs = []
@@ -22,15 +36,6 @@ def findAllDirectories(filter, startdir):
                 dirs.append(os.path.join(dirPath, file))
     print("Found", dirs)
     return dirs
-
-
-lines = []
-
-for a in cbuild:
-    lines.append(a)
-
-lineNumber = 0
-
 
 def strip_string(string):
     return string.replace("\n", "")
