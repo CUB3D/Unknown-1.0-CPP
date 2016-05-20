@@ -97,4 +97,5 @@ while lineNumber < len(lines):
     if data[0] == "log":
         print("[INFO]", " ".join(data[1:]))
     if data[0] == "rpl":
+        print(" ".join(data[1:0]))
         os.system("tools/build/rpl.py " + " ".join(data[1:]))
