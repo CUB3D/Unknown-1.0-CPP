@@ -1,3 +1,4 @@
+#!/usr/bin/python3.4
 #usage python3 rpl.py [-ri] <source> <dest> file [outFile]
 
 import sys

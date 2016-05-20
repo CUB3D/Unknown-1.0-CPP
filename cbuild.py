@@ -1,3 +1,4 @@
+#!/usr/bin/python3.4
 # a project to make the compilation of code simpler
 
 import os
@@ -95,3 +96,5 @@ while lineNumber < len(lines):
         os.system(replace_vars(variables["$compile"]) + " " + temp)
     if data[0] == "log":
         print("[INFO]", " ".join(data[1:]))
+    if data[0] == "rpl":
+        os.system("tools/build/rpl.py " + " ".join(data[1:]))

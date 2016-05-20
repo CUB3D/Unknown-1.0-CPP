@@ -11,7 +11,7 @@
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
-build/
+#build/
 bld/
 [Bb]in/
 [Oo]bj/
@@ -202,5 +202,12 @@ Unknown++
 
 *.iws
 
+#Don't include source patched for linux compatibility
 UK_SRC/*
 UK_TEST/*
+
+#Don't include vim swap files
+*.swp
+
+#Don't include linux library binary
+libUK.so
