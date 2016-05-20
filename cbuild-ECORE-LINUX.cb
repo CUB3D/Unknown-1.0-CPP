@@ -5,6 +5,8 @@ $testDir = Unknown Test
 
 run rm UK_SRC -r
 run rm UK_TEST -r
+run rm "Unknown Test/a.out"
+run rm "Unknown Tesst/libUK.so"
 
 mkdir UK_SRC/src
 mkdir UK_SRC/headers
@@ -65,5 +67,8 @@ compileAll * in UK_SRC/obj
 $compile = g++ -IUK_TEST/headers -IUK_SRC/headers -ILibs/RapidJSON/include/rapidjson -L. -std=gnu++14 -lUK -lSDL2 -lSDL2main -lSDL2_image
 
 compileAll * in UK_TEST/src
+
+run mv a.out "Unknown Test"
+run mv libUK.so "Unknown Test"
 
 log Compilation completed successfully
