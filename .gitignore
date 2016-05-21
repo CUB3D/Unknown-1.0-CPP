@@ -210,4 +210,4 @@ UK_TEST/*
 *.swp
 
 #Don't include linux library binary
-libUK.so
+*libUK.so
