@@ -86,7 +86,7 @@ while lineNumber < len(lines):
     lineNumber += 1
 
     if data[0] == "run":
-        programName = strip_string(" ".join(data[1:]))
+        programName = replace_vars(strip_string(" ".join(data[1:])))
         print("[EXEC]", programName)
         execSystemCommand(programName)
     if data[0].startswith("$"):

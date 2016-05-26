@@ -1,8 +1,9 @@
 $cp = cp
 $mv = mv
 $srcDir = Unknown 1.0++
+$rmdir = rm -r
 
-run rm UK_SRC -r
+run $rmdir -f UK_SRC
 
 mkdir UK_SRC/src
 mkdir UK_SRC/headers
@@ -43,7 +44,7 @@ $compile = g++ -shared -o libUK.so
 
 compileAll * in UK_SRC/obj
 
-run rm -r Output/lib
+run $rmdir -f Output/lib
 
 mkdir Output/lib/linux/
 
