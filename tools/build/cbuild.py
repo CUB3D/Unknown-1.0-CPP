@@ -51,6 +51,13 @@ def replace_vars(string):
     return strip_string(ret)
 
 
+def execSystemCommand(command):
+    returnValue = os.system(command)
+    if returnValue != 0:
+        print("[ERROR] failed to run command")
+        print("Command:", command)
+        sys.exit(1)
+
 def exec_forall():
     global lineNumber
     while True:
@@ -61,7 +68,8 @@ def exec_forall():
         for file in dirs:
             commandNew = command.replace("$name", file).replace("$fileName", "".join(file.split("/")[-1:]))
             print("[EXEC]", commandNew)
-            os.system(commandNew)
+            execSystemCommand(commandNew)
+
 
 while lineNumber < len(lines):
     data = lines[lineNumber].split(" ")
@@ -80,7 +88,7 @@ while lineNumber < len(lines):
     if data[0] == "run":
         programName = strip_string(" ".join(data[1:]))
         print("[EXEC]", programName)
-        os.system(programName)
+        execSystemCommand(programName)
     if data[0].startswith("$"):
         variableName = data[0]
         variableValue = " ".join(data[2:])
@@ -93,9 +101,9 @@ while lineNumber < len(lines):
         temp = ""
         for x in sourceFiles:
             temp += '"' + x + '" '
-        os.system(replace_vars(variables["$compile"]) + " " + temp)
+        execSystemCommand(replace_vars(variables["$compile"]) + " " + temp)
     if data[0] == "log":
         print("[INFO]", " ".join(data[1:]))
     if data[0] == "rpl":
         print(" ".join(data[1:0]))
-        os.system("tools/build/rpl.py " + " ".join(data[1:]))
+        execSystemCommand("tools/build/rpl.py " + " ".join(data[1:]))
