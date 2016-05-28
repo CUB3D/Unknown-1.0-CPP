@@ -2,10 +2,12 @@ $cp = cp
 $mv = mv
 $srcDir = Unknown 1.0++
 $testDir = Unknown Test
+$rm = rm -f
+$rmdir = rm -rf
 
-run rm UK_TEST -r
-run rm "Unknown Test/a.out"
-run rm "Unknown Test/libUK.so"
+run $rmdir UK_TEST
+run $rm "Unknown Test/a.out"
+run $rm "Unknown Test/libUK.so"
 
 mkdir UK_TEST/src
 mkdir UK_TEST/headers
