@@ -211,3 +211,5 @@ UK_TEST/*
 
 #Don't include linux library binary
 *libUK.so
+
+.cbuild_filecache

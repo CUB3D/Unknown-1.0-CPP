@@ -70,6 +70,35 @@ def exec_forall():
             print("[EXEC]", commandNew)
             execSystemCommand(commandNew)
 
+oldFileHashes = {}
+
+if os.path.exists(".cbuild_filecache"):
+    print("Cache found, parsing")
+    file = open(".cbuild_filecache", "r")
+    for line in file:
+        data = line.rstrip("\n").split("=")
+        oldFileHashes[data[0]] = data[1]
+
+newFileHashes = {}
+
+import hashlib
+
+"""
+Returns true if the given file needs recompiled
+Creates an sha256 hash of the given file and will compare it to
+the hash from the last time that it was compiled.
+If the hash has changed or file is new then the file is (re)compiled
+"""
+def checkCompileNeeded(filename):
+    fileHandle = open(filename, "rb")
+    fileHash = hashlib.sha256(fileHandle.read()).hexdigest()
+    #store the hash so that it can be cached if the compile succeeds
+    newFileHashes[filename] = fileHash
+    if filename in oldFileHashes:
+        return oldFileHashes[filename] != fileHash
+    else:
+        #Recompile if the file is new
+        return True
 
 while lineNumber < len(lines):
     data = lines[lineNumber].split(" ")
@@ -100,10 +129,21 @@ while lineNumber < len(lines):
         sourceFiles = findAllDirectories(data[1], replace_vars(startDir))
         temp = ""
         for x in sourceFiles:
-            temp += '"' + x + '" '
-        execSystemCommand(replace_vars(variables["$compile"]) + " " + temp)
+            if checkCompileNeeded(x):
+                temp += '"' + x + '" '
+        if len(temp) == 0:
+            print("No files need to be recompiled")
+        else:
+            execSystemCommand(replace_vars(variables["$compile"]) + " " + temp)
     if data[0] == "log":
         print("[INFO]", " ".join(data[1:]))
     if data[0] == "rpl":
         print(" ".join(data[1:0]))
         execSystemCommand("tools/build/rpl.py " + " ".join(data[1:]))
+
+print("[INFO] Build completed")
+
+file = open(".cbuild_filecache", "w")
+for key in newFileHashes:
+    file.write(key + "=" + newFileHashes[key] + "\n")
+file.close()
