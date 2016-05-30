@@ -11,6 +11,8 @@ cp "Output/lib/linux/libUK.so" "$1"
 
 cp "tools/project/cbuild-PROJECT-TEMPLATE.cb" "$1"
 
+cp "tools/build/cbuild.py" "$1"
+
 cp UK_SRC/headers/* "$1/Libs/Unknown/headers"
 
 printf '{ \n    "Width":512,\n    "Height":512,\n    "Title":"Test"\n}\n' > "$1"/Config.json
