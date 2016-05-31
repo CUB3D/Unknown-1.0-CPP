@@ -34,7 +34,7 @@ def findAllDirectories(filter, startdir):
                 if file.endswith(filter.split(">")[1].replace("\n", "")):
                     dirs.append(os.path.join(dirPath, file))
             if filter == "*":
-                dirs.append(os.path.join(dirPath, file))
+                dirs.append(os.path.abspath(os.path.join(dirPath, file)))
     print("Found", dirs)
     return dirs
 
@@ -111,7 +111,8 @@ while lineNumber < len(lines):
 
     if data[0] == "mkdir":
         dirName = strip_string(data[1])
-        os.makedirs(dirName)
+        if not os.path.exists(dirName):
+            os.makedirs(dirName)
     lineNumber += 1
 
     if data[0] == "run":

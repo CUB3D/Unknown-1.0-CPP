@@ -42,8 +42,9 @@ def rplSingleFile(inFile, outFile):
 if recursive:
     for path, sub, files in os.walk(inFileName):
         for file in files:
-            filePath = os.path.join(path, file)
-            print("Match found in file", filePath)
-            rplSingleFile(filePath, filePath)
+            if not ".o" in file:
+                filePath = os.path.join(path, file)
+                print("Match found in file", filePath)
+                rplSingleFile(filePath, filePath)
 else:
     rplSingleFile(inFileName, outFileName)

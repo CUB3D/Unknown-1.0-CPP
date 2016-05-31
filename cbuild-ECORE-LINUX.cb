@@ -1,9 +1,9 @@
 $cp = cp
 $mv = mv
 $srcDir = Unknown 1.0++
-$rmdir = rm -r
+$rmdir = rm -rf
 
-run $rmdir -f UK_SRC
+run $rmdir UK_SRC/src UK_SRC/headers
 
 mkdir UK_SRC/src
 mkdir UK_SRC/headers
@@ -33,21 +33,14 @@ log Patching done
 
 mkdir UK_SRC/obj
 
-$compile = g++ -c -fpic -IUK_SRC/headers -ILibs/RapidJSON/include/rapidjson -std=gnu++14 -lSDL2 -lSDL2main -lSDL2_image 
+$compile = cd UK_SRC/obj && g++ -c -fpic -I../headers -I../../Libs/RapidJSON/include/rapidjson -std=gnu++14 -lSDL2 -lSDL2main -lSDL2_image 
+
 compileAll * in UK_SRC/src
 
-forall (ending)>.o
-$mv "$name" UK_SRC/obj
-endfor
-
-$compile = g++ -shared -o libUK.so
-
-compileAll * in UK_SRC/obj
-
-run $rmdir -f Output/lib
+$compile = cd Output/lib/linux && g++ -shared -o libUK.so
 
 mkdir Output/lib/linux/
 
-run mv libUK.so Output/lib/linux
+compileAll * in UK_SRC/obj
 
 log Compilation completed successfully
