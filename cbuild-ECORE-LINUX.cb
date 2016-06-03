@@ -37,6 +37,8 @@ $compile = cd UK_SRC/obj && g++ -c -fpic -I../headers -I../../Libs/RapidJSON/inc
 
 compileAll * in UK_SRC/src
 
+$depends = *
+
 $compile = cd Output/lib/linux && g++ -shared -o libUK.so
 
 mkdir Output/lib/linux/

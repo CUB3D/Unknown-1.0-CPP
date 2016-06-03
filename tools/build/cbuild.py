@@ -81,6 +81,9 @@ if os.path.exists(".cbuild_filecache"):
 
 newFileHashes = {}
 
+changedFiles =  []
+
+
 import hashlib
 
 """
@@ -95,10 +98,23 @@ def checkCompileNeeded(filename):
     #store the hash so that it can be cached if the compile succeeds
     newFileHashes[filename] = fileHash
     if filename in oldFileHashes:
-        return oldFileHashes[filename] != fileHash
+        if oldFileHashes[filename] != fileHash:
+            changedFiles.append(filename)
+            return True
+        else:
+            return False
     else:
         #Recompile if the file is new
+        changedFiles.append(filename)
         return True
+
+def compileRequiredByDepends(filename):
+    if "$depends" not in variables:
+        return False
+    dependsValue = strip_string(variables["$depends"])
+    if dependsValue == "*":
+        return len(changedFiles) > 0
+    return False
 
 while lineNumber < len(lines):
     data = lines[lineNumber].split(" ")
@@ -130,12 +146,13 @@ while lineNumber < len(lines):
         sourceFiles = findAllDirectories(data[1], replace_vars(startDir))
         temp = ""
         for x in sourceFiles:
-            if checkCompileNeeded(x):
+            if checkCompileNeeded(x) or compileRequiredByDepends(x):
                 temp += '"' + x + '" '
         if len(temp) == 0:
             print("No files need to be recompiled")
         else:
-            execSystemCommand(replace_vars(variables["$compile"]) + " " + temp)
+            command = replace_vars(variables["$compile"]) + " " + temp
+            execSystemCommand(command)
     if data[0] == "log":
         print("[INFO]", " ".join(data[1:]))
     if data[0] == "rpl":
