@@ -13,6 +13,7 @@
 #include <fstream>
 #include <string>
 #include "rapidjson\document.h"
+#include "PythonScript.h"
 
 // unknown class
 
@@ -95,6 +96,7 @@ void Unknown::Unknown::createWindow()
 void Unknown::Unknown::initGameLoop()
 {
 	initKeySystem();
+    ::Unknown::Python::init();
 
 	while (running)
 	{

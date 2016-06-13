@@ -33,7 +33,9 @@ run echo "" > UK_TEST/headers/stdafx.h
 
 run cp Output/lib/linux/libUK.so ./libUK.so
 
-$compile = g++ -IUK_TEST/headers -IUK_SRC/headers -ILibs/RapidJSON/include/rapidjson -L. -std=gnu++14 -lUK -lSDL2 -lSDL2main -lSDL2_image
+$compile = g++ -IUK_TEST/headers -IUK_SRC/headers -ILibs/RapidJSON/include/rapidjson -I/usr/include/python3.4 -L. -std=gnu++14 -lUK -lSDL2 -lSDL2main -lSDL2_image -lpython3.4m -lpthread -ldl -lutil -lm
+
+$depends = *
 
 compileAll * in UK_TEST/src
 
