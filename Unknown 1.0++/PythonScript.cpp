@@ -2,7 +2,7 @@
 #include "PythonScript.h"
 #include "Python.h"
 
-void Unknown::Python::checkError(PyObject* obj)
+void Unknown::Python:Script:::checkError(PyObject* obj)
 {
     if(obj == NULL)
     {
@@ -11,14 +11,18 @@ void Unknown::Python::checkError(PyObject* obj)
     }
 }
 
-void Unknown::Python::init()
+void Unknown::Python::Script::importModule(std::string name)
+{
+    PyObject* sysModulePath = PyObject_GetAttrString(getInterperator()->moduleSys, "path");
+    checkError(sysModulePath);
+    PyList_Append(sysModulePath, PyUnicode_FromString("."));
+ 
+}
+
+void Unknown::Python::Interperator::init()
 {
     Py_Initialize();
 
-    PyObject* moduleSys = PyImport_ImportModule("sys");
-    checkError(moduleSys);
-    PyObject* sysModulePath = PyObject_GetAttrString(moduleSys, "path");
-    checkError(sysModulePath);
-    PyList_Append(sysModulePath, PyUnicode_FromString("."));
-    //TODO: importing dynamicaly
+    this->moduleSys = PyImport_ImportModule("sys");
+    checkError(this->moduleSys);
 }
