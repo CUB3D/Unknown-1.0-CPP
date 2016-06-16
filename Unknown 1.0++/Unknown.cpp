@@ -96,7 +96,7 @@ void Unknown::Unknown::createWindow()
 void Unknown::Unknown::initGameLoop()
 {
 	initKeySystem();
-    ::Unknown::Python::init();
+    ::Unknown::Python::getInterperator()->init();
 
 	while (running)
 	{

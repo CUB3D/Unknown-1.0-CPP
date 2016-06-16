@@ -9,22 +9,20 @@ namespace Unknown
 {
     namespace Python
     {
-        class Interperator()
+        class Interperator
         {
         public:
             PyObject* moduleSys;
 
-            void init();
-        }
-
-        class Script()
-        {
-        public:
+            
             void checkError(PyObject* obj);
-        
             void importModule(std::string name);
+            void init();
+        };
 
-        }
+        extern Interperator* instance;
+
+        Interperator* getInterperator();
     }
 }
 
