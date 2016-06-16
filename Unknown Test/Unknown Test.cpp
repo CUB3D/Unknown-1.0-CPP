@@ -20,6 +20,9 @@
 #include "../Unknown 1.0++/Image.h"
 #include "../Unknown 1.0++/Unknown.h"
 #include "../Unknown 1.0++/Log.h"
+#include "../Unknown 1.0++/PythonScript.h"
+
+#include "Python.h"
 
 Unknown::Graphics::Image font_img("Font.png");
 
@@ -92,6 +95,16 @@ void init()
 	Unknown::registerKeybind(Unknown::KeyCode::KEY_UP, "MoveUp");
 
 	UI = Unknown::Loader::loadUI("TestUI.json");
+   
+    Unknown::Python::getInterperator()->init();
+
+    Unknown::Python::getInterperator()->addSearchPath(".");
+    std::cout << "Importing" << std::endl;
+    PyObject* testModule = PyImport_ImportModule("Test");
+
+  //  PyObject* myFunction = PyObject_GetAttrString(testModule,(char*)"init");
+//PyObject_CallObject(myFunction, NULL);
+
 }
 
 int _tmain(int argc, _TCHAR* argv[])

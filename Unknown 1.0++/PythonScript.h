@@ -16,7 +16,7 @@ namespace Unknown
 
             
             void checkError(PyObject* obj);
-            void importModule(std::string name);
+            void addSearchPath(std::string name);
             void init();
         };
 

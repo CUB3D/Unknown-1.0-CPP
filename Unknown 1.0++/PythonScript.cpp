@@ -13,11 +13,11 @@ void Unknown::Python::Interperator::checkError(PyObject* obj)
     }
 }
 
-void Unknown::Python::Interperator::importModule(std::string name)
+void Unknown::Python::Interperator::addSearchPath(std::string name)
 {
     PyObject* sysModulePath = PyObject_GetAttrString(this->moduleSys, "path");
     checkError(sysModulePath);
-    PyList_Append(sysModulePath, PyUnicode_FromString("."));
+    PyList_Append(sysModulePath, PyUnicode_FromString(name.c_str()));
  
 }
 
