@@ -35,7 +35,6 @@ def findAllDirectories(filter, startdir):
                     dirs.append(os.path.join(dirPath, file))
             if filter == "*":
                 dirs.append(os.path.abspath(os.path.join(dirPath, file)))
-    print("Found", dirs)
     return dirs
 
 def strip_string(string):
