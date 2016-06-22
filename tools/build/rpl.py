@@ -30,13 +30,18 @@ print("Replacing string '", sourceString, "' with '", destinationString, "' in f
 
 def rplSingleFile(inFile, outFile):
     file = open(inFile, "r")
-    output = []
+    input = []
     for line in file:
-        output.append(line.replace(sourceString, destinationString))
+        input.append(line)
     file.close()
+
     file = open(outFile, "w")
-    for line in output:
-        file.write(line)
+    for line in input:
+        if sourceString in line:
+            print("Match found in file", filePath)
+            file.write(line.replace(sourceString, destinationString))
+        else:
+            file.write(line)
     file.close()
 
 if recursive:
@@ -44,7 +49,6 @@ if recursive:
         for file in files:
             if not ".o" in file:
                 filePath = os.path.join(path, file)
-                print("Match found in file", filePath)
                 rplSingleFile(filePath, filePath)
 else:
     rplSingleFile(inFileName, outFileName)
