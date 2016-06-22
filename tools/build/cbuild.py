@@ -146,9 +146,10 @@ while lineNumber < len(lines):
         temp = ""
         for x in sourceFiles:
             if checkCompileNeeded(x) or compileRequiredByDepends(x):
+                print("[BUILD] Building", x)
                 temp += '"' + x + '" '
         if len(temp) == 0:
-            print("No files need to be recompiled")
+            print("[BUILD] No work needs to be done")
         else:
             command = replace_vars(variables["$compile"]) + " " + temp
             execSystemCommand(command)
