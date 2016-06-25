@@ -43,6 +43,8 @@ set(SOURCE_FILES
         "Unknown 1.0++/Vector.h"
         "Unknown 1.0++/PythonScript.cpp"
         "Unknown 1.0++/PythonScript.h"
+        "Unknown 1.0++/Log.cpp"
+        "Unknown 1.0++/Log.h"
 
         "Unknown Test/Unknown Test.cpp"
         "Unknown Test/stdafx.h"

@@ -11,9 +11,10 @@
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Unknown.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Input.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/stdafx.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Colour.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Image.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Map.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Quadtree.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Entity.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/stdafx.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Unknown.cpp" isTestSource="false" />
@@ -22,7 +23,6 @@
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Particle.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Map.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Colour.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Utils.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Sprite.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Animation.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Timer.h" isTestSource="false" />
@@ -31,17 +31,19 @@
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/PythonScript.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Physics.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI2D.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Input.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Particle.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Sprite.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Entity.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Log.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Utils.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Font.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Loader.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Quadtree.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Log.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Map.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/UI.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Input.h" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/stdafx.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Image.cpp" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Utils.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Loader.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown 1.0++/Animation.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Unknown Test/targetver.h" isTestSource="false" />

@@ -97,11 +97,7 @@ void init()
 	UI = Unknown::Loader::loadUI("TestUI.json");
 
     Unknown::Python::getInterpreter()->addSearchPath(".");
-    std::cout << "Importing" << std::endl;
-    PyObject* testModule = PyImport_ImportModule("Test");
-
-  //  PyObject* myFunction = PyObject_GetAttrString(testModule,(char*)"init");
-//PyObject_CallObject(myFunction, NULL);
+	Unknown::Python::getInterpreter()->loadScript("Test");
 
 }
 

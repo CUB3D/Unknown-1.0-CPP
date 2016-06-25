@@ -13,9 +13,10 @@ namespace Unknown
         {
         public:
             PyObject* moduleSys;
-            
+
             void checkError(PyObject* obj);
             void addSearchPath(std::string name);
+            void loadScript(std::string name);
             void init();
         };
 

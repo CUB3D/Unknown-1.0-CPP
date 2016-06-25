@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PythonScript.h"
 #include "Python.h"
+#include "Log.h"
 
 Unknown::Python::Interpreter* ::Unknown::Python::instance = NULL;
 
@@ -35,4 +36,16 @@ Unknown::Python::Interpreter* Unknown::Python::getInterpreter()
         instance = new Interpreter();
     }
     return instance;
+}
+
+void Unknown::Python::Interpreter::loadScript(std::string name)
+{
+    UK_LOG_INFO(::Unknown::concat({"Loading script ", name.c_str()}).c_str());
+    PyObject* testModule = PyImport_ImportModule(name.c_str());
+    checkError(testModule);
+    PyObject* initFunction = PyObject_GetAttrString(testModule, "init");
+    if(initFunction)
+    {
+        PyObject_CallObject(initFunction, NULL);
+    }
 }
