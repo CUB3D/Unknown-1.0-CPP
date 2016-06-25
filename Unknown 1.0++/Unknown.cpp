@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Unknown.h"
 
+#include "Python.h"
 #include <SDL.h>
 #include <iostream>
 #include <map>
@@ -14,6 +15,7 @@
 #include <string>
 #include "rapidjson\document.h"
 #include "PythonScript.h"
+#include "Utils.h"
 
 // unknown class
 
@@ -59,6 +61,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = new Dimension<int> { width, height };
+
+	::Unknown::Python::getInterpreter()->init();
 }
 
 void Unknown::Unknown::createWindow()
@@ -96,7 +100,6 @@ void Unknown::Unknown::createWindow()
 void Unknown::Unknown::initGameLoop()
 {
 	initKeySystem();
-    ::Unknown::Python::getInterperator()->init();
 
 	while (running)
 	{

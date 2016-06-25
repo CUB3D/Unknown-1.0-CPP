@@ -95,10 +95,8 @@ void init()
 	Unknown::registerKeybind(Unknown::KeyCode::KEY_UP, "MoveUp");
 
 	UI = Unknown::Loader::loadUI("TestUI.json");
-   
-    Unknown::Python::getInterperator()->init();
 
-    Unknown::Python::getInterperator()->addSearchPath(".");
+    Unknown::Python::getInterpreter()->addSearchPath(".");
     std::cout << "Importing" << std::endl;
     PyObject* testModule = PyImport_ImportModule("Test");
 
