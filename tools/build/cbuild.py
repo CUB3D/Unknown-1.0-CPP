@@ -71,9 +71,9 @@ def exec_forall():
 
 oldFileHashes = {}
 
-if os.path.exists(".cbuild_filecache"):
+if os.path.exists(".cbuild_filecache-" + projects[0]):
     print("Cache found, parsing")
-    file = open(".cbuild_filecache", "r")
+    file = open(".cbuild_filecache-" + projects[0], "r")
     for line in file:
         data = line.rstrip("\n").split("=")
         oldFileHashes[data[0]] = data[1]
@@ -160,7 +160,7 @@ while lineNumber < len(lines):
 
 print("[INFO] Build completed")
 
-file = open(".cbuild_filecache", "w")
+file = open(".cbuild_filecache-" + projects[0], "w")
 for key in newFileHashes:
     file.write(key + "=" + newFileHashes[key] + "\n")
 file.close()
