@@ -27,6 +27,7 @@ void Unknown::Python::Interpreter::init()
 
     this->moduleSys = PyImport_ImportModule("sys");
     checkError(this->moduleSys);
+    this->addSearchPath(".");
 }
 
 Unknown::Python::Interpreter* Unknown::Python::getInterpreter()

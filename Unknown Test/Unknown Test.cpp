@@ -96,7 +96,6 @@ void init()
 
 	UI = Unknown::Loader::loadUI("TestUI.json");
 
-    Unknown::Python::getInterpreter()->addSearchPath(".");
 	Unknown::Python::getInterpreter()->loadScript("Test");
 
 }
