@@ -1,3 +1,6 @@
 [submodule "tools/libs/third_party/rapidJSON"]
 	path = tools/libs/third_party/rapidJSON
 	url = https://github.com/miloyip/rapidjson.git
+[submodule "tools/build"]
+	path = tools/build
+	url = https://github.com/CUB3D/cbuild.git
