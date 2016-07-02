@@ -96,8 +96,8 @@ void init()
 
 	UI = Unknown::Loader::loadUI("TestUI.json");
 
-	Unknown::Python::getInterpreter()->loadScript("Test");
-
+    //Unknown::Python::getInterpreter()->loadScript("Test");
+    UK_PYTHON_LOAD_SCRIPT("Test");
 }
 
 int _tmain(int argc, _TCHAR* argv[])

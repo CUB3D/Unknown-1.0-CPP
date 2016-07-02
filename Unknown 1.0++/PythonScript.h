@@ -26,4 +26,7 @@ namespace Unknown
     }
 }
 
+#define UK_PYTHON_ADD_SEARCH_PATH(path) ::Unknown::Python::getInterpreter()->addSearchPath(path)
+#define UK_PYTHON_LOAD_SCRIPT(name) ::Unknown::Python::getInterpreter()->loadScript(name)
+
 #endif
