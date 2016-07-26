@@ -5,6 +5,8 @@ $testDir = Unknown Test
 $rm = rm -f
 $rmdir = rm -rf
 
+deps add Output/lib/linux/libUK.so
+
 run $rmdir UK_TEST
 run $rm "Unknown Test/a.out"
 run $rm "Unknown Test/libUK.so"
@@ -31,9 +33,9 @@ log Patching done
 
 run echo "" > UK_TEST/headers/stdafx.h
 
-$compile = echo 
+#$compile = echo 
 
-compileAll * in Output/lib/linux/
+#compileAll * in Output/lib/linux/
 
 run cp Output/lib/linux/libUK.so ./libUK.so
 
