@@ -1,3 +1,5 @@
+deps add ECORE-LINUX
+
 $cp = cp
 $mv = mv
 $srcDir = Unknown 1.0++
