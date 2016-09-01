@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "UI.h"
 #include "rapidjson\document.h"
+#include "Utils.h"
 
 #include <map>
 
@@ -235,21 +236,18 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 
 	for (auto member = doc.MemberBegin(); member != doc.MemberEnd(); member++)
 	{
-		UIComponent comp;
-
-
-		for (int i = 0; i < 4; i++)
-		{
-			comp.offsetBounds[i] = 0;
-			comp.bounds[i] = 0;
-		}
-
-
 		std::string componenetName = member->name.GetString();
-		std::string type = member->value.FindMember("Type")->value.GetString();
+		std::string typeString = member->value.FindMember("Type")->value.GetString();
 
-		comp.name = componenetName;
-		comp.type = type;
+        UIComponent* comp;
+
+        if(typeString == "Rect")
+        {
+            comp = new RectComponent();
+            comp->type = UI_RECT;
+        }
+
+		comp->name = componenetName;
 
 		auto bounds = member->value.FindMember("Bounds");
 
@@ -264,7 +262,8 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 				boundsArray[x] = bounds->value[x].GetInt();
 			}
 
-			memcpy(comp.bounds, boundsArray, sizeof(int) * 4);
+            comp->location = {boundsArray[0], boundsArray[1]};
+            comp->size = {boundsArray[2], boundsArray[3]};
 		}
 
 		auto colour = member->value.FindMember("Colour");
@@ -272,33 +271,28 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (colour != member->value.MemberEnd())
 		{
 			std::string colourString = colour->value.GetString();
-			comp.colour = getColourFromString(colourString);
+			comp->colour = getColourFromString(colourString);
 
-			std::cout << "Colour loaded: (" << comp.colour->alpha << ", " << comp.colour->red << ", " << comp.colour->green << ", " << comp.colour->blue << ")" << std::endl;
+			//std::cout << "Colour loaded: (" << comp.colour->alpha << ", " << comp.colour->red << ", " << comp.colour->green << ", " << comp.colour->blue << ")" << std::endl;
 		}
 
 		auto insideComponent = member->value.FindMember("InsideComponent");
 
 		if (insideComponent != member->value.MemberEnd())
 		{
-			std::string insideComponentString = insideComponent->value.GetString();
-			comp.insideComponent = insideComponentString;
+			std::string parentName = insideComponent->value.GetString();
+			comp->parentName = parentName;
 		}
 
 		auto offsetBounds = member->value.FindMember("OffsetBounds");
+        int boundsArray[4];
 
 		if (offsetBounds != member->value.MemberEnd())
 		{
-			int boundsArray[4];
-
-			int x = 0;
-
 			for (int x = 0; x < offsetBounds->value.Size(); x++)
 			{
 				boundsArray[x] = offsetBounds->value[x].GetInt();
 			}
-
-			memcpy(comp.offsetBounds, boundsArray, sizeof(int) * 4);
 		}
 
 		auto content = member->value.FindMember("Content");
@@ -306,33 +300,34 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (content != member->value.MemberEnd())
 		{
 			std::string contentString = content->value.GetString();
-			comp.content = contentString;
+			comp->content = contentString;
 		}
 
 		// calculate OffsetBounds for a component
 
-		if (!comp.insideComponent.empty())
+		if (!comp->parentName.empty())
 		{
 			UIComponent* parent = nullptr;
 
 			for (auto component2 : container.components)
 			{
-				if (comp.insideComponent == component2.name)
+				if (comp->parentName == component2->name)
 				{
-					parent = &component2;
+					parent = component2;
 					break;
 				}
 			}
 
 			if (parent == nullptr)
 			{
-				std::cout << "Error: no parent found for " << comp.name << std::endl;
+				std::cout << "Error: no parent found for " << comp->name << std::endl;
 			}
 
-			comp.bounds[0] = parent->bounds[0] + comp.offsetBounds[0];
-			comp.bounds[1] = parent->bounds[1] + comp.offsetBounds[1];
-			comp.bounds[2] = parent->bounds[2] + comp.offsetBounds[2];
-			comp.bounds[3] = parent->bounds[3] + comp.offsetBounds[3];
+
+            comp->location.x = parent->location.x + boundsArray[0];
+            comp->location.y = parent->location.y + boundsArray[1];
+            comp->size.width = parent->size.width + boundsArray[2];
+            comp->size.height = parent->size.height + boundsArray[3];
 		}
 
 		container.components.push_back(comp);
@@ -340,11 +335,11 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 
 	std::cout << "Loaded UI data, found " << container.components.size() << " components" << std::endl;
 
-	for (auto comp : container.components)
-	{
-		std::cout << "Component: " << comp.name << ", Bounds (" << comp.bounds[0] << ", " << comp.bounds[1] << ", " << comp.bounds[2] << ", " << comp.bounds[3] << ")" << std::endl;
-		std::cout << "Component: " << comp.name << ", Bounds (" << comp.offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
-	}
+	//for (auto comp : container.components)
+	//{
+	//	std::cout << "Component: " << comp.name << ", Bounds (" << comp.location.x << ", " << comp.location.y << ", " << comp.size.width << ", " << comp.size.height << ")" << std::endl;
+	//	std::cout << "Component: " << comp.name << ", Bounds (" << comp.offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
+	//}
 
 	return container;
 }
