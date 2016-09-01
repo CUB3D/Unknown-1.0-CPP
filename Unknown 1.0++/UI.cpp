@@ -10,10 +10,9 @@ void Unknown::UIContainer::renderUIComponentRect(UIComponent comp)
 
 void Unknown::UIContainer::renderUIComponent(UIComponent comp)
 {
-	if (comp.type == "Rect")
-	{
+	if (comp.type == "Rect" || comp.type == "Square")
 		renderUIComponentRect(comp);
-	}
+
 }
 
 void Unknown::UIContainer::renderUI()
