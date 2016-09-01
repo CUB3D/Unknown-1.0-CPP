@@ -138,11 +138,11 @@ void Unknown::Unknown::initGameLoop()
 
 void Unknown::Unknown::checkEvents()
 {
-	SDL_Event* evnt = new SDL_Event();
+	SDL_Event evnt;
 
-	while (SDL_PollEvent(evnt) != 0)
+	while (SDL_PollEvent(&evnt) != 0)
 	{
-		Uint32 eventType = evnt->type;
+		Uint32 eventType = evnt.type;
 
 		if (eventType == SDL_QUIT)
 		{
@@ -153,7 +153,7 @@ void Unknown::Unknown::checkEvents()
 		{
 			KeyEvent evt;
 
-			evt.SDLCode = evnt->key.keysym.sym;
+			evt.SDLCode = evnt.key.keysym.sym;
 			evt.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
 			postKeyEvent(evt);
@@ -163,10 +163,10 @@ void Unknown::Unknown::checkEvents()
 		{
 			MouseEvent evt;
 
-			evt.SDLButtonCode = evnt->button.button;
+			evt.SDLButtonCode = evnt.button.button;
 			evt.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
-			evt.location.x = evnt->button.x;
-			evt.location.y = evnt->button.y;
+			evt.location.x = evnt.button.x;
+			evt.location.y = evnt.button.y;
 
 			postMouseEvent(evt);
 		}
