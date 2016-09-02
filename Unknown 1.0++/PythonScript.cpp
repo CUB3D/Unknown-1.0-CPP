@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "PythonScript.h"
-#include "Python.h"
+#include <Python.h>
 #include "Log.h"
 
 Unknown::Python::Interpreter* ::Unknown::Python::instance = NULL;

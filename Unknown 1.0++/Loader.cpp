@@ -239,7 +239,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		std::string componenetName = member->name.GetString();
 		std::string typeString = member->value.FindMember("Type")->value.GetString();
 
-        UIComponent* comp;
+        UIComponent* comp = nullptr;
 
         if(typeString == "Rect")
         {

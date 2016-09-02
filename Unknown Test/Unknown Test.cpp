@@ -22,7 +22,7 @@
 #include "../Unknown 1.0++/Log.h"
 #include "../Unknown 1.0++/PythonScript.h"
 
-#include "Python.h"
+#include <Python.h>
 
 Unknown::Graphics::Image font_img("Font.png");
 

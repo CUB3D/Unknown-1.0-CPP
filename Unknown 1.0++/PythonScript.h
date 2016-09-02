@@ -2,7 +2,7 @@
 #define PYTHONSCRIPT_H
 
 #include "stdafx.h"
-#include "Python.h"
+#include <Python.h>
 #include <string>
 
 namespace Unknown
