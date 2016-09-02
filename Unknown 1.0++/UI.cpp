@@ -3,15 +3,22 @@
 
 #include "UI2D.h"
 
+#include <memory>
+
 void Unknown::UIContainer::renderUI()
 {
-	for (auto comp : components)
+	for (auto& comp : components)
 	{
 	    comp->render();
 	}
 }
 
 // UIComponent
+
+Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)
+{
+	//NOOP
+}
 
 Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type)
 {

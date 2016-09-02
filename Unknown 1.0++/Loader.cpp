@@ -9,8 +9,8 @@
 #include "Utils.h"
 
 #include <map>
-
 #include <iostream>
+#include <memory>
 
 std::map<const char*, Unknown::Sprite*> Unknown::Loader::spritePool;
 std::map<const char*, Unknown::Entity*> Unknown::Loader::entityPool;
@@ -239,16 +239,16 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		std::string componenetName = member->name.GetString();
 		std::string typeString = member->value.FindMember("Type")->value.GetString();
 
-        UIComponent* comp = nullptr;
+        std::unique_ptr<UIComponent> comp(new UIComponent(UI_NULL));
 
         if(typeString == "Rect")
         {
-            comp = new RectComponent();
+			comp = std::unique_ptr<UIComponent>(new RectComponent());
         }
 
 		if (typeString == "Square")
 		{
-			comp = new SquareComponent();
+			comp = std::unique_ptr<UIComponent>(new SquareComponent());
 		}
 
 		comp->name = componenetName;
@@ -311,30 +311,25 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 
 		if (!comp->parentName.empty())
 		{
-			UIComponent* parent = nullptr;
-
-			for (auto component2 : container.components)
+			for (auto& component2 : container.components)
 			{
 				if (comp->parentName == component2->name)
 				{
-					parent = component2;
-					break;
+					comp->location.x = component2->location.x + boundsArray[0];
+					comp->location.y = component2->location.y + boundsArray[1];
+					comp->size.width = component2->size.width + boundsArray[2];
+					comp->size.height = component2->size.height + boundsArray[3];
+					goto done; // Found the parent, now jump to end
 				}
 			}
-
-			if (parent == nullptr)
-			{
-				std::cout << "Error: no parent found for " << comp->name << std::endl;
-			}
-
-
-            comp->location.x = parent->location.x + boundsArray[0];
-            comp->location.y = parent->location.y + boundsArray[1];
-            comp->size.width = parent->size.width + boundsArray[2];
-            comp->size.height = parent->size.height + boundsArray[3];
+			
+			// If a parent is found then this will be skipped
+			std::cout << "Error: no parent found for " << comp->name << std::endl;
 		}
 
-		container.components.push_back(comp);
+		done:{
+			container.components.push_back(std::move(comp));
+		}
 	}
 
 	std::cout << "Loaded UI data, found " << container.components.size() << " components" << std::endl;
