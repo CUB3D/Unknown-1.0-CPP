@@ -29,7 +29,7 @@ namespace Unknown
             std::string parentName;
             std::string content; // consider moving to a subclass
             
-            UIComponent();            
+            UIComponent(const UIComponent_Type type);            
 
             virtual void render() const;
     };
@@ -40,6 +40,14 @@ namespace Unknown
             RectComponent();
             virtual void render() const override;
     };
+
+	class SquareComponent : public RectComponent
+	{
+		public:
+			SquareComponent();
+			virtual void render() const override;
+
+	};
 
 	class UIContainer
 	{

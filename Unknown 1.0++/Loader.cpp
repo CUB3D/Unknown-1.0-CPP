@@ -244,8 +244,12 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
         if(typeString == "Rect")
         {
             comp = new RectComponent();
-            comp->type = UI_RECT;
         }
+
+		if (typeString == "Square")
+		{
+			comp = new SquareComponent();
+		}
 
 		comp->name = componenetName;
 
