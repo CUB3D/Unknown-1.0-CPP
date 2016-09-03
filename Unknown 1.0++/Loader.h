@@ -13,7 +13,7 @@ namespace Unknown
 	{
 		extern std::map<const char*, Sprite*> spritePool;
 		extern std::map<const char*, Entity*> entityPool;
-		extern std::map<const char*, Graphics::Image*> imagePool;
+		extern std::map<const char*, std::unique_ptr<Graphics::Image>> imagePool;
 
 		::Unknown::Sprite* loadSprite(const char* name);
 		::Unknown::Entity* loadEntity(const char* name);
