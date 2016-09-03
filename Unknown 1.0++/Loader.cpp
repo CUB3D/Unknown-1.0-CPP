@@ -12,15 +12,15 @@
 #include <iostream>
 #include <memory>
 
-std::map<const char*, Unknown::Sprite*> Unknown::Loader::spritePool;
-std::map<const char*, Unknown::Entity*> Unknown::Loader::entityPool;
+std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
+std::map<const char*, std::unique_ptr<Unknown::Entity>> Unknown::Loader::entityPool;
 std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 {
 	if (spritePool.find(name) != spritePool.end())
 	{
-		Sprite* spritePrefab = spritePool.find(name)->second;
+		std::unique_ptr<Sprite>& spritePrefab = spritePool.find(name)->second;
 		Sprite* returnValue = spritePrefab->clone();
 		return returnValue;
 	}
@@ -44,7 +44,7 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 		y = yValue->GetInt();
 	}
 
-	Sprite* sprite = NULL;
+	std::unique_ptr<Sprite> sprite;
 
 	rapidjson::Value* typeValue = getValue("Type", rapidjson::Type::kStringType, doc);
 
@@ -53,7 +53,7 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 		std::string type = typeValue->GetString();
 		if (type == "Sprite")
 		{
-			sprite = new Sprite(x, y);
+			sprite = std::unique_ptr<Sprite>(new Sprite(x, y));
 		}
 		else
 		{
@@ -65,7 +65,7 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 				{
 					Graphics::Image* image = new Graphics::Image(imageValue->GetString());
 
-					sprite = new Graphics::ImageSprite(x, y, image);
+					sprite = std::unique_ptr<Graphics::ImageSprite>(new Graphics::ImageSprite(x, y, image));
 				}
 			}
 			else
@@ -78,23 +78,23 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 					{
 						Graphics::Animation* animation = UK_LOAD_ANIMATION(animationLocation->GetString());
 
-						sprite = new Graphics::AnimatedSprite(x, y, animation);
+						sprite = std::unique_ptr<Graphics::AnimatedSprite>(new Graphics::AnimatedSprite(x, y, animation));
 					}
 				}
 			}
 		}
 	}
 
-	spritePool[name] = sprite;
+	spritePool[name] = std::move(sprite);
 
-	return sprite;
+	return sprite.get();
 }
 
 Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 {
 	if (entityPool.find(name) != entityPool.end())
 	{
-		Entity* entityPrefab = entityPool.find(name)->second;
+		std::unique_ptr<Entity>& entityPrefab = entityPool.find(name)->second;
 		Entity* returnValue = entityPrefab->clone();
 		return returnValue;
 	}
@@ -112,7 +112,7 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 		sprite = UK_LOAD_SPRITE(spriteName.c_str());
 	}
 
-	Entity* entity = NULL;
+	std::unique_ptr<Entity> entity;
 
 	rapidjson::Value* typeValue = getValue("Type", rapidjson::Type::kStringType, doc);
 
@@ -122,13 +122,13 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 
 		if (type == "Entity")
 		{
-			entity = new Entity(sprite);
+			entity = std::unique_ptr<Entity>(new Entity(sprite));
 		}
 		else
 		{
 			if (type == "TwoState")
 			{
-				entity = new TwoStateEntity(sprite);
+				entity = std::unique_ptr<Entity>(new TwoStateEntity(sprite));
 			}
 			else
 			{
@@ -155,15 +155,15 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 						maxHealth = health;
 					}
 
-					entity = new HealthEntity(sprite, health, maxHealth);
+					entity = std::unique_ptr<HealthEntity>(new HealthEntity(sprite, health, maxHealth));
 				}
 			}
 		}
 	}
 
-	entityPool[name] = entity;
+	entityPool[name] = std::move(entity);
 
-	return entity;
+	return entity.get(); //TODO: convert the rest into smart pointers
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)

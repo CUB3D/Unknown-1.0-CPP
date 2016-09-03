@@ -11,8 +11,8 @@ namespace Unknown
 {
 	namespace Loader
 	{
-		extern std::map<const char*, Sprite*> spritePool;
-		extern std::map<const char*, Entity*> entityPool;
+		extern std::map<const char*, std::unique_ptr<Sprite>> spritePool;
+		extern std::map<const char*, std::unique_ptr<Entity>> entityPool;
 		extern std::map<const char*, std::unique_ptr<Graphics::Image>> imagePool;
 
 		::Unknown::Sprite* loadSprite(const char* name);
