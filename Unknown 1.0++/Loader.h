@@ -18,7 +18,7 @@ namespace Unknown
 		::Unknown::Sprite* loadSprite(const char* name);
 		::Unknown::Entity* loadEntity(const char* name);
 		::Unknown::Graphics::Animation* loadAnimation(const char* name);
-		::Unknown::Graphics::Image* loadImage(const char* name);
+		std::unique_ptr<::Unknown::Graphics::Image> loadImage(const char* name);
 		::Unknown::UIContainer loadUI(const char* name);
 	}
 }

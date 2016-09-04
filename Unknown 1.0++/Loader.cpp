@@ -163,7 +163,7 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 
 	entityPool[name] = std::move(entity);
 
-	return entity.get(); //TODO: convert the rest into smart pointers
+	return entity.get();
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
@@ -177,7 +177,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (member->name == "Frame")
 		{
 			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
-			Graphics::Image* image = new Graphics::Image(imageLocation.c_str());
+			std::unique_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
 			
 			rapidjson::Value::MemberIterator delayMemeber = member->value.FindMember("Delay");
 
@@ -191,7 +191,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 			::Unknown::Graphics::AnimationFrame animationFrame;
 
 			animationFrame.delayms = delay;
-			animationFrame.frameImage = image;
+			animationFrame.frameImage = image.get();
 
 			animation->addFrame(animationFrame);
 		}
@@ -212,13 +212,13 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	return animation;
 }
 
-::Unknown::Graphics::Image* Unknown::Loader::loadImage(const char* name)
+std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const char* name)
 {
 	if (imagePool.find(name) != imagePool.end())
 	{
 		std::unique_ptr<Graphics::Image>& imagePrefab = imagePool.find(name)->second;
 		//Clone so that original remains unmodified
-		return imagePrefab->clone().get();
+		return imagePrefab->clone();
 	}
 
 	std::unique_ptr<Graphics::Image> image(new Graphics::Image(name));
@@ -227,7 +227,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	imagePool[name] = std::move(image);
 
 	//Again, clone to keep original unmodified
-	return image->clone().get();
+	return image->clone();
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const char * name)
