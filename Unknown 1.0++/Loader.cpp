@@ -218,8 +218,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	{
 		std::unique_ptr<Graphics::Image>& imagePrefab = imagePool.find(name)->second;
 		//Clone so that original remains unmodified
-		Graphics::Image* returnValue = imagePrefab->clone();
-		return returnValue;
+		return imagePrefab->clone().get();
 	}
 
 	std::unique_ptr<Graphics::Image> image(new Graphics::Image(name));
@@ -228,7 +227,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	imagePool[name] = std::move(image);
 
 	//Again, clone to keep original unmodified
-	return image->clone();
+	return image->clone().get();
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const char * name)

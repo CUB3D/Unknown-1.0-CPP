@@ -2,6 +2,7 @@
 #define IMAGE_H
 
 #include <SDL.h>
+#include <memory>
 
 namespace Unknown
 {
@@ -25,7 +26,7 @@ namespace Unknown
 			void render(const int x, const int y, const double angle);
 			void render(const int x, const int y);
 
-			virtual ::Unknown::Graphics::Image* clone() const;
+			virtual std::unique_ptr<Image> clone() const;
 		};
 	}
 }

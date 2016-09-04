@@ -55,11 +55,11 @@ void Unknown::Graphics::Image::render(const int x, const int y)
 	this->render(x, y, 0);
 }
 
-::Unknown::Graphics::Image* Unknown::Graphics::Image::clone() const
+std::unique_ptr<Unknown::Graphics::Image> Unknown::Graphics::Image::clone() const
 {
 	Image* clone = (Image*)malloc(sizeof(Image));
 	memcpy(clone, this, sizeof *this);
-	return clone;
+	return std::unique_ptr<Image>(clone);
 }
 
 void Unknown::Graphics::Image::render(const int x, const int y, const double angle)
