@@ -90,13 +90,12 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 	return sprite.get();
 }
 
-Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
+std::unique_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const char* name)
 {
 	if (entityPool.find(name) != entityPool.end())
 	{
 		std::unique_ptr<Entity>& entityPrefab = entityPool.find(name)->second;
-		Entity* returnValue = entityPrefab->clone();
-		return returnValue;
+		return std::unique_ptr<Entity>(entityPrefab->clone());
 	}
 
 	rapidjson::Document doc = readJSONFile(name);
@@ -163,7 +162,7 @@ Unknown::Entity* Unknown::Loader::loadEntity(const char* name)
 
 	entityPool[name] = std::move(entity);
 
-	return entity.get();
+	return entity;
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)

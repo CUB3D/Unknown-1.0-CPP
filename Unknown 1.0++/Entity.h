@@ -25,7 +25,7 @@ namespace Unknown
 
 		virtual const std::string getEntityID() const;
 
-		virtual Entity* clone() const;
+		virtual std::unique_ptr<Entity> clone() const;
 	};
 
 	class TwoStateEntity : public Entity
@@ -41,7 +41,7 @@ namespace Unknown
 		virtual void damage(const int damage);
 		virtual void heal(const int health);
 
-		virtual Entity* clone() const;
+		virtual std::unique_ptr<Entity> clone() const;
 	};
 
 	class HealthEntity : public Entity
@@ -61,7 +61,7 @@ namespace Unknown
 
 		int getHealth() const;
 
-		virtual Entity* clone() const;
+		virtual std::unique_ptr<Entity> clone() const;
 	};
 
 	extern std::vector<Entity*> entitys;

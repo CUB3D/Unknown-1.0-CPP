@@ -50,10 +50,10 @@ const std::string Unknown::Entity::getEntityID() const
 }
 
 
-::Unknown::Entity* Unknown::Entity::clone() const
+std::unique_ptr<Unknown::Entity> Unknown::Entity::clone() const
 {
-	Entity* ent = (Entity*)malloc(sizeof(Entity));
-	memcpy(ent, this, sizeof(Entity));
+	std::unique_ptr<Entity> ent((Entity*)malloc(sizeof(Entity)));
+	memcpy(ent.get(), this, sizeof(Entity));
 	return ent;
 }
 
@@ -84,10 +84,11 @@ void Unknown::TwoStateEntity::heal(const int health)
 		this->alive = true;
 }
 
-::Unknown::Entity* Unknown::TwoStateEntity::clone() const
+std::unique_ptr<Unknown::Entity> Unknown::TwoStateEntity::clone() const
 {
-	TwoStateEntity* ent = (TwoStateEntity*)malloc(sizeof(TwoStateEntity));
-	memcpy(ent, this, sizeof(TwoStateEntity));
+	//May not work, will need future checking
+	std::unique_ptr<Entity> ent((TwoStateEntity*)malloc(sizeof(TwoStateEntity)));
+	memcpy(ent.get(), this, sizeof(TwoStateEntity));
 	return ent;
 }
 
@@ -136,10 +137,10 @@ int Unknown::HealthEntity::getHealth() const
 	return this->health;
 }
 
-::Unknown::Entity* Unknown::HealthEntity::clone() const
+std::unique_ptr<Unknown::Entity> Unknown::HealthEntity::clone() const
 {
-	HealthEntity* ent = (HealthEntity*)malloc(sizeof(HealthEntity));
-	memcpy(ent, this, sizeof(HealthEntity));
+	std::unique_ptr<Entity> ent((HealthEntity*)malloc(sizeof(HealthEntity)));
+	memcpy(ent.get(), this, sizeof(HealthEntity));
 	return ent;
 }
 
