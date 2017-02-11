@@ -7,10 +7,12 @@
 #include "UI.h"
 #include "rapidjson\document.h"
 #include "Utils.h"
+#include "Log.h"
 
 #include <map>
 #include <iostream>
 #include <memory>
+#include <sstream>
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
 std::map<const char*, std::unique_ptr<Unknown::Entity>> Unknown::Loader::entityPool;
@@ -46,7 +48,7 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 
 	std::unique_ptr<Sprite> sprite;
 
-	rapidjson::Value* typeValue = getValue("Type", rapidjson::Type::kStringType, doc);
+	std::unique_ptr<rapidjson::Value> typeValue(getValue("Type", rapidjson::Type::kStringType, doc));
 
 	if (typeValue)
 	{
@@ -113,7 +115,7 @@ std::unique_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const char* name)
 
 	std::unique_ptr<Entity> entity;
 
-	rapidjson::Value* typeValue = getValue("Type", rapidjson::Type::kStringType, doc);
+	std::unique_ptr<rapidjson::Value> typeValue(getValue("Type", rapidjson::Type::kStringType, doc));
 
 	if (typeValue)
 	{
@@ -169,7 +171,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 {
 	rapidjson::Document json = readJSONFile(name);
 
-	::Unknown::Graphics::Animation* animation = new ::Unknown::Graphics::Animation();
+	std::unique_ptr<::Unknown::Graphics::Animation> animation(new ::Unknown::Graphics::Animation());
 
 	for (rapidjson::Value::MemberIterator member = json.MemberBegin(); member != json.MemberEnd(); member++)
 	{
@@ -208,7 +210,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		}
 	}
 
-	return animation;
+	return animation.get();
 }
 
 std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const char* name)
@@ -333,7 +335,12 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 		}
 	}
 
-	std::cout << "Loaded UI data, found " << container.components.size() << " components" << std::endl;
+	std::stringstream tempStream;
+	tempStream << container.components.size();
+
+	UK_LOG_INFO(::Unknown::concat({ "Loaded UI data, found ", tempStream.str(), " components" }).c_str());
+
+	tempStream.clear();
 
 	//for (auto comp : container.components)
 	//{

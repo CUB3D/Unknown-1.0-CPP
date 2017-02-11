@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Input.h"
+#include "Log.h"
 
 #include <SDL.h>
 #include <vector>
@@ -11,13 +12,13 @@
 
 void Unknown::initKeySystem()
 {
-	printf("Loading keybinds\n");
+	UK_LOG_INFO("Loading keybinds");
 
 	std::ifstream keybinds("Keybinds.ini");
 
 	if (!keybinds.good())
 	{
-		printf("No keybinds.ini found, skipping\n");
+		UK_LOG_WARN("No keybinds.ini found, skipping");
 		return;
 	}
 
@@ -42,10 +43,11 @@ void Unknown::initKeySystem()
 
 		registerKeybind((KeyCode)keyCode, name);
 
-		printf("Name: %s, Value: %s\n", name.c_str(), value.c_str());
+
+		//printf("Name: %s, Value: %s\n", name.c_str(), value.c_str());
 	}
 
-	printf("Keybinds loaded\n");
+	UK_LOG_INFO("Keybinds loaded");
 }
 
 void Unknown::exitKeySystem()
@@ -54,7 +56,7 @@ void Unknown::exitKeySystem()
 
 	if (!keybinds.good())
 	{
-		printf("No keybinds.ini found, creating\n");
+		UK_LOG_INFO("Not keybinds.ini found, creating");
 	}
 
 
@@ -70,7 +72,7 @@ void Unknown::exitKeySystem()
 	keybinds.flush();
 	keybinds.close();
 
-	printf("Keybinds saved\n");
+	UK_LOG_INFO("Keybinds saved");
 }
 
 void Unknown::postKeyEvent(KeyEvent evnt)
