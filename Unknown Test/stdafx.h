@@ -3,13 +3,15 @@
 // are changed infrequently
 //
 
-#ifdef _WIN32
-#pragma once
+#ifndef STDAFX_H
+#define STDAFX_H
+    #ifdef _WIN32
 
-#include "targetver.h"
+    #include "targetver.h"
 
-#include <stdio.h>
-#include <tchar.h>
+    #include <stdio.h>
+    #include <tchar.h>
+    #endif
 #endif
 
 

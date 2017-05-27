@@ -100,7 +100,11 @@ void init()
     UK_PYTHON_LOAD_SCRIPT("Test");
 }
 
+#ifdef _WIN32
 int _tmain(int argc, _TCHAR* argv[])
+#else
+int main(int argc, char* argv[])
+#endif
 {
 	UK_UPDATE(update);
 	UK_RENDER(render);
