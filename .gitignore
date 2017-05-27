@@ -218,3 +218,5 @@ UK_TEST/*
 .cbuild_filecache-*
 */a.out
 Unknown Test/__pycache__/*
+
+Output/

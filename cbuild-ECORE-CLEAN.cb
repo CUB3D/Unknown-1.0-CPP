@@ -1,8 +1,0 @@
-$rm = rm
-$rmdir = rm -r
-
-log Cleaning src patches
-run $rmdir UK_SRC
-
-log Cleaning library binaries
-run $rmdir Output/lib
