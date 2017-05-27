@@ -33,7 +33,7 @@ log Patching done
 
 mkdir UK_SRC/obj
 
-$compile = cd UK_SRC/obj && g++ -c -fpic -I../headers -I../../Libs/RapidJSON/include/rapidjson -I/usr/include/python3.4 -std=gnu++14 -lSDL2 -lSDL2main -lSDL2_image -lpython3.4m -lpthread -ldl -lutil -lm
+$compile = cd UK_SRC/obj && g++ -c -fpic -I../headers -I../../Libs/RapidJSON/include/rapidjson -I/usr/include/python3.6m -std=gnu++14 -lSDL2 -lSDL2main -lSDL2_image -lpython3.6m -lpthread -ldl -lutil -lm
 
 compileAll * in UK_SRC/src
 

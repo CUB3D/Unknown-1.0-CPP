@@ -212,6 +212,9 @@ UK_TEST/*
 #Don't include linux library binary
 *libUK.so
 
+#dont include object files
+*.o
+
 .cbuild_filecache-*
 */a.out
 Unknown Test/__pycache__/*

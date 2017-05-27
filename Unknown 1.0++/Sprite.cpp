@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Sprite.h"
 
-#include <Math.h>
+#include <cmath>
 #include <string.h>
 
 // Sprite class

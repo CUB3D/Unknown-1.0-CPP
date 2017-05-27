@@ -3,6 +3,8 @@
 // are changed infrequently
 //
 
+
+#ifdef _WIN32
 #pragma once
 
 #include "targetver.h"
@@ -20,3 +22,4 @@
 //{
 //	return _iob;
 //}
+#endif

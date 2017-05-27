@@ -13,7 +13,7 @@
 #include <ios>
 #include <fstream>
 #include <string>
-#include "rapidjson\document.h"
+#include "document.h"
 #include "PythonScript.h"
 #include "Utils.h"
 

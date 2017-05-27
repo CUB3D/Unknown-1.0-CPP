@@ -9,18 +9,18 @@
 
 namespace Unknown
 {
-	namespace Loader
-	{
-		extern std::map<const char*, std::unique_ptr<Sprite>> spritePool;
-		extern std::map<const char*, std::unique_ptr<Entity>> entityPool;
-		extern std::map<const char*, std::unique_ptr<Graphics::Image>> imagePool;
+    namespace Loader
+    {
+        extern std::map<const char*, std::unique_ptr<Sprite>> spritePool;
+        extern std::map<const char*, std::unique_ptr<Entity>> entityPool;
+        extern std::map<const char*, std::unique_ptr<Graphics::Image>> imagePool;
 
-		::Unknown::Sprite* loadSprite(const char* name);
-		std::unique_ptr<::Unknown::Entity> loadEntity(const char* name);
-		::Unknown::Graphics::Animation* loadAnimation(const char* name);
-		std::unique_ptr<::Unknown::Graphics::Image> loadImage(const char* name);
-		::Unknown::UIContainer loadUI(const char* name);
-	}
+        ::Unknown::Sprite* loadSprite(const char* name);
+        std::unique_ptr<::Unknown::Entity> loadEntity(const char* name);
+        ::Unknown::Graphics::Animation* loadAnimation(const char* name);
+        std::unique_ptr<::Unknown::Graphics::Image> loadImage(const char* name);
+        ::Unknown::UIContainer loadUI(const char* name);
+    }
 }
 
 #define UK_LOAD_SPRITE(x) ::Unknown::Loader::loadSprite(x)

@@ -7,10 +7,10 @@
 
 namespace Unknown
 {
-	char* Unknown::logStatus[] = { "[INFO] ", "[WARNING] ", "[ERROR] " };
+	char* logStatus[] = { "[INFO] ", "[WARNING] ", "[ERROR] " };
 
 	//TODO: move to utils
-	std::string Unknown::concat(std::vector<std::string> strings)
+	std::string concat(std::vector<std::string> strings)
 	{
 		std::stringstream output;
 

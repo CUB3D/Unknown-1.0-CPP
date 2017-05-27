@@ -2,7 +2,6 @@
 #include "Utils.h"
 
 #include "Colour.h"
-#include "rapidjson\document.h"
 
 #include <fstream>
 #include <string>

@@ -5,7 +5,7 @@
 #include "Utils.h"
 #include "Entity.h"
 #include "UI.h"
-#include "rapidjson\document.h"
+#include "document.h"
 #include "Utils.h"
 #include "Log.h"
 
