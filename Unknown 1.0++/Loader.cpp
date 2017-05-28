@@ -254,6 +254,11 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp = std::unique_ptr<UIComponent>(new SquareComponent());
 		}
 
+		if(typeString == "Text")
+		{
+			comp = std::unique_ptr<UIComponent>(new TextComponent());
+		}
+
 		comp->name = componenetName;
 
 		auto bounds = member->value.FindMember("Bounds");
@@ -318,10 +323,23 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			{
 				if (comp->parentName == component2->name)
 				{
-					comp->location.x = component2->location.x + boundsArray[0];
-					comp->location.y = component2->location.y + boundsArray[1];
-					comp->size.width = component2->size.width + boundsArray[2];
-					comp->size.height = component2->size.height + boundsArray[3];
+                    //Extra if checks allow for use of both relative and direct positioning
+                    if(boundsArray[0] != 0)
+                    {
+                        comp->location.x = component2->location.x + boundsArray[0];
+                    }
+                    if(boundsArray[1] != 0)
+                    {
+                        comp->location.y = component2->location.y + boundsArray[1];
+                    }
+                    if(boundsArray[2] != 0)
+                    {
+                        comp->size.width = component2->size.width + boundsArray[2];
+                    }
+                    if(boundsArray[3] != 0)
+                    {
+                        comp->size.height = component2->size.height + boundsArray[3];
+                    }
 					goto done; // Found the parent, now jump to end
 				}
 			}

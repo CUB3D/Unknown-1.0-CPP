@@ -23,11 +23,11 @@ Unknown::Unknown::Unknown()
 {
 }
 
-void Unknown::Unknown::createWindow(const char* title, const int width, const int height)
+void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("Error: SDL failed to initalize, %s\n", SDL_GetError());
+		printf("Error: SDL failed to initialise, %s\n", SDL_GetError());
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
@@ -51,13 +51,11 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
-		printf("Error: SDL failed to initalize PNG loading, %s\n", IMG_GetError());
+		printf("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
 		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
 	}
 
-	int fps = 60;
-
-	this->tickSpeed = 1000.0 / fps;
+	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = new Dimension<int> { width, height };
@@ -70,6 +68,7 @@ void Unknown::Unknown::createWindow()
 	int height = 0;
 	int width = 0;
 	std::string title;
+    int ups = 60;
 
 	rapidjson::Document doc = readJSONFile("Config.json");
 
@@ -94,7 +93,18 @@ void Unknown::Unknown::createWindow()
 		title = titleValue->GetString();
 	}
 
-	createWindow(title.c_str(), width, height);
+    rapidjson::Value* upsValue = getValue("ups", rapidjson::Type::kNumberType, doc);
+
+    if(upsValue)
+    {
+        ups = upsValue->GetInt();
+    }
+    else
+    {
+        printf("[UK] No update speed specified, defaulting to 60tps\n");
+    }
+
+	createWindow(title.c_str(), width, height, ups);
 }
 
 void Unknown::Unknown::initGameLoop()

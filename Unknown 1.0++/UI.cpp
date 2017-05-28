@@ -5,6 +5,11 @@
 
 #include <memory>
 
+Unknown::UIContainer::UIContainer()
+{
+    //NOOP
+}
+
 void Unknown::UIContainer::renderUI()
 {
 	for (auto& comp : components)
@@ -53,4 +58,19 @@ Unknown::SquareComponent::SquareComponent() : UIComponent(UI_SQUARE)
 void Unknown::SquareComponent::render() const
 {
 	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *this->colour);
+}
+
+// TextComponent
+
+Unknown::TextComponent::TextComponent() : UIComponent(UI_TEXT)
+{
+    //NOOP
+}
+
+void Unknown::TextComponent::render() const
+{
+    if(font)
+    {
+        font->drawString(this->content, this->location.x, this->location.y);
+    }
 }

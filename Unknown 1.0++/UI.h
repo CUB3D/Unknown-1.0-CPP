@@ -5,6 +5,7 @@
 
 #include "Colour.h"
 #include "Utils.h"
+#include "Font.h"
 
 #include <vector>
 #include <memory>
@@ -17,12 +18,14 @@ namespace Unknown
     {
 		UI_NULL,
         UI_RECT,
-        UI_SQUARE
+        UI_SQUARE,
+		UI_TEXT
     };
 
     class UIComponent
     {
         public:
+            Graphics::Font* font;
             std::string name;
             UIComponent_Type type;
             Dimension<int> size;
@@ -52,9 +55,18 @@ namespace Unknown
 
 	};
 
+    class TextComponent : public UIComponent
+    {
+    public:
+        TextComponent();
+        virtual void render() const override;
+
+    };
+
 	class UIContainer
 	{
 	public:
+        UIContainer();
 		std::vector<std::unique_ptr<UIComponent>> components;
 
 		void renderUI();

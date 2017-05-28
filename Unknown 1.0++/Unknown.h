@@ -27,7 +27,6 @@ namespace Unknown
 	private:
 		long startTime = 0;
 		double unprocessed = 0;
-		double tickSpeed = 0;
 		Timer fpsCounter;
 
 	public:
@@ -37,13 +36,14 @@ namespace Unknown
 		const Dimension<int>* screenSize;
 
 		bool running = true;
+		double tickSpeed = 0;
 
 		int frames = 0;
 		int ticks = 0;
 
 		Unknown();
 
-		void createWindow(const char* title, const int width, const int height);
+		void createWindow(const char* title, const int width, const int height, const int fps);
 		void createWindow();
 
 		void initGameLoop();

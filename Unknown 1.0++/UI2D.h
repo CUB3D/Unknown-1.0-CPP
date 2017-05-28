@@ -1,4 +1,4 @@
-#ifndef UI2D_H
+#ifndef UI2D_Hrenderer
 #define UI2D_H
 
 #include "Colour.h"

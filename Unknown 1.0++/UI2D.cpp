@@ -23,7 +23,7 @@ void Unknown::Graphics::drawRect(const int x, const int y, const int width, cons
 
 	if (i != 0)
 	{
-		printf("Error: failed to draw rectangle, %s/n", SDL_GetError());
+		printf("Error: failed to draw rectangle, %s\n", SDL_GetError());
 		uk->quit(ErrorCodes::SDL_RENDER_RECT_FAIL);
 	}
 }
