@@ -32,15 +32,16 @@ Unknown::Graphics::Font* font;
 
 Unknown::UIContainer startMenu;
 
-Unknown::Map* map;
+std::unique_ptr<Unknown::Map> map;
 Unknown::Timer timer;
 
 int SIZE = 128;
 bool started = false;
+bool creatingBoard = false;
 
 void createBoard()
 {
-    map = new Unknown::Map(SIZE, SIZE);
+    map = std::unique_ptr<Unknown::Map>(new Unknown::Map(SIZE, SIZE));
 
     for(int x = 0; x < SIZE; x++)
     {
@@ -54,11 +55,17 @@ void createBoard()
             }
         }
     }
+
+    printf("Board creation complete\n");
 }
 
 void render()
 {
-	int scale = 512/SIZE;
+    if (creatingBoard)
+    {
+        return;
+    }
+	int scale = 1024/SIZE;
 
     for(int x = 0; x < SIZE; x++)
     {
@@ -81,7 +88,7 @@ void render()
     }
 }
 
-int checkTile(int x, int y, Unknown::Map* map)
+int checkTile(int x, int y, std::unique_ptr<Unknown::Map>& map)
 {
 	if(x < 0 || y < 0 || x > SIZE || y > SIZE)
 	{
@@ -101,13 +108,23 @@ void keylistener(Unknown::KeyEvent evnt)
         {
             if(evnt.SDLCode == SDLK_LEFT)
             {
-                timer.timerSpeed = 1000/20;
+                timer.timerSpeed += 100;
+                if(timer.timerSpeed > 1000)
+                {
+                    timer.timerSpeed = 1000;
+                }
+                printf("Timer speed now %d\n", timer.timerSpeed);
             }
             else
             {
                 if(evnt.SDLCode == SDLK_RIGHT)
                 {
-                    timer.timerSpeed = 1;
+                    timer.timerSpeed -= 20;
+                    if(timer.timerSpeed <= 0)
+                    {
+                        timer.timerSpeed = 20;
+                    }
+                    printf("Timer speed now %d\n", timer.timerSpeed);
                 }
             }
         }
@@ -124,7 +141,9 @@ void keylistener(Unknown::KeyEvent evnt)
                         printf("Creating board with size %d\n", boardSize);
                         SIZE = boardSize;
                         started = true;
+                        creatingBoard = true;
                         createBoard();
+                        creatingBoard = false;
                     }
                 }
             } else
@@ -159,7 +178,7 @@ void update()
 {
     using namespace Unknown;
 
-    Map *newMap = new Map(SIZE, SIZE);
+    std::unique_ptr<Unknown::Map> newMap = std::unique_ptr<Unknown::Map>(new Map(SIZE, SIZE));
 
     if (timer.isTickComplete())
     {
@@ -205,14 +224,13 @@ void update()
             }
         }
 
-        delete map;
-
-        map = newMap;
+        map = std::move(newMap);
     }
 }
 
 void init()
 {
+    timer.timerSpeed = 300;
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
 

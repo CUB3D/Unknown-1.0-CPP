@@ -58,6 +58,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
+    //Could be a memory leak
 	this->screenSize = new Dimension<int> { width, height };
 
 	::Unknown::Python::getInterpreter()->init();
@@ -223,7 +224,7 @@ Unknown::Unknown* Unknown::instance;
 Unknown::Unknown* Unknown::getUnknown()
 {
 	if (instance == nullptr)
-		instance = new Unknown;
+		instance = new Unknown();
 
 	return instance;
 }
