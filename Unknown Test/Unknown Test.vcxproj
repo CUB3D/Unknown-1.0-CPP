@@ -49,7 +49,7 @@
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(SolutionDir)\Unknown 1.0++\Debug;$(ExecutablePath)</ExecutablePath>
     <IncludePath>$(SolutionDir)\Libs\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>B:\Programs\Python\libs;$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>B:\Programs\Python36;B:\Programs\Python36\libs;$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -58,7 +58,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>B:\Programs\Python\include;$(SolutionDir)\Libs\RapidJSON\include;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(SolutionDir)\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>B:\Programs\Python\include;$(SolutionDir)\Libs\RapidJSON\include\rapidjson;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(SolutionDir)\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -75,7 +75,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>B:\Programs\Python\include;$(SolutionDir)\Libs\RapidJSON\include;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(SolutionDir)\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>B:\Programs\Python36\include;$(SolutionDir)\Libs\RapidJSON\include\rapidjson;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(SolutionDir)\Unknown 1.0++;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
@@ -83,7 +83,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)\Release\Unknown 1.0++.lib;python34.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(SolutionDir)\Release\Unknown 1.0++.lib;python36.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -98,7 +98,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Unknown Test.cpp" />
+    <ClCompile Include="UnknownTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Config.json" />

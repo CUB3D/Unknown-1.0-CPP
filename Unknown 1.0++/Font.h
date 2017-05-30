@@ -12,7 +12,7 @@ namespace Unknown
 		class Font
 		{
 		private:
-			std::string layout;
+			const std::string layout;
 			Image* fontSheet;
 			const int charSize;
 

@@ -1,0 +1,16 @@
+{
+	"WIN": {
+		"MainBinary": "Release/Unknown Test.exe",
+		"ProjectOutput": "UnknownTestPublish",
+		"Libs": ["Libs\\SDL2\\lib\\$arch$\\SDL2.dll", 
+						 "Libs\\SDL2_image\\lib\\$arch$\\SDL2_image.dll",
+						 "Libs\\SDL2_image\\lib\\$arch$\\zlib1.dll",
+						 "Libs\\SDL2_image\\lib\\$arch$\\libwebp-4.dll",
+						 "Libs\\SDL2_image\\lib\\$arch$\\libtiff-5.dll",
+						 "Libs\\SDL2_image\\lib\\$arch$\\libpng16-16.dll",
+						 "Libs\\SDL2_image\\lib\\$arch$\\libjpeg-9.dll"],
+		"Resources": ["Config.json",
+					  "Font.png",
+					  "MainMenuUI.json"]
+	}
+}
