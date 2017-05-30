@@ -18,6 +18,27 @@ void Unknown::UIContainer::renderUI()
 	}
 }
 
+void Unknown::UIContainer::setGlobalFont(Graphics::Font* font)
+{
+	for (auto& comp : components)
+	{
+		comp->font = font;
+	}
+}
+
+std::unique_ptr<Unknown::UIComponent>* Unknown::UIContainer::getComponentByName(const std::string name)
+{
+	for (auto& comp : components)
+	{
+		if (comp->name == name)
+		{
+			return &comp;
+		}
+	}
+
+	return NULL;
+}
+
 // UIComponent
 
 Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)

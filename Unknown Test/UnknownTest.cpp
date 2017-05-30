@@ -42,9 +42,9 @@ void createBoard()
 {
     map = new Unknown::Map(SIZE, SIZE);
 
-    for(int x = 0; x < SIZE; x++)
+    for(int x = 0; x < map->mapSize->width; x++)
     {
-        for(int y = 0; y < SIZE; y++)
+        for(int y = 0; y < map->mapSize->height; y++)
         {
             if(rand()%2 == 1) {
                 map->setTileID(0, x, y);
@@ -60,9 +60,9 @@ void render()
 {
 	int scale = 512/SIZE;
 
-    for(int x = 0; x < SIZE; x++)
+    for(int x = 0; x <  map->mapSize->width; x++)
     {
-        for (int y = 0; y < SIZE; y++)
+        for (int y = 0; y <  map->mapSize->height; y++)
         {
             if(map->getTileID(x, y) == 0)
             {
@@ -83,7 +83,7 @@ void render()
 
 int checkTile(int x, int y, Unknown::Map* map)
 {
-	if(x < 0 || y < 0 || x > SIZE || y > SIZE)
+	if(x < 0 || y < 0 || x >  map->mapSize->width || y > map->mapSize->height)
 	{
 		return 0;
 	}
@@ -91,6 +91,11 @@ int checkTile(int x, int y, Unknown::Map* map)
 	{
 		return map->getTileID(x, y);
 	}
+}
+
+bool isCharCodeNumber(const char* key)
+{
+	return *key >= '0' && *key <= '9';
 }
 
 void keylistener(Unknown::KeyEvent evnt)
@@ -115,39 +120,29 @@ void keylistener(Unknown::KeyEvent evnt)
         {
             if (evnt.SDLCode == SDLK_RETURN)
             {
-                for (auto &component : startMenu.components)
-                {
-                    if (component->name == "TextLabelTextBoxSizeContent")
-                    {
-                        //Get size of board
-                        int boardSize = std::stoi(component->content);
-                        printf("Creating board with size %d\n", boardSize);
-                        SIZE = boardSize;
-                        started = true;
-                        createBoard();
-                    }
-                }
+				auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
+				
+				int boardSize = std::stoi((*textBoxSizeContent)->content);
+				printf("Creating board with size %d\n", boardSize);
+				SIZE = boardSize;
+				started = true;
+				createBoard();
             } else
             {
-                for (auto &component : startMenu.components)
+				auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
+				const char *key = SDL_GetKeyName(evnt.SDLCode);
+                    
+                if (evnt.SDLCode == SDLK_BACKSPACE)
                 {
-                    if (component->name == "TextLabelTextBoxSizeContent")
+                    if ((*textBoxSizeContent)->content.size() > 0)
                     {
-                        if (evnt.SDLCode == SDLK_BACKSPACE)
-                        {
-                            if (component->content.size() > 0)
-                            {
-                                component->content.pop_back();
-                            }
-                        } else
-                        {
-                            const char *key = SDL_GetKeyName(evnt.SDLCode);
-                            int i = std::stoi(key);
-                            if (i >= 0 && i <= 9)
-                            {
-                                component->content += key;
-                            }
-                        }
+                        (*textBoxSizeContent)->content.pop_back();
+                    }
+                } else
+                {
+					if(isCharCodeNumber(key))
+					{
+                        (*textBoxSizeContent)->content += key;
                     }
                 }
             }
@@ -163,9 +158,9 @@ void update()
 
     if (timer.isTickComplete())
     {
-        for (int x = 0; x < SIZE; x++)
+        for (int x = 0; x <  map->mapSize->width; x++)
         {
-            for (int y = 0; y < SIZE; y++)
+            for (int y = 0; y <  map->mapSize->height; y++)
             {
                 int alive = map->getTileID(x, y);
                 int popcount = 0;
@@ -213,6 +208,7 @@ void update()
 
 void init()
 {
+	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
 
@@ -221,10 +217,7 @@ void init()
     font = new Unknown::Graphics::Font(&font_img, "ABCDEFGHIJKLMNOPQRSTUVWXYZ: 1234567890", 16);
 
     startMenu = Unknown::Loader::loadUI("MainMenuUI.json");
-    for(auto& component : startMenu.components)
-    {
-        component->font = font;
-    }
+	startMenu.setGlobalFont(font);
 
     //UK_PYTHON_LOAD_SCRIPT("Test");
 }

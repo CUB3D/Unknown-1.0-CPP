@@ -69,6 +69,9 @@ namespace Unknown
         UIContainer();
 		std::vector<std::unique_ptr<UIComponent>> components;
 
+		void setGlobalFont(Graphics::Font* font);
+		std::unique_ptr<UIComponent>* getComponentByName(const std::string name);
+
 		void renderUI();
 	};
 }
