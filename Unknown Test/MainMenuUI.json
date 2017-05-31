@@ -12,12 +12,26 @@
     "OffsetBounds": [10, 60, -20, 0],
     "Bounds": [0, 0, 0, 20]
   },
-  "TextBoxSize": {
+  "TextBoxWidth": {
     "Type": "TextBox",
     "InsideComponent": "Background",
     "Colour": "ffffffff",
-    "OffsetBounds": [10, 30, -20, 0],
-    "Bounds":[0, 0, 0, 20]
+    "OffsetBounds": [10, 30, 0, 0],
+    "Bounds":[0, 0, 75, 20]
+  },
+  "TextBoxHeight": {
+    "Type": "TextBox",
+    "InsideComponent": "Background",
+    "Colour": "ffffffff",
+    "OffsetBounds": [115, 30, 0, 0],
+    "Bounds":[0, 0, 75, 20]
+  },
+  "TextLabelX": {
+    "Type": "Text",
+    "InsideComponent": "Background",
+    "Colour": "ff000000",
+    "Content": "X",
+    "OffsetBounds": [92, 32, 0, 0]
   },
   "TextLabel1": {
     "Type": "Text",

@@ -61,6 +61,14 @@ std::unique_ptr<Unknown::UIComponent>* Unknown::UIContainer::getComponentByName(
 	return NULL;
 }
 
+void Unknown::UIContainer::initUI()
+{
+    for (auto& comp : components)
+    {
+        comp->init();
+    }
+}
+
 // UIComponent
 
 Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)
@@ -75,6 +83,11 @@ Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type)
 }
 
 void Unknown::UIComponent::render() const
+{
+    //NOOP
+}
+
+void Unknown::UIComponent::init()
 {
     //NOOP
 }
@@ -173,31 +186,52 @@ void Unknown::ButtonComponent::render() const
 //TextBoxComponent
 Unknown::TextBoxComponent::TextBoxComponent() : UIComponent(UI_TEXTBOX)
 {
-    UK_ADD_KEY_LISTENER_INTERNAL(this->onKeyTyped, this->name);
+    //NOOP
 }
 
 void Unknown::TextBoxComponent::onKeyTyped(KeyEvent evnt)
 {
-    if(evnt.keyState == InputState::PRESSED)
+    if(this->isEditing)
     {
-        const char *key = SDL_GetKeyName(evnt.SDLCode);
-
-        UIEvent evnt_;
-        evnt_.componentName = this->name;
-        evnt_.action = "keyTyped";
-        evnt_.relatedKey = &key;
-        callUIListeners(evnt_);
-
-        if (evnt.SDLCode == SDLK_BACKSPACE)
+        if (evnt.keyState == InputState::PRESSED)
         {
-            if (this->content.size() > 0)
+            const char *key = SDL_GetKeyName(evnt.SDLCode);
+
+            UIEvent evnt_;
+            evnt_.componentName = this->name;
+            evnt_.action = "keyTyped";
+            evnt_.relatedKey = &key;
+            callUIListeners(evnt_);
+
+            if (evnt.SDLCode == SDLK_BACKSPACE)
             {
-                this->content.pop_back();
+                if (this->content.size() > 0)
+                {
+                    this->content.pop_back();
+                }
+            } else
+            {
+                this->content += key;
             }
-        } else
-        {
-            this->content += key;
         }
+    }
+}
+
+void Unknown::TextBoxComponent::onMouseClick(MouseEvent evnt)
+{
+    if(evnt.buttonState == InputState::PRESSED)
+    {
+        if (evnt.location.x >= this->location.x && evnt.location.x <= this->location.x + this->size.width)
+        {
+            if (evnt.location.y >= this->location.y && evnt.location.y <= this->location.y + this->size.height)
+            {
+                // If the button has been clicked
+                this->isEditing = true;
+                return;
+            }
+        }
+
+        this->isEditing = false;
     }
 }
 
@@ -208,4 +242,17 @@ void Unknown::TextBoxComponent::render() const
     {
         font->drawString(this->content, this->location.x + 2, this->location.y);
     }
+
+    if(isEditing)
+    {
+        Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, Colour::BLACK);
+    }
+}
+
+
+
+void Unknown::TextBoxComponent::init()
+{
+    UK_ADD_KEY_LISTENER_INTERNAL(this->onKeyTyped, this->name);
+    UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }

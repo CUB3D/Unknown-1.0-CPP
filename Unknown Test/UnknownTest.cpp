@@ -155,19 +155,22 @@ void UICallback(const Unknown::UIEvent evnt)
 {
     if(evnt.componentName == "ButtonStart")
     {
-        auto textBoxSize = startMenu.getComponentByName("TextBoxSize");
+        auto textBoxWidth = startMenu.getComponentByName("TextBoxWidth");
+        auto textBoxHeight = startMenu.getComponentByName("TextBoxHeight");
 
-        if ((*textBoxSize)->content.size() > 0)
+        if ((*textBoxWidth)->content.size() > 0 && (*textBoxHeight)->content.size() > 0)
         {
-            int boardSize = std::stoi((*textBoxSize)->content);
-            printf("Creating board with size %d\n", boardSize);
-            width = height = boardSize;
+            int boardWidth = std::stoi((*textBoxWidth)->content);
+            int boardHeight = std::stoi((*textBoxHeight)->content);
+            printf("Creating board with size %dx%d\n", boardWidth, boardHeight);
+            width = boardWidth;
+            height = boardHeight;
             started = true;
             createBoard();
         }
     }
 
-    if(evnt.componentName == "TextBoxSize")
+    if(evnt.componentName == "TextBoxWidth" || evnt.componentName == "TextBoxHeight")
     {
         if(!Unknown::isCharCodeNumber(*evnt.relatedKey))
         {
@@ -242,7 +245,7 @@ void init()
     font = new Unknown::Graphics::Font(&font_img, "ABCDEFGHIJKLMNOPQRSTUVWXYZ: 1234567890", 16);
 
     startMenu = Unknown::Loader::loadUI("MainMenuUI.json");
-
+    startMenu.initUI();
 	startMenu.setGlobalFont(font);
 
     //UK_PYTHON_LOAD_SCRIPT("Test");

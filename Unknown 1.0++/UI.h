@@ -41,6 +41,7 @@ namespace Unknown
             UIComponent(const UIComponent_Type type);            
 
             virtual void render() const;
+            virtual void init();
     };
 
     class RectComponent : public UIComponent
@@ -77,9 +78,13 @@ namespace Unknown
     class TextBoxComponent : public UIComponent
     {
     public:
+        bool isEditing = false;
+
         TextBoxComponent();
         void onKeyTyped(KeyEvent evnt);
+        void onMouseClick(MouseEvent evnt);
         virtual void render() const override;
+        virtual void init() override;
     };
 
     struct UIEvent
@@ -109,6 +114,7 @@ namespace Unknown
 		std::unique_ptr<UIComponent>* getComponentByName(const std::string name);
 
 		void renderUI();
+        void initUI();
 	};
 }
 
