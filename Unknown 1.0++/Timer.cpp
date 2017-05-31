@@ -8,7 +8,7 @@ Unknown::Timer::Timer()
 	this->timerSpeed = 1000;
 }
 
-Unknown::Timer::Timer(const int seconds)
+Unknown::Timer::Timer(const float seconds)
 {
 	this->timerSpeed = 1000 * seconds;
 }

@@ -259,6 +259,16 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp = std::unique_ptr<UIComponent>(new TextComponent());
 		}
 
+		if(typeString == "Button")
+		{
+			comp = std::unique_ptr<UIComponent>(new ButtonComponent());
+		}
+
+        if(typeString == "TextBox")
+        {
+            comp = std::unique_ptr<UIComponent>(new TextBoxComponent());
+        }
+
 		comp->name = componenetName;
 
 		auto bounds = member->value.FindMember("Bounds");

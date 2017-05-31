@@ -28,6 +28,8 @@ namespace Unknown
 	::rapidjson::Value* getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc);
 
 	Colour* getColourFromString(std::string str);
+
+	bool isCharCodeNumber(const char* key);
 }
 
 #endif

@@ -21,6 +21,7 @@ namespace Unknown
 
 			void drawChar(const char c, const int x, const int y);
 			void drawString(const std::string string, const int x, const int y);
+			int getStringWidth(const std::string str) const;
 		};
 	}
 }

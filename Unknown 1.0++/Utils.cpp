@@ -79,3 +79,8 @@ Unknown::Colour* Unknown::getColourFromString(std::string str)
 
 	return new Colour(red, green, blue, alpha);
 }
+
+bool Unknown::isCharCodeNumber(const char* key)
+{
+	return *key >= '0' && *key <= '9';
+}

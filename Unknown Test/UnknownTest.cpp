@@ -33,15 +33,18 @@ Unknown::Graphics::Font* font;
 Unknown::UIContainer startMenu;
 
 std::unique_ptr<Unknown::Map> map;
-Unknown::Timer timer;
+Unknown::Timer timer(0.2);
 
-int SIZE = 128;
+int width = 128;
+int height = 8;
 bool started = false;
 bool creatingBoard = false;
 
+void createBoard();
+
 void createBoard()
 {
-    map = std::unique_ptr<Unknown::Map>(new Unknown::Map(SIZE, SIZE));
+    map = std::unique_ptr<Unknown::Map>(new Unknown::Map(width, height));
 
     for(int x = 0; x < map->mapSize->width; x++)
     {
@@ -65,7 +68,8 @@ void render()
     {
         return;
     }
-	int scale = 1024/SIZE;
+	int scaleX = 1024/width;
+    int scaleY = 1024/height;
 
     for(int x = 0; x <  map->mapSize->width; x++)
     {
@@ -73,11 +77,11 @@ void render()
         {
             if(map->getTileID(x, y) == 0)
             {
-                UK_DRAW_SQUARE(x*scale, y*scale, scale, Unknown::Colour::WHITE);
+                UK_DRAW_RECT(x*scaleX, y*scaleY, scaleX, scaleY, Unknown::Colour::WHITE);
             }
             else
             {
-                UK_DRAW_SQUARE(x*scale, y*scale, scale, Unknown::Colour::BLACK);
+                UK_DRAW_RECT(x*scaleX, y*scaleY, scaleX, scaleY, Unknown::Colour::BLACK);
             }
         }
     }
@@ -98,11 +102,6 @@ int checkTile(int x, int y, std::unique_ptr<Unknown::Map>& map)
 	{
 		return map->getTileID(x, y);
 	}
-}
-
-bool isCharCodeNumber(const char* key)
-{
-	return *key >= '0' && *key <= '9';
 }
 
 void keylistener(Unknown::KeyEvent evnt)
@@ -131,38 +130,48 @@ void keylistener(Unknown::KeyEvent evnt)
                     }
                     printf("Timer speed now %d\n", timer.timerSpeed);
                 }
+                else
+                {
+                    if(evnt.SDLCode == SDLK_ESCAPE)
+                    {
+                        started = false;
+                        auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
+                        (*textBoxSizeContent)->content = "";
+                    }
+                }
             }
         }
         else
         {
-            if (evnt.SDLCode == SDLK_RETURN)
+            if (evnt.SDLCode == SDLK_ESCAPE)
             {
-				auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
-				
-				int boardSize = std::stoi((*textBoxSizeContent)->content);
-				printf("Creating board with size %d\n", boardSize);
-				SIZE = boardSize;
-				started = true;
-				createBoard();
-            } else
-            {
-				auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
-				const char *key = SDL_GetKeyName(evnt.SDLCode);
-                    
-                if (evnt.SDLCode == SDLK_BACKSPACE)
-                {
-                    if ((*textBoxSizeContent)->content.size() > 0)
-                    {
-                        (*textBoxSizeContent)->content.pop_back();
-                    }
-                } else
-                {
-					if(isCharCodeNumber(key))
-					{
-                        (*textBoxSizeContent)->content += key;
-                    }
-                }
+                started = true;
             }
+        }
+    }
+}
+
+void UICallback(const Unknown::UIEvent evnt)
+{
+    if(evnt.componentName == "ButtonStart")
+    {
+        auto textBoxSize = startMenu.getComponentByName("TextBoxSize");
+
+        if ((*textBoxSize)->content.size() > 0)
+        {
+            int boardSize = std::stoi((*textBoxSize)->content);
+            printf("Creating board with size %d\n", boardSize);
+            width = height = boardSize;
+            started = true;
+            createBoard();
+        }
+    }
+
+    if(evnt.componentName == "TextBoxSize")
+    {
+        if(!Unknown::isCharCodeNumber(*evnt.relatedKey))
+        {
+            (*evnt.relatedKey) = "";
         }
     }
 }
@@ -171,7 +180,7 @@ void update()
 {
     using namespace Unknown;
 
-    std::unique_ptr<Unknown::Map> newMap = std::unique_ptr<Unknown::Map>(new Map(SIZE, SIZE));
+    std::unique_ptr<Unknown::Map> newMap = std::unique_ptr<Unknown::Map>(new Map(width, height));
 
     if (timer.isTickComplete())
     {
@@ -226,12 +235,14 @@ void init()
 	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
+    UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
 
     createBoard();
 
     font = new Unknown::Graphics::Font(&font_img, "ABCDEFGHIJKLMNOPQRSTUVWXYZ: 1234567890", 16);
 
     startMenu = Unknown::Loader::loadUI("MainMenuUI.json");
+
 	startMenu.setGlobalFont(font);
 
     //UK_PYTHON_LOAD_SCRIPT("Test");

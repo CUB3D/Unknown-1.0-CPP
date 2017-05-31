@@ -14,7 +14,7 @@ namespace Unknown
 			Uint32 timerSpeed;
 
 			Timer();
-			Timer(const int seconds);
+			Timer(const float seconds);
 
 			bool isTickComplete();
 			void resetTimer();

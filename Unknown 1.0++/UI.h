@@ -6,6 +6,7 @@
 #include "Colour.h"
 #include "Utils.h"
 #include "Font.h"
+#include "Input.h"
 
 #include <vector>
 #include <memory>
@@ -19,7 +20,9 @@ namespace Unknown
 		UI_NULL,
         UI_RECT,
         UI_SQUARE,
-		UI_TEXT
+		UI_TEXT,
+		UI_BUTTON,
+        UI_TEXTBOX
     };
 
     class UIComponent
@@ -62,6 +65,39 @@ namespace Unknown
         virtual void render() const override;
 
     };
+
+	class ButtonComponent : public UIComponent
+	{
+	public:
+		ButtonComponent();
+		void mouseListener(MouseEvent evnt);
+		virtual void render() const override;
+	};
+
+    class TextBoxComponent : public UIComponent
+    {
+    public:
+        TextBoxComponent();
+        void onKeyTyped(KeyEvent evnt);
+        virtual void render() const override;
+    };
+
+    struct UIEvent
+    {
+        std::string componentName;
+        std::string action;
+        const char** relatedKey;
+    };
+
+    extern std::map<std::string, std::function<void(const UIEvent)>> UIListeners;
+
+    void registerUIListener(std::function<void(const UIEvent)> listener, std::string listenerID);
+    void removeUIListener(std::string listnerID);
+    void callUIListeners(const UIEvent evnt);
+
+    #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](::Unknown::UIEvent evnt) {listener(evnt);}, id)
+    #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](::Unknown::UIEvent evnt) {listener(evnt);}, id)
+    #define UK_REMOVE_UI_LISTENER(id) ::Unknown::removeUIListener(id)
 
 	class UIContainer
 	{

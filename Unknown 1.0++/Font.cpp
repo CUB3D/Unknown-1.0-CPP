@@ -31,3 +31,8 @@ void Unknown::Graphics::Font::drawString(const std::string string, const int x, 
 	}
 }
 
+int Unknown::Graphics::Font::getStringWidth(const std::string str) const
+{
+	return str.size() * this->charSize;
+}
+
