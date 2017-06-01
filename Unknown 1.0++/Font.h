@@ -5,6 +5,8 @@
 #include "Image.h"
 #include "Unknown.h"
 
+#include <SDL_ttf.h>
+
 namespace Unknown
 {
 	namespace Graphics
@@ -20,9 +22,23 @@ namespace Unknown
 			Font(Image* fontSheet, const std::string layout, const int charSize);
 
 			void drawChar(const char c, const int x, const int y);
-			void drawString(const std::string string, const int x, const int y);
-			int getStringWidth(const std::string str) const;
+
+            virtual void drawString(const std::string string, const int x, const int y);
+
+            virtual int getStringWidth(const std::string str) const;
 		};
+
+        class TTFont : public Font
+        {
+        private:
+            TTF_Font* font;
+
+        public:
+            TTFont(std::string name);
+
+            virtual void drawString(const std::string string, const int x, const int y) override;
+            virtual int getStringWidth(const std::string str) const override ;
+        };
 	}
 }
 #endif

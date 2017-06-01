@@ -27,7 +27,6 @@
 #include <Python.h>
 #include <cmath>
 
-Unknown::Graphics::Image font_img("Font.png");
 Unknown::Graphics::Font* font;
 
 Unknown::UIContainer startMenu;
@@ -35,12 +34,10 @@ Unknown::UIContainer startMenu;
 std::unique_ptr<Unknown::Map> map;
 Unknown::Timer timer(0.2);
 
-int width = 128;
-int height = 8;
+int width = 64;
+int height = 64;
 bool started = false;
 bool creatingBoard = false;
-
-void createBoard();
 
 void createBoard()
 {
@@ -135,8 +132,10 @@ void keylistener(Unknown::KeyEvent evnt)
                     if(evnt.SDLCode == SDLK_ESCAPE)
                     {
                         started = false;
-                        auto textBoxSizeContent = startMenu.getComponentByName("TextLabelTextBoxSizeContent");
-                        (*textBoxSizeContent)->content = "";
+                        auto textBoxWidth = startMenu.getComponentByName("TextBoxWidth");
+                        auto textBoxHeight = startMenu.getComponentByName("TextBoxHeight");
+                        (*textBoxHeight)->content = "";
+                        (*textBoxWidth)->content = "";
                     }
                 }
             }
@@ -235,6 +234,11 @@ void update()
 
 void init()
 {
+    if(TTF_Init() == -1)
+    {
+        printf("Unable to load SDL_tff\n");
+    }
+
 	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
@@ -242,7 +246,7 @@ void init()
 
     createBoard();
 
-    font = new Unknown::Graphics::Font(&font_img, "ABCDEFGHIJKLMNOPQRSTUVWXYZ: 1234567890", 16);
+    font = new Unknown::Graphics::TTFont("Fonts/Arimo-Regular.ttf");
 
     startMenu = Unknown::Loader::loadUI("MainMenuUI.json");
     startMenu.initUI();
