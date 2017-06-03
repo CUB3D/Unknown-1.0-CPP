@@ -17,10 +17,11 @@ namespace Unknown
 		SDL_WINDOW_CREATION_FAIL = -11,
 		SDL_WINDOW_RENDERER_CREATION_FAIL = -12,
 		SDL_WINDOW_PNG_INIT_FAIL = -13,
+        SDL_WINDOW_TTF_INIT_FAIL = -14,
 		SDL_RENDER_RECT_FAIL = -20,
 		SDL_IMAGE_LOAD_FAIL = -21,
 		SDL_IMAGE_TEXTURE_CREATE_FAIL = -22,
-	};
+    };
 
 	class Unknown
 	{
@@ -40,6 +41,10 @@ namespace Unknown
 
 		int frames = 0;
 		int ticks = 0;
+
+        int fps = 0;
+        double lastFrameTimeMS = 0;
+        double lastUpdateTimeMS = 0;
 
 		Unknown();
 

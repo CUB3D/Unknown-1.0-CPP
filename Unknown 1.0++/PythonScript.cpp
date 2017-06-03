@@ -88,8 +88,8 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     //register a test method
     registerMethod("Unknown", "tez", "Tests stuff", testCommandTez);
 
+    log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 
-    UK_LOG_INFO(::Unknown::concat({"Loading script ", name.c_str()}).c_str());
     PyObject* testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);
     PyObject* initFunction = PyObject_GetAttrString(testModule, "init");

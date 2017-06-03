@@ -3,10 +3,10 @@ CFLAGS=-I. -I../Output/lib/linux/include/. -I/usr/include/SDL2/. -I../Libs/Rapid
 OBJ=UnknownTest.o
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -O2 -c $< -o $@
 
 test: $(OBJ)
-	$(CC) $(CFLAGS) UnknownTest.o -o a.out
+	$(CC) $(CFLAGS) -O2 UnknownTest.o -o a.out
 
 
 .PHONY: clean

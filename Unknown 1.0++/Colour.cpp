@@ -13,11 +13,12 @@ Unknown::Colour::Colour(const int red, const int green, const int blue) : red(re
 {
 }
 
-Uint32 Unknown::Colour::toSDLColour() const
+SDL_Color Unknown::Colour::toSDLColour() const
 {
-	Unknown* uk = getUnknown();
+	//Unknown* uk = getUnknown();
 
-	return SDL_MapRGBA(SDL_GetWindowSurface(uk->window)->format, this->red, this->green, this->blue, this->alpha);
+	//return SDL_MapRGBA(SDL_GetWindowSurface(uk->window)->format, this->red, this->green, this->blue, this->alpha);
+	return SDL_Color {(uint8_t) this->red, (uint8_t) this->green, (uint8_t) this->blue, (uint8_t) this->alpha};
 }
 
 Unknown::Colour Unknown::Colour::RED = Colour(255, 0, 0);

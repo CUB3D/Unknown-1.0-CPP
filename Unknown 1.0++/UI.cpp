@@ -32,7 +32,7 @@ Unknown::UIContainer::UIContainer()
     //NOOP
 }
 
-void Unknown::UIContainer::renderUI()
+void Unknown::UIContainer::renderUI() const
 {
 	for (auto& comp : components)
 	{
@@ -179,7 +179,7 @@ void Unknown::ButtonComponent::render() const
 
 	if(this->font && this->content.size() > 0)
 	{
-		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y);
+		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.height / 2 - font->getStringHeight(this->content) / 2);
 	}
 }
 
