@@ -17,6 +17,9 @@
 #include "PythonScript.h"
 #include "Utils.h"
 
+#include <chrono>
+#include <SDL_ttf.h>
+
 // unknown class
 
 Unknown::Unknown::Unknown()
@@ -54,6 +57,12 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		printf("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
 		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
 	}
+
+    if(TTF_Init() == -1)
+    {
+        printf("Error: SDL failed to initialise TTF handling, %s\n", TTF_GetError());
+        quit(ErrorCodes::SDL_WINDOW_TTF_INIT_FAIL);
+    }
 
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
@@ -123,7 +132,10 @@ void Unknown::Unknown::initGameLoop()
 
 		while (this->unprocessed >= 1)
 		{
+            auto renderStartTime = std::chrono::high_resolution_clock::now();
 			this->update();
+            auto renderFinishTime = std::chrono::high_resolution_clock::now();
+            this->lastUpdateTimeMS = this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
 
 			this->ticks++;
 			this->unprocessed--;
@@ -131,7 +143,11 @@ void Unknown::Unknown::initGameLoop()
 
 		this->clearScreen();
 
+        auto renderStartTime = std::chrono::high_resolution_clock::now();
 		this->render();
+		auto renderFinishTime = std::chrono::high_resolution_clock::now();
+        this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
+        this->fps = 1000 / this->lastFrameTimeMS;
 
 		this->frames++;
 

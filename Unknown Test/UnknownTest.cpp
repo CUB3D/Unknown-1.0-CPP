@@ -26,18 +26,18 @@
 
 #include <Python.h>
 #include <cmath>
+#include "Scene/SceneManager.h"
+#include "Scene/Scene.h"
 
 Unknown::Graphics::Font* font;
-
-Unknown::UIContainer startMenu;
 
 std::unique_ptr<Unknown::Map> map;
 Unknown::Timer timer(0.2);
 
+Unknown::SceneManager scenes;
+
 int width = 64;
 int height = 64;
-bool started = false;
-bool creatingBoard = false;
 
 void createBoard()
 {
@@ -59,34 +59,41 @@ void createBoard()
     printf("Board creation complete\n");
 }
 
-void render()
+void renderSimulationBoard()
 {
-    if (creatingBoard)
-    {
-        return;
-    }
-	int scaleX = 1024/width;
+    int scaleX = 1024/width;
     int scaleY = 1024/height;
 
-    for(int x = 0; x <  map->mapSize->width; x++)
+    for (int x = 0; x < map->mapSize->width; x++)
     {
-        for (int y = 0; y <  map->mapSize->height; y++)
+        for (int y = 0; y < map->mapSize->height; y++)
         {
-            if(map->getTileID(x, y) == 0)
+            if (map->getTileID(x, y) == 0)
             {
-                UK_DRAW_RECT(x*scaleX, y*scaleY, scaleX, scaleY, Unknown::Colour::WHITE);
-            }
-            else
+                UK_DRAW_RECT(x * scaleX, y * scaleY, scaleX, scaleY, Unknown::Colour::WHITE);
+            } else
             {
-                UK_DRAW_RECT(x*scaleX, y*scaleY, scaleX, scaleY, Unknown::Colour::BLACK);
+                UK_DRAW_RECT(x * scaleX, y * scaleY, scaleX, scaleY, Unknown::Colour::BLACK);
             }
         }
     }
+}
 
-    if(!started)
-    {
-        startMenu.renderUI();
-    }
+void render()
+{
+    scenes.currentScene->render();
+
+    std::string asdf = "FPS: ";
+    asdf += std::to_string(Unknown::getUnknown()->fps);
+    font->drawString(asdf, 10, 10);
+
+    std::string frameTime = "FrameTime: ";
+    frameTime += std::to_string(Unknown::getUnknown()->lastFrameTimeMS);
+    font->drawString(frameTime, 10, 30);
+
+    std::string updateTime = "UpdateTime: ";
+    updateTime += std::to_string(Unknown::getUnknown()->lastUpdateTimeMS);
+    font->drawString(updateTime, 10, 50);
 }
 
 int checkTile(int x, int y, std::unique_ptr<Unknown::Map>& map)
@@ -105,46 +112,20 @@ void keylistener(Unknown::KeyEvent evnt)
 {
     if(evnt.keyState == Unknown::InputState::RELEASED)
     {
-        if(started)
+        if(evnt.SDLCode == SDLK_ESCAPE)
         {
-            if(evnt.SDLCode == SDLK_LEFT)
+            if(scenes.currentScene->name == "Simulator")
             {
-                timer.timerSpeed += 100;
-                if(timer.timerSpeed > 1000)
-                {
-                    timer.timerSpeed = 1000;
-                }
-                printf("Timer speed now %d\n", timer.timerSpeed);
+                scenes.loadScene("MainMenu");
+                Unknown::UIContainer& mainMenu = scenes.getScene<Unknown::MenuScene>()->menu;
+                auto textBoxWidth = mainMenu.getComponentByName("TextBoxWidth");
+                auto textBoxHeight = mainMenu.getComponentByName("TextBoxHeight");
+                (*textBoxHeight)->content = "";
+                (*textBoxWidth)->content = "";
             }
             else
             {
-                if(evnt.SDLCode == SDLK_RIGHT)
-                {
-                    timer.timerSpeed -= 20;
-                    if(timer.timerSpeed <= 0)
-                    {
-                        timer.timerSpeed = 20;
-                    }
-                    printf("Timer speed now %d\n", timer.timerSpeed);
-                }
-                else
-                {
-                    if(evnt.SDLCode == SDLK_ESCAPE)
-                    {
-                        started = false;
-                        auto textBoxWidth = startMenu.getComponentByName("TextBoxWidth");
-                        auto textBoxHeight = startMenu.getComponentByName("TextBoxHeight");
-                        (*textBoxHeight)->content = "";
-                        (*textBoxWidth)->content = "";
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (evnt.SDLCode == SDLK_ESCAPE)
-            {
-                started = true;
+                scenes.loadScene("Simulator");
             }
         }
     }
@@ -154,8 +135,10 @@ void UICallback(const Unknown::UIEvent evnt)
 {
     if(evnt.componentName == "ButtonStart")
     {
-        auto textBoxWidth = startMenu.getComponentByName("TextBoxWidth");
-        auto textBoxHeight = startMenu.getComponentByName("TextBoxHeight");
+        Unknown::UIContainer& mainMenu = scenes.getScene<Unknown::MenuScene>()->menu;
+        auto textBoxWidth = mainMenu.getComponentByName("TextBoxWidth");
+        auto textBoxHeight = mainMenu.getComponentByName("TextBoxHeight");
+        auto textBoxSpeed = mainMenu.getComponentByName("TextBoxSpeed");
 
         if ((*textBoxWidth)->content.size() > 0 && (*textBoxHeight)->content.size() > 0)
         {
@@ -164,12 +147,17 @@ void UICallback(const Unknown::UIEvent evnt)
             printf("Creating board with size %dx%d\n", boardWidth, boardHeight);
             width = boardWidth;
             height = boardHeight;
-            started = true;
             createBoard();
+            scenes.loadScene("Simulator");
+        }
+
+        if((*textBoxSpeed)->content.size() > 0)
+        {
+            timer.timerSpeed = std::stoi((*textBoxSpeed)->content);
         }
     }
 
-    if(evnt.componentName == "TextBoxWidth" || evnt.componentName == "TextBoxHeight")
+    if(evnt.componentName == "TextBoxWidth" || evnt.componentName == "TextBoxHeight" || evnt.componentName == "TextBoxSpeed")
     {
         if(!Unknown::isCharCodeNumber(*evnt.relatedKey))
         {
@@ -178,13 +166,19 @@ void UICallback(const Unknown::UIEvent evnt)
     }
 }
 
+
 void update()
+{
+    scenes.currentScene->update();
+}
+
+void updateBoardSimulation()
 {
     using namespace Unknown;
 
     std::unique_ptr<Map> newMap = std::unique_ptr<Map>(new Map(width, height));
 
-    if (timer.isTickComplete())
+    if (timer.isTickComplete() || true)
     {
         for (int x = 0; x <  map->mapSize->width; x++)
         {
@@ -234,26 +228,18 @@ void update()
 
 void init()
 {
-    if(TTF_Init() == -1)
-    {
-        printf("Unable to load SDL_tff\n");
-    }
-
 	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
     UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
 
-    createBoard();
+    font = new Unknown::Graphics::TTFont("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
-    font = new Unknown::Graphics::TTFont("Fonts/Arimo-Regular.ttf");
-
-    startMenu = Unknown::Loader::loadUI("MainMenuUI.json");
-    startMenu.initUI();
-	startMenu.setGlobalFont(font);
-
-    //UK_PYTHON_LOAD_SCRIPT("Test");
+    scenes.add(new Unknown::MenuScene("MainMenu", "MainMenuUI.json", font));
+    scenes.add(new Unknown::CustomScene("Simulator", renderSimulationBoard, updateBoardSimulation));
+    scenes.loadScene("MainMenu");
 }
+
 
 #ifdef _WIN32
 int _tmain(int argc, _TCHAR* argv[])

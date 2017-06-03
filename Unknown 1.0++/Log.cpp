@@ -1,33 +1,15 @@
 #include "stdafx.h"
 #include "Log.h"
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 namespace Unknown
 {
-	char* logStatus[] = { "[INFO] ", "[WARNING] ", "[ERROR] " };
+	std::string logStatus[] = { "[INFO] ", "[WARNING] ", "[ERROR] " };
 
-	//TODO: move to utils
-	std::string concat(std::vector<std::string> strings)
+	void log(int logLevel, std::string message)
 	{
-		std::stringstream output;
+		printf(logStatus[logLevel].c_str());
 
-		for (auto string : strings)
-		{
-			output << string;
-		}
-
-		return output.str();
-	}
-
-	void log(int logLevel, const char* message)
-	{
-
-		printf(logStatus[logLevel]);
-
-		printf(message);
+		printf(message.c_str());
 
 		printf("\n");
 	}

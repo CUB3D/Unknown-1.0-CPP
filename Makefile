@@ -1,10 +1,8 @@
 make=make
 
-ecore:
-	$(make) -C Unknown\ 1.0++/
-
-test:
-	$(make) -C Unknown\ Test/
+clean:
+	$(make) -C Unknown\ 1.0++/ clean
+	$(make) -C Unknown\ Test/ clean
 
 all:
 	$(make) -C Unknown\ 1.0++/

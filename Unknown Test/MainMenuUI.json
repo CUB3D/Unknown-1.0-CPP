@@ -1,15 +1,15 @@
 {
   "Background": {
     "Type": "Rect",
-    "Bounds": [100, 100, 200, 90],
+    "Bounds": [100, 100, 200, 120],
     "Colour": "80aaaaaa"
   },
   "ButtonStart": {
     "Type": "Button",
     "InsideComponent": "Background",
     "Colour": "ffff0000",
-    "Content": "START",
-    "OffsetBounds": [10, 60, -20, 0],
+    "Content": "Start",
+    "OffsetBounds": [10, 90, -25, 0],
     "Bounds": [0, 0, 0, 20]
   },
   "TextBoxWidth": {
@@ -23,7 +23,21 @@
     "Type": "TextBox",
     "InsideComponent": "Background",
     "Colour": "ffffffff",
-    "OffsetBounds": [115, 30, 0, 0],
+    "OffsetBounds": [110, 30, 0, 0],
+    "Bounds":[0, 0, 75, 20]
+  },
+  "TextLabelSpeed": {
+    "Type": "Text",
+    "InsideComponent": "Background",
+    "Colour": "ff000000",
+    "Content": "Speed:",
+    "OffsetBounds": [10, 60, -20, 0]
+  },
+  "TextBoxSpeed": {
+    "Type": "TextBox",
+    "InsideComponent": "Background",
+    "Colour": "ffffffff",
+    "OffsetBounds": [110, 60, 0, 0],
     "Bounds":[0, 0, 75, 20]
   },
   "TextLabelX": {
@@ -37,7 +51,7 @@
     "Type": "Text",
     "InsideComponent": "Background",
     "Colour": "ff000000",
-    "Content": "BOARD SIZE:",
+    "Content": "Board size:",
     "OffsetBounds": [10, 10, -20, 0]
   }
 }

@@ -113,7 +113,7 @@ namespace Unknown
 		void setGlobalFont(Graphics::Font* font);
 		std::unique_ptr<UIComponent>* getComponentByName(const std::string name);
 
-		void renderUI();
+		void renderUI() const;
         void initUI();
 	};
 }

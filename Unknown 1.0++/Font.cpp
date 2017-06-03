@@ -37,17 +37,22 @@ int Unknown::Graphics::Font::getStringWidth(const std::string str) const
 	return str.size() * this->charSize;
 }
 
+int Unknown::Graphics::Font::getStringHeight(const std::string str) const
+{
+    return this->charSize;
+}
+
 //TTFont
 
-Unknown::Graphics::TTFont::TTFont(std::string name) : Font(NULL, "", 0)
+Unknown::Graphics::TTFont::TTFont(std::string name, const int size, Colour colour) : Font(NULL, "", 0)
 {
-    this->font = TTF_OpenFont(name.c_str(), 18);
+    this->font = TTF_OpenFont(name.c_str(), size);
+    this->color = colour.toSDLColour();
 }
 
 void Unknown::Graphics::TTFont::drawString(const std::string string, const int x, const int y)
 {
-    SDL_Color col {0, 0, 0};
-	SDL_Surface* textSurface = TTF_RenderText_Blended(font, string.c_str(), col);
+	SDL_Surface* textSurface = TTF_RenderText_Blended(font, string.c_str(), this->color);
 	auto texture = SDL_CreateTextureFromSurface(getUnknown()->windowRenderer, textSurface);
 	SDL_FreeSurface(textSurface);
 	SDL_Rect quad = {x, y, textSurface->w, textSurface->h};
@@ -60,5 +65,12 @@ int Unknown::Graphics::TTFont::getStringWidth(const std::string str) const
     int width = 0;
     TTF_SizeText(this->font, str.c_str(), &width, NULL);
     return width;
+}
+
+int Unknown::Graphics::TTFont::getStringHeight(const std::string str) const
+{
+    int height = 0;
+    TTF_SizeText(this->font, str.c_str(), NULL, &height);
+    return height;
 }
 

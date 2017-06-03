@@ -23,7 +23,7 @@ namespace Unknown
 		Colour(const int red, const int green, const int blue, const int alpha);
 		Colour(const int red, const int green, const int blue);
 
-		Uint32 toSDLColour() const;
+		SDL_Color toSDLColour() const;
 	};
 
 	#define UK_COLOUR_RGBA(r, g, b, a) Unknown::Colour(r, g, b, a)

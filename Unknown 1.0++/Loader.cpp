@@ -366,7 +366,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 	std::stringstream tempStream;
 	tempStream << container.components.size();
 
-	UK_LOG_INFO(::Unknown::concat({ "Loaded UI data, found ", tempStream.str(), " components" }).c_str());
+    log(UK_LOG_LEVEL_INFO, concat("Loaded UI data, found", tempStream.str(), "components"));
 
 	tempStream.clear();
 
