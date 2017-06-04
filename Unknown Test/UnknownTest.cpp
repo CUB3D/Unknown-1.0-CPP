@@ -28,6 +28,7 @@
 #include <cmath>
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
+#include "../Output/lib/linux/include/Unknown.h"
 
 Unknown::Graphics::Font* font;
 
@@ -38,6 +39,8 @@ Unknown::SceneManager scenes;
 
 int width = 64;
 int height = 64;
+int scaleX = 0;
+int scaleY = 0;
 
 void createBoard()
 {
@@ -56,14 +59,17 @@ void createBoard()
         }
     }
 
+    auto uk = Unknown::getUnknown();
+    scaleX = uk->screenSize->width / width;
+    scaleY = uk->screenSize->height / height;
+
     printf("Board creation complete\n");
 }
 
+int pixelScale = 2;
+
 void renderSimulationBoard()
 {
-    int scaleX = 1024/width;
-    int scaleY = 1024/height;
-
     for (int x = 0; x < map->mapSize->width; x++)
     {
         for (int y = 0; y < map->mapSize->height; y++)
@@ -75,7 +81,15 @@ void renderSimulationBoard()
             {
                 UK_DRAW_RECT(x * scaleX, y * scaleY, scaleX, scaleY, Unknown::Colour::BLACK);
             }
+
+            // If the last tile has been drawn
+            if(x == map->mapSize->width - 1)
+            {
+             //   UK_DRAW_RECT(0, y * scaleY, scaleX * width, 1, Unknown::Colour::BLUE);
+            }
         }
+
+       // UK_DRAW_RECT(x * scaleX, 0, 1, scaleY * height, Unknown::Colour::BLUE);
     }
 }
 
@@ -83,29 +97,37 @@ void render()
 {
     scenes.currentScene->render();
 
-    std::string asdf = "FPS: ";
-    asdf += std::to_string(Unknown::getUnknown()->fps);
-    font->drawString(asdf, 10, 10);
+    UK_DRAW_RECT(Unknown::getUnknown()->screenSize->width - 200, 5, 200, 60, Unknown::Colour::WHITE);
+
+    std::string fps = "FPS: ";
+    fps += std::to_string(Unknown::getUnknown()->fps);
+    font->drawString(fps, Unknown::getUnknown()->screenSize->width - font->getStringWidth(fps) - 10, 10);
 
     std::string frameTime = "FrameTime: ";
     frameTime += std::to_string(Unknown::getUnknown()->lastFrameTimeMS);
-    font->drawString(frameTime, 10, 30);
+    font->drawString(frameTime, Unknown::getUnknown()->screenSize->width - font->getStringWidth(frameTime) - 10, 30);
 
     std::string updateTime = "UpdateTime: ";
     updateTime += std::to_string(Unknown::getUnknown()->lastUpdateTimeMS);
-    font->drawString(updateTime, 10, 50);
+    font->drawString(updateTime, Unknown::getUnknown()->screenSize->width - font->getStringWidth(updateTime) - 10, 50);
+}
+
+int tileExists(int x, int y, std::unique_ptr<Unknown::Map>& map)
+{
+    if(x < 0 || y < 0 || x >=  map->mapSize->width || y >= map->mapSize->height)
+    {
+        return 0;
+    }
+    return 1;
 }
 
 int checkTile(int x, int y, std::unique_ptr<Unknown::Map>& map)
 {
-	if(x < 0 || y < 0 || x >  map->mapSize->width || y > map->mapSize->height)
-	{
-		return 0;
-	}
-	else
+	if(tileExists(x, y, map))
 	{
 		return map->getTileID(x, y);
 	}
+    return 0;
 }
 
 void keylistener(Unknown::KeyEvent evnt)
@@ -148,6 +170,8 @@ void UICallback(const Unknown::UIEvent evnt)
             width = boardWidth;
             height = boardHeight;
             createBoard();
+            //TODO: create a resize function under unknown
+            //SDL_SetWindowSize(Unknown::getUnknown()->window, width*pixelScale, height*pixelScale);
             scenes.loadScene("Simulator");
         }
 
@@ -178,7 +202,7 @@ void updateBoardSimulation()
 
     std::unique_ptr<Unknown::Map> newMap = std::unique_ptr<Unknown::Map>(new Map(width, height));
 
-    if (timer.isTickComplete() || true)
+    if (timer.isTickComplete())
     {
         for (int x = 0; x <  map->mapSize->width; x++)
         {

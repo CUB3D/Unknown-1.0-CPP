@@ -42,7 +42,7 @@ void Unknown::Graphics::Animation::draw(const int x, const int y, const double a
 	{
 		currentFrameIndex++;
 
-		if (currentFrameIndex == frames.size())
+		if ((unsigned int) currentFrameIndex == frames.size())
 		{
 			currentFrameIndex = 0;
 		}

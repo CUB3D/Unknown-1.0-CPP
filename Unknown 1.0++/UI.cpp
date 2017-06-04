@@ -245,7 +245,11 @@ void Unknown::TextBoxComponent::render() const
 
     if(isEditing)
     {
-        Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, Colour::BLACK);
+
+        if((time(NULL) % 1000) % 2 ==0)
+        {
+            Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, Colour::BLACK);
+        }
     }
 }
 

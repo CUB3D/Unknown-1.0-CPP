@@ -51,4 +51,4 @@ set(SOURCE_FILES
         "Unknown Test/stdafx.cpp")
 
 add_executable(NULL ${SOURCE_FILES})
-target_include_directories(NULL SYSTEM PRIVATE "Libs/RapidJSON/include/rapidjson" "/usr/include/python3.4" "/usr/include/SDL2" "Output/lib/linux/include")
+target_include_directories(NULL PRIVATE "Libs/RapidJSON/include/rapidjson" "/usr/include/python3.4" "/usr/include/SDL2" "Output/lib/linux/include")

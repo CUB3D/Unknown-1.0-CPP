@@ -271,23 +271,6 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 
 		comp->name = componenetName;
 
-		auto bounds = member->value.FindMember("Bounds");
-
-		if (bounds != member->value.MemberEnd())
-		{
-			int boundsArray[4];
-
-			int x = 0;
-
-			for (int x = 0; x < bounds->value.Size(); x++)
-			{
-				boundsArray[x] = bounds->value[x].GetInt();
-			}
-
-            comp->location = {boundsArray[0], boundsArray[1]};
-            comp->size = {boundsArray[2], boundsArray[3]};
-		}
-
 		auto colour = member->value.FindMember("Colour");
 
 		if (colour != member->value.MemberEnd())
@@ -306,17 +289,6 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp->parentName = parentName;
 		}
 
-		auto offsetBounds = member->value.FindMember("OffsetBounds");
-        int boundsArray[4];
-
-		if (offsetBounds != member->value.MemberEnd())
-		{
-			for (int x = 0; x < offsetBounds->value.Size(); x++)
-			{
-				boundsArray[x] = offsetBounds->value[x].GetInt();
-			}
-		}
-
 		auto content = member->value.FindMember("Content");
 
 		if (content != member->value.MemberEnd())
@@ -325,42 +297,149 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp->content = contentString;
 		}
 
+        std::unique_ptr<UIComponent>* parent = nullptr;
+
+        if (!comp->parentName.empty())
+        {
+            for (auto &component2 : container.components)
+            {
+                if (comp->parentName == component2->name)
+                {
+                    parent = &component2;
+                    break;
+                }
+            }
+
+            if(!parent)
+            {
+                std::cout << "Error: no parent found for " << comp->name << std::endl;
+            }
+        }
+
+        auto bounds = member->value.FindMember("Bounds");
+
+        if (bounds != member->value.MemberEnd())
+        {
+            int boundsArray[4];
+
+            for (int x = 0; x < bounds->value.Size(); x++)
+            {
+                if(bounds->value[x].IsString())
+                {
+                    std::string location = bounds->value[x].GetString();
+                    std::vector<std::string> tokens = tokenise(location, {"+", "-", "minX", "minY", "maxX", "maxY"});
+
+                    int position = 0;
+                    std::string operation;
+                    for(auto token : tokens)
+                    {
+                        if(token == "minX")
+                        {
+                            position = (*parent)->location.x;
+                        }
+
+                        if(token == "minY")
+                        {
+                            position = (*parent)->location.y;
+                        }
+
+                        if(token == "maxX")
+                        {
+                            position = (*parent)->location.x+(*parent)->size.width;
+                        }
+
+                        if(token == "maxY")
+                        {
+                            position = (*parent)->location.y+(*parent)->size.height;
+                        }
+
+                        if(token == "+")
+                        {
+                            operation = "+";
+                        }
+
+                        if(token == "-")
+                        {
+                            operation = "-";
+                        }
+
+                        bool isNumber = true;
+
+                        for(char c : token)
+                        {
+                            if(!isCharCodeNumber(&c))
+                            {
+                                isNumber = false;
+                            }
+                        }
+
+                        if(isNumber)
+                        {
+                            if(operation == "+")
+                            {
+                                position += std::stoi(token);
+                            }
+                            if(operation == "-")
+                            {
+                                position -= std::stoi(token);
+                            }
+                        }
+                    }
+                    boundsArray[x] = position;
+                }
+                if(bounds->value[x].IsInt())
+                {
+                    boundsArray[x] = bounds->value[x].GetInt();
+                }
+            }
+
+            comp->location = {boundsArray[0], boundsArray[1]};
+            comp->size = {boundsArray[2], boundsArray[3]};
+
+            if(comp->size.width == -1)
+            {
+                comp->size.width = getUnknown()->screenSize->width;
+            }
+
+            if(comp->size.height == -1)
+            {
+                comp->size.height = getUnknown()->screenSize->height;
+            }
+        }
+
 		// calculate OffsetBounds for a component
 
-		if (!comp->parentName.empty())
-		{
-			for (auto& component2 : container.components)
-			{
-				if (comp->parentName == component2->name)
-				{
-                    //Extra if checks allow for use of both relative and direct positioning
-                    if(boundsArray[0] != 0)
-                    {
-                        comp->location.x = component2->location.x + boundsArray[0];
-                    }
-                    if(boundsArray[1] != 0)
-                    {
-                        comp->location.y = component2->location.y + boundsArray[1];
-                    }
-                    if(boundsArray[2] != 0)
-                    {
-                        comp->size.width = component2->size.width + boundsArray[2];
-                    }
-                    if(boundsArray[3] != 0)
-                    {
-                        comp->size.height = component2->size.height + boundsArray[3];
-                    }
-					goto done; // Found the parent, now jump to end
-				}
-			}
+//		if (!comp->parentName.empty())
+//		{
+//			for (auto& component2 : container.components)
+//			{
+//				if (comp->parentName == component2->name)
+//				{
+//                    //Extra if checks allow for use of both relative and direct positioning
+//                    if(boundsArray[0] != 0)
+//                    {
+//                        comp->location.x = component2->location.x + boundsArray[0];
+//                    }
+//                    if(boundsArray[1] != 0)
+//                    {
+//                        comp->location.y = component2->location.y + boundsArray[1];
+//                    }
+//                    if(boundsArray[2] != 0)
+//                    {
+//                        comp->size.width = component2->size.width + boundsArray[2];
+//                    }
+//                    if(boundsArray[3] != 0)
+//                    {
+//                        comp->size.height = component2->size.height + boundsArray[3];
+//                    }
+//					goto done; // Found the parent, now jump to end
+//				}
+//			}
 			
 			// If a parent is found then this will be skipped
-			std::cout << "Error: no parent found for " << comp->name << std::endl;
-		}
+//		}
 
-		done:{
-			container.components.push_back(std::move(comp));
-		}
+        container.components.push_back(std::move(comp));
 	}
 
 	std::stringstream tempStream;

@@ -5,6 +5,7 @@
 
 #include "Colour.h"
 #include "document.h"
+#include <vector>
 
 
 namespace Unknown
@@ -30,6 +31,8 @@ namespace Unknown
 	Colour* getColourFromString(std::string str);
 
 	bool isCharCodeNumber(const char* key);
+
+	std::vector<std::string> tokenise(std::string input, std::vector<std::string> extraTokens);
 }
 
 #endif

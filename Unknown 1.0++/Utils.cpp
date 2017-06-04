@@ -84,3 +84,62 @@ bool Unknown::isCharCodeNumber(const char* key)
 {
 	return *key >= '0' && *key <= '9';
 }
+
+std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::string> extTokens)
+{
+	const char* temp = input.c_str();
+
+    std::vector<std::string> tokens;
+
+	std::string token;
+    std::string lastTokenType = "str";
+
+	for(char c = ' '; *temp != '\0', c = *temp; temp++)
+	{
+        if(isCharCodeNumber(&c))
+        {
+            if(lastTokenType == "num")
+            {
+                token += c;
+            } else {
+                if(!token.empty())
+                {
+                    tokens.push_back(token);
+                }
+                token = "";
+                lastTokenType = "num";
+                token += c;
+            }
+        }
+        else {
+            if(lastTokenType == "str")
+            {
+                token += c;
+            } else {
+                if(!token.empty())
+                {
+                    tokens.push_back(token);
+                }
+                token = "";
+                lastTokenType = "str";
+                token += c;
+            }
+        }
+
+        for(auto extToken : extTokens)
+        {
+            if(extToken == token)
+            {
+				tokens.push_back(token);
+                token = "";
+            }
+        }
+	}
+
+    if(!token.empty())
+    {
+        tokens.push_back(token);
+    }
+
+	return tokens;
+}
