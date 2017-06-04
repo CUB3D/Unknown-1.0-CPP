@@ -69,7 +69,7 @@
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_ITERATOR_DEBUG_LEVEL=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>B:\Programs\Python36\include;$(SolutionDir)\Libs\RapidJSON\include\rapidjson;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>B:\Git\Unknown-1.0-CPP\Libs\SDL2_ttf\include;B:\Programs\Python36\include;$(SolutionDir)\Libs\RapidJSON\include\rapidjson;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>

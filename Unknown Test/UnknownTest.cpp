@@ -200,7 +200,7 @@ void updateBoardSimulation()
 {
     using namespace Unknown;
 
-    std::unique_ptr<Unknown::Map> newMap = std::unique_ptr<Unknown::Map>(new Map(width, height));
+    std::unique_ptr<Map> newMap = std::unique_ptr<Map>(new Map(width, height));
 
     if (timer.isTickComplete())
     {

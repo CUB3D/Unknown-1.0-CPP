@@ -1,0 +1,29 @@
+{
+  "Background": {
+    "Type": "Rect",
+    "Bounds": [100, 100, 200, 90],
+    "Colour": "80aaaaaa"
+  },
+  "ButtonStart": {
+    "Type": "Button",
+    "InsideComponent": "Background",
+    "Colour": "ffff0000",
+    "Content": "START",
+    "OffsetBounds": [10, 60, -20, 0],
+    "Bounds": [0, 0, 0, 20]
+  },
+  "TextBoxSize": {
+    "Type": "TextBox",
+    "InsideComponent": "Background",
+    "Colour": "ffffffff",
+    "OffsetBounds": [10, 30, -20, 0],
+    "Bounds":[0, 0, 0, 20]
+  },
+  "TextLabel1": {
+    "Type": "Text",
+    "InsideComponent": "Background",
+    "Colour": "ff000000",
+    "Content": "BOARD SIZE:",
+    "OffsetBounds": [10, 10, -20, 0]
+  }
+}
