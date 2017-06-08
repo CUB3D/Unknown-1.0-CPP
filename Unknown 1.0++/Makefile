@@ -7,6 +7,7 @@ OBJ=Animation.o Colour.o Entity.o Font.o Image.o Input.o Loader.o Log.o Map.o Pa
 
 libUK: $(OBJ)
 	$(CC) $(CFLAGS) -O2 -shared -o $@ $^
+	mkdir -p ../Output/lib/linux
 	mv libUK ../Output/lib/linux/libUK.so
 	mkdir -p ../Output/lib/linux/include
 	/usr/bin/python ../tools/build/exportHeaders.py
