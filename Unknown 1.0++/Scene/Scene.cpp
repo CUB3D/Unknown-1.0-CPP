@@ -1,10 +1,10 @@
 //
 // Created by cub3d on 01/06/17.
 //
-
+#include "stdafx.h"
 #include "Scene.h"
-#include "Loader.h"
-#include "Font.h"
+#include "../Loader.h"
+#include "../Font.h"
 
 Unknown::Scene::Scene(const std::string name) : name(name)
 {

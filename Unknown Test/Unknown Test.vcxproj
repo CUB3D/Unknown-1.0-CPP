@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -19,13 +19,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -48,8 +48,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <ExecutablePath>$(SolutionDir)\Unknown 1.0++\Debug;$(ExecutablePath)</ExecutablePath>
-    <IncludePath>$(SolutionDir)\Libs\SDL2\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\Libs\SDL2_ttf\lib\x86;B:\Programs\Python36;B:\Programs\Python36\libs;$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\Libs\rapidJSON\include\rapidjson;B:\Programs\Python 3.6\include;B:\git\Unknown-1.0-CPP\Libs\SDL2_ttf\include;$(SolutionDir)\SDL_image\include;$(SolutionDir)\Libs\SDL2\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\Libs\SDL2_ttf\lib\x86;B:\Programs\Python36;B:\Programs\Python36\libs;B:\Programs\Python 3.6\libs;$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

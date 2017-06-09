@@ -9,8 +9,8 @@
 #include <string>
 #include <functional>
 
-#include "UI.h"
-#include "Font.h"
+#include "../UI.h"
+#include "../Font.h"
 
 namespace Unknown
 {

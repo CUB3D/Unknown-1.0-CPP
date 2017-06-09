@@ -4,6 +4,7 @@
 #include "UI2D.h"
 
 #include <memory>
+#include <ctime>
 
 std::map <std::string, std::function<void(const Unknown::UIEvent)> > Unknown::UIListeners;
 

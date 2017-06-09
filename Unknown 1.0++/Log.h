@@ -18,7 +18,7 @@ namespace Unknown {
     {
         std::stringstream ss;
         ss << first << " ";
-        ((ss << asf << " "), ...);
+   //     ((ss << asf << " "), ...);
 
         return ss.str();
     }

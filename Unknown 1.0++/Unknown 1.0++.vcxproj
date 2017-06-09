@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -20,13 +20,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -41,10 +41,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>B:\git\Unknown-1.0-CPP\Libs\SDL2_ttf\lib\x86;$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>B:\Programs\Python 3.6\include;B:\git\Unknown-1.0-CPP\Libs\SDL2_ttf\include;B:\git\Unknown-1.0-CPP\Libs\SDL2_image\include;B:\git\Unknown-1.0-CPP\Libs\SDL2\include;B:\git\Unknown-1.0-CPP\Libs\rapidJSON\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>$(SolutionDir)\Libs\SDL2_image\lib\x86;$(SolutionDir)\Libs\SDL2\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>B:\Programs\Python 3.6\include;$(SolutionDir)\Libs\RapidJSON\rapidjson;$(SolutionDir)\Libs\SDL2_ttf\include;$(SolutionDir)\Libs\SDL2_image\include;$(SolutionDir)\Libs\SDL2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -96,6 +98,8 @@
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PythonScript.h" />
     <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Scene\Scene.h" />
+    <ClInclude Include="Scene\SceneManager.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -120,6 +124,8 @@
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PythonScript.cpp" />
     <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
+    <ClCompile Include="Scene\SceneManager.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

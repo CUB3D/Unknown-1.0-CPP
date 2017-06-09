@@ -28,7 +28,6 @@
 #include <cmath>
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
-#include "../Output/lib/linux/include/Unknown.h"
 
 Unknown::Graphics::Font* font;
 
