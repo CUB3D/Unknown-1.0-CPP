@@ -1,9 +1,12 @@
-make=make
+UnknownTestDir=Unknown\ Test
+UnknownDir=Unknown\ 1.0++
+
+all: build
 
 clean:
-	$(make) -C Unknown\ 1.0++/ clean
-	$(make) -C Unknown\ Test/ clean
+	$(MAKE) -C $(UnknownDir)/ clean
+	$(MAKE) -C $(UnknownTestDir)/ clean
 
-all:
-	$(make) -C Unknown\ 1.0++/
-	$(make) -C Unknown\ Test/
+build: 
+	$(MAKE) -C $(UnknownDir)/
+	$(MAKE) -C $(UnknownTestDir)/
