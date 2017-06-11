@@ -6,7 +6,7 @@
 #include "Colour.h"
 #include "Utils.h"
 #include "Font.h"
-#include "Input.h"
+#include "Event/Event.h"
 
 #include <vector>
 #include <memory>
@@ -81,7 +81,7 @@ namespace Unknown
         bool isEditing = false;
 
         TextBoxComponent();
-        void onKeyTyped(KeyEvent evnt);
+        void onKeyTyped(Event& evnt);
         void onMouseClick(MouseEvent evnt);
         virtual void render() const override;
         virtual void init() override;

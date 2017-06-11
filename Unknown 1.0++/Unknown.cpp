@@ -19,6 +19,8 @@
 
 #include <chrono>
 #include <SDL_ttf.h>
+#include "Event/Event.h"
+#include "Event/EventManager.h"
 
 // unknown class
 
@@ -183,7 +185,7 @@ void Unknown::Unknown::checkEvents()
 			evt.SDLCode = evnt.key.keysym.sym;
 			evt.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
-			postKeyEvent(evt);
+            postEvent(ET_KEYPRESS, evt);
 		}
 
 		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP)
@@ -195,7 +197,7 @@ void Unknown::Unknown::checkEvents()
 			evt.location.x = evnt.button.x;
 			evt.location.y = evnt.button.y;
 
-			postMouseEvent(evt);
+            postMouseEvent(evt);
 		}
 	}
 }

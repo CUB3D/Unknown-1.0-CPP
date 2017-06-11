@@ -28,6 +28,8 @@
 #include <cmath>
 #include "Scene/SceneManager.h"
 #include "Scene/Scene.h"
+#include "Event/Event.h"
+#include "Event/EventManager.h"
 
 Unknown::Graphics::Font* font;
 
@@ -129,27 +131,27 @@ int checkTile(int x, int y, std::unique_ptr<Unknown::Map>& map)
     return 0;
 }
 
-void keylistener(Unknown::KeyEvent evnt)
+void keylistener(Unknown::Event& evnt)
 {
-    if(evnt.keyState == Unknown::InputState::RELEASED)
-    {
-        if(evnt.SDLCode == SDLK_ESCAPE)
-        {
-            if(scenes.currentScene->name == "Simulator")
-            {
-                scenes.loadScene("MainMenu");
-                Unknown::UIContainer& mainMenu = scenes.getScene<Unknown::MenuScene>()->menu;
-                auto textBoxWidth = mainMenu.getComponentByName("TextBoxWidth");
-                auto textBoxHeight = mainMenu.getComponentByName("TextBoxHeight");
-                (*textBoxHeight)->content = "";
-                (*textBoxWidth)->content = "";
-            }
-            else
-            {
-                scenes.loadScene("Simulator");
-            }
-        }
-    }
+//    if(evnt.keyState == Unknown::InputState::RELEASED)
+//    {
+//        if(evnt.SDLCode == SDLK_ESCAPE)
+//        {
+//            if(scenes.currentScene->name == "Simulator")
+//            {
+//                scenes.loadScene("MainMenu");
+//                Unknown::UIContainer& mainMenu = scenes.getScene<Unknown::MenuScene>()->menu;
+//                auto textBoxWidth = mainMenu.getComponentByName("TextBoxWidth");
+//                auto textBoxHeight = mainMenu.getComponentByName("TextBoxHeight");
+//                (*textBoxHeight)->content = "";
+//                (*textBoxWidth)->content = "";
+//            }
+//            else
+//            {
+//                scenes.loadScene("Simulator");
+//            }
+//        }
+//    }
 }
 
 void UICallback(const Unknown::UIEvent evnt)
@@ -253,7 +255,6 @@ void init()
 {
 	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
-    UK_ADD_KEY_LISTENER_EXTERNAL(keylistener, "mainmenu");
     UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
 
     font = new Unknown::Graphics::TTFont("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
@@ -270,6 +271,8 @@ int _tmain(int argc, _TCHAR* argv[])
 int main(int argc, char* argv[])
 #endif
 {
+    Unknown::registerEventHandler(Unknown::ET_KEYPRESS, "mainMenu", keylistener);
+
 	UK_UPDATE(update);
 	UK_RENDER(render);
 

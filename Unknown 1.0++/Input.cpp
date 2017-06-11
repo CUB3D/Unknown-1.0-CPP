@@ -75,17 +75,6 @@ void Unknown::exitKeySystem()
 	UK_LOG_INFO("Keybinds saved");
 }
 
-void Unknown::postKeyEvent(KeyEvent evnt)
-{
-	KeyCode code = SDLToKeyCode(evnt.SDLCode);
-
-	evnt.keyCode = code;
-
-	keyStates[code] = (evnt.keyState == InputState::PRESSED);
-
-	callKeyListeners(evnt);
-}
-
 Unknown::KeyCode Unknown::SDLToKeyCode(const int SDLCode)
 {
 	switch (SDLCode)
@@ -122,29 +111,7 @@ std::map<std::string, Unknown::KeyCode> Unknown::keyBinds;
 
 void Unknown::registerKeybind(Unknown::KeyCode keycode, std::string name)
 {
-	keyBinds[name] = keycode;
-}
-
-std::map <std::string, std::function<void(const Unknown::KeyEvent)> > Unknown::keyListeners;
-
-void Unknown::registerKeyListener(std::function<void(const KeyEvent)> listener, std::string listenerID)
-{
-	keyListeners[listenerID] = listener;
-}
-
-void Unknown::removeKeyListener(std::string listnerID)
-{
-	keyListeners.erase(listnerID);
-}
-
-void Unknown::callKeyListeners(const KeyEvent evnt)
-{
-	std::map <std::string, std::function<void(const Unknown::KeyEvent)> >::iterator listeners;
-
-	for (listeners = keyListeners.begin(); listeners != keyListeners.end(); listeners++)
-	{
-		listeners->second(evnt);
-	}
+//	keyBinds[name] = keycode;
 }
 
 void Unknown::postMouseEvent(MouseEvent evnt)

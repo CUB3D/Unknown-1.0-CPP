@@ -32,32 +32,16 @@ namespace Unknown
 		KEY_DOWN
 	};
 
-	struct KeyEvent
-	{
-		int SDLCode;
-		KeyCode keyCode;
-		InputState keyState;
-	};
 
 	void initKeySystem();
 	void exitKeySystem();
 
-	void postKeyEvent(KeyEvent evnt);
 	bool getKeyState(const KeyCode code);
 	bool getKeyState(std::string keyname);
 	KeyCode SDLToKeyCode(const int SDLCode);
 
 	extern std::map<std::string, KeyCode> keyBinds;
 	void registerKeybind(KeyCode keycode, std::string name);
-
-	extern std::map<std::string, std::function<void(const KeyEvent)>> keyListeners;
-	void registerKeyListener(std::function<void(const KeyEvent)> listener, std::string listenerID);
-	void removeKeyListener(std::string listnerID);
-	void callKeyListeners(const KeyEvent evnt);
-
-#define UK_ADD_KEY_LISTENER_INTERNAL(listener, id) ::Unknown::registerKeyListener([this](::Unknown::KeyEvent evnt) { listener(evnt); }, id);
-#define UK_ADD_KEY_LISTENER_EXTERNAL(listener, id) ::Unknown::registerKeyListener([](::Unknown::KeyEvent evnt) { listener(evnt); }, id);
-#define UK_REMOVE_KEY_LISTENER(id) ::Unknown::removeKeyListener(id);
 
 	// Mouse input
 

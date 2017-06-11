@@ -2,6 +2,8 @@
 #include "UI.h"
 
 #include "UI2D.h"
+#include "Event/Event.h"
+#include "Event/EventManager.h"
 
 #include <memory>
 #include <ctime>
@@ -190,7 +192,7 @@ Unknown::TextBoxComponent::TextBoxComponent() : UIComponent(UI_TEXTBOX)
     //NOOP
 }
 
-void Unknown::TextBoxComponent::onKeyTyped(KeyEvent evnt)
+void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
 {
     if(this->isEditing)
     {
@@ -258,6 +260,6 @@ void Unknown::TextBoxComponent::render() const
 
 void Unknown::TextBoxComponent::init()
 {
-    UK_ADD_KEY_LISTENER_INTERNAL(this->onKeyTyped, this->name);
+    registerEventHandler(ET_KEYPRESS, this->name, [this](Event& evnt) {onKeyTyped(evnt);});
     UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }
