@@ -10,3 +10,8 @@ clean:
 build: 
 	$(MAKE) -C $(UnknownDir)/
 	$(MAKE) -C $(UnknownTestDir)/
+
+test:
+	cd 'Unknown Test' && LD_LIBRARY_PATH=../Output/lib/linux/ ./a.out 2>&1
+
+build-all-test: build test

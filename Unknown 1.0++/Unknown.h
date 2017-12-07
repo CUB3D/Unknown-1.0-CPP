@@ -4,9 +4,11 @@
 #include <SDL.h>
 #include <map>
 #include <vector>
+#include <functional>
 
 #include "Timer.h"
 #include "Utils.h"
+
 
 
 namespace Unknown
@@ -79,9 +81,9 @@ namespace Unknown
 		UPDATE
 	};
 
-	extern std::map < HookType, std::vector < void(*) (void) > > hooks;
+	extern std::map <HookType, std::vector<std::function<void()>>> hooks;
 
-	void registerHook(void(*hook) (void), HookType type);
+	void registerHook(std::function<void()> hook, HookType type);
 
 	#define UK_RENDER(x) Unknown::registerHook(x, Unknown::HookType::RENDER);
 	#define UK_UPDATE(x) Unknown::registerHook(x, Unknown::HookType::UPDATE);

@@ -256,6 +256,7 @@ void init()
 	srand(time(NULL));
 	UK_LOG_INFO_VERBOSE("This is an information log");
     UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
+    UK_PYTHON_LOAD_SCRIPT("Test");
 
     font = new Unknown::Graphics::TTFont("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 

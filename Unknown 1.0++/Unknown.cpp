@@ -247,11 +247,11 @@ Unknown::Unknown* Unknown::getUnknown()
 	return instance;
 }
 
-std::map < Unknown::HookType, std::vector < void(*) (void) > > Unknown::hooks;
+std::map < Unknown::HookType, std::vector < std::function<void()> > > Unknown::hooks;
 
-void Unknown::registerHook(void(*hook) (void), HookType type)
+void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
-	std::vector < void(*) (void) > vec = hooks[type];
+	auto vec = hooks[type];
 
 	vec.push_back(hook);
 
@@ -260,7 +260,7 @@ void Unknown::registerHook(void(*hook) (void), HookType type)
 
 void Unknown::callHooks(HookType type)
 {
-	std::vector < void(*) (void) > vec = hooks[type];
+	auto vec = hooks[type];
 
 	for (int i = 0; i < vec.size(); i++)
 		vec[i]();

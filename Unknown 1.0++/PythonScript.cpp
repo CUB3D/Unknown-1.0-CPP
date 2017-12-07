@@ -2,6 +2,8 @@
 #include "PythonScript.h"
 #include <Python.h>
 #include "Log.h"
+#include "Unknown.h"
+#include <cstdio>
 
 Unknown::Python::Interpreter* ::Unknown::Python::instance = NULL;
 
@@ -77,16 +79,34 @@ void registerMethod(std::string moduleName, std::string functionName, std::strin
     createMethod(moduleName, callable, functionName);
 }
 
-PyObject* testCommandTez(PyObject* param1, PyObject* param2)
+PyObject* registerHookHandler(PyObject* self, PyObject* args)
 {
-    UK_LOG_INFO("Hello, World from c++");
-    return PyUnicode_FromString("abcd");
+    PyObject* hookType = PySequence_GetItem(args, 0);
+    if(!hookType) {
+        UK_LOG_ERROR("Invalid hookType for handler");
+        return nullptr;
+    }
+
+    PyObject* callback = PySequence_GetItem(args, 1);
+    if(!callback) {
+        UK_LOG_ERROR("Invalid callback for handler");
+        return nullptr;
+    }
+    ::Unknown::registerHook([=]() {
+        if(!PyObject_CallObject(callback, NULL)) {
+            UK_LOG_ERROR("Unable to call func");
+            PyObject_Print(callback, stdout, Py_PRINT_RAW);
+            PyErr_PrintEx(1);
+        }
+    }, (Unknown::HookType)PyLong_AsLong(hookType));
+    Py_RETURN_NONE;
 }
 
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
     //register a test method
-    registerMethod("Unknown", "tez", "Tests stuff", testCommandTez);
+    registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
+
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 
