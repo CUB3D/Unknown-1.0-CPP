@@ -4,6 +4,8 @@
 #include "Log.h"
 #include "Unknown.h"
 #include <cstdio>
+#include "Loader.h"
+#include "Image.h"
 
 Unknown::Python::Interpreter* ::Unknown::Python::instance = NULL;
 
@@ -87,6 +89,12 @@ PyObject* registerHookHandler(PyObject* self, PyObject* args)
         return nullptr;
     }
 
+    long hookTypeLong = PyLong_AsLong(hookType);
+    Unknown::HookType hookTypeEnum = Unknown::HookType::RENDER;
+    if (hookTypeLong == 1) {
+        hookTypeEnum = Unknown::HookType::UPDATE;
+    }
+
     PyObject* callback = PySequence_GetItem(args, 1);
     if(!callback) {
         UK_LOG_ERROR("Invalid callback for handler");
@@ -98,7 +106,78 @@ PyObject* registerHookHandler(PyObject* self, PyObject* args)
             PyObject_Print(callback, stdout, Py_PRINT_RAW);
             PyErr_PrintEx(1);
         }
-    }, (Unknown::HookType)PyLong_AsLong(hookType));
+    }, hookTypeEnum);
+    Py_RETURN_NONE;
+}
+
+void rawImageDestructor(PyObject* imageCapsule)
+{
+    UK_LOG_INFO("Destroying image");
+}
+
+PyObject* createRawImageHandler(PyObject* self, PyObject* args)
+{
+    PyObject* fileName = PySequence_GetItem(args, 0);
+    if(!fileName) {
+        UK_LOG_ERROR("Invalid filename for image");
+        PyErr_PrintEx(1);
+        return nullptr;
+    }
+    const char* fileName_cStr = PyUnicode_AsUTF8(fileName);
+    printf("Loading file ");
+    PyObject_Print(fileName, stdout, Py_PRINT_RAW);
+    printf("\n");
+
+    std::unique_ptr<Unknown::Graphics::Image> image = UK_LOAD_IMAGE(fileName_cStr);
+    PyObject* capsule = PyCapsule_New(image.release(), NULL, rawImageDestructor);
+
+    if(!capsule) {
+        UK_LOG_ERROR("Unable to form capsule");
+        PyErr_PrintEx(1);
+        return nullptr;
+    }
+
+    return capsule;
+}
+
+PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
+{
+    PyObject* capsule = PySequence_GetItem(args, 0);
+    if(!capsule) {
+        UK_LOG_ERROR("Invalid capsule for image");
+        PyErr_PrintEx(1);
+        return nullptr;
+    }
+
+    PyObject* dataTuple = PySequence_GetItem(args, 1);
+    if(!dataTuple) {
+        UK_LOG_ERROR("Invalid data for image");
+        PyErr_PrintEx(1);
+        return nullptr;
+    }
+
+    int XCoord = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 0));
+    int YCoord = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 1));
+    int angle = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 2));
+    PyObject* clipTuple = PyTuple_GetItem(dataTuple, 3);
+
+    Unknown::Graphics::Image* image = (Unknown::Graphics::Image*)PyCapsule_GetPointer(capsule, NULL);
+
+    if(image) {
+        if(PyTuple_Check(clipTuple)) {
+            // Only use user given clip if it is not None
+            SDL_Rect clipRect;
+            clipRect.x = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 0));
+            clipRect.y = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 1));
+            clipRect.w = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 2));
+            clipRect.h = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 3));
+
+            image->render(XCoord, YCoord, angle, &clipRect);
+        } else {
+            image->render(XCoord, YCoord, angle, NULL);
+        }
+    }
+
     Py_RETURN_NONE;
 }
 
@@ -106,6 +185,8 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 {
     //register a test method
     registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
+    registerMethod("Unknown", "create_raw_image", "Create an image capsule", createRawImageHandler);
+    registerMethod("Unknown", "render_raw_image", "Render an image capsule", renderRawImageHandler);
 
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));

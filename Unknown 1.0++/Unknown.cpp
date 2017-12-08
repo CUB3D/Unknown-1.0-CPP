@@ -125,6 +125,12 @@ void Unknown::Unknown::initGameLoop()
 
 	while (running)
 	{
+        const char* err = SDL_GetError();
+        if (strlen(err) > 0) {
+            printf("Error: %s\n", err);
+            SDL_ClearError();
+        }
+
 		this->checkEvents();
 
 		long time = SDL_GetTicks();

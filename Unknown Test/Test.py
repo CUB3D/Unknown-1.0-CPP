@@ -1,12 +1,22 @@
 from Unknown import *
 
-def update():
-    print("Update")
+img = Image("Player.png")
+x = 0
+y = 0
 
 def render():
-    print("Render")
+    img.render(x, y)
+
+def update():
+    global x
+    global y
+    x += 20
+    if x >= 200:
+        y+= 4
+        x = 0
+
 
 def init():
     print("Hello, World!")
-    register_update_handler(update)
     register_render_handler(render)
+    register_update_handler(update)

@@ -10,6 +10,11 @@
 Unknown::Graphics::Image::Image(const char* fileName)
 {
 	this->imageSurface = IMG_Load(fileName);
+
+    if(!this->imageSurface) {
+        printf("Error: Failed to initiate image: %s\n", SDL_GetError());
+        getUnknown()->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
+    }
 }
 
 Unknown::Graphics::Image::~Image()
@@ -79,5 +84,9 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 	this->textureRect.x = x;
 	this->textureRect.y = y;
 
-	SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &this->textureRect, angle, NULL, SDL_FLIP_NONE);
+    int status = SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &this->textureRect, angle, NULL, SDL_FLIP_NONE);
+    if(status) {
+        printf("Error rendering image: %s\n", SDL_GetError());
+        SDL_ClearError();
+    }
 }

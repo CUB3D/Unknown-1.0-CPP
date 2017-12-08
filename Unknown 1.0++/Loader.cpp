@@ -228,7 +228,8 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 	imagePool[name] = std::move(image);
 
 	//Again, clone to keep original unmodified
-	return image->clone();
+    // After std::move image.get() -> nullptr therefore clone the one in the pool
+	return imagePool[name]->clone();
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const char * name)
