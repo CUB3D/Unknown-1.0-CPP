@@ -5,9 +5,8 @@
 #include <algorithm>
 #include <string.h>
 
-Unknown::Entity::Entity(Sprite* sprite)
+Unknown::Entity::Entity(Sprite* sprite) : sprite(sprite)
 {
-	this->sprite = sprite;
 }
 
 
@@ -42,6 +41,11 @@ void Unknown::Entity::damage(const int damage)
 
 void Unknown::Entity::heal(const int health)
 {
+}
+
+int Unknown::Entity::getHealth() const
+{
+	return 0;
 }
 
 const std::string Unknown::Entity::getEntityID() const
@@ -170,7 +174,7 @@ void Unknown::updateEntitys()
 		entitys[i]->update();
 	}
 
-	// collision check
+	// TODO [M]: collision check
 }
 
 void Unknown::renderEntitys()

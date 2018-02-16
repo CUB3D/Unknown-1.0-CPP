@@ -15,8 +15,8 @@ namespace Unknown
 
 	enum InputState
 	{
-		RELEASED,
-		PRESSED
+		RELEASED = 0,
+		PRESSED = 1
 	};
 
 	// Keyboard input

@@ -22,6 +22,7 @@ namespace Unknown
 		virtual void kill();
 		virtual void damage(const int damage);
 		virtual void heal(const int health);
+		virtual int  getHealth() const;
 
 		virtual const std::string getEntityID() const;
 
@@ -36,12 +37,12 @@ namespace Unknown
 	public:
 		TwoStateEntity(Sprite* sprite);
 
-		virtual bool isAlive() const;
-		virtual void kill();
-		virtual void damage(const int damage);
-		virtual void heal(const int health);
+		virtual bool isAlive() const override;
+		virtual void kill() override;
+		virtual void damage(const int damage) override;
+		virtual void heal(const int health) override;
 
-		virtual std::unique_ptr<Entity> clone() const;
+		virtual std::unique_ptr<Entity> clone() const override;
 	};
 
 	class HealthEntity : public Entity
@@ -54,14 +55,14 @@ namespace Unknown
 		HealthEntity(Sprite* sprite, int health);
 		HealthEntity(Sprite* sprite, int health, int maxHealth);
 
-		virtual bool isAlive() const;
-		virtual void kill();
-		virtual void damage(const int damage);
-		virtual void heal(const int health);
+		virtual bool isAlive() const override;
+		virtual void kill() override;
+		virtual void damage(const int damage) override;
+		virtual void heal(const int health) override;
 
-		int getHealth() const;
+		virtual int getHealth() const override;
 
-		virtual std::unique_ptr<Entity> clone() const;
+		virtual std::unique_ptr<Entity> clone() const override;
 	};
 
 	extern std::vector<Entity*> entitys;

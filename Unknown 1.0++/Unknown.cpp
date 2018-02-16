@@ -71,8 +71,6 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
     //Could be a memory leak
 	this->screenSize = new Dimension<int> { width, height };
-
-	::Unknown::Python::getInterpreter()->init();
 }
 
 void Unknown::Unknown::createWindow()
