@@ -3,11 +3,9 @@
 
 #include <SDL.h>
 
-Unknown::Timer::Timer() : timerSpeed(1000)
-{}
+Unknown::Timer::Timer() : Timer(1) {}
 
-Unknown::Timer::Timer(const float seconds) : timerSpeed(seconds * 1000)
-{}
+Unknown::Timer::Timer(const float seconds) : timerSpeed(seconds * 1000) {}
 
 bool Unknown::Timer::isTickComplete()
 {

@@ -2,6 +2,7 @@
 
 #include "EventManager.h"
 #include <algorithm>
+#include <iostream>
 
 std::map<Unknown::EventType, std::vector<Unknown::EventHandler>> Unknown::eventHandlers;
 
@@ -16,15 +17,14 @@ void Unknown::registerEventHandler(EventType listenerType, std::string name, std
     if(iter != eventHandlers.end())
     {
         iter->second.push_back(eventHandler);
+        eventHandlers[listenerType] = iter->second;
     }
     else
     {
-        iter->second = std::vector<Unknown::EventHandler>();
-
-        iter->second.push_back(eventHandler);
+        std::vector<Unknown::EventHandler> newVec;
+        newVec.push_back(eventHandler);
+        eventHandlers[listenerType] = newVec;
     }
-
-    eventHandlers[listenerType] = iter->second;
 }
 
 void Unknown::removeEventHandler(Unknown::EventType type, std::string name)

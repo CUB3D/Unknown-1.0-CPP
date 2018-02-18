@@ -14,8 +14,8 @@ LL_WARN = 1
 LL_ERROR = 2
 
 ST_STD = 0
-ST_IMAGE = 0
-ST_ANIMATION = 0
+ST_IMAGE = 1
+ST_ANIMATION = 2
 
 
 rect = namedtuple("rect", "x y width height")
@@ -85,7 +85,7 @@ def print(*args):
 def create_raw_sprite(type, data):
     return 0
 
-def raw_sprite_move(sprite, speedX, speedY):
+def raw_sprite_interface(sprite, ID, args):
     pass
 
 
@@ -135,7 +135,10 @@ class Sprite:
             self._capsule = create_raw_sprite(ST_STD, (x, y))
 
     def move(self, speedX, speedY):
-        raw_sprite_move(self._capsule, speedX, speedY)
+        raw_sprite_interface(self._capsule, 1, (speedX, speedY))
+
+    def render(self):
+        raw_sprite_interface(self._capsule, 2, ())
 
 
 class ImageSprite(Sprite):

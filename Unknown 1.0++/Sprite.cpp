@@ -37,7 +37,7 @@ void Unknown::Sprite::setAngle(double angle)
 	direction.y = sin((PI * angle) / 180);
 
 	if (direction.getLength() > 0)
-		direction.normalize();
+		this->direction = direction.normalize();
 }
 
 double Unknown::Sprite::getAngle() const

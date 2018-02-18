@@ -5,17 +5,20 @@
 
 namespace Unknown
 {
-	class Vector : public Point<double>
+	class Vector
 	{
 	public:
+        double x;
+        double y;
+
 		Vector();
 		Vector(const double x, const double y);
 
-		double getLength();
+		double getLength() const;
 
-		void normalize();
+		Vector normalize() const;
 
-		double getAngleTo(Vector vec);
+		double getAngleTo(Vector vec) const;
 	};
 }
 

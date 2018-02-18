@@ -1,8 +1,6 @@
 from Unknown import *
 
 img = Image("Player.png")
-x = 0
-y = 0
 
 spr = ImageSprite(0, 0, img)
 
@@ -16,22 +14,19 @@ kb_down = Keybind(0x40000051, "down")
 PLAYER_SPEED_HORIZONTAL = 4
 PLAYER_SPEED_VERTICAL = 4
 
+#TODO: Need a way to set direction vector
+
 def render():
-    img.render(x, y)
+    spr.render()
 
 def update():
-    global x,y
     if kb_left.isPressed: # Left
-        x -= PLAYER_SPEED_HORIZONTAL
         spr.move(-PLAYER_SPEED_HORIZONTAL, 0)
     if kb_right.isPressed: # Right
-        x += PLAYER_SPEED_HORIZONTAL
         spr.move(PLAYER_SPEED_HORIZONTAL, 0)
     if kb_down.isPressed: # Down
-        y += PLAYER_SPEED_VERTICAL
         spr.move(0, PLAYER_SPEED_VERTICAL)
     if kb_up.isPressed: # Up
-        y -= PLAYER_SPEED_VERTICAL
         spr.move(0, -PLAYER_SPEED_VERTICAL)
 
 def onKeyboardEvent(keyData):
