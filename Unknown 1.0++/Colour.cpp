@@ -5,13 +5,9 @@
 #include <SDL_image.h>
 #include "Unknown.h"
 
-Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha) : red(red), green(green), blue(blue), alpha(alpha)
-{
-}
+Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha) : red(red), green(green), blue(blue), alpha(alpha) {}
 
-Unknown::Colour::Colour(const int red, const int green, const int blue) : red(red), green(green), blue(blue), alpha(255)
-{
-}
+Unknown::Colour::Colour(const int red, const int green, const int blue) : red(red), green(green), blue(blue), alpha(255) {}
 
 SDL_Color Unknown::Colour::toSDLColour() const
 {

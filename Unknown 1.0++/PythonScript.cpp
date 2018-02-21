@@ -393,38 +393,47 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
     return capsule;
 }
 
-PyObject* rawSpriteMove(PyObject* self, PyObject* args)
-{
-    PyObject* capsule = PySequence_GetItem(args, 0);
-    if(!capsule) {
+PyObject* rawSpriteInterface(PyObject *self, PyObject *args) {
+    PyObject * capsule = PySequence_GetItem(args, 0);
+    if (!capsule) {
         UK_LOG_ERROR("Invalid capsule for sprite");
         PyErr_PrintEx(1);
         return nullptr;
     }
 
-    Unknown::Graphics::ImageSprite* sprite = (Unknown::Graphics::ImageSprite*)PyCapsule_GetPointer(capsule, NULL);
+    Unknown::Graphics::ImageSprite *sprite = (Unknown::Graphics::ImageSprite *) PyCapsule_GetPointer(capsule, NULL);
 
-    std::cout << sprite << std::endl;
+    PyObject* function = PySequence_GetItem(args, 1);
+    long functionInt = PyLong_AsLong(function);
 
-    PyObject* xSpeed = PySequence_GetItem(args, 1);
-    if (!xSpeed) {
-        UK_LOG_ERROR("Invalid x");
-        PyErr_PrintEx(1);
-        return nullptr;
+    PyObject* data = PySequence_GetItem(args, 2);
+
+    if (functionInt == 1) { // Move
+
+        PyObject * xSpeed = PySequence_GetItem(data, 0);
+        if (!xSpeed) {
+            UK_LOG_ERROR("Invalid x");
+            PyErr_PrintEx(1);
+            return nullptr;
+        }
+
+        int xSpeedValue = PyLong_AsLong(xSpeed);
+
+        PyObject * ySpeed = PySequence_GetItem(data, 1);
+        if (!ySpeed) {
+            UK_LOG_ERROR("Invalid y");
+            PyErr_PrintEx(1);
+            return nullptr;
+        }
+
+        int ySpeedValue = PyLong_AsLong(ySpeed);
+
+        sprite->move(xSpeedValue, ySpeedValue);
     }
 
-    int xSpeedValue = PyLong_AsLong(xSpeed);
-
-    PyObject* ySpeed = PySequence_GetItem(args, 1);
-    if (!ySpeed) {
-        UK_LOG_ERROR("Invalid y");
-        PyErr_PrintEx(1);
-        return nullptr;
+    if(functionInt == 2) {// Render
+        sprite->render();
     }
-
-    int ySpeedValue = PyLong_AsLong(ySpeed);
-
-    sprite->move(xSpeedValue, ySpeedValue);
 
     Py_RETURN_NONE;
 }
@@ -441,7 +450,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     registerMethod("Unknown", "event_register_handler",    "Register a key handler",  registerRawEventHandler);
     registerMethod("Unknown", "uk_log",                    "Print a string to stdout",logMessage);
     registerMethod("Unknown", "create_raw_sprite",         "Create a sprite capsule", createRawSprite);
-    registerMethod("Unknown", "raw_sprite_move",           "Move a sprite capsule",   rawSpriteMove);
+    registerMethod("Unknown", "raw_sprite_interface", "Interface with a sprite capsule", rawSpriteInterface);
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 

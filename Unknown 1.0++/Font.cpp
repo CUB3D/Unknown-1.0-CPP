@@ -4,9 +4,7 @@
 #include <iostream>
 #include <SDL_ttf.h>
 
-Unknown::Graphics::Font::Font(Image* fontSheet, const std::string layout, const int charSize) : fontSheet(fontSheet), layout(layout), charSize(charSize)
-{
-}
+Unknown::Graphics::Font::Font(Image* fontSheet, const std::string layout, const int charSize) : fontSheet(fontSheet), layout(layout), charSize(charSize) {}
 
 void Unknown::Graphics::Font::drawChar(const char character, const int x, const int y)
 {
