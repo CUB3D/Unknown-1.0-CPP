@@ -77,8 +77,8 @@ namespace Unknown
 
 	enum HookType
 	{
-		RENDER,
-		UPDATE
+		RENDER = 0,
+		UPDATE = 1
 	};
 
 	extern std::map <HookType, std::vector<std::function<void()>>> hooks;

@@ -17,8 +17,8 @@ namespace Unknown {
     std::string concat(T1 first, Types... asf)
     {
         std::stringstream ss;
-        ss << first << " ";
-   //     ((ss << asf << " "), ...);
+        //ss << first << " ";
+        ((ss << asf), ...);
 
         return ss.str();
     }

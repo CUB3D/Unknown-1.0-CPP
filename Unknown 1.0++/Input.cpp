@@ -170,3 +170,9 @@ void Unknown::callMouseListeners(const MouseEvent evnt)
 		listeners->second(evnt);
 	}
 }
+
+Unknown::Point<int> Unknown::getMouseLocation() {
+	Point<int> p;
+	SDL_GetMouseState(&p.x, &p.y);
+	return p;
+}

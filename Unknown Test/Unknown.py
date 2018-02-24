@@ -76,8 +76,9 @@ def uk_log(loglevel, message):
     pass
 
 
-def print(*args):
-    uk_log(LL_INFO, "[PY] {}".format(" ".join(args)))
+def print(*args, sep=' ', end='\n', file=None):
+    output = sep.join([str(x) for x in args]) + end
+    uk_log(LL_INFO, "[PY] {}".format(output))
 # END
 
 
@@ -85,9 +86,16 @@ def print(*args):
 def create_raw_sprite(type, data):
     return 0
 
+
 def raw_sprite_interface(sprite, ID, args):
     pass
+# END
 
+
+# Mouse
+def get_mouse_pos():
+    return (0, 0)
+# END
 
 # Actual functional classes
 class Keybind:

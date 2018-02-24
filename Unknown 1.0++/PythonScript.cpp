@@ -83,25 +83,29 @@ void registerMethod(std::string moduleName, std::string functionName, std::strin
     createMethod(moduleName, callable, functionName);
 }
 
+PyObject* PyGetElement(PyObject* sequence, int index, std::string pyFuncName, int line) {
+    PyObject* element = PySequence_GetItem(sequence, index);
+
+    if(!element) {
+        UK_LOG_ERROR_VERBOSE(::Unknown::concat("Invalid element at ", pyFuncName, ":", line));
+        PyErr_PrintEx(1);
+        return nullptr;
+    }
+
+    return element;
+}
+
+#define PY_GET_OBJ(args, index) PyGetElement(args, index, __FUNCTION__, __LINE__)
+#define PY_GET_LONG(args, index)  PyLong_AsLong(PY_GET_OBJ(args, index))
+#define PY_GET_UTF8(args, index) PyUnicode_AsUTF8(PY_GET_OBJ(args, index))
+#define PY_GET_FLOAT(args, index) PyFloat_AsDouble(PY_GET_OBJ(args, index))
+
+
 PyObject* registerHookHandler(PyObject* self, PyObject* args)
 {
-    PyObject* hookType = PySequence_GetItem(args, 0);
-    if(!hookType) {
-        UK_LOG_ERROR("Invalid hookType for handler");
-        return nullptr;
-    }
+    Unknown::HookType hookTypeEnum = (Unknown::HookType)PY_GET_LONG(args, 0);
 
-    long hookTypeLong = PyLong_AsLong(hookType);
-    Unknown::HookType hookTypeEnum = Unknown::HookType::RENDER;
-    if (hookTypeLong == 1) {
-        hookTypeEnum = Unknown::HookType::UPDATE;
-    }
-
-    PyObject* callback = PySequence_GetItem(args, 1);
-    if(!callback) {
-        UK_LOG_ERROR("Invalid callback for handler");
-        return nullptr;
-    }
+    PyObject* callback = PY_GET_OBJ(args, 1);
     ::Unknown::registerHook([=]() {
         if(!PyObject_CallObject(callback, NULL)) {
             UK_LOG_ERROR("Unable to call func");
@@ -119,16 +123,8 @@ void rawImageDestructor(PyObject* imageCapsule)
 
 PyObject* createRawImageHandler(PyObject* self, PyObject* args)
 {
-    PyObject* fileName = PySequence_GetItem(args, 0);
-    if(!fileName) {
-        UK_LOG_ERROR("Invalid filename for image");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-    const char* fileName_cStr = PyUnicode_AsUTF8(fileName);
-    printf("Loading file ");
-    PyObject_Print(fileName, stdout, Py_PRINT_RAW);
-    printf("\n");
+    const char* fileName_cStr = PY_GET_UTF8(args, 0);
+    printf("Loading file '%s'\n", fileName_cStr);
 
     std::unique_ptr<Unknown::Graphics::Image> image = UK_LOAD_IMAGE(fileName_cStr);
     PyObject* capsule = PyCapsule_New(image.release(), NULL, rawImageDestructor);
@@ -144,23 +140,13 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
 
 PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PySequence_GetItem(args, 0);
-    if(!capsule) {
-        UK_LOG_ERROR("Invalid capsule for image");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    PyObject* capsule = PY_GET_OBJ(args, 0);
 
-    PyObject* dataTuple = PySequence_GetItem(args, 1);
-    if(!dataTuple) {
-        UK_LOG_ERROR("Invalid data for image");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    PyObject* dataTuple = PY_GET_OBJ(args, 1);
 
-    int XCoord = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 0));
-    int YCoord = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 1));
-    int angle = (int) PyLong_AsLong(PyTuple_GetItem(dataTuple, 2));
+    int XCoord = PY_GET_LONG(dataTuple, 0);
+    int YCoord = PY_GET_LONG(dataTuple, 1);
+    int angle = PY_GET_LONG(dataTuple, 2);
     PyObject* clipTuple = PyTuple_GetItem(dataTuple, 3);
 
     Unknown::Graphics::Image* image = (Unknown::Graphics::Image*)PyCapsule_GetPointer(capsule, NULL);
@@ -169,10 +155,10 @@ PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
         if(PyTuple_Check(clipTuple)) {
             // Only use user given clip if it is not None
             SDL_Rect clipRect;
-            clipRect.x = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 0));
-            clipRect.y = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 1));
-            clipRect.w = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 2));
-            clipRect.h = (int) PyLong_AsLong(PyTuple_GetItem(clipTuple, 3));
+            clipRect.x = PY_GET_LONG(clipTuple, 0);
+            clipRect.y = PY_GET_LONG(clipTuple, 1);
+            clipRect.w = PY_GET_LONG(clipTuple, 2);
+            clipRect.h = PY_GET_LONG(clipTuple, 3);
 
             image->render(XCoord, YCoord, angle, &clipRect);
         } else {
@@ -185,14 +171,7 @@ PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
 
 PyObject* createRawTimer(PyObject* self, PyObject* args)
 {
-    PyObject* time = PySequence_GetItem(args, 0);
-    if(!time) {
-        UK_LOG_ERROR("Invalid step for timer");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-
-    double timeStep = PyFloat_AsDouble(time);
+    double timeStep = PY_GET_FLOAT(args, 0);
     Unknown::Timer* timer = new Unknown::Timer(timeStep);
 
     PyObject* capsule = PyCapsule_New(timer, NULL, rawImageDestructor);
@@ -208,12 +187,7 @@ PyObject* createRawTimer(PyObject* self, PyObject* args)
 
 PyObject* resetRawTimer(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PySequence_GetItem(args, 0);
-    if(!capsule) {
-        UK_LOG_ERROR("Invalid capsule for timer");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    PyObject* capsule = PY_GET_OBJ(args, 0);
 
     Unknown::Timer* timer = (Unknown::Timer*)PyCapsule_GetPointer(capsule, NULL);
 
@@ -226,12 +200,7 @@ PyObject* resetRawTimer(PyObject* self, PyObject* args)
 
 PyObject* checkRawTimer(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PySequence_GetItem(args, 0);
-    if(!capsule) {
-        UK_LOG_ERROR("Invalid capsule for timer");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    PyObject* capsule = PY_GET_OBJ(args, 0);
 
     Unknown::Timer* timer = (Unknown::Timer*)PyCapsule_GetPointer(capsule, NULL);
 
@@ -288,14 +257,7 @@ PyObject* registerRawEventHandler(PyObject* self, PyObject* args)
 
 PyObject* logMessage(PyObject* self, PyObject* args)
 {
-    PyObject* loglevel = PySequence_GetItem(args, 0);
-    if(!loglevel) {
-        UK_LOG_ERROR("Invalid message");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-
-    int loglevelValue = PyLong_AsLong(loglevel);
+    int loglevelValue = PY_GET_LONG(args, 0);
 
     PyObject* message = PySequence_GetItem(args, 1);
     if(!message) {
@@ -312,36 +274,15 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 
 PyObject* createRawSprite(PyObject* self, PyObject* args)
 {
-    PyObject* type = PySequence_GetItem(args, 0);
-    if(!type) {
-        UK_LOG_ERROR("Invalid y");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    int typeValue = PY_GET_LONG(args, 0);
 
-    int typeValue = PyLong_AsLong(type);
-
-    PyObject* data = PySequence_GetItem(args, 1);
+    PyObject* data = PY_GET_OBJ(args, 1);
 
     // All sprites have an x and a y coord
 
-    PyObject *x = PySequence_GetItem(data, 0);
-    if (!x) {
-        UK_LOG_ERROR("Invalid x");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    int xValue = PY_GET_LONG(data, 0);
 
-    int xValue = PyLong_AsLong(x);
-
-    PyObject *y = PySequence_GetItem(data, 1);
-    if (!y) {
-        UK_LOG_ERROR("Invalid y");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-
-    int yValue = PyLong_AsLong(x);
+    int yValue = PY_GET_LONG(data, 1);
 
     PyObject* capsule = nullptr;
 
@@ -354,12 +295,7 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
 
     if(typeValue == 1) // If is an image sprite
     {
-        PyObject* img = PySequence_GetItem(data, 2);
-        if (!img) {
-            UK_LOG_ERROR("Invalid image");
-            PyErr_PrintEx(1);
-            return nullptr;
-        }
+        PyObject* img = PY_GET_OBJ(data, 2);
 
         Unknown::Graphics::Image* imgValue = (Unknown::Graphics::Image*)PyCapsule_GetPointer(img, NULL);
 
@@ -370,12 +306,7 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
 
     if(typeValue == 2) // If is an animated sprite
     {
-        PyObject* animation = PySequence_GetItem(data, 2);
-        if (!animation) {
-            UK_LOG_ERROR("Invalid animation");
-            PyErr_PrintEx(1);
-            return nullptr;
-        }
+        PyObject* animation = PY_GET_OBJ(data, 2);
 
         Unknown::Graphics::Animation* animationValue = (Unknown::Graphics::Animation*)PyCapsule_GetPointer(animation, NULL);
 
@@ -393,49 +324,39 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
     return capsule;
 }
 
+template <class T>
+T getObjectCapsule(PyObject* capsule) {
+    return *((T*) PyCapsule_GetPointer(capsule, NULL));
+}
+
+#define PY_UNPACK_OBJ(T, args, index) getObjectCapsule<T>(PY_GET_OBJ(args, index))
+
 PyObject* rawSpriteInterface(PyObject *self, PyObject *args) {
-    PyObject * capsule = PySequence_GetItem(args, 0);
-    if (!capsule) {
-        UK_LOG_ERROR("Invalid capsule for sprite");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
+    auto sprite = PY_UNPACK_OBJ(Unknown::Sprite, args, 0);
 
-    Unknown::Graphics::ImageSprite *sprite = (Unknown::Graphics::ImageSprite *) PyCapsule_GetPointer(capsule, NULL);
-
-    PyObject* function = PySequence_GetItem(args, 1);
-    long functionInt = PyLong_AsLong(function);
+    long functionInt = PY_GET_LONG(args, 1);
 
     PyObject* data = PySequence_GetItem(args, 2);
 
     if (functionInt == 1) { // Move
+        int xSpeedValue = PY_GET_LONG(data, 0);
+        int ySpeedValue = PY_GET_LONG(data, 1);
 
-        PyObject * xSpeed = PySequence_GetItem(data, 0);
-        if (!xSpeed) {
-            UK_LOG_ERROR("Invalid x");
-            PyErr_PrintEx(1);
-            return nullptr;
-        }
-
-        int xSpeedValue = PyLong_AsLong(xSpeed);
-
-        PyObject * ySpeed = PySequence_GetItem(data, 1);
-        if (!ySpeed) {
-            UK_LOG_ERROR("Invalid y");
-            PyErr_PrintEx(1);
-            return nullptr;
-        }
-
-        int ySpeedValue = PyLong_AsLong(ySpeed);
-
-        sprite->move(xSpeedValue, ySpeedValue);
+        sprite.move(xSpeedValue, ySpeedValue);
     }
 
     if(functionInt == 2) {// Render
-        sprite->render();
+        sprite.render();
     }
 
     Py_RETURN_NONE;
+}
+
+PyObject* getMousePos(PyObject *self, PyObject *args) {
+    Unknown::Point<int> p = Unknown::getMouseLocation();
+    PyObject* seq = PyTuple_Pack(2, PyLong_FromLong(p.x), PyLong_FromLong(p.y));
+
+    return seq;
 }
 
 void Unknown::Python::Interpreter::loadScript(std::string name)
@@ -451,6 +372,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     registerMethod("Unknown", "uk_log",                    "Print a string to stdout",logMessage);
     registerMethod("Unknown", "create_raw_sprite",         "Create a sprite capsule", createRawSprite);
     registerMethod("Unknown", "raw_sprite_interface", "Interface with a sprite capsule", rawSpriteInterface);
+    registerMethod("Unknown", "get_mouse_pos",        "Get mouse position",              getMousePos);
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 

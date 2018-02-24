@@ -7,10 +7,6 @@ namespace Unknown
 
 	void log(int logLevel, std::string message)
 	{
-		printf(logStatus[logLevel].c_str());
-
-		printf(message.c_str());
-
-		printf("\n");
+		printf("%s%s\n", logStatus[logLevel].c_str(), message.c_str());
 	}
 }

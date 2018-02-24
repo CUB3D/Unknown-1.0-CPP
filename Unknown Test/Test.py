@@ -10,14 +10,18 @@ kb_left = Keybind(0x40000050, "left")
 kb_right = Keybind(0x4000004F, "right")
 kb_up = Keybind(0x40000052, "up")
 kb_down = Keybind(0x40000051, "down")
+x = 0
 
 PLAYER_SPEED_HORIZONTAL = 4
 PLAYER_SPEED_VERTICAL = 4
 
-#TODO: Need a way to set direction vector
+
+#TODO: Need a way to set direction vector, maybe add some option to the json entities to enable a force_(1,1) dir vector mode. Add add functions to call loader funcs from py
+
 
 def render():
     spr.render()
+
 
 def update():
     if kb_left.isPressed: # Left
@@ -29,15 +33,8 @@ def update():
     if kb_up.isPressed: # Up
         spr.move(0, -PLAYER_SPEED_VERTICAL)
 
-def onKeyboardEvent(keyData):
-    pass
-
-
-
 
 def init():
     print("Hello, World!")
     register_render_handler(render)
     register_update_handler(update)
-    # event_register_handler(1, "Test", onKeyboardEvent)
-    register_keyboard_handler(onKeyboardEvent)
