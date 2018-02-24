@@ -1,7 +1,7 @@
 //
 // Created by cub3d on 01/06/17.
 //
-#include "stdafx.h"
+#include "../stdafx.h"
 
 #include "SceneManager.h"
 

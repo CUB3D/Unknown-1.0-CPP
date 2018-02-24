@@ -214,6 +214,7 @@ void Unknown::Unknown::clearScreen()
 
 void Unknown::Unknown::quit(const int exitCode)
 {
+    // All Images must have been destroyed or this will cause a sigsev
 	SDL_DestroyRenderer(this->windowRenderer);
 	this->windowRenderer = NULL;
 	SDL_DestroyWindow(this->window);

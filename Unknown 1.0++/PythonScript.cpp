@@ -95,6 +95,16 @@ PyObject* PyGetElement(PyObject* sequence, int index, std::string pyFuncName, in
     return element;
 }
 
+template <class T>
+T* getObjectCapsule(PyObject* capsule, std::string name) {
+    return (T*) PyCapsule_GetPointer(capsule, name.c_str());
+}
+
+#define MAKE_FUNC_MAPPING(name, desc, callback) registerMethod("Unknown", name, desc, callback);
+#define PY_MAKE_LONG(value) PyLong_FromLong(value)
+#define PY_MAKE_CAPSULE(value, name, callback)  PyCapsule_New(value, name, callback)
+
+#define PY_UNPACK_OBJ(T, name, args, index) getObjectCapsule<T>(PY_GET_OBJ(args, index), name)
 #define PY_GET_OBJ(args, index) PyGetElement(args, index, __FUNCTION__, __LINE__)
 #define PY_GET_LONG(args, index)  PyLong_AsLong(PY_GET_OBJ(args, index))
 #define PY_GET_UTF8(args, index) PyUnicode_AsUTF8(PY_GET_OBJ(args, index))
@@ -127,10 +137,10 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
     printf("Loading file '%s'\n", fileName_cStr);
 
     std::unique_ptr<Unknown::Graphics::Image> image = UK_LOAD_IMAGE(fileName_cStr);
-    PyObject* capsule = PyCapsule_New(image.release(), NULL, rawImageDestructor);
+    PyObject* capsule = PY_MAKE_CAPSULE(image.release(), "Image", [](PyObject* a){});
 
     if(!capsule) {
-        UK_LOG_ERROR("Unable to form capsule");
+        UK_LOG_ERROR(::Unknown::concat("Unable to form capsule@", __FILE__, "@", __FUNCTION__, ":", __LINE__));
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -140,8 +150,6 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
 
 PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PY_GET_OBJ(args, 0);
-
     PyObject* dataTuple = PY_GET_OBJ(args, 1);
 
     int XCoord = PY_GET_LONG(dataTuple, 0);
@@ -149,7 +157,7 @@ PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
     int angle = PY_GET_LONG(dataTuple, 2);
     PyObject* clipTuple = PyTuple_GetItem(dataTuple, 3);
 
-    Unknown::Graphics::Image* image = (Unknown::Graphics::Image*)PyCapsule_GetPointer(capsule, NULL);
+    Unknown::Graphics::Image* image = PY_UNPACK_OBJ(Unknown::Graphics::Image, "Image", args, 0);
 
     if(image) {
         if(PyTuple_Check(clipTuple)) {
@@ -174,7 +182,7 @@ PyObject* createRawTimer(PyObject* self, PyObject* args)
     double timeStep = PY_GET_FLOAT(args, 0);
     Unknown::Timer* timer = new Unknown::Timer(timeStep);
 
-    PyObject* capsule = PyCapsule_New(timer, NULL, rawImageDestructor);
+    PyObject* capsule = PY_MAKE_CAPSULE(timer, "Timer", [](PyObject* a){});
 
     if(!capsule) {
         UK_LOG_ERROR("Unable to form capsule");
@@ -187,9 +195,7 @@ PyObject* createRawTimer(PyObject* self, PyObject* args)
 
 PyObject* resetRawTimer(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PY_GET_OBJ(args, 0);
-
-    Unknown::Timer* timer = (Unknown::Timer*)PyCapsule_GetPointer(capsule, NULL);
+    Unknown::Timer* timer = PY_UNPACK_OBJ(Unknown::Timer, "Timer", args, 0);
 
     if(timer) {
         timer->resetTimer();
@@ -200,9 +206,7 @@ PyObject* resetRawTimer(PyObject* self, PyObject* args)
 
 PyObject* checkRawTimer(PyObject* self, PyObject* args)
 {
-    PyObject* capsule = PY_GET_OBJ(args, 0);
-
-    Unknown::Timer* timer = (Unknown::Timer*)PyCapsule_GetPointer(capsule, NULL);
+    Unknown::Timer* timer = PY_UNPACK_OBJ(Unknown::Timer, "Timer", args, 0);
 
     if(timer) {
         if(timer->isTickComplete()) {
@@ -216,28 +220,11 @@ PyObject* checkRawTimer(PyObject* self, PyObject* args)
 
 PyObject* registerRawEventHandler(PyObject* self, PyObject* args)
 {
-    PyObject* hookType = PySequence_GetItem(args, 0);
-    if(!hookType) {
-        UK_LOG_ERROR("Invalid hookType for handler");
-        return nullptr;
-    }
+    Unknown::EventType type = (Unknown::EventType)PY_GET_LONG(args, 0);
 
-    long hookTypeLong = PyLong_AsLong(hookType);
-    Unknown::EventType type = (Unknown::EventType)hookTypeLong;
+    const char* handlerName_cStr =  PY_GET_UTF8(args, 1);
 
-    PyObject* handlerName = PySequence_GetItem(args, 1);
-    if(!handlerName) {
-        UK_LOG_ERROR("Invalid handler name");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-    const char* handlerName_cStr = PyUnicode_AsUTF8(handlerName);
-
-    PyObject* callback = PySequence_GetItem(args, 2);
-    if(!callback) {
-        UK_LOG_ERROR("Invalid callback for handler");
-        return nullptr;
-    }
+    PyObject* callback = PY_GET_OBJ(args, 2);
 
     ::Unknown::registerEventHandler(type, handlerName_cStr, [=](Unknown::Event& evnt) {
         PyObject* args = PyTuple_New(3);
@@ -259,13 +246,7 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 {
     int loglevelValue = PY_GET_LONG(args, 0);
 
-    PyObject* message = PySequence_GetItem(args, 1);
-    if(!message) {
-        UK_LOG_ERROR("Invalid message");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-    const char* message_cStr = PyUnicode_AsUTF8(message);
+    const char* message_cStr = PY_GET_UTF8(args, 1);
 
     Unknown::log(loglevelValue, message_cStr);
 
@@ -290,66 +271,34 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
     {
         Unknown::Sprite *sprite = new Unknown::Sprite(xValue, yValue);
 
-        capsule = PyCapsule_New(sprite, NULL, rawImageDestructor);
+        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
     }
 
     if(typeValue == 1) // If is an image sprite
     {
-        PyObject* img = PY_GET_OBJ(data, 2);
+        Unknown::Graphics::Image* imgValue = PY_UNPACK_OBJ(Unknown::Graphics::Image, "Image", data, 2);
 
-        Unknown::Graphics::Image* imgValue = (Unknown::Graphics::Image*)PyCapsule_GetPointer(img, NULL);
+        Unknown::Graphics::ImageSprite* sprite = new Unknown::Graphics::ImageSprite(xValue, yValue, imgValue);
 
-        Unknown::Graphics::ImageSprite *sprite = new Unknown::Graphics::ImageSprite(xValue, yValue, imgValue);
-
-        capsule = PyCapsule_New(sprite, NULL, rawImageDestructor);
+        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
     }
 
     if(typeValue == 2) // If is an animated sprite
     {
-        PyObject* animation = PY_GET_OBJ(data, 2);
-
-        Unknown::Graphics::Animation* animationValue = (Unknown::Graphics::Animation*)PyCapsule_GetPointer(animation, NULL);
+        Unknown::Graphics::Animation* animationValue = PY_UNPACK_OBJ(Unknown::Graphics::Animation, "Animation", data, 2);
 
         Unknown::Graphics::AnimatedSprite *sprite = new Unknown::Graphics::AnimatedSprite(xValue, yValue, animationValue);
 
-        capsule = PyCapsule_New(sprite, NULL, rawImageDestructor);
+        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
     }
 
     if(!capsule) {
-        UK_LOG_ERROR("Unable to form capsule");
+        UK_LOG_ERROR(::Unknown::concat("Unable to form capsule@", __FILE__, "@", __FUNCTION__, ":", __LINE__));
         PyErr_PrintEx(1);
         return nullptr;
     }
 
     return capsule;
-}
-
-template <class T>
-T getObjectCapsule(PyObject* capsule) {
-    return *((T*) PyCapsule_GetPointer(capsule, NULL));
-}
-
-#define PY_UNPACK_OBJ(T, args, index) getObjectCapsule<T>(PY_GET_OBJ(args, index))
-
-PyObject* rawSpriteInterface(PyObject *self, PyObject *args) {
-    auto sprite = PY_UNPACK_OBJ(Unknown::Sprite, args, 0);
-
-    long functionInt = PY_GET_LONG(args, 1);
-
-    PyObject* data = PySequence_GetItem(args, 2);
-
-    if (functionInt == 1) { // Move
-        int xSpeedValue = PY_GET_LONG(data, 0);
-        int ySpeedValue = PY_GET_LONG(data, 1);
-
-        sprite.move(xSpeedValue, ySpeedValue);
-    }
-
-    if(functionInt == 2) {// Render
-        sprite.render();
-    }
-
-    Py_RETURN_NONE;
 }
 
 PyObject* getMousePos(PyObject *self, PyObject *args) {
@@ -359,28 +308,80 @@ PyObject* getMousePos(PyObject *self, PyObject *args) {
     return seq;
 }
 
+PyObject* rawSpriteCall(PyObject* self, PyObject* args) {
+    Unknown::Sprite* spr = PY_UNPACK_OBJ(Unknown::Sprite, "Sprite", args, 0);
+    int functionID = PY_GET_LONG(args, 1);
+    PyObject* data = PY_GET_OBJ(args, 2);
+
+    switch (functionID)
+    {
+        case 0: spr->render();break;
+        case 1: spr->init();break;
+        case 2: spr->move(PY_GET_LONG(data, 0), PY_GET_LONG(data, 1));break;
+        case 3:
+            return PY_MAKE_CAPSULE(spr->clone(), "Sprite", [](PyObject* sprite) {
+                Unknown::Sprite* s = getObjectCapsule<Unknown::Sprite>(sprite, "Sprite");
+                // TODO:
+                UK_LOG_INFO("Cleaned up sprite");
+            });
+        case 4:
+            return PY_MAKE_LONG(spr->getAngle());
+        case 5: spr->setAngle(PY_GET_FLOAT(data, 0));break;
+        case 6: return PY_MAKE_CAPSULE(&spr->bounds, "Bounds", [](PyObject* bound){});
+        case 7: return PY_MAKE_CAPSULE(&spr->direction, "Direction", [](PyObject* dir){});
+        case 8: return PY_MAKE_CAPSULE(&spr->location, "Loc", [](PyObject* a){});
+        case 9: spr->bounds = *PY_UNPACK_OBJ(Unknown::AABB, "Sprite", data, 0);break;
+        case 10: spr->direction = *PY_UNPACK_OBJ(Unknown::Vector, "Vector", data, 0);break;
+        case 11: spr->location = *PY_UNPACK_OBJ(Unknown::Point<double>, "Point", data, 0);break;
+
+    }
+    Py_RETURN_NONE;
+}
+
+PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
+    int functionID = PY_GET_LONG(args, 1);
+    PyObject* data = PY_GET_OBJ(args, 2);
+
+    if (functionID == 0) {
+        return PY_MAKE_CAPSULE(new Unknown::Vector(PY_GET_FLOAT(data, 0), PY_GET_FLOAT(data, 1)), "Vector", [](PyObject* a){}); //TODO
+    }
+
+    Unknown::Vector* vector = PY_UNPACK_OBJ(Unknown::Vector, "Vector", args, 0);
+
+    switch (functionID) {
+        case 1:
+            UK_LOG_INFO("A");
+    }
+
+    Py_RETURN_NONE;
+}
+
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
+    MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
+    MAKE_FUNC_MAPPING("raw_sprite_interface", "Call a function on a sprite", rawSpriteCall);
     //register a test method
-    registerMethod("Unknown", "register_hook",             "Add a base hook",         registerHookHandler);
-    registerMethod("Unknown", "create_raw_image",          "Create an image capsule", createRawImageHandler);
-    registerMethod("Unknown", "render_raw_image",          "Render an image capsule", renderRawImageHandler);
-    registerMethod("Unknown", "create_raw_timer",          "Create a timer capsule",  createRawTimer);
-    registerMethod("Unknown", "timer_reset",               "Resets a timer capsule",  resetRawTimer);
-    registerMethod("Unknown", "timer_isTickComplete",      "Checks a timer capsule",  checkRawTimer);
-    registerMethod("Unknown", "event_register_handler",    "Register a key handler",  registerRawEventHandler);
-    registerMethod("Unknown", "uk_log",                    "Print a string to stdout",logMessage);
-    registerMethod("Unknown", "create_raw_sprite",         "Create a sprite capsule", createRawSprite);
-    registerMethod("Unknown", "raw_sprite_interface", "Interface with a sprite capsule", rawSpriteInterface);
-    registerMethod("Unknown", "get_mouse_pos",        "Get mouse position",              getMousePos);
+    registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
+    registerMethod("Unknown", "create_raw_image", "Create an image capsule", createRawImageHandler);
+    registerMethod("Unknown", "render_raw_image", "Render an image capsule", renderRawImageHandler);
+    registerMethod("Unknown", "create_raw_timer", "Create a timer capsule", createRawTimer);
+    registerMethod("Unknown", "timer_reset", "Resets a timer capsule", resetRawTimer);
+    registerMethod("Unknown", "timer_isTickComplete", "Checks a timer capsule", checkRawTimer);
+    registerMethod("Unknown", "event_register_handler", "Register a key handler", registerRawEventHandler);
+    registerMethod("Unknown", "uk_log", "Print a string to stdout", logMessage);
+    registerMethod("Unknown", "create_raw_sprite", "Create a sprite capsule", createRawSprite);
+    registerMethod("Unknown", "get_mouse_pos", "Get mouse position", getMousePos);
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 
-    PyObject* testModule = PyImport_ImportModule(name.c_str());
+    PyObject *testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);
-    PyObject* initFunction = PyObject_GetAttrString(testModule, "init");
-    if(initFunction)
+    if (PyObject_HasAttrString(testModule, "init"))
     {
-        PyObject_CallObject(initFunction, NULL);
+        PyObject *initFunction = PyObject_GetAttrString(testModule, "init");
+        if (initFunction)
+        {
+            PyObject_CallObject(initFunction, NULL);
+        }
     }
 }

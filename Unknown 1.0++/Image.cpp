@@ -19,7 +19,7 @@ Unknown::Graphics::Image::Image(const char* fileName)
 
 Unknown::Graphics::Image::~Image()
 {
-	if (this->imageTexture)
+	if (this->imageTexture && getUnknown()->windowRenderer && getUnknown()->window)
 	{
 		SDL_DestroyTexture(this->imageTexture);
 		this->imageTexture = NULL;

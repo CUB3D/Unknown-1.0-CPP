@@ -1,4 +1,5 @@
 from collections import namedtuple
+import functools
 
 #DONE: images, hooks, logging, timers, keybinds
 
@@ -97,6 +98,12 @@ def get_mouse_pos():
     return (0, 0)
 # END
 
+
+# Vector
+def raw_vector_interface(capsule, ID, args):
+    return 0
+# END
+
 # Actual functional classes
 class Keybind:
     isPressed = False
@@ -137,28 +144,52 @@ class Timer:
 
 class Sprite:
     _capsule = None
+    _interface = None
 
     def __init__(self, x, y, noCapsuleGen=False):
         if not noCapsuleGen:
             self._capsule = create_raw_sprite(ST_STD, (x, y))
+        self._interface = functools.partial(raw_sprite_interface, self._capsule)
 
     def move(self, speedX, speedY):
-        raw_sprite_interface(self._capsule, 1, (speedX, speedY))
+        self._interface(2, (speedX, speedY))
 
     def render(self):
-        raw_sprite_interface(self._capsule, 2, ())
+        self._interface(0, ())
+
+    def __setattr__(self, key, value):
+        if key == "direction":
+            self._interface(10, (value._capsule,))
+        else:
+            self.__dict__[key] = value
 
 
 class ImageSprite(Sprite):
 
     def __init__(self, x, y, image):
-        super().__init__(0, 0, noCapsuleGen=True)
         self._capsule = create_raw_sprite(ST_IMAGE, (x, y, getattr(image, "_Image__capsule")))
+        super().__init__(0, 0, noCapsuleGen=True)
 
 
 class AnimatedSprite(Sprite):
 
     def __init__(self, x, y, animation):
-        super().__init__(0, 0, noCapsuleGen=True)
         super()._capsule = create_raw_sprite(ST_ANIMATION, (x, y, animation))
+        super().__init__(0, 0, noCapsuleGen=True)
+
+
+class Vector:
+    _capsule = None
+    __interface = None
+
+    def __init__(self, x=0, y=0):
+        self._capsule = raw_vector_interface(None, 0, (float(x), float(y)))
+        self.__interface = functools.partial(raw_vector_interface, self._capsule)
+
+    def getLength(self):
+        return self.__interface(1, ())
+
+    def normalise(self):
+        return self.__interface(2, ())
+
 
