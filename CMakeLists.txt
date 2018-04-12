@@ -6,7 +6,7 @@ project("Unknown development tool")
 set(UK_DIR ${PROJECT_SOURCE_DIR})
 message("UK_DIR: ${UK_DIR}")
 
-set(UK_INCLUDE ${UK_DIR}/Output/lib/linux/include)
+set(UK_INCLUDE "${UK_DIR}/Unknown 1.0++")
 set(UK_LIB ${UK_DIR}/Output/lib/linux)
 set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJSON/include/rapidjson)
 
@@ -38,6 +38,12 @@ if(PYTHONLIBS_FOUND)
     message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
 endif()
 
+# Find box2d
+find_package(Box2D REQUIRED)
+if(BOX2D_FOUND)
+    message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
+endif()
+
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
 
@@ -45,12 +51,12 @@ add_executable(devTool "DevLib/UnknownTest.cpp")
 
 FILE(GLOB_RECURSE UK_ENGINE_SRC "Unknown 1.0++/*.cpp")
 add_library(UK SHARED ${UK_ENGINE_SRC})
-target_include_directories(UK PUBLIC ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
-target_link_libraries(UK ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${PYTHON_LIBRARIES} pthread dl util m)
+target_include_directories(UK PUBLIC ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${BOX2D_INCLUDE_DIRS})
+target_link_libraries(UK ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} pthread dl util m)
 set_target_properties(UK PROPERTIES CMAKE_LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})
 add_custom_command(TARGET UK POST_BUILD COMMAND "${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py")
 
 FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.cpp")
 add_executable(UKTest ${UK_TEST_SRC})
-target_include_directories(UKTest PUBLIC ${UK_INCLUDE} ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
-target_link_libraries(UKTest UK ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${PYTHON_LIBRARIES} pthread dl util m)
+target_include_directories(UKTest PUBLIC ${UK_INCLUDE} ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${BOX2D_INCLUDE_DIRS})
+target_link_libraries(UKTest UK ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} pthread dl util m)

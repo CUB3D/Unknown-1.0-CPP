@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
+  <component name="CidrRootsConfiguration">
+    <sourceRoots>
+      <file path="$PROJECT_DIR$/Unknown 1.0++" />
+      <file path="$PROJECT_DIR$/Unknown Test" />
+    </sourceRoots>
+    <excludeRoots>
+      <file path="$PROJECT_DIR$/Output/lib/linux/include" />
+      <file path="$PROJECT_DIR$/Output/lib/linux/include----" />
+    </excludeRoots>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.6.0 (/usr/bin/python3.6)" project-jdk-type="Python SDK" />
 </project>
