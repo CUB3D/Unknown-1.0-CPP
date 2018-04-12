@@ -28,3 +28,13 @@ double Unknown::Vector::getAngleTo(Vector vec) const
 {
 	return -(atan2(y - vec.y, x - vec.x) * 180 / PI) + 90;
 }
+
+Unknown::Vector Unknown::Vector::operator+(Unknown::Vector other) const
+{
+	return Unknown::Vector(this->x + other.x, this->y + other.y);
+}
+
+Unknown::Vector Unknown::Vector::operator*(double other) const
+{
+	return Unknown::Vector(this->x * other, this->y * other);
+}

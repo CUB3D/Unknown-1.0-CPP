@@ -19,6 +19,9 @@ namespace Unknown
 		Vector normalize() const;
 
 		double getAngleTo(Vector vec) const;
+
+		Vector operator+(Vector other) const;
+		Vector operator*(double other) const;
 	};
 }
 

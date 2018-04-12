@@ -192,4 +192,19 @@ class Vector:
     def normalise(self):
         return self.__interface(2, ())
 
+    def getPosition(self):
+        return self.__interface(3, ())
+
+    def __getattr__(self, item):
+        if item == "x":
+            return self.getPosition()[0]
+        if item == "y":
+            return self.getPosition()[1]
+
+    def __mul__(self, other):
+        return self
+
+    def __add__(self, other):
+        return self
+
 

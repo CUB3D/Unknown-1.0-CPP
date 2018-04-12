@@ -3,7 +3,8 @@ from Unknown import *
 img = Image("Player.png")
 
 spr = ImageSprite(0, 0, img)
-spr.direction = Vector(1, 1)
+direction = Vector(1, 1)
+print(direction.getPosition()[0])
 
 kb_left = Keybind(0x40000050, "left")
 kb_right = Keybind(0x4000004F, "right")
@@ -15,7 +16,8 @@ PLAYER_SPEED_VERTICAL = 4
 
 
 def render():
-    spr.render()
+    pass
+    #spr.render()
 
 
 def update():

@@ -6,29 +6,50 @@
 #include "Colour.h"
 #include "document.h"
 #include <vector>
+#include <memory>
 
 
 namespace Unknown
 {
 	template < class T >
-	struct Dimension
+	class Dimension
 	{
+	public:
 		T width;
 		T height;
+
+		Dimension() : Dimension(0, 0) {
+
+		}
+
+		Dimension(T t1, T t2) {
+			this->width = t1;
+			this->width = t2;
+		}
 	};
 
 	template < class T >
-	struct Point
+	class Point
 	{
+	public:
 		T x;
 		T y;
+
+		Point() : Point(0, 0) {
+
+		}
+
+		Point(T t1, T t2) {
+			this->x = t1;
+			this->y = t2;
+		}
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);
 
 	::rapidjson::Value* getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc);
 
-	Colour* getColourFromString(std::string str);
+	std::shared_ptr<Colour> getColourFromString(std::string str);
 
 	bool isCharCodeNumber(const char* key);
 

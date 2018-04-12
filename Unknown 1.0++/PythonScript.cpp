@@ -101,6 +101,7 @@ T* getObjectCapsule(PyObject* capsule, std::string name) {
 }
 
 #define MAKE_FUNC_MAPPING(name, desc, callback) registerMethod("Unknown", name, desc, callback);
+#define PY_MAKE_FLOAT(value) PyFloat_FromDouble(value)
 #define PY_MAKE_LONG(value) PyLong_FromLong(value)
 #define PY_MAKE_CAPSULE(value, name, callback)  PyCapsule_New(value, name, callback)
 
@@ -350,7 +351,21 @@ PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
 
     switch (functionID) {
         case 1:
-            UK_LOG_INFO("A");
+        {
+            return PY_MAKE_FLOAT(vector->getLength());
+        }
+        case 2:
+        {
+            UK_LOG_ERROR("Normalisation of vectors not impl");
+            return PY_GET_OBJ(args, 0);
+        }
+        case 3:
+        {
+            PyObject* args_ = PyTuple_New(2);
+            PyTuple_SetItem(args_, 0, PY_MAKE_FLOAT(vector->x));
+            PyTuple_SetItem(args_, 1, PY_MAKE_FLOAT(vector->y));
+            return args_;
+        }
     }
 
     Py_RETURN_NONE;
@@ -360,7 +375,6 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 {
     MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
     MAKE_FUNC_MAPPING("raw_sprite_interface", "Call a function on a sprite", rawSpriteCall);
-    //register a test method
     registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
     registerMethod("Unknown", "create_raw_image", "Create an image capsule", createRawImageHandler);
     registerMethod("Unknown", "render_raw_image", "Render an image capsule", renderRawImageHandler);
