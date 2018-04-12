@@ -279,7 +279,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			std::string colourString = colour->value.GetString();
 			comp->colour = getColourFromString(colourString);
 
-			//std::cout << "Colour loaded: (" << comp.colour->alpha << ", " << comp.colour->red << ", " << comp.colour->green << ", " << comp.colour->blue << ")" << std::endl;
+			std::cout << "Colour loaded: (" << comp->colour->alpha << ", " << comp->colour->red << ", " << comp->colour->green << ", " << comp->colour->blue << ")" << std::endl;
 		}
 
 		auto insideComponent = member->value.FindMember("InsideComponent");

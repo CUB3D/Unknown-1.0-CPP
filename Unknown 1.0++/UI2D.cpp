@@ -8,7 +8,7 @@
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour colour)
 {
-	Unknown* uk = getUnknown();
+	auto uk = getUnknown();
 
 	SDL_Rect rect;
 
@@ -33,7 +33,7 @@ void Unknown::Graphics::drawSquare(const int x, const int y, const int size, con
 
 void Unknown::Graphics::setDrawColour(const Colour colour)
 {
-	Unknown* uk = getUnknown();
+	auto uk = getUnknown();
 
 	SDL_SetRenderDrawColor(uk->windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
 }

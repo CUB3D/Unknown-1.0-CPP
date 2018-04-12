@@ -28,7 +28,7 @@ Unknown::Graphics::Image::~Image()
 
 void Unknown::Graphics::Image::init()
 {
-	Unknown* uk = getUnknown();
+	auto uk = getUnknown();
 
 	if (!imageSurface)
 	{
@@ -79,7 +79,7 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 		init();
 	}
 
-	Unknown* uk = getUnknown();
+	auto uk = getUnknown();
 
 	this->textureRect.x = x;
 	this->textureRect.y = y;

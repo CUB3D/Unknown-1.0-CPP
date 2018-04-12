@@ -66,9 +66,9 @@ namespace Unknown
 		void updateWindow();
 	};
 
-	extern Unknown* instance;
+	extern std::shared_ptr<Unknown> instance;
 
-	Unknown* getUnknown();
+	std::shared_ptr<Unknown> getUnknown();
 	
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()

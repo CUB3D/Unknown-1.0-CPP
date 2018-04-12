@@ -22,7 +22,7 @@ rapidjson::Document Unknown::readJSONFile(const char* filename)
 
 	return d;
 }
-
+// TODO: optional
 rapidjson::Value* Unknown::getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc)
 {
 	if (doc.HasMember(name))
@@ -41,43 +41,35 @@ rapidjson::Value* Unknown::getValue(const char* name, const rapidjson::Type type
 	return NULL;
 }
 
-Unknown::Colour* Unknown::getColourFromString(std::string str)
-{
-	int pos = 0;
+inline int parseHexString(std::stringstream& stream, std::string str) {
+	stream << std::hex << str[0];
+	stream << std::hex << str[1];
+	int x = 0;
+	stream >> x;
+	stream.clear();
+	return x;
+}
 
+std::shared_ptr<Unknown::Colour> Unknown::getColourFromString(std::string str)
+{
 	std::stringstream strstream;
 
-	int alpha = 255;
+	// A R G B
+	int colourParts[4];
 
-	if (str.length() >= 8)
-	{
-		strstream << std::hex << str[pos++];
-		strstream << std::hex << str[pos++];
-		strstream >> alpha;
+	colourParts[3] = 255;
 
-		strstream.clear();
+	if (str.length() >= 8) {
+		colourParts[3] = parseHexString(strstream, str);
+		str = str.erase(0, 2);
 	}
 
-	strstream << std::hex << str[pos++];
-	strstream << std::hex << str[pos++];
-	int red = 0;
-	strstream >> red;
+	for(int i = 0; i < 3; i++) {
+	    colourParts[i] = parseHexString(strstream, str);
+	    str = str.erase(0, 2);
+	}
 
-	strstream.clear();
-
-	strstream << std::hex << str[pos++];
-	strstream << std::hex << str[pos++];
-	int green = 0;
-	strstream >> green;
-
-	strstream.clear();
-
-	strstream << std::hex << str[pos++];
-	strstream << std::hex << str[pos];
-	int blue = 0;
-	strstream >> blue;
-
-	return new Colour(red, green, blue, alpha);
+	return std::make_shared<Colour>(colourParts[0], colourParts[1], colourParts[2], colourParts[3]);
 }
 
 bool Unknown::isCharCodeNumber(const char* key)

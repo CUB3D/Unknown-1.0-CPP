@@ -22,6 +22,10 @@
 #include "Event/Event.h"
 #include "Event/EventManager.h"
 
+void freeWindow(SDL_Window* window) {
+
+}
+
 // unknown class
 
 Unknown::Unknown::Unknown()
@@ -125,7 +129,8 @@ void Unknown::Unknown::initGameLoop()
 	{
         const char* err = SDL_GetError();
         if (strlen(err) > 0) {
-            printf("Error: %s\n", err);
+        	//TODO: move to stderr
+           // printf("Error: %s\n", err);
             SDL_ClearError();
         }
 
@@ -216,9 +221,9 @@ void Unknown::Unknown::quit(const int exitCode)
 {
     // All Images must have been destroyed or this will cause a sigsev
 	SDL_DestroyRenderer(this->windowRenderer);
-	this->windowRenderer = NULL;
 	SDL_DestroyWindow(this->window);
-	this->window = NULL;
+	this->windowRenderer = nullptr;
+	this->window = nullptr;
 
 	exitKeySystem();
 
@@ -242,12 +247,12 @@ void Unknown::Unknown::updateWindow()
 	SDL_RenderPresent(this->windowRenderer);
 }
 
-Unknown::Unknown* Unknown::instance;
+std::shared_ptr<Unknown::Unknown> Unknown::instance;
 
-Unknown::Unknown* Unknown::getUnknown()
+std::shared_ptr<Unknown::Unknown> Unknown::getUnknown()
 {
 	if (instance == nullptr)
-		instance = new Unknown();
+		instance = std::make_shared<Unknown>();
 
 	return instance;
 }
