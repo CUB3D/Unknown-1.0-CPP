@@ -19,11 +19,12 @@ namespace Unknown
 			const int charSize;
 
 		public:
+			Font();
 			Font(Image* fontSheet, const std::string layout, const int charSize);
 
-			void drawChar(const char c, const int x, const int y);
+			void drawChar(const char c, const int x, const int y) const;
 
-            virtual void drawString(const std::string string, const int x, const int y);
+            virtual void drawString(const std::string string, const int x, const int y) const;
 
             virtual int getStringWidth(const std::string str) const;
             virtual int getStringHeight(const std::string str) const;
@@ -38,9 +39,16 @@ namespace Unknown
         public:
             TTFont(std::string name, const int size, Colour colour);
 
-            virtual void drawString(const std::string string, const int x, const int y) override;
+            virtual void drawString(const std::string string, const int x, const int y) const override;
             virtual int getStringWidth(const std::string str) const override;
             virtual int getStringHeight(const std::string str) const override;
+        };
+
+        class NullFont : public Font
+        {
+        public:
+            NullFont();
+            virtual void drawString(const std::string str, const int x, const int y) const override;
 
         };
 	}

@@ -15,19 +15,21 @@ namespace Unknown
     class SceneManager
     {
     private:
-        std::vector<Scene*> scenes;
+        std::vector<std::shared_ptr<Scene>> scenes;
     public:
-        Scene* currentScene;
+        std::shared_ptr<Scene> currentScene;
 
         SceneManager();
         ~SceneManager();
-        void add(Scene* scene);
+        void add(std::shared_ptr<Scene> scene);
         void loadScene(const std::string sceneName);
 
+        const void update();
+
         template<class T>
-        T* getScene()
+        std::shared_ptr<T> getScene()
         {
-            return (T*) this->currentScene;
+            return std::dynamic_pointer_cast<T>(this->currentScene);
         }
 
         SceneManager(const SceneManager& sm) = delete;

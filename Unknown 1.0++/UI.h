@@ -28,17 +28,18 @@ namespace Unknown
     class UIComponent
     {
         public:
-            Graphics::Font* font;
+			std::shared_ptr<Graphics::Font> font;
             std::string name;
             UIComponent_Type type;
             Dimension<int> size;
             Point<int> location;
-            Colour* colour;
+            std::shared_ptr<Colour> colour;
             std::string parentName;
             std::string content; // consider moving to a subclass
-            
+
 			UIComponent();
-            UIComponent(const UIComponent_Type type);            
+			UIComponent(const UIComponent_Type type);
+			UIComponent(std::shared_ptr<Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
 
             virtual void render() const;
             virtual void init();
@@ -81,6 +82,7 @@ namespace Unknown
         bool isEditing = false;
 
         TextBoxComponent();
+        TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
         void onKeyTyped(Event& evnt);
         void onMouseClick(MouseEvent evnt);
         virtual void render() const override;
@@ -110,11 +112,13 @@ namespace Unknown
         UIContainer();
 		std::vector<std::unique_ptr<UIComponent>> components;
 
-		void setGlobalFont(Graphics::Font* font);
+		void setGlobalFont(std::shared_ptr<Graphics::Font> font);
 		std::unique_ptr<UIComponent>* getComponentByName(const std::string name);
 
 		void renderUI() const;
         void initUI();
+
+        void addComponent(std::unique_ptr<UIComponent> component);
 	};
 }
 

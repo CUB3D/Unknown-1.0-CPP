@@ -12,13 +12,13 @@ Unknown::SceneManager::SceneManager()
 Unknown::SceneManager::~SceneManager()
 {
     // Delete the scenes
-    for(auto& scene : this->scenes)
-    {
-        delete scene;
-    }
+//    for(auto& scene : this->scenes)
+//    {
+//        delete scene;
+//    }
 }
 
-void Unknown::SceneManager::add(Scene* scene)
+void Unknown::SceneManager::add(std::shared_ptr<Scene> scene)
 {
     this->scenes.push_back(scene);
 }
@@ -33,4 +33,9 @@ void Unknown::SceneManager::loadScene(const std::string sceneName)
             return;
         }
     }
+}
+
+const void Unknown::SceneManager::update()
+{
+    this->currentScene->update();
 }

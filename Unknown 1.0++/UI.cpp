@@ -43,7 +43,7 @@ void Unknown::UIContainer::renderUI() const
 	}
 }
 
-void Unknown::UIContainer::setGlobalFont(Graphics::Font* font)
+void Unknown::UIContainer::setGlobalFont(std::shared_ptr<Graphics::Font> font)
 {
 	for (auto& comp : components)
 	{
@@ -72,6 +72,11 @@ void Unknown::UIContainer::initUI()
     }
 }
 
+void Unknown::UIContainer::addComponent(std::unique_ptr<UIComponent> component)
+{
+    this->components.push_back(std::move(component));
+}
+
 // UIComponent
 
 Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)
@@ -79,10 +84,9 @@ Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)
 	//NOOP
 }
 
-Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type)
+Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type), font(std::make_shared<Graphics::NullFont>())
 {
-    this->size = {0, 0};
-    this->location = {0, 0};
+
 }
 
 void Unknown::UIComponent::render() const
@@ -93,6 +97,11 @@ void Unknown::UIComponent::render() const
 void Unknown::UIComponent::init()
 {
     //NOOP
+}
+
+Unknown::UIComponent::UIComponent(std::shared_ptr<Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size) : font(font), name(name), location(location), size(size), type(type)
+{
+
 }
 
 // RectComponent
@@ -128,10 +137,7 @@ Unknown::TextComponent::TextComponent() : UIComponent(UI_TEXT)
 
 void Unknown::TextComponent::render() const
 {
-    if(font)
-    {
-        font->drawString(this->content, this->location.x, this->location.y);
-    }
+    font->drawString(this->content, this->location.x, this->location.y);
 }
 
 //ButtonComponent
@@ -168,7 +174,7 @@ void Unknown::ButtonComponent::render() const
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Colour* col = this->colour;
+	Colour* col = this->colour.get();
 
 	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.width)
 	{
@@ -180,7 +186,7 @@ void Unknown::ButtonComponent::render() const
 
 	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *col);
 
-	if(this->font && this->content.size() > 0)
+	if(this->content.size() > 0)
 	{
 		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.height / 2 - font->getStringHeight(this->content) / 2);
 	}
@@ -240,8 +246,8 @@ void Unknown::TextBoxComponent::onMouseClick(MouseEvent evnt)
 
 void Unknown::TextBoxComponent::render() const
 {
-    Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *(this->colour));
-    if(this->font && this->content.size() > 0)
+    Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *this->colour);
+    if(this->content.size() > 0)
     {
         font->drawString(this->content, this->location.x + 2, this->location.y);
     }
@@ -262,4 +268,8 @@ void Unknown::TextBoxComponent::init()
 {
     registerEventHandler(ET_KEYPRESS, this->name, [this](Event& evnt) {onKeyTyped(evnt);});
     UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
+}
+
+Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
+{
 }
