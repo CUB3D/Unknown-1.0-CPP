@@ -54,7 +54,7 @@ add_library(UK SHARED ${UK_ENGINE_SRC})
 target_include_directories(UK PUBLIC ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${BOX2D_INCLUDE_DIRS})
 target_link_libraries(UK ${SDL2_TTF_LIBRARIES} ${SDL2_LIBRARIES} ${SDL2_IMAGE_LIBRARIES} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} pthread dl util m)
 set_target_properties(UK PROPERTIES CMAKE_LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})
-add_custom_command(TARGET UK POST_BUILD COMMAND "${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py")
+add_custom_command(TARGET UK POST_BUILD COMMAND python ${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py)
 
 FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.cpp")
 add_executable(UKTest ${UK_TEST_SRC})

@@ -2,8 +2,10 @@
 import os
 import shutil
 
-outDir = "../Output/lib/linux/include/"
-inDir = "../Unknown 1.0++/"
+outDir = "./Output/lib/linux/include/"
+inDir = "./Unknown 1.0++/"
+
+shutil.rmtree(outDir)
 
 for base, dirs, files in os.walk(inDir):
     for file in files:

@@ -181,7 +181,7 @@ PyObject* renderRawImageHandler(PyObject* self, PyObject* args)
 PyObject* createRawTimer(PyObject* self, PyObject* args)
 {
     double timeStep = PY_GET_FLOAT(args, 0);
-    Unknown::Timer* timer = new Unknown::Timer(timeStep);
+    Unknown::Timer* timer = new Unknown::Timer((float)timeStep);
 
     PyObject* capsule = PY_MAKE_CAPSULE(timer, "Timer", [](PyObject* a){});
 
@@ -215,7 +215,8 @@ PyObject* checkRawTimer(PyObject* self, PyObject* args)
         } else {
             Py_RETURN_FALSE;
         }
-
+    } else {
+        Py_RETURN_FALSE;
     }
 }
 

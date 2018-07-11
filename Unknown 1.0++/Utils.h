@@ -7,6 +7,7 @@
 #include "document.h"
 #include <vector>
 #include <memory>
+#include <random>
 
 
 namespace Unknown
@@ -54,6 +55,10 @@ namespace Unknown
 	bool isCharCodeNumber(const char* key);
 
 	std::vector<std::string> tokenise(std::string input, std::vector<std::string> extraTokens);
+
+	long long randInt(const int min, const int max);
 }
+
+#define RANDINT(min, max) ::Unknown::randInt(min, max)
 
 #endif

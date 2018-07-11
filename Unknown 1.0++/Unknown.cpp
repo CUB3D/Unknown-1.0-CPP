@@ -73,7 +73,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
-    //Could be a memory leak
+    //Is a memory leak
 	this->screenSize = new Dimension<int> { width, height };
 }
 
@@ -249,9 +249,9 @@ void Unknown::Unknown::updateWindow()
 
 std::shared_ptr<Unknown::Unknown> Unknown::instance;
 
-std::shared_ptr<Unknown::Unknown> Unknown::getUnknown()
+std::shared_ptr<Unknown::Unknown>& Unknown::getUnknown()
 {
-	if (instance == nullptr)
+	if (!instance)
 		instance = std::make_shared<Unknown>();
 
 	return instance;
@@ -261,6 +261,13 @@ std::map < Unknown::HookType, std::vector < std::function<void()> > > Unknown::h
 
 void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
+	printf("Registering a hook %d\n", (int)type);
+
+	if(hooks.find(type) == hooks.end()) {
+//	    // If there is no hooks
+        hooks[type] = std::vector<std::function<void()>>();
+	}
+
 	auto vec = hooks[type];
 
 	vec.push_back(hook);

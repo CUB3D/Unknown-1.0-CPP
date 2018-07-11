@@ -4,7 +4,7 @@
 
 Unknown::Graphics::Particle::Particle(Sprite* sprite, const int life) : TwoStateEntity(sprite)
 {
-	timer = Timer(life);
+	timer = Timer((long long)life);
 }
 
 void Unknown::Graphics::Particle::update()

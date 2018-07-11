@@ -10,7 +10,6 @@
 #include "Utils.h"
 
 
-
 namespace Unknown
 {
 	enum ErrorCodes
@@ -68,7 +67,7 @@ namespace Unknown
 
 	extern std::shared_ptr<Unknown> instance;
 
-	std::shared_ptr<Unknown> getUnknown();
+	std::shared_ptr<Unknown>& getUnknown();
 	
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()

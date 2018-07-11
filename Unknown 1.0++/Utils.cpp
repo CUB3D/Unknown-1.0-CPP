@@ -72,6 +72,13 @@ std::shared_ptr<Unknown::Colour> Unknown::getColourFromString(std::string str)
 	return std::make_shared<Colour>(colourParts[0], colourParts[1], colourParts[2], colourParts[3]);
 }
 
+long long Unknown::randInt(const int min, const int max) {
+	std::random_device rnd;
+	std::mt19937_64 rng(rnd());
+	std::uniform_int_distribution<long long> uni(min, max);
+	return uni(rng);
+}
+
 bool Unknown::isCharCodeNumber(const char* key)
 {
 	return *key >= '0' && *key <= '9';

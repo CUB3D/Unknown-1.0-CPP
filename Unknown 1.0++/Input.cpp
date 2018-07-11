@@ -111,7 +111,7 @@ std::map<std::string, Unknown::KeyCode> Unknown::keyBinds;
 
 void Unknown::registerKeybind(Unknown::KeyCode keycode, std::string name)
 {
-//	keyBinds[name] = keycode;
+	keyBinds[name] = keycode;
 }
 
 void Unknown::postMouseEvent(MouseEvent evnt)
@@ -136,16 +136,12 @@ Unknown::MouseButton Unknown::SDLTOMouseButton(const int SDLCode)
 	{
 	case SDL_BUTTON_LEFT:
 		return MouseButton::BUTTON_LEFT;
-		break;
 	case SDL_BUTTON_RIGHT:
 		return MouseButton::BUTTON_RIGHT;
-		break;
 	case SDL_BUTTON_MIDDLE:
 		return MouseButton::BUTTON_MIDDLE;
-		break;
 	default:
 		return MouseButton::BUTTON_NONE;
-		break;
 	}
 }
 

@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <stack>
 #include "Scene.h"
 
 namespace Unknown
@@ -15,14 +16,16 @@ namespace Unknown
     class SceneManager
     {
     private:
-        std::vector<std::shared_ptr<Scene>> scenes;
+        std::map<std::string, std::shared_ptr<Scene>> scenes;
     public:
         std::shared_ptr<Scene> currentScene;
+        std::stack<std::string> sceneHistory;
 
         SceneManager();
         ~SceneManager();
         void add(std::shared_ptr<Scene> scene);
         void loadScene(const std::string sceneName);
+        void loadLastScene();
 
         const void update();
 

@@ -33,7 +33,7 @@
 #include "Event/EventManager.h"
 
 std::unique_ptr<Unknown::Map> map;
-Unknown::Timer timer(0.2f);
+Unknown::Timer timer(0.2);
 
 Unknown::SceneManager scenes;
 std::shared_ptr<Unknown::Graphics::Font> font;
@@ -77,9 +77,9 @@ void createBoard()
 
     map = std::unique_ptr<Unknown::Map>(new Unknown::Map(width, height));
 
-    for(int x = 0; x < map->mapSize.width; x++)
+    for(int x = 0; x < map->mapSize->width; x++)
     {
-        for(int y = 0; y < map->mapSize.height; y++)
+        for(int y = 0; y < map->mapSize->height; y++)
         {
             if(rand()%2 == 1) {
                 map->setTileID(0, x, y);
@@ -101,9 +101,9 @@ int pixelScale = 2;
 
 void renderSimulationBoard()
 {
-    for (int x = 0; x < map->mapSize.width; x++)
+    for (int x = 0; x < map->mapSize->width; x++)
     {
-        for (int y = 0; y < map->mapSize.height; y++)
+        for (int y = 0; y < map->mapSize->height; y++)
         {
             if (map->getTileID(x, y) == 0)
             {
@@ -114,7 +114,7 @@ void renderSimulationBoard()
             }
 
             // If the last tile has been drawn
-            if(x == map->mapSize.width - 1)
+            if(x == map->mapSize->width - 1)
             {
              //   UK_DRAW_RECT(0, y * scaleY, scaleX * width, 1, Unknown::Colour::BLUE);
             }
@@ -133,7 +133,7 @@ void render()
 
 int tileExists(int x, int y, std::unique_ptr<Unknown::Map>& map)
 {
-    if(x < 0 || y < 0 || x >=  map->mapSize.width || y >= map->mapSize.height)
+    if(x < 0 || y < 0 || x >=  map->mapSize->width || y >= map->mapSize->height)
     {
         return 0;
     }
@@ -194,9 +194,9 @@ void updateBoardSimulation()
 
     if (timer.isTickComplete())
     {
-        for (int x = 0; x <  map->mapSize.width; x++)
+        for (int x = 0; x <  map->mapSize->width; x++)
         {
-            for (int y = 0; y <  map->mapSize.height; y++)
+            for (int y = 0; y <  map->mapSize->height; y++)
             {
                 int alive = map->getTileID(x, y);
                 int popcount = 0;
