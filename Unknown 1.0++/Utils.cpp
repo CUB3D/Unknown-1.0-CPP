@@ -72,6 +72,13 @@ std::shared_ptr<Unknown::Colour> Unknown::getColourFromString(std::string str)
 	return std::make_shared<Colour>(colourParts[0], colourParts[1], colourParts[2], colourParts[3]);
 }
 
+bool Unknown::stringToInt(const std::string& str, int& out) {
+    std::stringstream ss;
+    ss << str;
+    ss >> out;
+    return !ss.bad();
+}
+
 long long Unknown::randInt(const int min, const int max) {
 	std::random_device rnd;
 	std::mt19937_64 rng(rnd());

@@ -9,8 +9,8 @@ Unknown::Map::Map(const int width, const int height)
 	this->mapSize.width = width;
 	this->mapSize.height = height;
 
-	this->map = std::unique_ptr<int[]>(new int[width * height]);
-	this->data = std::unique_ptr<int[]>(new int[width * height]);
+	this->map = std::make_unique<int[]>(width * height); //std::unique_ptr<int[]>(new int[width * height]);
+	this->data =std::make_unique<int[]>(width * height);// std::unique_ptr<int[]>(new int[width * height]);
 }
 
 void Unknown::Map::setTileID(const int tileID, const int x, const int y)

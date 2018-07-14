@@ -1,0 +1,27 @@
+//
+// Created by cub3d on 10/07/2018.
+//
+
+#include "KeyBind.h"
+
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode) {
+    registerEventHandler(ET_KEYPRESS, name, [&] (Event& evt){this->handle(evt);});
+}
+
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name, std::function<void(Event &evt)> event) : KeyBind(keycode, name) {
+    this->callback = event;
+}
+
+void Unknown::KeyBind::handle(Event& evt) {
+    if(evt.SDLCode == this->keycode) {
+        this->currentState = evt.keyState;
+
+        if(this->callback) {
+            callback(evt);
+        }
+    }
+}
+
+bool Unknown::KeyBind::pressed() const {
+    return this->currentState == InputState::PRESSED;
+}

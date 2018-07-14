@@ -1,0 +1,1 @@
+Make sure that msvc builds still work with rapidjson in libs rather than third_party

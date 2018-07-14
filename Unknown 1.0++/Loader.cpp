@@ -6,7 +6,6 @@
 #include "Entity.h"
 #include "UI.h"
 #include "document.h"
-#include "Utils.h"
 #include "Log.h"
 
 #include <map>

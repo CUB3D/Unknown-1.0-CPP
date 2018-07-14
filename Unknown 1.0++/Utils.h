@@ -57,6 +57,8 @@ namespace Unknown
 	std::vector<std::string> tokenise(std::string input, std::vector<std::string> extraTokens);
 
 	long long randInt(const int min, const int max);
+
+    bool stringToInt(const std::string& str, int& out);
 }
 
 #define RANDINT(min, max) ::Unknown::randInt(min, max)

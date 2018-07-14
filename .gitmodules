@@ -7,3 +7,6 @@
 [submodule "Libs/Box2D"]
 	path = Libs/Box2D
 	url = https://github.com/erincatto/Box2D
+[submodule "Libs/rapidjson"]
+	path = Libs/rapidjson
+	url = https://github.com/Tencent/rapidjson

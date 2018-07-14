@@ -1,10 +1,14 @@
 #!/usr/bin/python3
 import os
 import shutil
+import pathlib
+import sys
 
-outDir = "./Output/lib/linux/include/"
-inDir = "./Unknown 1.0++/"
+base = sys.argv[-1]
+outDir = os.path.join(base, "./Output/lib/linux/include/")
+inDir = os.path.join(base, "./Unknown 1.0++/")
 
+pathlib.Path(outDir).mkdir(parents=True, exist_ok=True)
 shutil.rmtree(outDir)
 
 for base, dirs, files in os.walk(inDir):
