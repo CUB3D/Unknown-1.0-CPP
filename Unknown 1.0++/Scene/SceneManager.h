@@ -9,10 +9,12 @@
 #include <vector>
 #include <memory>
 #include <stack>
-#include "Scene.h"
+#include <map>
 
 namespace Unknown
 {
+    class Scene;
+
     class SceneManager
     {
     private:
@@ -28,6 +30,7 @@ namespace Unknown
         void loadLastScene();
 
         const void update();
+        const void render() const;
 
         template<class T>
         std::shared_ptr<T> getScene()

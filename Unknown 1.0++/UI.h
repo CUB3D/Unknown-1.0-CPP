@@ -15,6 +15,10 @@ namespace Unknown
 {
 	class Colour;
 
+	namespace Graphics {
+		class Font;
+	}
+
     enum UIComponent_Type
     {
 		UI_NULL,
@@ -28,7 +32,7 @@ namespace Unknown
     class UIComponent
     {
         public:
-			std::shared_ptr<Graphics::Font> font;
+			std::shared_ptr<::Unknown::Graphics::Font> font;
             std::string name;
             UIComponent_Type type;
             Dimension<int> size;
@@ -39,7 +43,7 @@ namespace Unknown
 
 			UIComponent();
 			UIComponent(const UIComponent_Type type);
-			UIComponent(std::shared_ptr<Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
+			UIComponent(std::shared_ptr<::Unknown::Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
 
             virtual void render() const;
             virtual void init();

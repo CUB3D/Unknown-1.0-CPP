@@ -12,6 +12,26 @@
 
 namespace Unknown
 {
+	class Direction {
+	public:
+		int x, y;
+		Direction(int x, int y) : x(x), y(y) {}
+
+		Direction operator-() {
+			return Direction(-x, -y);
+		}
+	};
+
+	extern Direction up;
+	extern Direction down;
+	extern Direction left;
+	extern Direction right;
+
+#define UP ::Unknown::Direction(0, 1)
+#define DOWN ::Unknown::Direction(0, -1)
+#define LEFT ::Unknown::Direction(1, 0)
+#define RIGHT ::Unknown::Direction(-1, 0)
+
 	template < class T >
 	class Dimension
 	{
@@ -44,6 +64,14 @@ namespace Unknown
 			this->x = t1;
 			this->y = t2;
 		}
+	};
+
+	template<typename T>
+	class Rect {
+	public:
+		T x, y, w, h;
+		Rect() : Rect(0, 0, 0, 0) {}
+		Rect(T x, T y, T w, T h) : x(x), y(y), w(w), h(h) {}
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);

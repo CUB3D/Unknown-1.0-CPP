@@ -23,7 +23,6 @@ namespace Unknown
 	};
 
 
-
 	class Map
 	{
 	private:

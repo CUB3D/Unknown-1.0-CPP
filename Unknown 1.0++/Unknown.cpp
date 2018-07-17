@@ -19,17 +19,16 @@
 
 #include <chrono>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "Event/Event.h"
 #include "Event/EventManager.h"
-
-void freeWindow(SDL_Window* window) {
-
-}
 
 // unknown class
 
 Unknown::Unknown::Unknown()
 {
+    registerHook([=]{globalSceneManager.render();}, RENDER);
+    registerHook([=]{globalSceneManager.update();}, UPDATE);
 }
 
 void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
@@ -68,6 +67,16 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
     {
         printf("Error: SDL failed to initialise TTF handling, %s\n", TTF_GetError());
         quit(ErrorCodes::SDL_WINDOW_TTF_INIT_FAIL);
+    }
+
+    if(SDL_Init(SDL_INIT_AUDIO) == -1) {
+		printf("Error: SDL failed to initialise audio handling, %s\n", Mix_GetError());
+		quit(ErrorCodes::SDL_MIXER_INIT_FAIL);
+	}
+
+    if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
+        printf("Failed to setup audio mixer %s\n", Mix_GetError());
+        quit(ErrorCodes::SDL_MIXER_OPEN_AUDIO_FAIL);
     }
 
 	this->tickSpeed = 1000.0 / ups;
@@ -226,6 +235,7 @@ void Unknown::Unknown::quit(const int exitCode)
 	this->window = nullptr;
 
 	exitKeySystem();
+	Mix_CloseAudio();
 
 	SDL_Quit();
 

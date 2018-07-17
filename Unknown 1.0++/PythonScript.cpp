@@ -101,6 +101,7 @@ T* getObjectCapsule(PyObject* capsule, std::string name) {
 }
 
 #define MAKE_FUNC_MAPPING(name, desc, callback) registerMethod("Unknown", name, desc, callback);
+#define PY_MAKE_UTF8(value) PyUnicode_FromString(value)
 #define PY_MAKE_FLOAT(value) PyFloat_FromDouble(value)
 #define PY_MAKE_LONG(value) PyLong_FromLong(value)
 #define PY_MAKE_CAPSULE(value, name, callback)  PyCapsule_New(value, name, callback)
@@ -372,6 +373,52 @@ PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
     Py_RETURN_NONE;
 }
 
+#include "SharedVariable.h"
+
+PyObject* getSharedValue(PyObject* self, PyObject* args) {
+    const char* name_c = PY_GET_UTF8(args, 0);
+    std::string name(name_c);
+
+    if(Unknown::variablelookup.find(name) != Unknown::variablelookup.end()) {
+        Unknown::SharedVariable* x = Unknown::variablelookup[name];
+        auto& type = x->type();
+
+        if(type == typeid(std::string)) {
+            return PY_MAKE_UTF8(x->getString().c_str());
+        }
+
+        if(type == typeid(double)) {
+            return PY_MAKE_FLOAT(x->getDouble());
+        }
+    } else {
+        printf("[PY] Unknown variable: %s\n", name);
+    }
+    Py_RETURN_NONE;
+}
+
+PyObject* setSharedValue(PyObject* self, PyObject* args) {
+    const char* name_c = PY_GET_UTF8(args, 0);
+    PyObject* data = PY_GET_OBJ(args, 1);
+    std::string name(name_c);
+
+    if(Unknown::variablelookup.find(name) != Unknown::variablelookup.end()) {
+        Unknown::SharedVariable* x = Unknown::variablelookup[name];
+
+        if(PyFloat_Check(data)) {
+            double in = PY_GET_FLOAT(args, 1);
+            *x = in;
+        }
+
+        if(PyUnicode_Check(data)) {
+            const char* str = PY_GET_UTF8(args, 1);
+            *x = std::string(str);
+        }
+    } else {
+        printf("[PY] Unknown variable: %s\n", name);
+    }
+    Py_RETURN_NONE;
+}
+
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
     MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
@@ -386,6 +433,8 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     registerMethod("Unknown", "uk_log", "Print a string to stdout", logMessage);
     registerMethod("Unknown", "create_raw_sprite", "Create a sprite capsule", createRawSprite);
     registerMethod("Unknown", "get_mouse_pos", "Get mouse position", getMousePos);
+    registerMethod("Unknown", "raw_get_shared", "Get shared value", getSharedValue);
+    registerMethod("Unknown", "raw_set_shared", "Set shared value", setSharedValue);
 
     log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
 

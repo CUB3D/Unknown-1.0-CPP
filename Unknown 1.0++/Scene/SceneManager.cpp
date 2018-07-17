@@ -4,6 +4,7 @@
 #include "../stdafx.h"
 
 #include "SceneManager.h"
+#include "Scene.h"
 
 Unknown::SceneManager::SceneManager()
 {
@@ -32,10 +33,16 @@ void Unknown::SceneManager::loadScene(const std::string sceneName)
 
 const void Unknown::SceneManager::update()
 {
-    this->currentScene->update();
+    if(this->currentScene)
+        this->currentScene->update();
 }
 
 void Unknown::SceneManager::loadLastScene() {
     this->sceneHistory.pop();
     this->currentScene = this->scenes[this->sceneHistory.top()];
+}
+
+const void Unknown::SceneManager::render() const {
+    if(this->currentScene)
+        this->currentScene->render();
 }

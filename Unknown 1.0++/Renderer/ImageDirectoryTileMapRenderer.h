@@ -6,7 +6,7 @@
 #define UNKNOWN_GAME_IMAGEDIRECTORYTILEMAPRENDERER_H
 
 #include "BasicTileMapRenderer.h"
-#include "Image.h"
+#include "../Image.h"
 #include <map>
 
 namespace Unknown {

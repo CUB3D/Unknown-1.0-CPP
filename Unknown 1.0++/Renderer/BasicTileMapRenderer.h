@@ -7,7 +7,8 @@
 
 #include <functional>
 
-#include "Map.h"
+#include "../Map.h"
+#include "Camera.h"
 
 namespace Unknown {
 
@@ -18,6 +19,9 @@ protected:
     std::function<void(int, int, int, int)> renderer;
 
 public:
+    Camera camera;
+
+    BasicTileMapRenderer(Map &map1, std::function<void(int, int, int, int)> renderer1, bool isGlobal);
     BasicTileMapRenderer(Map& map1, std::function<void(int, int, int, int)> renderer1);
     virtual void render() const;
 };

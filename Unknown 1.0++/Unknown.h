@@ -8,6 +8,7 @@
 
 #include "Timer.h"
 #include "Utils.h"
+#include "Scene/SceneManager.h"
 
 
 namespace Unknown
@@ -22,7 +23,9 @@ namespace Unknown
 		SDL_RENDER_RECT_FAIL = -20,
 		SDL_IMAGE_LOAD_FAIL = -21,
 		SDL_IMAGE_TEXTURE_CREATE_FAIL = -22,
-    };
+		SDL_MIXER_INIT_FAIL = -30,
+		SDL_MIXER_OPEN_AUDIO_FAIL = -31
+	};
 
 	class Unknown
 	{
@@ -36,6 +39,8 @@ namespace Unknown
 		SDL_Window* window;
 		SDL_Renderer* windowRenderer;
 		const Dimension<int>* screenSize;
+		::Unknown::SceneManager globalSceneManager;
+
 
 		bool running = true;
 		double tickSpeed = 0;

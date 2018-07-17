@@ -3,12 +3,12 @@
 //
 
 #include "ImageDirectoryTileMapRenderer.h"
-#include "Map.h"
+#include "../Map.h"
 #include <filesystem>
 
 Unknown::ImageDirectoryTileMapRenderer::ImageDirectoryTileMapRenderer(Unknown::Map &map1,
-                                                                      std::string directory) : BasicTileMapRenderer(map1,
-                                                                                                                    nullptr) {
+                                                                      std::string directory) : BasicTileMapRenderer(
+        map1, nullptr, false) {
    std::filesystem::path dirPath = std::filesystem::u8path(directory);
    for(auto& p : std::filesystem::directory_iterator(dirPath)) {
        int id = 0;
