@@ -12,22 +12,28 @@
 
 #include "../UI.h"
 #include "../Font.h"
+#include "../Renderer/IRenderable.h"
 
 namespace Unknown
 {
     class Scene
     {
     public:
+        std::vector<std::shared_ptr<IRenderable>> renderables;
         b2World world;
         const std::string name;
         Scene(const std::string name);
 
-        virtual void render() const = 0;
+        virtual void render() const; //TODO: this should render all renderables and when creating something renderable it should add itself to the current scene, also finish partial map rendering to only render
+                // TODO:                         The section that is currently visible
         virtual void update();
     };
 
     class MenuScene : public Scene
     {
+        std::string uiFile;
+        std::shared_ptr<Graphics::Font> font;
+
     public:
         UIContainer menu;
 
@@ -35,6 +41,8 @@ namespace Unknown
 
         virtual void render() const override;
         virtual void update() override;
+
+        void reloadMenu();
     };
 
     class CustomScene : public Scene

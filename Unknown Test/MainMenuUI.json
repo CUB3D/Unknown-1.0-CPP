@@ -15,20 +15,23 @@
     "Type": "TextBox",
     "InsideComponent": "Background",
     "Colour": "ffffffff",
-    "Bounds": ["minX+10", "minY+30", 75, 20]
+    "Bounds": ["minX+10", "minY+30", 75, 20],
+    "Numerical": true
   },
   "TextBoxHeight": {
     "Type": "TextBox",
     "InsideComponent": "Background",
     "Colour": "ffffffff",
-    "Bounds": ["minX+110", "minY+30", 75, 20]
+    "Bounds": ["minX+110", "minY+30", 75, 20],
+    "Numerical": true
   },
   "TextLabelSpeed": {
     "Type": "Text",
     "InsideComponent": "Background",
     "Colour": "ff000000",
     "Content": "Speed:",
-    "Bounds": ["minX+10", "minY+60", "maxX-20", 0]
+    "Bounds": ["minX+10", "minY+60", "maxX-20", 0],
+    "Numerical": true
   },
   "TextBoxSpeed": {
     "Type": "TextBox",

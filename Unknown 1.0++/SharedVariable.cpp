@@ -61,8 +61,6 @@ double Unknown::SharedVariable::operator++(int dummy) {
         *this = 0;
     }
 
-    //std::cout << "Type: " << type().name() << std::endl;
-
     double old = getDouble();
     this->data = old + 1;
     return old;

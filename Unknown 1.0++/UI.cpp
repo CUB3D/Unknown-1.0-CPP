@@ -8,9 +8,9 @@
 #include <memory>
 #include <ctime>
 
-std::map <std::string, std::function<void(const Unknown::UIEvent)> > Unknown::UIListeners;
+std::map <std::string, std::function<void(std::shared_ptr<Unknown::UIEvent>)> > Unknown::UIListeners;
 
-void Unknown::registerUIListener(std::function<void(const UIEvent)> listener, std::string listenerID)
+void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
     UIListeners[listenerID] = listener;
 }
@@ -20,9 +20,9 @@ void Unknown::removeUIListener(std::string listenerID)
     UIListeners.erase(listenerID);
 }
 
-void Unknown::callUIListeners(const UIEvent evnt)
+void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
-    std::map <std::string, std::function<void(const UIEvent)> >::iterator listeners;
+    std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
 
     for (listeners = UIListeners.begin(); listeners != UIListeners.end(); listeners++)
     {
@@ -37,6 +37,7 @@ Unknown::UIContainer::UIContainer()
 
 void Unknown::UIContainer::renderUI() const
 {
+    // Rendering
 	for (auto& comp : components)
 	{
 	    comp->render();
@@ -51,13 +52,13 @@ void Unknown::UIContainer::setGlobalFont(std::shared_ptr<Graphics::Font> font)
 	}
 }
 
-std::unique_ptr<Unknown::UIComponent>* Unknown::UIContainer::getComponentByName(const std::string name)
+std::shared_ptr<Unknown::UIComponent> Unknown::UIContainer::getComponentByName(const std::string name)
 {
 	for (auto& comp : components)
 	{
 		if (comp->name == name)
 		{
-			return &comp;
+			return comp;
 		}
 	}
 
@@ -72,9 +73,13 @@ void Unknown::UIContainer::initUI()
     }
 }
 
-void Unknown::UIContainer::addComponent(std::unique_ptr<UIComponent> component)
+void Unknown::UIContainer::addComponent(std::shared_ptr<UIComponent> component)
 {
-    this->components.push_back(std::move(component));
+    this->components.push_back(component);
+}
+
+std::string Unknown::UIContainer::getComponentValue(const std::string& name) {
+    return getComponentByName(name)->content;
 }
 
 // UIComponent
@@ -158,9 +163,9 @@ void Unknown::ButtonComponent::mouseListener(MouseEvent evnt)
                 if (evnt.location.y >= this->location.y && evnt.location.y <= this->location.y + this->size.height)
                 {
                     // If the button has been clicked
-                    UIEvent evnt;
-                    evnt.componentName = this->name;
-                    evnt.action = "buttonClicked";
+                    std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
+                    evnt->componentName = this->name;
+                    evnt->action = "buttonClicked";
                     callUIListeners(evnt);
                 }
             }
@@ -204,12 +209,19 @@ void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
     {
         if (evnt.keyState == InputState::PRESSED)
         {
-            const char *key = SDL_GetKeyName(evnt.SDLCode);
+            std::string key = std::string(SDL_GetKeyName(evnt.SDLCode));
 
-            UIEvent evnt_;
-            evnt_.componentName = this->name;
-            evnt_.action = "keyTyped";
-            evnt_.relatedKey = &key;
+            if(this->isNumerical) {
+                if(!isStringNumerical(key)) {
+                    printf("%s isn't numerical\n", key.c_str());
+                    key="";
+                }
+            }
+
+            std::shared_ptr<UIEvent> evnt_ = std::make_shared<UIEvent>();
+            evnt_->componentName = this->name;
+            evnt_->action = "keyTyped";
+            evnt_->relatedKey = key;
             callUIListeners(evnt_);
 
             if (evnt.SDLCode == SDLK_BACKSPACE)
@@ -220,7 +232,7 @@ void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
                 }
             } else
             {
-                this->content += key;
+                this->content += evnt_->relatedKey;
             }
         }
     }

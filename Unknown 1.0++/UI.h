@@ -84,6 +84,7 @@ namespace Unknown
     {
     public:
         bool isEditing = false;
+        bool isNumerical = false;
 
         TextBoxComponent();
         TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
@@ -97,32 +98,33 @@ namespace Unknown
     {
         std::string componentName;
         std::string action;
-        const char** relatedKey;
+        std::string relatedKey;
     };
 
-    extern std::map<std::string, std::function<void(const UIEvent)>> UIListeners;
+    extern std::map<std::string, std::function<void(std::shared_ptr<UIEvent>)>> UIListeners;
 
-    void registerUIListener(std::function<void(const UIEvent)> listener, std::string listenerID);
+    void registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID);
     void removeUIListener(std::string listnerID);
-    void callUIListeners(const UIEvent evnt);
+    void callUIListeners(std::shared_ptr<UIEvent> evnt);
 
     #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](::Unknown::UIEvent evnt) {listener(evnt);}, id)
-    #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](::Unknown::UIEvent evnt) {listener(evnt);}, id)
+    #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_REMOVE_UI_LISTENER(id) ::Unknown::removeUIListener(id)
 
 	class UIContainer
 	{
 	public:
         UIContainer();
-		std::vector<std::unique_ptr<UIComponent>> components;
+		std::vector<std::shared_ptr<UIComponent>> components;
 
 		void setGlobalFont(std::shared_ptr<Graphics::Font> font);
-		std::unique_ptr<UIComponent>* getComponentByName(const std::string name);
+		std::shared_ptr<UIComponent> getComponentByName(const std::string name);
+		std::string getComponentValue(const std::string& name);
 
 		void renderUI() const;
         void initUI();
 
-        void addComponent(std::unique_ptr<UIComponent> component);
+        void addComponent(std::shared_ptr<UIComponent> component);
 	};
 }
 

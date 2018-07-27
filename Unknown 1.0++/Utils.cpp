@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <algorithm>
 
 Unknown::Direction up(0, 1);
 Unknown::Direction down(0, -1);
@@ -79,6 +80,10 @@ std::shared_ptr<Unknown::Colour> Unknown::getColourFromString(std::string str)
 }
 
 bool Unknown::stringToInt(const std::string& str, int& out) {
+	if(str.empty()) {
+		return false;
+	}
+
     std::stringstream ss;
     ss << str;
     ss >> out;
@@ -95,6 +100,18 @@ long long Unknown::randInt(const int min, const int max) {
 bool Unknown::isCharCodeNumber(const char* key)
 {
 	return *key >= '0' && *key <= '9';
+}
+
+bool Unknown::isStringNumerical(const std::string& str) {
+    return !str.empty() && std::find_if(str.begin(), str.end(), [](char c) {
+        return !std::isdigit(c);
+    }) == str.end();
+}
+
+std::string Unknown::intToString(const int x) {
+	std::stringstream ss;
+	ss << x;
+	return ss.str();
 }
 
 std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::string> extTokens)

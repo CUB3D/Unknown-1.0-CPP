@@ -20,7 +20,7 @@ namespace Unknown
         std::unique_ptr<::Unknown::Entity> loadEntity(const char* name);
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);
         std::unique_ptr<::Unknown::Graphics::Image> loadImage(const char* name);
-        ::Unknown::UIContainer loadUI(const char* name);
+        ::Unknown::UIContainer loadUI(const std::string &name);
     }
 }
 

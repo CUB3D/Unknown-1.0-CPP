@@ -39,7 +39,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
-	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
 
 	if (!window)
 	{
@@ -82,8 +82,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
-    //Is a memory leak
-	this->screenSize = new Dimension<int> { width, height };
+	this->screenSize = std::make_shared<Dimension<int>>(width, height);
 }
 
 void Unknown::Unknown::createWindow()
@@ -217,6 +216,14 @@ void Unknown::Unknown::checkEvents()
 
             postMouseEvent(evt);
 		}
+
+		if(eventType == SDL_WINDOWEVENT) {
+            if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
+                this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
+                ResizeEvent evt = ResizeEvent(this->screenSize->width, this->screenSize->height);
+                postEvent(ET_WINDOW_RESIZE, evt);
+            }
+        }
 	}
 }
 

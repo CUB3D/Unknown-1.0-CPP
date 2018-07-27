@@ -9,8 +9,8 @@ Unknown::Map::Map(const int width, const int height)
 	this->mapSize.width = width;
 	this->mapSize.height = height;
 
-	this->map = std::make_unique<int[]>(width * height); //std::unique_ptr<int[]>(new int[width * height]);
-	this->data =std::make_unique<int[]>(width * height);// std::unique_ptr<int[]>(new int[width * height]);
+	this->map = std::make_unique<int[]>(width * height);
+	this->data =std::make_unique<int[]>(width * height);
 }
 
 void Unknown::Map::setTileID(const int tileID, const int x, const int y)
@@ -58,6 +58,17 @@ Unknown::MapCellProxy Unknown::Map::operator()(int p1, int p2) {
 
 bool Unknown::Map::isOnBoard(const int x, const int y) {
 	return x < mapSize.width && y < mapSize.height && x >= 0 && y >= 0;
+}
+
+Unknown::Map& Unknown::Map::operator=(const Map& other) {
+    this->mapSize.width = other.mapSize.width;
+    this->mapSize.height = other.mapSize.height;
+	int mapSize = other.mapSize.height * other.mapSize.width;
+	this->map = std::make_unique<int[]>(mapSize);
+	this->data = std::make_unique<int[]>(mapSize);
+    std::copy(other.map.get(), other.map.get() + mapSize, this->map.get());
+    std::copy(other.data.get(), other.data.get() + mapSize, this->data.get());
+    return *this;
 }
 
 Unknown::MapCellProxy &Unknown::MapCellProxy::operator=(int rhs) {

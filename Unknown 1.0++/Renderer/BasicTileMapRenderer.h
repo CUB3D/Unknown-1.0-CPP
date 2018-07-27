@@ -9,21 +9,24 @@
 
 #include "../Map.h"
 #include "Camera.h"
+#include "IRenderable.h"
 
 namespace Unknown {
 
-class BasicTileMapRenderer
+class BasicTileMapRenderer : public IRenderable
 {
 protected:
     Map& map;
     std::function<void(int, int, int, int)> renderer;
+    int tileSize = 1;
 
 public:
     Camera camera;
 
     BasicTileMapRenderer(Map &map1, std::function<void(int, int, int, int)> renderer1, bool isGlobal);
     BasicTileMapRenderer(Map& map1, std::function<void(int, int, int, int)> renderer1);
-    virtual void render() const;
+    virtual void render() const override;
+    virtual Rect<int> getRenderBounds() override;
 };
 
 }

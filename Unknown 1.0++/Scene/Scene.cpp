@@ -15,10 +15,16 @@ void Unknown::Scene::update()
    this->world.Step(1/60.0f, 8, 8);
 }
 
-Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::shared_ptr<Graphics::Font> font) : Scene(name)
+void Unknown::Scene::render() const {
+    for(auto& renderable : this->renderables) {
+        renderable->render();
+    }
+}
+
+Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::shared_ptr<Graphics::Font> font) : Scene(name), uiFile(uiFile), font(font)
 {
-    if(uiFile.length() > 0 ) {
-        this->menu = Loader::loadUI(uiFile.c_str());
+    if(!uiFile.empty()) {
+        this->menu = Loader::loadUI(uiFile);
     } else {
         this->menu = UIContainer();
     }
@@ -29,11 +35,19 @@ Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::s
 void Unknown::MenuScene::render() const
 {
     this->menu.renderUI();
+    Scene::render();
 }
 
 void Unknown::MenuScene::update()
 {
     Scene::update();
+}
+
+void Unknown::MenuScene::reloadMenu() {
+    // TODO: quick and dirty for getting resizing ui's, make a way to recalculate offsets inplace
+    this->menu = Loader::loadUI(this->uiFile);
+    this->menu.setGlobalFont(this->font);
+    this->menu.initUI();
 }
 
 Unknown::CustomScene::CustomScene(const std::string name, std::function<void(void)> renderer, std::function<void(void)> updater) : Scene(name), renderer(renderer), updater(updater)
@@ -42,11 +56,14 @@ Unknown::CustomScene::CustomScene(const std::string name, std::function<void(voi
 
 void Unknown::CustomScene::render() const
 {
-    this->renderer();
+    if(this->renderer)
+        this->renderer();
+    Scene::render();
 }
 
 void Unknown::CustomScene::update()
 {
-    this->updater();
+    if(this->updater)
+        this->updater();
     Scene::update();
 }

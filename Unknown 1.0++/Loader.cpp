@@ -231,9 +231,9 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 	return imagePool[name]->clone();
 }
 
-::Unknown::UIContainer Unknown::Loader::loadUI(const char * name)
+::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)
 {
-	rapidjson::Document doc = readJSONFile(name);
+	rapidjson::Document doc = readJSONFile(name.c_str());
 
 	UIContainer container;
 
@@ -242,31 +242,39 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 		std::string componenetName = member->name.GetString();
 		std::string typeString = member->value.FindMember("Type")->value.GetString();
 
-        std::unique_ptr<UIComponent> comp(new UIComponent(UI_NULL));
+        std::shared_ptr<UIComponent> comp = std::make_shared<UIComponent>(UI_NULL);
 
         if(typeString == "Rect")
         {
-			comp = std::unique_ptr<UIComponent>(new RectComponent());
+            comp = std::make_shared<RectComponent>();
         }
 
 		if (typeString == "Square")
 		{
-			comp = std::unique_ptr<UIComponent>(new SquareComponent());
+            comp = std::make_shared<SquareComponent>();
 		}
 
 		if(typeString == "Text")
 		{
-			comp = std::unique_ptr<UIComponent>(new TextComponent());
+            comp = std::make_shared<TextComponent>();
 		}
 
 		if(typeString == "Button")
 		{
-			comp = std::unique_ptr<UIComponent>(new ButtonComponent());
+            comp = std::make_shared<ButtonComponent>();
 		}
 
         if(typeString == "TextBox")
         {
-            comp = std::unique_ptr<UIComponent>(new TextBoxComponent());
+        	TextBoxComponent* comp_ = new TextBoxComponent();
+
+            comp = std::shared_ptr<TextBoxComponent>(comp_);
+
+            auto numerical = member->value.FindMember("Numerical");
+
+            if(numerical != member->value.MemberEnd()) {
+                comp_->isNumerical = numerical->value.GetBool();
+            }
         }
 
 		comp->name = componenetName;
@@ -297,7 +305,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp->content = contentString;
 		}
 
-        std::unique_ptr<UIComponent>* parent = nullptr;
+        std::shared_ptr<UIComponent> parent = nullptr;
 
         if (!comp->parentName.empty())
         {
@@ -305,7 +313,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
             {
                 if (comp->parentName == component2->name)
                 {
-                    parent = &component2;
+                    parent = component2;
                     break;
                 }
             }
@@ -335,22 +343,22 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
                     {
                         if(token == "minX")
                         {
-                            position = (*parent)->location.x;
+                            position = parent->location.x;
                         }
 
                         if(token == "minY")
                         {
-                            position = (*parent)->location.y;
+                            position = parent->location.y;
                         }
 
                         if(token == "maxX")
                         {
-                            position = (*parent)->location.x+(*parent)->size.width;
+                            position = parent->location.x + parent->size.width;
                         }
 
                         if(token == "maxY")
                         {
-                            position = (*parent)->location.y+(*parent)->size.height;
+                            position = parent->location.y + parent->size.height;
                         }
 
                         if(token == "+")
@@ -390,11 +398,14 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
                 if(bounds->value[x].IsInt())
                 {
                     boundsArray[x] = bounds->value[x].GetInt();
+                    std::cout << "Bounds[" << x << "] = " << boundsArray[x] << std::endl;
                 }
             }
 
-            comp->location = {boundsArray[0], boundsArray[1]};
-            comp->size = {boundsArray[2], boundsArray[3]};
+            comp->location = Point<int>(boundsArray[0], boundsArray[1]);
+            comp->size = Dimension<int>(boundsArray[2], boundsArray[3]);
+
+            std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
 
             if(comp->size.width == -1)
             {
@@ -407,53 +418,16 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
             }
         }
 
-		// calculate OffsetBounds for a component
-
-//		if (!comp->parentName.empty())
-//		{
-//			for (auto& component2 : container.components)
-//			{
-//				if (comp->parentName == component2->name)
-//				{
-//                    //Extra if checks allow for use of both relative and direct positioning
-//                    if(boundsArray[0] != 0)
-//                    {
-//                        comp->location.x = component2->location.x + boundsArray[0];
-//                    }
-//                    if(boundsArray[1] != 0)
-//                    {
-//                        comp->location.y = component2->location.y + boundsArray[1];
-//                    }
-//                    if(boundsArray[2] != 0)
-//                    {
-//                        comp->size.width = component2->size.width + boundsArray[2];
-//                    }
-//                    if(boundsArray[3] != 0)
-//                    {
-//                        comp->size.height = component2->size.height + boundsArray[3];
-//                    }
-//					goto done; // Found the parent, now jump to end
-//				}
-//			}
-			
-			// If a parent is found then this will be skipped
-//		}
-
-        container.components.push_back(std::move(comp));
+        container.components.push_back(comp);
 	}
 
-	std::stringstream tempStream;
-	tempStream << container.components.size();
+    log(UK_LOG_LEVEL_INFO, concat("Loaded UI data, found", intToString(container.components.size()), "components"));
 
-    log(UK_LOG_LEVEL_INFO, concat("Loaded UI data, found", tempStream.str(), "components"));
-
-	tempStream.clear();
-
-	//for (auto comp : container.components)
-	//{
-	//	std::cout << "Component: " << comp.name << ", Bounds (" << comp.location.x << ", " << comp.location.y << ", " << comp.size.width << ", " << comp.size.height << ")" << std::endl;
-	//	std::cout << "Component: " << comp.name << ", Bounds (" << comp.offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
-	//}
+	for (auto& comp : container.components)
+	{
+		std::cout << "Component: " << comp->name << ", Bounds (" << comp->location.x << ", " << comp->location.y << ", " << comp->size.width << ", " << comp->size.height << ")" << std::endl;
+		//std::cout << "Component: " << comp->name << ", Bounds (" << comp->offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
+	}
 
 	return container;
 }

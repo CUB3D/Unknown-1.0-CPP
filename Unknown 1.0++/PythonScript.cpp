@@ -66,14 +66,28 @@ Unknown::Python::getInterpreter()->checkError(moduleNamePyString);
     return callable;
 }
 
+PyObject* getModule(const std::string& name) {
+    PyObject* modulePyString = PyUnicode_FromString(name.c_str());
+    PyObject* module = PyImport_Import(modulePyString);
+    Unknown::Python::getInterpreter()->checkError(module);
+    return module;
+}
+
 void createMethod(std::string moduleName, PyObject* callable, std::string functionName)
 {
-    PyObject* moduleNameString = PyUnicode_FromString(moduleName.c_str());
-    PyObject* module = PyImport_Import(moduleNameString);
-    Unknown::Python::getInterpreter()->checkError(module);
+    PyObject* module = getModule(moduleName);
     PyObject* originalDict = PyModule_GetDict(module);
     Unknown::Python::getInterpreter()->checkError(originalDict);
     PyDict_SetItemString(originalDict, functionName.c_str(), callable);
+}
+
+void callMethod(std::string moduleName, std::string methodName, PyObject* argsTuple) {
+    PyObject* module = getModule(moduleName);
+    PyObject* dict = PyModule_GetDict(module);
+    PyObject* callable = PyDict_GetItem(dict, PyUnicode_FromString(methodName.c_str()));
+    //PyCFunction_Call(callable, argsTuple, nullptr);
+    PyEval_CallObject(callable, argsTuple);
+
 }
 
 void registerMethod(std::string moduleName, std::string functionName, std::string functionDescription, PyCFunction callback)
@@ -448,4 +462,6 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
             PyObject_CallObject(initFunction, NULL);
         }
     }
+
+    callMethod("Test", "hello", PyTuple_New(0));
 }

@@ -14,6 +14,9 @@ kb_down = Keybind(0x40000051, "down")
 PLAYER_SPEED_HORIZONTAL = 4
 PLAYER_SPEED_VERTICAL = 4
 
+def hello():
+    print("Hello, World")
+
 
 def render():
     pass

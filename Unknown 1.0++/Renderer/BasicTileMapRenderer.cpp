@@ -7,15 +7,14 @@
 #include "../Unknown.h"
 
 Unknown::BasicTileMapRenderer::BasicTileMapRenderer(Map &map1, std::function<void(int, int, int, int)> renderer1,
-                                                    bool isGlobal) : map(map1), renderer(std::move(renderer1)) {
+                                                    bool isGlobal) : map(map1), renderer(std::move(renderer1)), camera(map.mapSize.width, map.mapSize.height) {
     if(isGlobal) {
         registerHook([&] { this->render(); }, HookType::RENDER);
     }
-    this->camera.setPosition(0, 0, map.mapSize.width, map.mapSize.height);
 }
 
 void Unknown::BasicTileMapRenderer::render() const {
-    auto bounds = camera.getTileBounds();
+    auto bounds = camera.getBounds();
 
     for(int x = bounds.x; x < bounds.w + bounds.x; x++) {
         for(int y = bounds.y; y < bounds.h + bounds.y; y++) {
@@ -28,6 +27,12 @@ void Unknown::BasicTileMapRenderer::render() const {
 
 Unknown::BasicTileMapRenderer::BasicTileMapRenderer(Map &map1,
                                                     std::function<void(int, int, int, int)> renderer1) : BasicTileMapRenderer(map1, renderer1, true){
+
+}
+
+Unknown::Rect<int> Unknown::BasicTileMapRenderer::getRenderBounds() {
+    auto b = camera.getBounds();
+    return Rect<int>(b.x, b.y, b.h, b.w);
 
 }
 

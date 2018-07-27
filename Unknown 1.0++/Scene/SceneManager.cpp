@@ -6,7 +6,7 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-Unknown::SceneManager::SceneManager()
+Unknown::SceneManager::SceneManager() : currentSceneName("")
 {
 }
 
@@ -27,6 +27,7 @@ void Unknown::SceneManager::add(std::shared_ptr<Scene> scene)
 void Unknown::SceneManager::loadScene(const std::string sceneName)
 {
     //TODO: error checking
+    this->currentSceneName = sceneName;
     this->currentScene = this->scenes[sceneName];
     this->sceneHistory.push(sceneName);
 }

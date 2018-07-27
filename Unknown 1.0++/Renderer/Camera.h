@@ -12,17 +12,16 @@ namespace Unknown
 {
     class Camera
     {
-        Rect<int> tileArea;
         Rect<double> area;
         double speed = 1;
-        int tileSize = 1;
 
     public:
-        Camera();
+        Camera(int width, int height);
         void move(Direction d);
         void setPosition(double x, double y, double width, double height);
 
-        virtual Rect<int> getTileBounds() const;
+        virtual Rect<double> getBounds() const;
+        virtual void render();
     };
 }
 

@@ -38,7 +38,7 @@ namespace Unknown
 		SDL_Surface* s;
 		SDL_Window* window;
 		SDL_Renderer* windowRenderer;
-		const Dimension<int>* screenSize;
+		std::shared_ptr<Dimension<int>> screenSize;
 		::Unknown::SceneManager globalSceneManager;
 
 
@@ -94,5 +94,8 @@ namespace Unknown
 
 	void callHooks(HookType type);
 }
+
+#define UK_ADD_SCENE(x) ::Unknown::getUnknown()->globalSceneManager.add(x)
+#define UK_LOAD_SCENE(x) ::Unknown::getUnknown()->globalSceneManager.loadScene(x)
 
 #endif

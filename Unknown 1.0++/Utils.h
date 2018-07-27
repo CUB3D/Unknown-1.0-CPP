@@ -43,10 +43,7 @@ namespace Unknown
 
 		}
 
-		Dimension(T t1, T t2) {
-			this->width = t1;
-			this->width = t2;
-		}
+		Dimension(T t1, T t2) : width(t1), height(t2){}
 	};
 
 	template < class T >
@@ -72,6 +69,14 @@ namespace Unknown
 		T x, y, w, h;
 		Rect() : Rect(0, 0, 0, 0) {}
 		Rect(T x, T y, T w, T h) : x(x), y(y), w(w), h(h) {}
+
+		Rect<int> operator *(int value) {
+			return Rect<int>(x * value, y * value, w * value, h * value);
+		}
+
+		Rect<int> operator /(int value) {
+			return Rect<int>(x / value, y / value, w / value, h / value);
+		}
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);
@@ -81,12 +86,14 @@ namespace Unknown
 	std::shared_ptr<Colour> getColourFromString(std::string str);
 
 	bool isCharCodeNumber(const char* key);
+	bool isStringNumerical(const std::string& str);
 
 	std::vector<std::string> tokenise(std::string input, std::vector<std::string> extraTokens);
 
 	long long randInt(const int min, const int max);
 
     bool stringToInt(const std::string& str, int& out);
+    std::string intToString(const int x);
 }
 
 #define RANDINT(min, max) ::Unknown::randInt(min, max)

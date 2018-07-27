@@ -17,8 +17,13 @@ namespace Unknown
         InputState keyState;
     };
 
-    class KeyEvent : public Event
-    {
+    class KeyEvent : public Event {};
+
+    class ResizeEvent : public Event {
+    public:
+        ResizeEvent(const int w, const int h);
+        int newWidth;
+        int newHeight;
     };
 
 }

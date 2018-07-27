@@ -20,6 +20,7 @@ namespace Unknown
     private:
         std::map<std::string, std::shared_ptr<Scene>> scenes;
     public:
+        std::string currentSceneName;
         std::shared_ptr<Scene> currentScene;
         std::stack<std::string> sceneHistory;
 

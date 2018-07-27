@@ -47,6 +47,8 @@ namespace Unknown
 
 		MapCellProxy operator[](int pos);
 		MapCellProxy operator()(int p1, int p2);
+
+		Map& operator=(const Map& other);
 	};
 }
 
