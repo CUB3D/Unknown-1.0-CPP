@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <algorithm>
+#include <locale>
 
 Unknown::Direction up(0, 1);
 Unknown::Direction down(0, -1);
@@ -104,7 +105,7 @@ bool Unknown::isCharCodeNumber(const char* key)
 
 bool Unknown::isStringNumerical(const std::string& str) {
     return !str.empty() && std::find_if(str.begin(), str.end(), [](char c) {
-        return !std::isdigit(c);
+        return !std::isdigit(c, std::locale());
     }) == str.end();
 }
 

@@ -33,6 +33,7 @@ namespace Unknown
 		Dimension<int> mapSize;
 
 		Map(const int width, const int height);
+		Map(const Map& map);
 
 		void setTileID(const int tileID, const int x, const int y);
 		int getTileID(const int x, const int y);

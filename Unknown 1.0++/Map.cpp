@@ -13,6 +13,10 @@ Unknown::Map::Map(const int width, const int height)
 	this->data =std::make_unique<int[]>(width * height);
 }
 
+Unknown::Map::Map(const Map& map) {
+	this->operator=(map);
+}
+
 void Unknown::Map::setTileID(const int tileID, const int x, const int y)
 {
 	this->map[mapSize.width * y + x] = tileID;

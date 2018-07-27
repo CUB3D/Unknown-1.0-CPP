@@ -3,6 +3,7 @@
 //
 
 #include "Sound.h"
+#include <cstdio>
 
 Unknown::Sound::Sound(Mix_Chunk* chunk) : chunk(chunk) {
 }
