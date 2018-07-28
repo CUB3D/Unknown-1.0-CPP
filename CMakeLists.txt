@@ -49,6 +49,15 @@ if(SDL_MXIXER_FOUND)
 endif()
 
 # Find python
+
+if(WIN32)
+	set(Python3_FOUND TRUE)
+	set(Python3_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
+	set(Python3_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
+endif()
+
+#TODO: Make work on windows and add REQUIRED
+
 find_package(Python3 COMPONENTS Development)
 if(Python3_FOUND)
     message("Python found: ${Python3_INCLUDE_DIRS}:${Python3_LIBRARIES}")
@@ -84,6 +93,9 @@ endif()
 
 SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${Python3_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${WIN32_LIBS})
 SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${Python3_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
+
+message("LIBS: ${COMBINED_LIBS}")
+message("INCLUDE: ${COMBINED_INCLUDE}")
 
 
 FILE(GLOB_RECURSE UK_ENGINE_SRC "Unknown 1.0++/*.cpp")
