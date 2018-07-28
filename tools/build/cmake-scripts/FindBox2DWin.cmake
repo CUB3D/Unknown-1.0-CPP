@@ -43,7 +43,7 @@ endif()
 
 find_path(
 	BOX2D_INCLUDE_DIR
-	Box2D/Box2D.hpp
+	Box2D/Box2D.h
 	PATH_SUFFIXES
 		include
 	PATHS
@@ -53,6 +53,7 @@ find_path(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
+		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D
 )
 
 find_library(
@@ -68,11 +69,12 @@ find_library(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
+		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Release
 )
 
 find_library(
 	BOX2D_LIBRARY_DEBUG
-	box2d${BOX2D_SUFFIX}-d
+	box2d${BOX2D_SUFFIX}
 	PATH_SUFFIXES
 		lib
 		lib64
@@ -83,7 +85,9 @@ find_library(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
+		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Debug
 )
+
 
 if(BOX2D_LIBRARY_RELEASE AND BOX2D_LIBRARY_DEBUG)
 	set(BOX2D_LIBRARY debug ${BOX2D_LIBRARY_DEBUG} optimized ${BOX2D_LIBRARY_RELEASE})
