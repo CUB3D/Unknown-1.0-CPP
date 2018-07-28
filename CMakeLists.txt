@@ -16,7 +16,7 @@ if(WIN32)
 	set(UK_LIB "${UK_DIR}/Output/lib/nt")
 endif()
 
-set(RJ_INCLUDE ${UK_DIR}/Libs/Rapidjson/include/rapidjson)
+set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
 set(CMAKE_MODULE_PATH ${UK_DIR}/tools/build/cmake-scripts)
 
