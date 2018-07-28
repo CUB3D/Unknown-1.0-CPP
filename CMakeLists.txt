@@ -54,11 +54,17 @@ if(PYTHONLIBS_FOUND)
     message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
 endif()
 
-# Find box2d
-find_package(Box2D REQUIRED)
+if(UNIX)
+    # Find box2d
+    find_package(Box2D REQUIRED)
+endif()
+if(WIN32)
+    find_package(Box2DWin REQUIRED)
+endif()
+
 if(BOX2D_FOUND)
     message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
-endif()
+endif(BOX2D_FOUND)
 
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
