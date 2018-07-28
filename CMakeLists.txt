@@ -69,7 +69,7 @@ endif(BOX2D_FOUND)
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
 
-add_executable(devTool "DevLib/UnknownTest.cpp")
+#add_executable(devTool "DevLib/UnknownTest.cpp")
 
 
 if(UNIX)
