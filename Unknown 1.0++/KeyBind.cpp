@@ -4,7 +4,7 @@
 
 #include "KeyBind.h"
 
-Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode) {
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED) {
     registerEventHandler(ET_KEYPRESS, name, [&] (Event& evt){this->handle(evt);});
 }
 

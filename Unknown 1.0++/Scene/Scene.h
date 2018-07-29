@@ -13,6 +13,7 @@
 #include "../UI.h"
 #include "../Font.h"
 #include "../Renderer/IRenderable.h"
+#include "../IUpdateable.h"
 
 namespace Unknown
 {
@@ -20,11 +21,12 @@ namespace Unknown
     {
     public:
         std::vector<std::shared_ptr<IRenderable>> renderables;
+        std::vector<std::shared_ptr<IUpdateable>> updatables;
         b2World world;
         const std::string name;
         Scene(const std::string name);
 
-        virtual void render() const; //TODO: this should render all renderables and when creating something renderable it should add itself to the current scene, also finish partial map rendering to only render
+        virtual void render() const; //TODO: when creating something renderable it should add itself to the current scene, also finish partial map rendering to only render
                 // TODO:                         The section that is currently visible
         virtual void update();
     };
