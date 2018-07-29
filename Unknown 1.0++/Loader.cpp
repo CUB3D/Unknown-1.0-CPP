@@ -11,9 +11,10 @@
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include "Entity/BasicRenderComponent.h"
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
-std::map<const char*, std::unique_ptr<Unknown::Entity>> Unknown::Loader::entityPool;
+//std::map<const char*, std::unique_ptr<Unknown::Entity>> Unknown::Loader::entityPool;
 std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
@@ -129,9 +130,21 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 
 		if(typeString == "BasicRenderer") {
 			auto colourValue = component.FindMember("Colour");
-			if(colourValue != component.MemberEnd()) {gi
+			Colour col = Colour::BLUE;
+
+			if(colourValue != component.MemberEnd()) {
+				col = *getColourFromString(colourValue->value.GetString());
 			}
 
+
+			auto renderValue = component.FindMember("RenderScale");
+			int renderScale = 1;
+
+			if (renderValue != component.MemberEnd()) {
+				renderScale = renderValue->value.GetInt();
+			}
+
+			ent->components.push_back(std::make_shared<BasicRenderComponent>(col, renderScale));
 		}
 
 		if(typeString == "Collider") {
@@ -143,7 +156,7 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 
 
 
-
+#ifdef NOPE
 	rapidjson::Value* spriteValue = getValue("Sprite", rapidjson::Type::kStringType, doc);
 
 	Sprite* sprite = NULL;
@@ -204,9 +217,9 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		}
 	}
 
-	entityPool[name] = std::move(entity);
+//	entityPool[name] = std::move(entity);
+#endif
 
-	return entity;
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
