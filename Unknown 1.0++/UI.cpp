@@ -179,17 +179,17 @@ void Unknown::ButtonComponent::render() const
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Colour* col = this->colour.get();
+	Colour col = *this->colour;
 
 	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.width)
 	{
 		if (mouseY >= this->location.y && mouseY <= this->location.y + this->size.height)
 		{
-			col = &Colour::WHITE;
+			col = Colour::WHITE;
 		}
 	}
 
-	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *col);
+	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, col);
 
 	if(this->content.size() > 0)
 	{

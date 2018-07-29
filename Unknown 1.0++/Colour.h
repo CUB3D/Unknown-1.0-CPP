@@ -9,19 +9,21 @@ namespace Unknown
 	class Colour
 	{
 	public:
-		static Colour RED;
-		static Colour GREEN;
-		static Colour BLUE;
-		static Colour BLACK;
-		static Colour WHITE;
+		const static Colour RED;
+		const static Colour GREEN;
+		const static Colour BLUE;
+		const static Colour BLACK;
+		const static Colour WHITE;
 
-		const int red;
-		const int green;
-		const int blue;
-		const int alpha;
+	    int red;
+		int green;
+		int blue;
+		int alpha;
 
 		Colour(const int red, const int green, const int blue, const int alpha);
 		Colour(const int red, const int green, const int blue);
+
+		Colour& operator=(const Colour& other);
 
 		SDL_Color toSDLColour() const;
 	};

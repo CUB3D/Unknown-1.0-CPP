@@ -17,8 +17,17 @@ SDL_Color Unknown::Colour::toSDLColour() const
 	return SDL_Color {(uint8_t) this->red, (uint8_t) this->green, (uint8_t) this->blue, (uint8_t) this->alpha};
 }
 
-Unknown::Colour Unknown::Colour::RED = Colour(255, 0, 0);
-Unknown::Colour Unknown::Colour::GREEN = Colour(0, 255, 0);
-Unknown::Colour Unknown::Colour::BLUE = Colour(0, 0, 255);
-Unknown::Colour Unknown::Colour::BLACK = Colour(0, 0, 0);
-Unknown::Colour Unknown::Colour::WHITE = Colour(255, 255, 255);
+Unknown::Colour& Unknown::Colour::operator=(const Colour& other) {
+	this->red = other.red;
+	this->green = other.green;
+	this->blue = other.blue;
+	this->alpha = other.alpha;
+
+	return *this;
+}
+
+const Unknown::Colour Unknown::Colour::RED = Colour(255, 0, 0);
+const Unknown::Colour Unknown::Colour::GREEN = Colour(0, 255, 0);
+const Unknown::Colour Unknown::Colour::BLUE = Colour(0, 0, 255);
+const Unknown::Colour Unknown::Colour::BLACK = Colour(0, 0, 0);
+const Unknown::Colour Unknown::Colour::WHITE = Colour(255, 255, 255);
