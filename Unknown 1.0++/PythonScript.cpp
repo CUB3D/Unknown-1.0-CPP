@@ -462,6 +462,4 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
             PyObject_CallObject(initFunction, NULL);
         }
     }
-
-    callMethod("Test", "hello", PyTuple_New(0));
 }

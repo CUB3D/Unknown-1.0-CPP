@@ -9,7 +9,6 @@
 #include "Image.h"
 #include "Sprite.h"
 #include "Input.h"
-#include "Entity.h"
 #include "Physics.h"
 #include "Loader.h"
 #include "Animation.h"
@@ -36,6 +35,8 @@
 #include <Renderer/BasicTileMapRenderer.h>
 #include "Map/BinaryMapGenerator.h"
 
+#include "PhysicsTestScene.h"
+
 Unknown::Map map(1, 1);
 Unknown::Timer timer(0.2f);
 
@@ -46,15 +47,6 @@ int height = 64;
 int scaleX = 0;
 int scaleY = 0;
 
-//b2BodyDef testDef;
-//b2Body* testObj;
-//b2PolygonShape testShape;
-//b2FixtureDef testFixture;
-//
-//b2BodyDef groundBody;
-//b2PolygonShape groundShape;
-//b2Body* groundBodyObj;
-
 #define PIXEL_PER_METER 64
 
 Unknown::Graphics::ImageSprite tmp(0, 0, nullptr);
@@ -64,23 +56,6 @@ void renderTile(int, int, int, int);
 
 void createBoard()
 {
-
-//    groundBody.position.Set(0.0f, 25.0f);
-//    groundBodyObj = scenes.currentScene->world.CreateBody(&groundBody);
-//    groundShape.SetAsBox(50.0f, 10.0f);
-//    groundBodyObj->CreateFixture(&groundShape, 0);
-//
-//
-//
-//    testDef.type = b2_dynamicBody;
-//    testDef.position.Set(0.0f, 3.0f);
-//    testObj = scenes.currentScene->world.CreateBody(&testDef);
-//    testShape.SetAsBox(1.0f, 1.0f);
-//    testFixture.shape = &testShape;
-//    testFixture.density = 1.0f;
-//    testFixture.friction = 0.3f;
-//    testObj->CreateFixture(&testFixture);
-
     map = Unknown::Map(width, height);
 
     Unknown::BinaryMapGenerator().generate(map);
@@ -185,9 +160,6 @@ void updateBoardSimulation()
 
         map = newMap;
     }
-
-//    tmp.location.y = testObj->GetPosition().y * PIXEL_PER_METER;
-//    printf("%f, %f\n", testObj->GetPosition().x, testObj->GetPosition().y);
 }
 
 void init()
@@ -205,7 +177,9 @@ void init()
     UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
     UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
+    UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
     UK_LOAD_SCENE("MainMenu");
+    UK_LOAD_SCENE("Phys");
 }
 
 
