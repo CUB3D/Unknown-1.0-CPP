@@ -57,7 +57,7 @@ int scaleY = 0;
 
 #define PIXEL_PER_METER 64
 
-Unknown::Graphics::ImageSprite tmp(0, 0, UK_LOAD_IMAGE("Player.png").release());
+Unknown::Graphics::ImageSprite tmp(0, 0, nullptr);
 std::shared_ptr<Unknown::BasicTileMapRenderer> boardRenderer;
 
 void renderTile(int, int, int, int);
@@ -196,6 +196,8 @@ void init()
     UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
 
     Unknown::registerEventHandler(Unknown::ET_WINDOW_RESIZE, "onResize", onResize);
+
+	tmp.image = new Unknown::Graphics::Image("Player.png");
 
 
     font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
