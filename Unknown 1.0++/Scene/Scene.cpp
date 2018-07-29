@@ -12,7 +12,11 @@ Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f
 
 void Unknown::Scene::update()
 {
-   this->world.Step(1/60.0f, 8, 8);
+   this->world.Step(getUnknown()->tickSpeed / 1000, 8, 3);
+
+   for(auto& updateable : this->updatables) {
+       updateable->update();
+   }
 }
 
 void Unknown::Scene::render() const {

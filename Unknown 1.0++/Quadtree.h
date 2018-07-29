@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.h"
+#include "Entity/Entity.h"
 #include <vector>
 #include "Utils.h"
 
@@ -10,7 +10,7 @@ namespace Unknown
 	{
 		std::vector<Entity*> entitys;
 
-		AABB quadBounds;
+		//AABB quadBounds;
 
 		void handleCollisions();
 	};

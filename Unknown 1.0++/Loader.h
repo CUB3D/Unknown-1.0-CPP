@@ -2,7 +2,7 @@
 			//postKeyEvent(evt);
 
 #include "Sprite.h"
-#include "Entity.h"
+#include "Entity/Entity.h"
 #include "Animation.h"
 #include "UI.h"
 

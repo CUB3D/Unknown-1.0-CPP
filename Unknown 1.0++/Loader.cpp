@@ -3,7 +3,6 @@
 
 #include "Sprite.h"
 #include "Utils.h"
-#include "Entity.h"
 #include "UI.h"
 #include "document.h"
 #include "Log.h"
@@ -122,13 +121,13 @@ std::unique_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const char* name)
 
 		if (type == "Entity")
 		{
-			entity = std::unique_ptr<Entity>(new Entity(sprite));
+			//entity = std::unique_ptr<Entity>(new Entity(sprite));
 		}
 		else
 		{
 			if (type == "TwoState")
 			{
-				entity = std::unique_ptr<Entity>(new TwoStateEntity(sprite));
+			//	entity = std::unique_ptr<Entity>(new TwoStateEntity(sprite));
 			}
 			else
 			{
@@ -155,7 +154,7 @@ std::unique_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const char* name)
 						maxHealth = health;
 					}
 
-					entity = std::unique_ptr<HealthEntity>(new HealthEntity(sprite, health, maxHealth));
+					//entity = std::unique_ptr<HealthEntity>(new HealthEntity(sprite, health, maxHealth));
 				}
 			}
 		}
