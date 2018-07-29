@@ -90,15 +90,59 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 	return sprite.get();
 }
 
-std::unique_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const char* name)
+std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& name)
 {
-	if (entityPool.find(name) != entityPool.end())
-	{
-		std::unique_ptr<Entity>& entityPrefab = entityPool.find(name)->second;
-		return std::unique_ptr<Entity>(entityPrefab->clone());
+	rapidjson::Document doc = readJSONFile(name.c_str());
+
+
+	auto widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
+	auto heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
+
+	std::shared_ptr<Entity> ent = std::make_shared<Entity>();
+
+	if(widthValue && heightValue) {
+		int width = widthValue->GetInt();
+		int height = heightValue->GetInt();
+		ent->size = Dimension<int>(width, height);
+	} else {
+		printf("[WARN] Entity %s has no size\n", name.c_str());
+		return ent;
 	}
 
-	rapidjson::Document doc = readJSONFile(name);
+	auto components = getValue("Components", rapidjson::Type::kObjectType, doc);
+
+	if(!components) {
+		printf("[WARN] Entity %s has no components\n", name.c_str());
+		return ent;
+	}
+
+	for(auto x = components->GetObject().MemberBegin(); x != components->MemberEnd(); x++) {
+		auto component = x->value.GetObject();
+
+		auto typeValue = component.FindMember("Type");
+		if(typeValue == component.MemberEnd()) {
+			printf("[ERR] Component %s of entity %s has no type\n", x->name.GetString(), name.c_str());
+			return ent;
+		}
+
+		auto typeString = typeValue->value.GetString();
+
+		if(typeString == "BasicRenderer") {
+			auto colourValue = component.FindMember("Colour");
+			if(colourValue != component.MemberEnd()) {gi
+			}
+
+		}
+
+		if(typeString == "Collider") {
+
+		}
+	}
+
+	return ent;
+
+
+
 
 	rapidjson::Value* spriteValue = getValue("Sprite", rapidjson::Type::kStringType, doc);
 
