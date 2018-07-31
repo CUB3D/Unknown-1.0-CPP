@@ -12,9 +12,9 @@
 #include <memory>
 #include <sstream>
 #include "Entity/BasicRenderComponent.h"
+#include "Entity/PhysicsBodyComponent.h"
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
-//std::map<const char*, std::unique_ptr<Unknown::Entity>> Unknown::Loader::entityPool;
 std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
@@ -91,7 +91,14 @@ Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 	return sprite.get();
 }
 
-std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& name)
+std::shared_ptr<Unknown::Entity>
+Unknown::Loader::loadEntityAt(const std::string &name, Scene &scene, double x, double y) {
+	auto ent = loadEntity(name, scene);
+	ent->setPosition(x, y);
+	return ent;
+}
+
+std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& name, Scene& scene)
 {
 	rapidjson::Document doc = readJSONFile(name.c_str());
 
@@ -126,8 +133,9 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 			return ent;
 		}
 
-		auto typeString = typeValue->value.GetString();
+		auto typeString = std::string(typeValue->value.GetString());
 
+		// Loading basic renderers
 		if(typeString == "BasicRenderer") {
 			auto colourValue = component.FindMember("Colour");
 			Colour col = Colour::BLUE;
@@ -136,7 +144,6 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 				col = *getColourFromString(colourValue->value.GetString());
 			}
 
-
 			auto renderValue = component.FindMember("RenderScale");
 			int renderScale = 1;
 
@@ -144,82 +151,38 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 				renderScale = renderValue->value.GetInt();
 			}
 
+			printf("rs: %d, col{%d, %d, %d}\n", renderScale, col.red, col.green, col.blue);
+
 			ent->components.push_back(std::make_shared<BasicRenderComponent>(col, renderScale));
 		}
 
 		if(typeString == "Collider") {
+		    auto colliderTypeValue = component.FindMember("ColliderType");
+			b2BodyType bodyType = b2_staticBody;
 
+		    if(colliderTypeValue != component.MemberEnd()) {
+		        auto colliderTypeString = std::string(colliderTypeValue->value.GetString());
+
+		        if(colliderTypeString == "Dynamic") {
+		            bodyType = b2_dynamicBody;
+		        }
+
+		        if(colliderTypeString == "Static") {
+		        	bodyType = b2_staticBody;
+		        }
+		    }
+
+
+		    auto maxSpeedValue = component.FindMember("MaxSpeed");
+		    if(maxSpeedValue != component.MemberEnd()) {
+		    	double maxSpeed = maxSpeedValue->value.GetDouble();
+		    }
+
+            ent->components.push_back(std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType));
 		}
 	}
 
 	return ent;
-
-
-
-#ifdef NOPE
-	rapidjson::Value* spriteValue = getValue("Sprite", rapidjson::Type::kStringType, doc);
-
-	Sprite* sprite = NULL;
-
-	if (spriteValue)
-	{
-		std::string spriteName = spriteValue->GetString();
-
-		sprite = UK_LOAD_SPRITE(spriteName.c_str());
-	}
-
-	std::unique_ptr<Entity> entity;
-
-	std::unique_ptr<rapidjson::Value> typeValue(getValue("Type", rapidjson::Type::kStringType, doc));
-
-	if (typeValue)
-	{
-		std::string type = typeValue->GetString();
-
-		if (type == "Entity")
-		{
-			//entity = std::unique_ptr<Entity>(new Entity(sprite));
-		}
-		else
-		{
-			if (type == "TwoState")
-			{
-			//	entity = std::unique_ptr<Entity>(new TwoStateEntity(sprite));
-			}
-			else
-			{
-				if (type == "Health")
-				{
-					int health = 0;
-					int maxHealth = 0;
-
-					rapidjson::Value* healthValue = getValue("Health", rapidjson::Type::kNumberType, doc);
-
-					if (healthValue)
-					{
-						health = healthValue->GetInt();
-					}
-
-					rapidjson::Value* maxHealthValue = getValue("MaxHealth", rapidjson::Type::kNumberType, doc);
-
-					if (maxHealthValue)
-					{
-						maxHealth = maxHealthValue->GetInt();
-					}
-					else
-					{
-						maxHealth = health;
-					}
-
-					//entity = std::unique_ptr<HealthEntity>(new HealthEntity(sprite, health, maxHealth));
-				}
-			}
-		}
-	}
-
-//	entityPool[name] = std::move(entity);
-#endif
-
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
@@ -477,7 +440,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
         container.components.push_back(comp);
 	}
 
-    log(UK_LOG_LEVEL_INFO, concat("Loaded UI data, found", intToString(container.components.size()), "components"));
+    UK_LOG_INFO("Loaded UI data, found", intToString(container.components.size()), "components");
 
 	for (auto& comp : container.components)
 	{

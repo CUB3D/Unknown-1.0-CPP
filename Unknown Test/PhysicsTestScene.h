@@ -11,13 +11,8 @@
 class PhysicsTestScene : public Unknown::Scene
 {
 public:
-    b2BodyDef groundBody;
-    b2PolygonShape groundShape;
-    b2Body* groundBodyObj;
-
     PhysicsTestScene();
 
-    virtual void render() const override;
     virtual void update() override;
 
 };

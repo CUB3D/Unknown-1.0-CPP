@@ -20,8 +20,8 @@ namespace Unknown
         b2PolygonShape shape;
         b2FixtureDef fixtureDefinition;
 
-    //public:
-    PhysicsBodyComponent(std::shared_ptr<Entity> ent, Scene *scene, b2BodyType type);
+        //public:
+        PhysicsBodyComponent(std::shared_ptr<Entity> ent, Scene *scene, b2BodyType type);
 
         virtual void update(Entity &ent) override;
     };

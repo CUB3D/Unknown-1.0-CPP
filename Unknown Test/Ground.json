@@ -1,17 +1,16 @@
 {
   "Tag": "Player",
-  "Width": 2,
-  "Height": 2,
+  "Width": 20,
+  "Height": 20,
   "Components": {
     "BRender": {
       "Type": "BasicRenderer",
-      "Colour": "FF0000",
+      "Colour": "00FF00",
       "RenderScale": 32
     },
     "Collider": {
       "Type": "Collider",
-      "ColliderType": "Dynamic",
-      "Friction": 0.3
+      "ColliderType": "Static"
     }
   }
 }

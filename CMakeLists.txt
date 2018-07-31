@@ -51,16 +51,26 @@ endif()
 # Find python
 
 if(WIN32)
-	set(Python3_FOUND TRUE)
-	set(Python3_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
-	set(Python3_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
+	#set(Python3_FOUND TRUE)
+	#set(Python3_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
+	#set(Python3_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
+    set(PYTHONLIBS_FOUND TRUE)
+    set(PYTHON_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
+    set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
 endif()
 
 #TODO: Make work on windows and add REQUIRED
 
-find_package(Python3 COMPONENTS Development)
-if(Python3_FOUND)
-    message("Python found: ${Python3_INCLUDE_DIRS}:${Python3_LIBRARIES}")
+#find_package(Python3 COMPONENTS Development)
+#if(Python3_FOUND)
+#    message("Python found: ${Python3_INCLUDE_DIRS}:${Python3_LIBRARIES}")
+#endif()
+
+#TODO: Add this back in when cmake 3.12 is available
+
+find_package(PythonLibs)
+if(PYTHONLIBS_FOUND)
+    message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
 endif()
 
 if(UNIX)
@@ -91,8 +101,8 @@ endif()
 
 
 
-SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${Python3_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${WIN32_LIBS})
-SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${Python3_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
+SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${WIN32_LIBS})
+SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
 
 message("LIBS: ${COMBINED_LIBS}")
 message("INCLUDE: ${COMBINED_INCLUDE}")

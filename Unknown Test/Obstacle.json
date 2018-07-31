@@ -5,13 +5,17 @@
   "Components": {
     "BRender": {
       "Type": "BasicRenderer",
-      "Colour": "FF0000",
+      "Colour": "0000FF",
       "RenderScale": 32
     },
     "Collider": {
       "Type": "Collider",
-      "ColliderType": "Dynamic",
-      "Friction": 0.3
+      "ColliderType": "Static",
+      "MaxSpeed": 10,
+      "Density": 1.0,
+      "Friction": 0.9,
+      "Restitution": 0.2,
+      "FixedRotation": true
     }
   }
 }

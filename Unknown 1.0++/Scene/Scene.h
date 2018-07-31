@@ -29,6 +29,16 @@ namespace Unknown
         virtual void render() const; //TODO: when creating something renderable it should add itself to the current scene, also finish partial map rendering to only render
                 // TODO:                         The section that is currently visible
         virtual void update();
+
+        template<class T>
+        void addObject(std::shared_ptr<T> obj) {
+            if(dynamic_cast<IRenderable*>(obj.get())) {
+                renderables.push_back(obj);
+            }
+            if(dynamic_cast<IUpdateable*>(obj.get())) {
+                updatables.push_back(obj);
+            }
+        }
     };
 
     class MenuScene : public Scene
