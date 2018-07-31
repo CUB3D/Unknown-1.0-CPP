@@ -20,7 +20,6 @@ Unknown::PhysicsBodyComponent::PhysicsBodyComponent(std::shared_ptr<Entity> ent,
 }
 
 void Unknown::PhysicsBodyComponent::update(Entity &ent) {
-    printf("%d\n", ent.position.y);
     ent.position.x = body->GetPosition().x;
     ent.position.y = body->GetPosition().y;
 }

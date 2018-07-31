@@ -81,13 +81,21 @@ void createMethod(std::string moduleName, PyObject* callable, std::string functi
     PyDict_SetItemString(originalDict, functionName.c_str(), callable);
 }
 
-void callMethod(std::string moduleName, std::string methodName, PyObject* argsTuple) {
+PyObject* Unknown::Python::Interpreter::getMethod(const std::string& method) {
+    auto moduleName = method.substr(0, method.find("."));
+    auto methodName = method.substr(method.find(".") + 1, method.size());
+
+    UK_LOG_INFO("Locating", moduleName, ".", methodName);
+
     PyObject* module = getModule(moduleName);
     PyObject* dict = PyModule_GetDict(module);
     PyObject* callable = PyDict_GetItem(dict, PyUnicode_FromString(methodName.c_str()));
-    //PyCFunction_Call(callable, argsTuple, nullptr);
-    PyEval_CallObject(callable, argsTuple);
+    return callable;
+}
 
+void Unknown::Python::Interpreter::callMethod(const std::string& methodName, PyObject* argsTuple) {
+    PyObject* callable = getMethod(methodName);
+    PyEval_CallObject(callable, argsTuple);
 }
 
 void registerMethod(std::string moduleName, std::string functionName, std::string functionDescription, PyCFunction callback)
@@ -101,7 +109,7 @@ PyObject* PyGetElement(PyObject* sequence, int index, std::string pyFuncName, in
     PyObject* element = PySequence_GetItem(sequence, index);
 
     if(!element) {
-        UK_LOG_ERROR_VERBOSE(::Unknown::concat("Invalid element at ", pyFuncName, ":", line));
+        UK_LOG_ERROR_VERBOSE("Invalid element at", pyFuncName, ":", ::Unknown::intToString(line));
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -156,7 +164,7 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
     PyObject* capsule = PY_MAKE_CAPSULE(image.release(), "Image", [](PyObject* a){});
 
     if(!capsule) {
-        UK_LOG_ERROR(::Unknown::concat("Unable to form capsule@", __FILE__, "@", __FUNCTION__, ":", __LINE__));
+        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -265,7 +273,7 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 
     const char* message_cStr = PY_GET_UTF8(args, 1);
 
-    Unknown::log(loglevelValue, message_cStr);
+    Unknown::log(loglevelValue, {message_cStr});
 
     Py_RETURN_NONE;
 }
@@ -310,7 +318,7 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
     }
 
     if(!capsule) {
-        UK_LOG_ERROR(::Unknown::concat("Unable to form capsule@", __FILE__, "@", __FUNCTION__, ":", __LINE__));
+        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -450,7 +458,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     registerMethod("Unknown", "raw_get_shared", "Get shared value", getSharedValue);
     registerMethod("Unknown", "raw_set_shared", "Set shared value", setSharedValue);
 
-    log(UK_LOG_LEVEL_INFO, concat("Loading script", name));
+    UK_LOG_INFO("Loading script", name);
 
     PyObject *testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);

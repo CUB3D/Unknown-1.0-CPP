@@ -29,7 +29,23 @@ namespace Unknown
         virtual void update() override;
         virtual void render() const override;
 
+
+        void setPosition(double x, double y);
+
+
         virtual Rect<int> getRenderBounds();
+
+        template<typename T>
+        std::shared_ptr<T> getComponent() {
+            for(auto& component : this->components) {
+                auto casted = std::dynamic_pointer_cast<T>(component);
+                if(casted) {
+                    return casted;
+                }
+            }
+
+            return nullptr;
+        }
 
         //TODO: tmp
         Entity* clone();

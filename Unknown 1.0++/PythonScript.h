@@ -18,6 +18,9 @@ namespace Unknown
             void addSearchPath(std::string name);
             void loadScript(std::string name);
             void init();
+
+            PyObject* getMethod(const std::string& method);
+            void callMethod(const std::string& method, PyObject* argsTuple);
         };
 
         extern Interpreter* instance;

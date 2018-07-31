@@ -13,7 +13,10 @@ try:
 except:
 	pass
 
-pathlib.Path(outDir).mkdir(parents=True, exist_ok=True)
+try:
+    os.makedirs(outDir, exist_ok=True)
+except:
+    pass
 
 for base, dirs, files in os.walk(inDir):
 	for file in files:
