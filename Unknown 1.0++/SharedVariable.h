@@ -55,6 +55,9 @@ namespace Unknown
         operator std::string();
 
 
+        std::string toString();
+
+
         double operator ++();
         double operator ++(int dummy); // postfix
     };

@@ -12,7 +12,8 @@
       "Type": "Collider",
       "ColliderType": "Dynamic",
       "Friction": 0.3,
-      "MaxSpeed": 10
+      "MaxSpeed": 10,
+      "GroupIndex": -2
     }
   }
 }

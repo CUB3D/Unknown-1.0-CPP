@@ -8,5 +8,5 @@ Unknown::ImageRenderComponent::ImageRenderComponent(const std::string &filename,
 
 void Unknown::ImageRenderComponent::render(const Entity &ent) const {
     img.render((ent.position.x - ent.size.width / 2) * renderScale,
-               (ent.position.y - ent.size.height / 2) * renderScale);
+               (ent.position.y - ent.size.height / 2) * renderScale, (ent.angle / 3.141) * 180);
 }

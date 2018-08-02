@@ -5,7 +5,7 @@
 #include "Sound.h"
 #include <cstdio>
 
-Unknown::Sound::Sound(Mix_Chunk* chunk) : chunk(chunk) {
+Unknown::Sound::Sound(Mix_Chunk* chunk) : chunk(chunk), channel(-1) {
 }
 
 void Unknown::Sound::play(int loops)  {
@@ -13,14 +13,14 @@ void Unknown::Sound::play(int loops)  {
         this->init();
     }
 
-    this->channel = Mix_PlayChannel(-1, this->chunk, loops - 1);
+    this->channel = Mix_PlayChannel(this->channel, this->chunk, loops - 1);
     if(this->channel == -1) {
         printf("Unable to play audio: %s\n", Mix_GetError());
     }
 }
 
 void Unknown::Sound::playSingle()  {
-    this->play(0);
+    this->play(1);
 }
 
 Unknown::Sound::~Sound() {

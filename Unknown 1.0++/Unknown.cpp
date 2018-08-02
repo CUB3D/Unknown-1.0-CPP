@@ -83,6 +83,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
         quit(ErrorCodes::SDL_MIXER_OPEN_AUDIO_FAIL);
     }
 
+    Mix_AllocateChannels(64);
+
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 

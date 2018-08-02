@@ -212,7 +212,14 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		        bullet = bulletValue->value.GetBool();
 		    }
 
-		    auto phys = std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType, bullet);
+		    auto groupIndexValue = component.FindMember("GroupIndex");
+		    int groupIndex = 0;
+
+		    if(groupIndexValue != component.MemberEnd()) {
+		        groupIndex = groupIndexValue->value.GetInt();
+		    }
+
+		    auto phys = std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType, bullet, groupIndex);
 
 
 		    auto maxSpeedValue = component.FindMember("MaxSpeed");

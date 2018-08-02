@@ -14,6 +14,7 @@
 #include "PythonScript.h"
 #include "Entity/TimerComponent.h"
 #include "Font.h"
+#include "Audio/WAVSound.h"
 
 using namespace Unknown;
 using namespace Unknown::Graphics;
@@ -22,30 +23,30 @@ KeyBind p1up(SDLK_UP, "jump");
 KeyBind p1left(SDLK_LEFT, "left");
 KeyBind p1right(SDLK_RIGHT, "right");
 KeyBind p1fire(SDLK_RCTRL, "shoot");
+Timer p1FireTimer(0.3f);
 
 KeyBind p2up(SDLK_w, "jump2");
 KeyBind p2left(SDLK_a, "left2");
 KeyBind p2right(SDLK_d, "right2");
 KeyBind p2fire(SDLK_e, "shoot2");
+Timer p2FireTimer(0.3f);
 
 bool p1onGround;
 bool p2onGround;
 
-int p1;
-int p2;
-
-SharedVariable p1Score("p1Score", std::string("0"));
-SharedVariable p2Score("p2Score", std::string("0"));
+SharedVariable p1Score("p1Score", 0.0);
+SharedVariable p2Score("p2Score", 0.0);
 
 UIContainer ui;
+
+WAVSound fire("Fire.wav");
+WAVSound hit("Hit.wav");
 
 //TODO: particles;
 //TODO: image renderer
 //TODO: render map with camera
 //TODO: render scene with camera
 //TODO: ingame editor
-
-//TODO: make sharedvar have a tostring method, store int conv to str for ui
 
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     UK_PYTHON_LOAD_SCRIPT("Test");
@@ -75,55 +76,65 @@ void PhysicsTestScene::update() {
     // Handle player 1 movement
     auto player = getObject<Entity>("Player");
     auto otherPlayer = getObject<Entity>("OtherPlayer");
-    auto body = player->getComponent<PhysicsBodyComponent>()->body;
+    auto body = player->getComponent<PhysicsBodyComponent>();
 
     if(p1up.pressed() && p1onGround) {
-        body->ApplyForceToCenter(b2Vec2(0, -3000), true);
+        body->applyForce(Vector(0, -3000));
     }
 
     if(p1left.pressed()) {
-        body->ApplyForceToCenter(b2Vec2(-200, 0), true);
+        body->applyForce(Vector(-200, 0));
     }
 
     if(p1right.pressed()) {
-        body->ApplyForceToCenter(b2Vec2(200, 0), true);
+        body->applyForce(Vector(200, 0));
     }
 
-    if(p1fire.pressed()) {
+    if(p1fire.pressed() && p1FireTimer.isTickComplete()) {
+        fire.playSingle();
+
         auto bullet = UK_LOAD_ENTITY_AT("Bullet.json", player->position.x + 1, player->position.y);
-        bullet->getComponent<PhysicsBodyComponent>()->body->ApplyForceToCenter(b2Vec2(100, 0), true);
+
+        auto vec = player->getComponent<PhysicsBodyComponent>()->getXDirection() * 100;
+
+        bullet->getComponent<PhysicsBodyComponent>()->body->ApplyForceToCenter(vec, true);
         this->addObject(bullet);
         contactManager.addListener(bullet, otherPlayer, [](auto objs, bool colliding) {
             if(colliding) {
-                p1++;
-                p1Score = intToString(p1);
+                hit.playSingle();
+                p1Score++;
                 objs.first->queueDisable();
             }
         });
     }
 
-    body = otherPlayer->getComponent<PhysicsBodyComponent>()->body;
+    body = otherPlayer->getComponent<PhysicsBodyComponent>();
 
     if(p2up.pressed() && p2onGround) {
-        body->ApplyForceToCenter(b2Vec2(0, -1000), true);
+        body->applyForce(Vector(0, -3000));
     }
 
     if(p2left.pressed()) {
-        body->ApplyForceToCenter(b2Vec2(-200, 0), true);
+        body->applyForce(Vector(-200, 0));
     }
 
     if(p2right.pressed()) {
-        body->ApplyForceToCenter(b2Vec2(200, 0), true);
+        body->applyForce(Vector(200, 0));
     }
 
-    if(p2fire.pressed()) {
-        auto bullet = UK_LOAD_ENTITY_AT("Bullet.json", otherPlayer->position.x + 1, otherPlayer->position.y);
-        bullet->getComponent<PhysicsBodyComponent>()->body->ApplyForceToCenter(b2Vec2(100, 0), true);
+    if(p2fire.pressed() && p2FireTimer.isTickComplete()) {
+        fire.playSingle();
+
+        auto bullet = UK_LOAD_ENTITY_AT("OtherBullet.json", otherPlayer->position.x + 1, otherPlayer->position.y);
+
+        auto vec = otherPlayer->getComponent<PhysicsBodyComponent>()->getXDirection() * 100;
+
+        bullet->getComponent<PhysicsBodyComponent>()->body->ApplyForceToCenter(vec, true);
         this->addObject(bullet);
         contactManager.addListener(bullet, player, [](auto objs, bool colliding) {
             if(colliding) {
-                p2++;
-                p2Score = intToString(p2);
+                hit.playSingle();
+                p2Score++;
                 objs.first->queueDisable();
             }
         });
