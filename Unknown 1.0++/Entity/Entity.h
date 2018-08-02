@@ -10,24 +10,30 @@
 #include "../IUpdateable.h"
 #include <vector>
 #include "../Utils.h"
+#include "../ITagable.h"
 
 namespace Unknown
 {
     class Component;
 
-    class Entity : public IRenderable, public IUpdateable
+    class Entity : public IRenderable, public IUpdateable, public ITagable
     {
     public:
         std::vector<std::shared_ptr<Component>> components;
 
-        Dimension<int> size;
+        Dimension<double> size;
         Point<double> position;
+        const std::string tag;
+        bool enabled;
+        bool queueDissable;
 
 
-        Entity();
+        Entity(const std::string& str);
 
         virtual void update() override;
         virtual void render() const override;
+        virtual void disable();
+        virtual void queueDisable();
 
 
         void setPosition(double x, double y);
@@ -47,8 +53,7 @@ namespace Unknown
             return nullptr;
         }
 
-        //TODO: tmp
-        Entity* clone();
+        virtual const std::string getTag() const;
     };
 }
 

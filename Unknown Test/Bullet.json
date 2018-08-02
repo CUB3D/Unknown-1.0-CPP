@@ -1,0 +1,25 @@
+{
+  "Tag": "Bullet",
+  "Width": 0.3,
+  "Height": 0.1,
+  "Components": {
+    "BRender": {
+      "Type": "BasicRenderer",
+      "Colour": "FF0000",
+      "RenderScale": 32
+    },
+    "Collider": {
+      "Type": "Collider",
+      "ColliderType": "Dynamic",
+      "Density": 1.0,
+      "Friction": 0.9,
+      "Restitution": 0.2,
+      "FixedRotation": true,
+      "Bullet": true
+    },
+    "DespawnTimer": {
+      "Type": "Timer",
+      "Delay": 1000
+    }
+  }
+}

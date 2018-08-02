@@ -15,9 +15,9 @@ namespace Unknown
     class Component
     {
     public:
-        // TODO: Should be pure
         virtual void update(Entity &ent);
         virtual void render(const Entity& ent) const;
+        virtual void onDisable(Entity& ent);
     };
 }
 

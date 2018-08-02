@@ -11,36 +11,8 @@ Unknown::SharedVariable::SharedVariable(const std::string &name) :name(name) {
     variablelookup[name] = this;
 }
 
-Unknown::SharedVariable::SharedVariable(const std::string &name, const double start) : name(name) {
-    *this = start;
-    variablelookup[name] = this;
-}
-
-Unknown::SharedVariable::SharedVariable(const std::string &name, const std::string &starting) {
-    *this = starting;
-    variablelookup[name] = this;
-}
-
-Unknown::SharedVariable &Unknown::SharedVariable::operator=(const std::string s) {
-    this->data = s;
-    return *this;
-}
-
-Unknown::SharedVariable &Unknown::SharedVariable::operator=(const double num) {
-    this->data = num;
-    return *this;
-}
-
-std::string Unknown::SharedVariable::getString() const {
-    return std::any_cast<std::string>(this->data);
-}
-
 const std::type_info& Unknown::SharedVariable::type() const {
     return this->data.type();
-}
-
-double Unknown::SharedVariable::getDouble() const {
-    return std::any_cast<double>(this->data);
 }
 
 bool Unknown::SharedVariable::initalised() {
@@ -52,8 +24,8 @@ double Unknown::SharedVariable::operator++() {
         *this = 0;
     }
 
-    this->data = getDouble() + 1;
-    return getDouble();
+    this->data = getValue<double>() + 1;
+    return getValue<double>();
 }
 
 double Unknown::SharedVariable::operator++(int dummy) {
@@ -61,7 +33,19 @@ double Unknown::SharedVariable::operator++(int dummy) {
         *this = 0;
     }
 
-    double old = getDouble();
+    double old = getValue<double>();
     this->data = old + 1;
     return old;
+}
+
+Unknown::SharedVariable::operator double() {
+    return getValue<double>();
+}
+
+Unknown::SharedVariable::operator std::string() {
+    return getValue<std::string>();
+}
+
+Unknown::SharedVariable::operator bool() {
+    return getValue<bool>();
 }

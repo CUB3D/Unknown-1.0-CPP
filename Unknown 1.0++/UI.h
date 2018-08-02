@@ -7,6 +7,7 @@
 #include "Utils.h"
 #include "Font.h"
 #include "Event/Event.h"
+#include "Renderer/IRenderable.h"
 
 #include <vector>
 #include <memory>
@@ -69,7 +70,6 @@ namespace Unknown
     public:
         TextComponent();
         virtual void render() const override;
-
     };
 
 	class ButtonComponent : public UIComponent
@@ -111,7 +111,7 @@ namespace Unknown
     #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_REMOVE_UI_LISTENER(id) ::Unknown::removeUIListener(id)
 
-	class UIContainer
+	class UIContainer : public IRenderable
 	{
 	public:
         UIContainer();
@@ -121,7 +121,8 @@ namespace Unknown
 		std::shared_ptr<UIComponent> getComponentByName(const std::string name);
 		std::string getComponentValue(const std::string& name);
 
-		void renderUI() const;
+		virtual void render() const override ;
+		virtual Rect<int> getRenderBounds() override;
         void initUI();
 
         void addComponent(std::shared_ptr<UIComponent> component);

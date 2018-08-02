@@ -99,6 +99,27 @@ def get_mouse_pos():
 # END
 
 
+# Variables
+def raw_get_shared(name):
+    pass
+
+def raw_set_shared(name, value):
+    pass
+# END
+
+# global variables
+class _sharedVars:
+    def __getattr__(self, item):
+        return raw_get_shared(item)
+
+    def __setattr__(self, key, value):
+        raw_set_shared(key, value)
+
+
+
+sharedVars = _sharedVars()
+# END
+
 # Vector
 def raw_vector_interface(capsule, ID, args):
     return 0

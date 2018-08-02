@@ -1,11 +1,11 @@
 {
-  "Tag": "Player",
+  "Tag": "OtherPlayer",
   "Width": 2,
   "Height": 2,
   "Components": {
     "BRender": {
-      "Type": "ImageRenderer",
-      "File": "Player.png",
+      "Type": "BasicRenderer",
+      "Colour": "FF0000",
       "RenderScale": 32
     },
     "Collider": {

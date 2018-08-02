@@ -8,6 +8,7 @@
 
 Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f))
 {
+    world.SetContactListener(&contactManager);
 }
 
 void Unknown::Scene::update()
@@ -38,7 +39,7 @@ Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::s
 
 void Unknown::MenuScene::render() const
 {
-    this->menu.renderUI();
+    this->menu.render();
     Scene::render();
 }
 
