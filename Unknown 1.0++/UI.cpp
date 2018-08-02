@@ -167,7 +167,7 @@ void Unknown::TextComponent::render() const
         // TODO Does this work with multiple replacements, size of string might change
         for (auto &sharedVar : variablelookup) {
             if (sharedVar.first == varname) {
-                std::string to = *sharedVar.second;
+                std::string to = sharedVar.second->toString();
                 cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
             }
         }

@@ -11,7 +11,7 @@
     "Collider": {
       "Type": "Collider",
       "ColliderType": "Dynamic",
-      "Friction": 0.3,
+      "GroupIndex": -1,
       "MaxSpeed": 10
     }
   }

@@ -38,3 +38,13 @@ Unknown::Vector Unknown::Vector::operator*(double other) const
 {
 	return Unknown::Vector(this->x * other, this->y * other);
 }
+
+Unknown::Vector::operator b2Vec2() const {
+    return b2Vec2(this->x, this->y);
+}
+
+Unknown::Vector::Vector(const b2Vec2 vec) : Vector(vec.x, vec.y) {}
+
+b2Vec2 Unknown::Vector::getBox2DVec() const {
+    return b2Vec2(this->x, this->y);
+}

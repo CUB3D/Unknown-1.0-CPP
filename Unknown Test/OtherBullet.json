@@ -16,7 +16,7 @@
       "Restitution": 0.2,
       "FixedRotation": true,
       "Bullet": true,
-      "GroupIndex": -1
+      "GroupIndex": -2
     },
     "DespawnTimer": {
       "Type": "Timer",

@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "SharedVariable.h"
 
 std::map<std::string, Unknown::SharedVariable*> Unknown::variablelookup;
@@ -48,4 +49,17 @@ Unknown::SharedVariable::operator std::string() {
 
 Unknown::SharedVariable::operator bool() {
     return getValue<bool>();
+}
+
+std::string Unknown::SharedVariable::toString() {
+    if(type() == typeid(std::string)) {
+        return getValue<std::string>();
+    }
+    if(type() == typeid(double)) {
+        std::stringstream ss;
+        ss << getValue<double>();
+        return ss.str();
+    }
+
+    return "N/A";
 }

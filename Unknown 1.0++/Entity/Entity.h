@@ -24,6 +24,7 @@ namespace Unknown
         Dimension<double> size;
         Point<double> position;
         const std::string tag;
+        double angle;
         bool enabled;
         bool queueDissable;
 
