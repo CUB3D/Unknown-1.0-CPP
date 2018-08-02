@@ -1,0 +1,21 @@
+{
+  "Background": {
+    "Type": "Rect",
+    "Bounds": [0, 0, -1, -1],
+    "Colour": "00000000"
+  },
+  "TextLabel1": {
+    "Type": "Text",
+    "InsideComponent": "Background",
+    "Colour": "ff000000",
+    "Content": "Score: ${p1Score}",
+    "Bounds": [10, 10, 0, 0]
+  },
+  "TextLabel2": {
+    "Type": "Text",
+    "InsideComponent": "Background",
+    "Colour": "ff000000",
+    "Content": "Score: ${p2Score}",
+    "Bounds": ["maxX-100", 10, 0, 0]
+  }
+}

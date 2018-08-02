@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <ctime>
+#include <regex>
 
 std::map <std::string, std::function<void(std::shared_ptr<Unknown::UIEvent>)> > Unknown::UIListeners;
 
@@ -35,13 +36,13 @@ Unknown::UIContainer::UIContainer()
     //NOOP
 }
 
-void Unknown::UIContainer::renderUI() const
+void Unknown::UIContainer::render() const
 {
     // Rendering
-	for (auto& comp : components)
-	{
-	    comp->render();
-	}
+    for (auto& comp : components)
+    {
+        comp->render();
+    }
 }
 
 void Unknown::UIContainer::setGlobalFont(std::shared_ptr<Graphics::Font> font)
@@ -80,6 +81,11 @@ void Unknown::UIContainer::addComponent(std::shared_ptr<UIComponent> component)
 
 std::string Unknown::UIContainer::getComponentValue(const std::string& name) {
     return getComponentByName(name)->content;
+}
+
+Unknown::Rect<int> Unknown::UIContainer::getRenderBounds() {
+    //TODO: calculate total size
+    return Rect<int>(1, 1, 1, 1);
 }
 
 // UIComponent
@@ -140,9 +146,34 @@ Unknown::TextComponent::TextComponent() : UIComponent(UI_TEXT)
     //NOOP
 }
 
+#include "SharedVariable.h"
+
 void Unknown::TextComponent::render() const
 {
-    font->drawString(this->content, this->location.x, this->location.y);
+    std::string cpy(this->content);
+
+    //TODO: this should somehow cache the shared var to remove need to re search
+
+    std::regex var("\\$\\{.+\\}");
+    std::smatch results;
+    std::regex_search(this->content, results, var);
+
+    for(auto result : results) {
+        std::string resultStr = std::string(result.first.base());
+        if (resultStr.empty())
+            continue;
+        std::string varname = resultStr.substr(2, resultStr.length() - 3);
+
+        // TODO Does this work with multiple replacements, size of string might change
+        for (auto &sharedVar : variablelookup) {
+            if (sharedVar.first == varname) {
+                std::string to = *sharedVar.second;
+                cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
+            }
+        }
+    }
+
+    font->drawString(cpy, this->location.x, this->location.y);
 }
 
 //ButtonComponent

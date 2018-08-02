@@ -27,6 +27,14 @@ namespace Unknown
 		SDL_MIXER_OPEN_AUDIO_FAIL = -31
 	};
 
+	enum EngineState {
+		UK_PRE_INIT, // Before renderer creation
+		UK_INIT, // Creating renderer
+		UK_POST_INIT, // Done creating render
+		UK_LOOP, // Game loop started
+		UK_QUIT // Game loop finished
+	};
+
 	class Unknown
 	{
 	private:
@@ -40,6 +48,7 @@ namespace Unknown
 		SDL_Renderer* windowRenderer;
 		std::shared_ptr<Dimension<int>> screenSize;
 		::Unknown::SceneManager globalSceneManager;
+		EngineState currentState = UK_PRE_INIT;
 
 
 		bool running = true;

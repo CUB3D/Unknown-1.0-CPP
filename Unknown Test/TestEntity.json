@@ -1,6 +1,0 @@
-{
-	"Type":"Health",
-	"Sprite":"TestSprite.json",
-	"Health":100,
-	"MaxHealth":150
-}

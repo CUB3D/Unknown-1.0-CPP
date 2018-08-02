@@ -13,6 +13,8 @@
 #include <sstream>
 #include "Entity/BasicRenderComponent.h"
 #include "Entity/PhysicsBodyComponent.h"
+#include "Entity/TimerComponent.h"
+#include "Entity/ImageRenderComponent.h"
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
 std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
@@ -105,16 +107,31 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 
 	auto widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
 	auto heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
+	auto tagValue = getValue("Tag", rapidjson::Type::kStringType, doc);
 
-	std::shared_ptr<Entity> ent = std::make_shared<Entity>();
+	std::shared_ptr<Entity> ent;
+	
+	std::string tag = tagValue ? std::string(tagValue->GetString()) : "";
+	ent = std::make_shared<Entity>(tag);
 
 	if(widthValue && heightValue) {
-		int width = widthValue->GetInt();
-		int height = heightValue->GetInt();
-		ent->size = Dimension<int>(width, height);
+		double width = widthValue->GetDouble();
+		double height = heightValue->GetDouble();
+		ent->size = Dimension<double>(width, height);
 	} else {
 		printf("[WARN] Entity %s has no size\n", name.c_str());
 		return ent;
+	}
+
+	auto xvalue = getValue("X", rapidjson::Type::kNumberType, doc);
+	auto yvalue = getValue("Y", rapidjson::Type::kNumberType, doc);
+
+	if(xvalue) {
+		ent->position.x = xvalue->GetDouble();
+	}
+
+	if(yvalue) {
+		ent->position.y = yvalue->GetDouble();
 	}
 
 	auto components = getValue("Components", rapidjson::Type::kObjectType, doc);
@@ -151,10 +168,26 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 				renderScale = renderValue->value.GetInt();
 			}
 
-			printf("rs: %d, col{%d, %d, %d}\n", renderScale, col.red, col.green, col.blue);
+			//printf("rs: %d, col{%d, %d, %d}\n", renderScale, col.red, col.green, col.blue);
 
 			ent->components.push_back(std::make_shared<BasicRenderComponent>(col, renderScale));
 		}
+
+		if(typeString == "ImageRenderer") {
+            auto renderValue = component.FindMember("RenderScale");
+            int renderScale = 1;
+
+            if (renderValue != component.MemberEnd()) {
+                renderScale = renderValue->value.GetInt();
+            }
+
+
+		    auto filenameValue = component.FindMember("File");
+		    if(filenameValue != component.MemberEnd()) {
+		        ent->components.push_back(std::make_shared<ImageRenderComponent>(std::string(filenameValue->value.GetString()), renderScale));
+		    }
+		}
+
 
 		if(typeString == "Collider") {
 		    auto colliderTypeValue = component.FindMember("ColliderType");
@@ -173,12 +206,32 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		    }
 
 
+		    auto bulletValue = component.FindMember("Bullet");
+		    bool bullet = false;
+		    if(bulletValue != component.MemberEnd()) {
+		        bullet = bulletValue->value.GetBool();
+		    }
+
+		    auto phys = std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType, bullet);
+
+
 		    auto maxSpeedValue = component.FindMember("MaxSpeed");
 		    if(maxSpeedValue != component.MemberEnd()) {
 		    	double maxSpeed = maxSpeedValue->value.GetDouble();
+		    	phys->maxSpeed = maxSpeed;
 		    }
 
-            ent->components.push_back(std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType));
+            ent->components.push_back(phys);
+		}
+
+
+		if(typeString == "Timer") {
+			auto delayValue = component.FindMember("Delay");
+			if(delayValue != component.MemberEnd()) {
+				if(delayValue->value.IsInt()) {
+					ent->components.push_back(std::make_shared<TimerComponent>(delayValue->value.GetInt()));
+				}
+			}
 		}
 	}
 
@@ -324,7 +377,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 			comp->content = contentString;
 		}
 
-        std::shared_ptr<UIComponent> parent = nullptr;
+        std::shared_ptr<UIComponent> parent;
 
         if (!comp->parentName.empty())
         {

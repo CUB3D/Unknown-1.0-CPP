@@ -1,7 +1,9 @@
 {
-  "Tag": "Player",
-  "Width": 2,
-  "Height": 2,
+  "Tag": "Obstacle",
+  "X": 15,
+  "Y": 18,
+  "Width": 20,
+  "Height": 1,
   "Components": {
     "BRender": {
       "Type": "BasicRenderer",

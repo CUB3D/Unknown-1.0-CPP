@@ -22,6 +22,8 @@
 #include <SDL_mixer.h>
 #include "Event/Event.h"
 #include "Event/EventManager.h"
+#include "Image.h"
+#include "Log.h"
 
 // unknown class
 
@@ -33,6 +35,8 @@ Unknown::Unknown::Unknown()
 
 void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
 {
+	this->currentState = UK_INIT;
+
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		printf("Error: SDL failed to initialise, %s\n", SDL_GetError());
@@ -83,6 +87,17 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->startTime = SDL_GetTicks();
 
 	this->screenSize = std::make_shared<Dimension<int>>(width, height);
+
+
+	// All of the images that were created early (i.e. given as args to sprites in constructor)
+	// Need to have init called as a render context is needed to make texture from image
+	// This specifically needs to be done before any images are rendered but after windowRenderer creation
+	UK_LOG_INFO("Performing late init for", intToString(Graphics::imageLateInit.size()), "images");
+	for(auto& image : Graphics::imageLateInit) {
+		image->init();
+	}
+
+	currentState = UK_POST_INIT;
 }
 
 void Unknown::Unknown::createWindow()
@@ -131,6 +146,8 @@ void Unknown::Unknown::createWindow()
 
 void Unknown::Unknown::initGameLoop()
 {
+	this->currentState = UK_LOOP;
+
 	initKeySystem();
 
 	while (running)
@@ -160,7 +177,7 @@ void Unknown::Unknown::initGameLoop()
 			this->unprocessed--;
 		}
 
-		this->clearScreen();
+		//this->clearScreen();
 
         auto renderStartTime = std::chrono::high_resolution_clock::now();
 		this->render();
@@ -235,6 +252,7 @@ void Unknown::Unknown::clearScreen()
 
 void Unknown::Unknown::quit(const int exitCode)
 {
+	this->currentState = UK_QUIT;
     // All Images must have been destroyed or this will cause a sigsev
 	SDL_DestroyRenderer(this->windowRenderer);
 	SDL_DestroyWindow(this->window);

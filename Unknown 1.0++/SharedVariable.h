@@ -7,9 +7,13 @@
 
 #include <map>
 #include <any>
+#include <functional>
 
 namespace Unknown
 {
+    class SharedVariable;
+    extern std::map<std::string, SharedVariable*> variablelookup;
+
     class SharedVariable
     {
         std::string name;
@@ -17,24 +21,43 @@ namespace Unknown
     public:
         std::any data;
 
-        SharedVariable(const std::string& name);
-        SharedVariable(const std::string& name, double starting);
-        SharedVariable(const std::string& name, const std::string& starting);
+        std::vector<std::function<void(SharedVariable v)>> changeListeners;
 
-        SharedVariable& operator=(const std::string s);
-        SharedVariable& operator=(const double num);
+        SharedVariable(const std::string& name);
+
+        template<typename T>
+        SharedVariable(const std::string& name, T starting) : name(name) {
+            *this = starting;
+            variablelookup[name] = this;
+        }
+
+
+        template<typename T>
+        SharedVariable& operator=(const T t) {
+            for(auto& listeners : changeListeners) {
+                listeners(*this);
+            }
+
+            this->data = t;
+            return *this;
+        }
 
         const std::type_info& type() const;
         bool initalised();
-        double getDouble() const;
-        std::string getString() const;
+
+        template<typename U>
+        U getValue() const {
+            return std::any_cast<U>(this->data);
+        }
+
+        operator bool();
+        operator double();
+        operator std::string();
 
 
         double operator ++();
         double operator ++(int dummy); // postfix
     };
-
-    extern std::map<std::string, SharedVariable *> variablelookup;
 }
 
 

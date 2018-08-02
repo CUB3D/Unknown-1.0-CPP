@@ -8,7 +8,7 @@
 #include "Image.h"
 #include "Event/EventManager.h"
 
-Unknown::Python::Interpreter* ::Unknown::Python::instance = NULL;
+std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::instance;
 
 void Unknown::Python::Interpreter::checkError(PyObject* obj)
 {
@@ -35,11 +35,11 @@ void Unknown::Python::Interpreter::init()
     this->addSearchPath(".");
 }
 
-Unknown::Python::Interpreter* Unknown::Python::getInterpreter()
+std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::getInterpreter()
 {
     if(instance == NULL)
     {
-        instance = new Interpreter();
+        instance = std::make_shared<Interpreter>();
         instance->init();
     }
     return instance;
@@ -82,10 +82,9 @@ void createMethod(std::string moduleName, PyObject* callable, std::string functi
 }
 
 PyObject* Unknown::Python::Interpreter::getMethod(const std::string& method) {
+    UK_LOG_INFO("Locating", method);
     auto moduleName = method.substr(0, method.find("."));
     auto methodName = method.substr(method.find(".") + 1, method.size());
-
-    UK_LOG_INFO("Locating", moduleName, ".", methodName);
 
     PyObject* module = getModule(moduleName);
     PyObject* dict = PyModule_GetDict(module);
@@ -95,6 +94,12 @@ PyObject* Unknown::Python::Interpreter::getMethod(const std::string& method) {
 
 void Unknown::Python::Interpreter::callMethod(const std::string& methodName, PyObject* argsTuple) {
     PyObject* callable = getMethod(methodName);
+
+    if(!callable) {
+        UK_LOG_ERROR("Attempted to call invalid python method", methodName);
+        return;
+    }
+
     PyEval_CallObject(callable, argsTuple);
 }
 
@@ -406,11 +411,11 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
         auto& type = x->type();
 
         if(type == typeid(std::string)) {
-            return PY_MAKE_UTF8(x->getString().c_str());
+            return PY_MAKE_UTF8(x->getValue<std::string>().c_str());
         }
 
         if(type == typeid(double)) {
-            return PY_MAKE_FLOAT(x->getDouble());
+            return PY_MAKE_FLOAT(x->getValue<double>());
         }
     } else {
         printf("[PY] Unknown variable: %s\n", name);
@@ -426,9 +431,14 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
     if(Unknown::variablelookup.find(name) != Unknown::variablelookup.end()) {
         Unknown::SharedVariable* x = Unknown::variablelookup[name];
 
-        if(PyFloat_Check(data)) {
-            double in = PY_GET_FLOAT(args, 1);
-            *x = in;
+        if(PyBool_Check(data)) {
+            bool b = PY_GET_LONG(args, 1);
+            *x = b;
+        } else {
+            if (PyFloat_Check(data)) {
+                double in = PY_GET_FLOAT(args, 1);
+                *x = in;
+            }
         }
 
         if(PyUnicode_Check(data)) {

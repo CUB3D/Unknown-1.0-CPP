@@ -4,6 +4,12 @@
 
 #include "Component.h"
 
-void Unknown::Component::update(Entity &ent) {}
+void Unknown::Component::update(Unknown::Entity &ent) {
 
-void Unknown::Component::render(const Unknown::Entity &ent) const {}
+}
+
+void Unknown::Component::render(const Unknown::Entity &ent) const {
+
+}
+
+void Unknown::Component::onDisable(Unknown::Entity &ent) {}
