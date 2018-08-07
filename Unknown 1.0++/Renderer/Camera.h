@@ -12,10 +12,10 @@ namespace Unknown
 {
     class Camera
     {
-        Rect<double> area;
-        double speed = 1;
-
     public:
+        double speed = 1;
+        Rect<double> area;
+
         Camera(int width, int height);
         void move(Direction d);
         void setPosition(double x, double y, double width, double height);

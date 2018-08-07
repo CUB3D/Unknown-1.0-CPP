@@ -11,8 +11,8 @@ Unknown::Sprite::Sprite(const int x, const int y)
 	this->location.x = x;
 	this->location.y = y;
 
-	this->bounds.location.x = x;
-	this->bounds.location.y = y;
+	//this->bounds.location.x = x;
+	//this->bounds.location.y = y;
 
 	this->direction = Vector(0, 0);
 
@@ -52,8 +52,8 @@ void Unknown::Sprite::move(const int speedX, const int speedY)
 	this->location.x += velocity.x;
 	this->location.y += velocity.y;
 
-	this->bounds.location.x = this->location.x;
-	this->bounds.location.y = this->location.y;
+	//this->bounds.location.x = this->location.x;
+	//this->bounds.location.y = this->location.y;
 }
 
 void Unknown::Sprite::init() const
@@ -93,8 +93,8 @@ void Unknown::Graphics::ImageSprite::init() const
 {
 	this->image->init();
 
-	this->bounds.size.width = image->textureRect.w;
-	this->bounds.size.height = image->textureRect.h;
+	//this->bounds.size.width = image->textureRect.w;
+	//this->bounds.size.height = image->textureRect.h;
 
 	this->hasInit = true;
 }
@@ -129,8 +129,8 @@ void Unknown::Graphics::AnimatedSprite::render() const
 
 	AnimationFrame frame = this->animation->frames[this->animation->currentFrameIndex];
 
-	this->bounds.size.width = frame.frameImage->textureRect.w;
-	this->bounds.size.height = frame.frameImage->textureRect.h;
+	//this->bounds.size.width = frame.frameImage->textureRect.w;
+	//this->bounds.size.height = frame.frameImage->textureRect.h;
 }
 
 void Unknown::Graphics::AnimatedSprite::init() const
@@ -139,8 +139,8 @@ void Unknown::Graphics::AnimatedSprite::init() const
 
 	frame.frameImage->init();
 
-	this->bounds.size.width = frame.frameImage->textureRect.w;
-	this->bounds.size.height = frame.frameImage->textureRect.h;
+	//this->bounds.size.width = frame.frameImage->textureRect.w;
+	//this->bounds.size.height = frame.frameImage->textureRect.h;
 
 	this->hasInit = true;
 }

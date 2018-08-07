@@ -18,7 +18,7 @@ namespace Unknown
 
         ImageRenderComponent(const std::string& filename, const int renderScale);
 
-        virtual void render(const Entity& ent) const;
+        virtual void render(const Entity &ent, double Xoffset, double Yoffset) const;
     };
 }
 

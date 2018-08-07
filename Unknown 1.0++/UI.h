@@ -121,7 +121,7 @@ namespace Unknown
 		std::shared_ptr<UIComponent> getComponentByName(const std::string name);
 		std::string getComponentValue(const std::string& name);
 
-		virtual void render() const override ;
+		virtual void render(double Xoffset, double Yoffset) const override ;
 		virtual Rect<int> getRenderBounds() override;
         void initUI();
 

@@ -5,7 +5,6 @@
 #include "Image.h"
 #include "Vector.h"
 #include "Utils.h"
-#include "Physics.h"
 #include "Animation.h"
 
 namespace Unknown
@@ -20,7 +19,6 @@ namespace Unknown
 	public:
 		Point<double> location;
 		Vector direction;
-		mutable AABB bounds;
 
 		Sprite(const int x, const int y);
 		virtual ~Sprite();

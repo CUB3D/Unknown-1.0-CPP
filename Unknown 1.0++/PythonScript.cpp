@@ -357,10 +357,10 @@ PyObject* rawSpriteCall(PyObject* self, PyObject* args) {
         case 4:
             return PY_MAKE_LONG(spr->getAngle());
         case 5: spr->setAngle(PY_GET_FLOAT(data, 0));break;
-        case 6: return PY_MAKE_CAPSULE(&spr->bounds, "Bounds", [](PyObject* bound){});
+        //case 6: return PY_MAKE_CAPSULE(&spr->bounds, "Bounds", [](PyObject* bound){});
         case 7: return PY_MAKE_CAPSULE(&spr->direction, "Direction", [](PyObject* dir){});
         case 8: return PY_MAKE_CAPSULE(&spr->location, "Loc", [](PyObject* a){});
-        case 9: spr->bounds = *PY_UNPACK_OBJ(Unknown::AABB, "Sprite", data, 0);break;
+        //case 9: spr->bounds = *PY_UNPACK_OBJ(Unknown::AABB, "Sprite", data, 0);break;
         case 10: spr->direction = *PY_UNPACK_OBJ(Unknown::Vector, "Vector", data, 0);break;
         case 11: spr->location = *PY_UNPACK_OBJ(Unknown::Point<double>, "Point", data, 0);break;
 
@@ -451,6 +451,47 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
     Py_RETURN_NONE;
 }
 
+#include "Reflex.h"
+
+//TODO: test and add changes from reflex to repo
+PyObject* makeObject(PyObject* self, PyObject* args) {
+    std::string name = std::string(PY_GET_UTF8(args, 0));
+    auto m1 = Reflex::getInstance().m1;
+
+    auto tmp = (*Reflex::getInstance().m1)[name];
+    void* ptr = tmp->newRawInstance();
+
+    UK_LOG_INFO("Created capsule of type", name, "with ptr:", Unknown::intToString((long int)ptr));
+
+    return PY_MAKE_CAPSULE(ptr, name.c_str(), [](PyObject* p){});
+}
+
+PyObject* setField(PyObject* self, PyObject* args) {
+    std::string classname = std::string(PY_GET_UTF8(args, 0));
+    std::string fieldName = std::string(PY_GET_UTF8(args, 1));
+    void* capsule = PyCapsule_GetPointer(PyTuple_GetItem(args, 2), classname.c_str());
+    PyObject* value = PyTuple_GetItem(args, 3);
+
+    if(!capsule) {
+        UK_LOG_ERROR_VERBOSE("Attempt to access field:", fieldName, "on null reference to", classname);
+        Py_RETURN_NONE;
+    }
+
+    std::shared_ptr<ClassInfoBase> classInfo = getClassInfo(classname);
+
+    auto field = classInfo->fields[fieldName];
+    std::type_index fieldType = field->getType(capsule);
+
+    if(fieldType == typeid(double)) {
+        double d = PyFloat_AsDouble(value);
+        printf("Set %s.%s to %lf\n", classname.c_str(), fieldName.c_str(), d);
+
+        field->setValue<decltype(d)>(capsule, d);
+    }
+
+    Py_RETURN_NONE;
+}
+
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
     MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
@@ -467,6 +508,10 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     registerMethod("Unknown", "get_mouse_pos", "Get mouse position", getMousePos);
     registerMethod("Unknown", "raw_get_shared", "Get shared value", getSharedValue);
     registerMethod("Unknown", "raw_set_shared", "Set shared value", setSharedValue);
+    MAKE_FUNC_MAPPING("uk_make_obj", "Create an instance of a class", makeObject);
+    MAKE_FUNC_MAPPING("uk_set_field", "Set a field in an object", setField);
+    //TODO: getfield, callfunc
+
 
     UK_LOG_INFO("Loading script", name);
 

@@ -10,3 +10,6 @@
 [submodule "Libs/RapidJson"]
 	path = Libs/RapidJson
 	url = https://github.com/Tencent/rapidjson
+[submodule "Libs/Reflex"]
+	path = Libs/Reflex
+	url = https://gogs.cub3d.pw/CUB3D/Reflex.git

@@ -77,6 +77,11 @@ namespace Unknown
 		Rect<int> operator /(int value) {
 			return Rect<int>(x / value, y / value, w / value, h / value);
 		}
+
+		template<typename R>
+		bool contains(Rect<R> other) {
+			return !(other.x + other.w < x || other.x > x + w || other.y + other.h < y || other.y > y + h);
+		}
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);

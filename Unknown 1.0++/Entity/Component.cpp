@@ -8,7 +8,7 @@ void Unknown::Component::update(Unknown::Entity &ent) {
 
 }
 
-void Unknown::Component::render(const Unknown::Entity &ent) const {
+void Unknown::Component::render(const Entity &ent, double Xoffset, double Yoffset) const {
 
 }
 

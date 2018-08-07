@@ -32,7 +32,7 @@ namespace Unknown
         Entity(const std::string& str);
 
         virtual void update() override;
-        virtual void render() const override;
+        virtual void render(double Xoffset, double Yoffset) const override;
         virtual void disable();
         virtual void queueDisable();
 

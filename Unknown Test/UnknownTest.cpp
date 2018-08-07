@@ -9,7 +9,6 @@
 #include "Image.h"
 #include "Sprite.h"
 #include "Input.h"
-#include "Physics.h"
 #include "Loader.h"
 #include "Animation.h"
 #include "Font.h"
@@ -170,7 +169,6 @@ void init()
 
 	tmp.image = new Unknown::Graphics::Image("Player.png");
 
-
     font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
     UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
@@ -189,8 +187,6 @@ int main(int argc, char* argv[])
 #endif
 {
 	UK_CREATE_WINDOW();
-
-	UK_PYTHON_LOAD_SCRIPT("Test");
 
 	init();
 
