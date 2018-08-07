@@ -150,28 +150,52 @@ Unknown::TextComponent::TextComponent() : UIComponent(UI_TEXT)
 
 void Unknown::TextComponent::render() const
 {
+	auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+
     std::string cpy(this->content);
 
     //TODO: this should somehow cache the shared var to remove need to re search
 
     std::regex var("\\$\\{.+\\}");
     std::smatch results;
-    std::regex_search(this->content, results, var);
+    
+	if(std::regex_search(this->content, results, var)) {
 
-    for(auto result : results) {
-        std::string resultStr = std::string(result.first.base());
-        if (resultStr.empty())
-            continue;
-        std::string varname = resultStr.substr(2, resultStr.length() - 3);
+		for (int i = 0; i < results.size(); i++) {
+			std::string resultStr = results[i];
 
-        // TODO Does this work with multiple replacements, size of string might change
-        for (auto &sharedVar : variablelookup) {
-            if (sharedVar.first == varname) {
-                std::string to = sharedVar.second->toString();
-                cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
-            }
-        }
-    }
+			if (resultStr.empty())
+				continue;
+			std::string varname = resultStr.substr(2, resultStr.length() - 3);
+
+			// TODO Does this work with multiple replacements, size of string might change
+			for (auto &sharedVar : variablelookup) {
+				if (sharedVar.first == varname) {
+					std::string to = sharedVar.second->toString();
+					cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
+				}
+			}
+		}
+	}
+
+#ifdef NOPE
+	for (auto result : results) {
+		std::string resultStr = result.s;
+		// std::string resultStr = std::string(result.first.base());
+		if (resultStr.empty())
+			continue;
+		std::string varname = resultStr.substr(2, resultStr.length() - 3);
+
+		// TODO Does this work with multiple replacements, size of string might change
+		for (auto &sharedVar : variablelookup) {
+			if (sharedVar.first == varname) {
+				std::string to = sharedVar.second->toString();
+				cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
+			}
+		}
+	}
+#endif // NOPE
+
 
     font->drawString(cpy, this->location.x, this->location.y);
 }

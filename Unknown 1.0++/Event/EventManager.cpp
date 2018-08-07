@@ -3,11 +3,12 @@
 #include "EventManager.h"
 #include <algorithm>
 #include <iostream>
-
-std::map<Unknown::EventType, std::vector<Unknown::EventHandler>> Unknown::eventHandlers;
+#include "../Unknown.h"
 
 void Unknown::registerEventHandler(EventType listenerType, std::string name, std::function<void(Event&)> func)
 {
+	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
+
     auto iter = eventHandlers.find(listenerType);
 
     EventHandler eventHandler;
@@ -21,14 +22,16 @@ void Unknown::registerEventHandler(EventType listenerType, std::string name, std
     }
     else
     {
-        std::vector<Unknown::EventHandler> newVec;
+        std::vector<EventHandler> newVec;
         newVec.push_back(eventHandler);
         eventHandlers[listenerType] = newVec;
     }
 }
 
-void Unknown::removeEventHandler(Unknown::EventType type, std::string name)
+void Unknown::removeEventHandler(EventType type, std::string name)
 {
+	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
+
     std::vector<EventHandler>& handlers = eventHandlers[type];
 
     for(EventHandler a : handlers)
@@ -37,8 +40,10 @@ void Unknown::removeEventHandler(Unknown::EventType type, std::string name)
     }
 }
 
-void Unknown::postEvent(Unknown::EventType type, Unknown::Event& event)
+void Unknown::postEvent(EventType type, Event& event)
 {
+	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
+
     std::vector<EventHandler>& handlers = eventHandlers[type];
     for(auto a : handlers)
     {
