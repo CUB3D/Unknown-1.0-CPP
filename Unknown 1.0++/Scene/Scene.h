@@ -16,6 +16,7 @@
 #include "../IUpdateable.h"
 #include "../ITagable.h"
 #include "CollisionManager.h"
+#include "../Renderer/Camera.h"
 
 namespace Unknown
 {
@@ -27,6 +28,9 @@ namespace Unknown
         std::vector<std::shared_ptr<ITagable>> tagables;
         b2World world;
         CollisionManager contactManager;
+        Camera cam;
+
+
         const std::string name;
         Scene(const std::string name);
 

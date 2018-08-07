@@ -13,7 +13,7 @@ namespace Unknown
     {
     public:
         virtual Rect<int> getRenderBounds() = 0;
-        virtual void render() const = 0;
+        virtual void render(double Xoffset, double Yoffset) const = 0;
     };
 }
 

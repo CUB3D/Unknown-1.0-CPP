@@ -25,7 +25,7 @@ public:
 
     BasicTileMapRenderer(Map &map1, std::function<void(int, int, int, int)> renderer1, bool isGlobal);
     BasicTileMapRenderer(Map& map1, std::function<void(int, int, int, int)> renderer1);
-    virtual void render() const override;
+    virtual void render(double Xoffset, double Yoffset) const override;
     virtual Rect<int> getRenderBounds() override;
 };
 

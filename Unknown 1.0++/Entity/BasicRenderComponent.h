@@ -7,6 +7,7 @@
 
 #include "Component.h"
 #include "../Colour.h"
+#include "Reflex.h"
 
 namespace Unknown
 {
@@ -16,11 +17,18 @@ namespace Unknown
         Colour col;
         int renderScale;
 
+        BasicRenderComponent();
         BasicRenderComponent(Colour c);
         BasicRenderComponent(Colour c, int renderScale);
 
-        virtual void render(const Entity& ent) const override;
+        virtual void render(const Entity &ent, double Xoffset, double Yoffset) const override;
         virtual void update(Entity &ent);
+    };
+
+    REFLECT {
+        addClass(BasicRenderComponent)
+        ->addProp(col)
+        ->addProp(renderScale);
     };
 }
 

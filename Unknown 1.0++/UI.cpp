@@ -36,7 +36,7 @@ Unknown::UIContainer::UIContainer()
     //NOOP
 }
 
-void Unknown::UIContainer::render() const
+void Unknown::UIContainer::render(double Xoffset, double Yoffset) const
 {
     // Rendering
     for (auto& comp : components)

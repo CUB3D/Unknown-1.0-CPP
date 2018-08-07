@@ -4,9 +4,9 @@
   "Height": 2,
   "Components": {
     "BRender": {
-      "Type": "BasicRenderer",
-      "Colour": "FF0000",
-      "RenderScale": 32
+      "Type": "BasicRender",
+      "col": "FF0000",
+      "renderScale": 32
     },
     "Collider": {
       "Type": "Collider",

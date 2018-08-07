@@ -6,7 +6,8 @@
 #include "../Loader.h"
 #include "../Font.h"
 
-Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f))
+Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f)),
+cam(getUnknown()->screenSize->width, getUnknown()->screenSize->height)
 {
     world.SetContactListener(&contactManager);
 }
@@ -22,7 +23,11 @@ void Unknown::Scene::update()
 
 void Unknown::Scene::render() const {
     for(auto& renderable : this->renderables) {
-        renderable->render();
+        // Only render things that are in the view of the camera
+        if(cam.getBounds().contains(renderable->getRenderBounds()) || true) {
+            //TODO: pass some offset
+            renderable->render(cam.area.x, cam.area.y);
+        }
     }
 }
 
@@ -39,7 +44,7 @@ Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::s
 
 void Unknown::MenuScene::render() const
 {
-    this->menu.render();
+    this->menu.render(0, 0);
     Scene::render();
 }
 

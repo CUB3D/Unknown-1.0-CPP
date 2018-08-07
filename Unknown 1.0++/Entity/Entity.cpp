@@ -5,11 +5,11 @@
 #include "Entity.h"
 #include "PhysicsBodyComponent.h"
 
-void Unknown::Entity::render() const {
+void Unknown::Entity::render(double Xoffset, double Yoffset) const {
     if(!enabled)
         return;
     for(auto& component : this->components) {
-        component->render(*this);
+        component->render(*this, Xoffset, Yoffset);
     }
 }
 

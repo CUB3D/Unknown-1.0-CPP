@@ -48,6 +48,8 @@ WAVSound hit("Hit.wav");
 //TODO: render scene with camera
 //TODO: ingame editor
 
+
+
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     UK_PYTHON_LOAD_SCRIPT("Test");
     ui = Loader::loadUI("PhysGameGUI.json");
@@ -58,7 +60,7 @@ PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     this->addObject(UK_LOAD_ENTITY("Ground.json"));
 
     this->addObject(UK_LOAD_ENTITY_AT("OtherPlayerEntity.json", 5, 3));
-    this->addObject(UK_LOAD_ENTITY_AT("PlayerEntity.json", 8, 3));
+    this->addObject(UK_LOAD_ENTITY_AT("PlayerEntity.json", 16, 3));
 
     this->addObject(UK_LOAD_ENTITY("Obstacle.json"));
 
@@ -77,17 +79,28 @@ void PhysicsTestScene::update() {
     auto player = getObject<Entity>("Player");
     auto otherPlayer = getObject<Entity>("OtherPlayer");
     auto body = player->getComponent<PhysicsBodyComponent>();
+    body->body->SetSleepingAllowed(false);
 
     if(p1up.pressed() && p1onGround) {
-        body->applyForce(Vector(0, -3000));
+       body->applyForce(Vector(0, -3000));
     }
 
+    //TODO: finish rendering offsets
+
     if(p1left.pressed()) {
-        body->applyForce(Vector(-200, 0));
+        //body->applyForce(Vector(-200, 0));
+        cam.area.x--;
+        auto t = body->body->GetPosition();
+        t.x -= 1/32.0;
+        body->body->SetTransform(t, body->body->GetAngle());
     }
 
     if(p1right.pressed()) {
-        body->applyForce(Vector(200, 0));
+        //body->applyForce(Vector(200, 0));
+        cam.area.x++;
+        auto t = body->body->GetPosition();
+        t.x += 1/32.0;
+        body->body->SetTransform(t, body->body->GetAngle());
     }
 
     if(p1fire.pressed() && p1FireTimer.isTickComplete()) {

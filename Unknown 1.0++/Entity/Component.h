@@ -16,7 +16,7 @@ namespace Unknown
     {
     public:
         virtual void update(Entity &ent);
-        virtual void render(const Entity& ent) const;
+        virtual void render(const Entity &ent, double Xoffset, double Yoffset) const;
         virtual void onDisable(Entity& ent);
     };
 }

@@ -48,6 +48,10 @@ if(SDL_MXIXER_FOUND)
     message("SDL2_mixer: ${SDL2_MIXER_INCLUDE_DIR}:${SDL2_MIXER_LIBRARY}")
 endif()
 
+
+# Find Reflex
+set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
+
 # Find python
 
 if(WIN32)
@@ -68,10 +72,14 @@ endif()
 
 #TODO: Add this back in when cmake 3.12 is available
 
-find_package(PythonLibs)
-if(PYTHONLIBS_FOUND)
-    message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
-endif()
+#find_package(PythonLibs)
+#if(PYTHONLIBS_FOUND)
+#    message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
+#endif()
+
+set(PYTHON_INCLUDE_DIRS /usr/include/python3.7m)
+set(PYTHON_LIBRARIES /usr/lib/libpython3.7m.so)
+
 
 if(UNIX)
     # Find box2d
@@ -102,7 +110,7 @@ endif()
 
 
 SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${WIN32_LIBS})
-SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR})
+SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE})
 
 message("LIBS: ${COMBINED_LIBS}")
 message("INCLUDE: ${COMBINED_INCLUDE}")

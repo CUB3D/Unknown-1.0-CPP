@@ -27,6 +27,12 @@ event = namedtuple("event", "SDLCode keycode keyState")
 def register_hook(type, callback):
     pass
 
+def uk_make_obj(name):
+    pass
+
+def uk_set_field(classname, fieldname, capsule, val):
+    pass
+
 
 # Images
 def create_raw_image(fileName):
@@ -199,7 +205,7 @@ class AnimatedSprite(Sprite):
         super().__init__(0, 0, noCapsuleGen=True)
 
 
-class Vector:
+"""class Vector:
     _capsule = None
     __interface = None
 
@@ -227,5 +233,16 @@ class Vector:
 
     def __add__(self, other):
         return self
+"""
+
+class Vector:
+    _capsule = None
+    def __init__(self):
+        self.__dict__["_capsule"] = uk_make_obj("Vector")
+
+    def __setattr__(self, key, value):
+        if key == "_capsule":
+            super().__setattr__(key, value)
+        uk_set_field("Vector", key, self._capsule, value)
 
 

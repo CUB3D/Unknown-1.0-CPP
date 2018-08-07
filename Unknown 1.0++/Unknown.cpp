@@ -179,7 +179,7 @@ void Unknown::Unknown::initGameLoop()
 			this->unprocessed--;
 		}
 
-		//this->clearScreen();
+		this->clearScreen();
 
         auto renderStartTime = std::chrono::high_resolution_clock::now();
 		this->render();
