@@ -4,7 +4,8 @@
 
 #include "KeyBind.h"
 
-Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED) {
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED)  {
+	//TODO: may need to have late init like img for win support
     registerEventHandler(ET_KEYPRESS, name, [&] (Event& evt){this->handle(evt);});
 }
 

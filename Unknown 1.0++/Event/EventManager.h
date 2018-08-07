@@ -22,8 +22,6 @@ namespace Unknown
         std::string name;
     };
 
-    extern std::map<EventType, std::vector<EventHandler>> eventHandlers;
-
     void registerEventHandler(EventType listenerType, std::string, std::function<void(Event&)> func);
     void removeEventHandler(EventType type, std::string name);
     void postEvent(EventType type, Event& event);

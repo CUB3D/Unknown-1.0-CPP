@@ -406,8 +406,10 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
     const char* name_c = PY_GET_UTF8(args, 0);
     std::string name(name_c);
 
-    if(Unknown::variablelookup.find(name) != Unknown::variablelookup.end()) {
-        Unknown::SharedVariable* x = Unknown::variablelookup[name];
+	auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+
+    if(variablelookup.find(name) != variablelookup.end()) {
+        Unknown::SharedVariable* x = variablelookup[name];
         auto& type = x->type();
 
         if(type == typeid(std::string)) {
@@ -424,12 +426,14 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
 }
 
 PyObject* setSharedValue(PyObject* self, PyObject* args) {
+	auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+
     const char* name_c = PY_GET_UTF8(args, 0);
     PyObject* data = PY_GET_OBJ(args, 1);
     std::string name(name_c);
 
-    if(Unknown::variablelookup.find(name) != Unknown::variablelookup.end()) {
-        Unknown::SharedVariable* x = Unknown::variablelookup[name];
+    if(variablelookup.find(name) != variablelookup.end()) {
+        Unknown::SharedVariable* x = variablelookup[name];
 
         if(PyBool_Check(data)) {
             bool b = PY_GET_LONG(args, 1);

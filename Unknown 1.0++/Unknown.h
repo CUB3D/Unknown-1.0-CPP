@@ -9,6 +9,8 @@
 #include "Timer.h"
 #include "Utils.h"
 #include "Scene/SceneManager.h"
+#include "Event/EventManager.h"
+#include "SharedVariable.h"
 
 
 namespace Unknown
@@ -35,6 +37,14 @@ namespace Unknown
 		UK_QUIT // Game loop finished
 	};
 
+	enum HookType
+	{
+		RENDER = 0,
+		UPDATE = 1
+	};
+
+	class SharedVariable;
+
 	class Unknown
 	{
 	private:
@@ -49,6 +59,12 @@ namespace Unknown
 		std::shared_ptr<Dimension<int>> screenSize;
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
+
+
+		std::map<HookType, std::vector<std::function<void()>>> hooks;
+		std::map<EventType, std::vector<EventHandler>> eventHandlers;
+		std::map<std::string, SharedVariable*> variablelookup;
+
 
 
 		bool running = true;
@@ -87,14 +103,6 @@ namespace Unknown
 	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()
 
 	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
-
-	enum HookType
-	{
-		RENDER = 0,
-		UPDATE = 1
-	};
-
-	extern std::map <HookType, std::vector<std::function<void()>>> hooks;
 
 	void registerHook(std::function<void()> hook, HookType type);
 

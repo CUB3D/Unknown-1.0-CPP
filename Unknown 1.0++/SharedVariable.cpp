@@ -6,10 +6,8 @@
 #include <sstream>
 #include "SharedVariable.h"
 
-std::map<std::string, Unknown::SharedVariable*> Unknown::variablelookup;
-
 Unknown::SharedVariable::SharedVariable(const std::string &name) :name(name) {
-    variablelookup[name] = this;
+	::Unknown::getUnknown()->variablelookup[name] = this;
 }
 
 const std::type_info& Unknown::SharedVariable::type() const {

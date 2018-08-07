@@ -9,11 +9,10 @@
 #include <any>
 #include <functional>
 
+#include "Unknown.h"
+
 namespace Unknown
 {
-    class SharedVariable;
-    extern std::map<std::string, SharedVariable*> variablelookup;
-
     class SharedVariable
     {
         std::string name;
@@ -28,7 +27,7 @@ namespace Unknown
         template<typename T>
         SharedVariable(const std::string& name, T starting) : name(name) {
             *this = starting;
-            variablelookup[name] = this;
+			getUnknown()->variablelookup[name] = this;
         }
 
 
