@@ -6,6 +6,7 @@
 #include <string.h>
 
 #include "Unknown.h"
+#include "GL/glad/glad.h"
 
 std::vector<Unknown::Graphics::Image*> Unknown::Graphics::imageLateInit;
 
@@ -82,11 +83,45 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 	textRect.x = x;
 	textRect.y = y;
 
-    int status = SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &textRect, angle, NULL, SDL_FLIP_NONE);
-    if(status) {
-        printf("Error rendering image: %s\n", SDL_GetError());
-        SDL_ClearError();
-    }
+	SDL_GL_BindTexture(this->imageTexture, 0, 0);
+
+    int centerX = (x + textRect.w / 2);
+    int centerY = (y + textRect.h /2);
+
+    //const double angle_ = (angle / (2.0*PI)) * 360.0;
+
+    glPushMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glTranslated(centerX, centerY, 0);
+    glRotated(angle, 0, 0, 1);
+    glTranslated(-centerX, -centerY, 0);
+
+
+    glColor3f(1, 1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+
+    glBegin(GL_TRIANGLES);
+    // Top right
+	glTexCoord2f(0, 0);
+    glVertex3f(x, y, 0);
+	glTexCoord2f(1, 0);
+    glVertex3f(x + textRect.w, y, 0);
+	glTexCoord2f(1, 1);
+    glVertex3f(x + textRect.w, y + textRect.h, 0);
+
+    // Bottom left
+    glTexCoord2f(0, 0);
+    glVertex3f(x, y, 0);
+    glTexCoord2f(0, 1);
+    glVertex3f(x, y + textRect.h, 0);
+    glTexCoord2f(1, 1);
+    glVertex3f(x + textRect.w, y + textRect.h, 0);
+
+    glEnd();
+    glPopMatrix();
+
+    SDL_GL_UnbindTexture(this->imageTexture);
 }
 
 Unknown::Graphics::Image::Image(const std::string &filename) : Image(filename.c_str()) {}

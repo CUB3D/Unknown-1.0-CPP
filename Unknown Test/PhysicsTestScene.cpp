@@ -15,6 +15,7 @@
 #include "Entity/TimerComponent.h"
 #include "Font.h"
 #include "Audio/WAVSound.h"
+#include "Editor/EditorBase.h"
 
 using namespace Unknown;
 using namespace Unknown::Graphics;
@@ -30,6 +31,9 @@ KeyBind p2left(SDLK_a, "left2");
 KeyBind p2right(SDLK_d, "right2");
 KeyBind p2fire(SDLK_e, "shoot2");
 Timer p2FireTimer(0.3f);
+
+
+KeyBind debug(SDLK_q, "debug", [](Event& t) {getEditor();});
 
 bool p1onGround;
 bool p2onGround;

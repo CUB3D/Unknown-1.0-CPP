@@ -27,7 +27,8 @@ namespace Unknown
         template<typename T>
         SharedVariable(const std::string& name, T starting) : name(name) {
             *this = starting;
-			getUnknown()->variablelookup[name] = this;
+
+            getUnknown()->variablelookup[name] = this;
         }
 
 

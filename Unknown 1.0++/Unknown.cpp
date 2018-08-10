@@ -20,6 +20,7 @@
 #include <chrono>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
+#include "GL/glad/glad.h"
 #include "Event/Event.h"
 #include "Event/EventManager.h"
 #include "Image.h"
@@ -41,7 +42,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
-	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
+	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	if (!window)
 	{
@@ -50,14 +51,18 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	}
 
 	this->windowRenderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-
 	if (!windowRenderer)
 	{
 		printf("Error: SDL failed to create renderer, %s\n", SDL_GetError());
-		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
+		//quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
-	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
+	this->glContext = SDL_GL_CreateContext(this->window);
+	gladLoadGL();
+	SDL_GL_SetSwapInterval(0);
+
+
+//	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
 
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
@@ -155,6 +160,14 @@ void Unknown::Unknown::initGameLoop()
 
 	initKeySystem();
 
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(0, screenSize->width, screenSize->height, 0, 0, 1);
+    glViewport(0, 0, screenSize->width, screenSize->height);
+
 	while (running)
 	{
         const char* err = SDL_GetError();
@@ -181,8 +194,6 @@ void Unknown::Unknown::initGameLoop()
 			this->ticks++;
 			this->unprocessed--;
 		}
-
-		//this->clearScreen();
 
         auto renderStartTime = std::chrono::high_resolution_clock::now();
 		this->render();
@@ -259,7 +270,8 @@ void Unknown::Unknown::quit(const int exitCode)
 {
 	this->currentState = UK_QUIT;
     // All Images must have been destroyed or this will cause a sigsev
-	SDL_DestroyRenderer(this->windowRenderer);
+    SDL_GL_DeleteContext(this->glContext);
+	//SDL_DestroyRenderer(this->windowRenderer);
 	SDL_DestroyWindow(this->window);
 	this->windowRenderer = nullptr;
 	this->window = nullptr;
@@ -284,7 +296,7 @@ void Unknown::Unknown::render()
 
 void Unknown::Unknown::updateWindow()
 {
-	SDL_RenderPresent(this->windowRenderer);
+    SDL_GL_SwapWindow(window);
 }
 
 std::shared_ptr<Unknown::Unknown> Unknown::instance;

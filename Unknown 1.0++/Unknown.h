@@ -10,7 +10,6 @@
 #include "Utils.h"
 #include "Scene/SceneManager.h"
 #include "Event/EventManager.h"
-#include "SharedVariable.h"
 
 
 namespace Unknown
@@ -21,7 +20,7 @@ namespace Unknown
 		SDL_WINDOW_CREATION_FAIL = -11,
 		SDL_WINDOW_RENDERER_CREATION_FAIL = -12,
 		SDL_WINDOW_PNG_INIT_FAIL = -13,
-        SDL_WINDOW_TTF_INIT_FAIL = -14,
+		SDL_WINDOW_TTF_INIT_FAIL = -14,
 		SDL_RENDER_RECT_FAIL = -20,
 		SDL_IMAGE_LOAD_FAIL = -21,
 		SDL_IMAGE_TEXTURE_CREATE_FAIL = -22,
@@ -29,7 +28,8 @@ namespace Unknown
 		SDL_MIXER_OPEN_AUDIO_FAIL = -31
 	};
 
-	enum EngineState {
+	enum EngineState
+	{
 		UK_PRE_INIT, // Before renderer creation
 		UK_INIT, // Creating renderer
 		UK_POST_INIT, // Done creating render
@@ -53,6 +53,8 @@ namespace Unknown
 		Timer fpsCounter;
 
 	public:
+		SDL_GLContext glContext;
+
 		SDL_Surface* s;
 		SDL_Window* window;
 		SDL_Renderer* windowRenderer;
@@ -94,15 +96,16 @@ namespace Unknown
 
 		void updateWindow();
 	};
-
-	extern std::shared_ptr<Unknown> instance;
-
-	std::shared_ptr<Unknown>& getUnknown();
 	
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()
 
 	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
+
+	extern std::shared_ptr<Unknown> instance;
+
+	std::shared_ptr<Unknown> &getUnknown();
+
 
 	void registerHook(std::function<void()> hook, HookType type);
 

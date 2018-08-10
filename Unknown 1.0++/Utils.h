@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define PI 3.14
+#define PI 3.141592653589793238462
 
 #include "Colour.h"
 #include "document.h"

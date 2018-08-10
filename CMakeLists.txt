@@ -8,13 +8,7 @@ message("UK_DIR: ${UK_DIR}")
 
 set(UK_INCLUDE "${UK_DIR}/Unknown 1.0++")
 
-if(UNIX)
-	set(UK_LIB "${UK_DIR}/Output/lib/linux/")
-endif()
-
-if(WIN32)
-	set(UK_LIB "${UK_DIR}/Output/lib/nt")
-endif()
+set(UK_LIB "${UK_DIR}/Output/lib/${CMAKE_HOST_SYSTEM_NAME}/")
 
 set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
@@ -48,16 +42,12 @@ if(SDL_MXIXER_FOUND)
     message("SDL2_mixer: ${SDL2_MIXER_INCLUDE_DIR}:${SDL2_MIXER_LIBRARY}")
 endif()
 
-
 # Find Reflex
 set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
 
 # Find python
 
 if(WIN32)
-	#set(Python3_FOUND TRUE)
-	#set(Python3_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
-	#set(Python3_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
     set(PYTHONLIBS_FOUND TRUE)
     set(PYTHON_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
     set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
@@ -72,14 +62,9 @@ endif()
 
 #TODO: Add this back in when cmake 3.12 is available
 
-find_package(PythonLibs)
-if(PYTHONLIBS_FOUND)
-    message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
+find_package(Py3 REQUIRED)
+if(Py3_FOUND)
 endif()
-
-#set(PYTHON_INCLUDE_DIRS /usr/include/python3.7m)
-#set(PYTHON_LIBRARIES /usr/lib/libpython3.7m.so)
-
 
 if(UNIX)
     # Find box2d
@@ -96,33 +81,24 @@ endif(BOX2D_FOUND)
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
 
-#add_executable(devTool "DevLib/UnknownTest.cpp")
-
-
 if(UNIX)
     set(UNIX_LIBS pthread dl util m stdc++fs)
 endif()
 
-if(WIN32)
-    set(WIN32_LIBS ${SDL2MAIN_LIBRARY})
-endif()
-
-
-
-SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${WIN32_LIBS})
+SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY})
 SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE})
 
 message("LIBS: ${COMBINED_LIBS}")
 message("INCLUDE: ${COMBINED_INCLUDE}")
 
-
-FILE(GLOB_RECURSE UK_ENGINE_SRC "Unknown 1.0++/*.cpp")
+FILE(GLOB_RECURSE UK_ENGINE_SRC "Unknown 1.0++/*.c*")
 if(WIN32)
 	add_library(UK STATIC ${UK_ENGINE_SRC})
 endif()
 if(UNIX)
 	add_library(UK SHARED ${UK_ENGINE_SRC})
 endif()
+
 target_include_directories(UK PUBLIC ${COMBINED_INCLUDE})
 target_link_libraries(UK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})

@@ -10,6 +10,11 @@
 void Unknown::CollisionManager::addListener(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b,
                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>> objs, bool inContact)> callback) {
 
+    if(!a || !b) {
+        UK_LOG_ERROR("Attempted to register collision listener between null entities");
+        return;
+    }
+
     auto physA = a->getComponent<PhysicsBodyComponent>();
     auto physB = b->getComponent<PhysicsBodyComponent>();
 
