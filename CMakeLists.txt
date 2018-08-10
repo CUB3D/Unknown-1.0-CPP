@@ -48,7 +48,7 @@ set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
 # Find python
 
 if(WIN32)
-    set(PYTHONLIBS_FOUND TRUE)
+    set(Py3_FOUND TRUE)
     set(PYTHON_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
     set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
 endif()
@@ -63,14 +63,10 @@ endif()
 #TODO: Add this back in when cmake 3.12 is available
 
 
-find_package(Py3 REQUIRED)
+find_package(Py3)
 if(Py3_FOUND)
     message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
 endif()
-
-set(PYTHON_INCLUDE_DIRS /usr/include/python3.7m)
-set(PYTHON_LIBRARIES /usr/lib/libpython3.7m.so)
-
 
 if(UNIX)
     # Find box2d
