@@ -160,20 +160,24 @@ void Unknown::TextComponent::render() const
 
     auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
 
-    for(auto result : results) {
-        std::string resultStr = std::string(result.first.base());
-        if (resultStr.empty())
-            continue;
-        std::string varname = resultStr.substr(2, resultStr.length() - 3);
+	if (std::regex_search(this->content, results, var)) {
 
-        // TODO Does this work with multiple replacements, size of string might change
-        for (auto &sharedVar : variablelookup) {
-            if (sharedVar.first == varname) {
-                std::string to = sharedVar.second->toString();
-                cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
-            }
-        }
-    }
+		for (int i = 0; i < results.size(); i++) {
+			std::string resultStr = results[i];
+
+			if (resultStr.empty())
+				continue;
+			std::string varname = resultStr.substr(2, resultStr.length() - 3);
+
+			// TODO Does this work with multiple replacements, size of string might change
+			for (auto &sharedVar : variablelookup) {
+				if (sharedVar.first == varname) {
+					std::string to = sharedVar.second->toString();
+					cpy = cpy.replace(content.find(resultStr), resultStr.length(), to);
+				}
+			}
+		}
+	}
 
     font->drawString(cpy, this->location.x, this->location.y);
 }
