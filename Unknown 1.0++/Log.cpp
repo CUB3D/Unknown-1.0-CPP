@@ -7,23 +7,6 @@ namespace Unknown
 {
 	std::string logStatus[] = { "INFO", "WARN", "ERR" };
 
-	std::string concat(int n, const std::string &delim, ...) {
-		va_list lst;
-		va_start(lst, delim);
-
-		std::stringstream ss;
-
-		for(int i = 0; i < n; i++) {
-			ss << va_arg(lst, std::string);
-
-			if(i < n-1) {
-				ss << delim;
-			}
-		}
-
-		return ss.str();
-	}
-
     void log(int logLevel, std::initializer_list<std::string> args) {
         std::stringstream ss;
 
