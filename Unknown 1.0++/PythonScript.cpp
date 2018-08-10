@@ -406,7 +406,7 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
     const char* name_c = PY_GET_UTF8(args, 0);
     std::string name(name_c);
 
-	auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];
@@ -420,17 +420,17 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
             return PY_MAKE_FLOAT(x->getValue<double>());
         }
     } else {
-        printf("[PY] Unknown variable: %s\n", name);
+        printf("[PY] Unknown variable: %s\n", name_c);
     }
     Py_RETURN_NONE;
 }
 
 PyObject* setSharedValue(PyObject* self, PyObject* args) {
-	auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
-
     const char* name_c = PY_GET_UTF8(args, 0);
     PyObject* data = PY_GET_OBJ(args, 1);
     std::string name(name_c);
+
+    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];
@@ -450,7 +450,7 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
             *x = std::string(str);
         }
     } else {
-        printf("[PY] Unknown variable: %s\n", name);
+        printf("[PY] Unknown variable: %s\n", name_c);
     }
     Py_RETURN_NONE;
 }

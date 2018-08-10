@@ -97,10 +97,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		image->init();
 	}
 
-
-	//TODO: this should be in constructor, but can't until registerHooks is moved into this class
-	registerHook([=] {globalSceneManager.render(); }, RENDER);
-	registerHook([=] {globalSceneManager.update(); }, UPDATE);
+    registerHook([=]{globalSceneManager.render();}, RENDER);
+    registerHook([=]{globalSceneManager.update();}, UPDATE);
 
 	currentState = UK_POST_INIT;
 }
@@ -182,7 +180,7 @@ void Unknown::Unknown::initGameLoop()
 			this->unprocessed--;
 		}
 
-		//this->clearScreen();
+		this->clearScreen();
 
         auto renderStartTime = std::chrono::high_resolution_clock::now();
 		this->render();
@@ -287,21 +285,18 @@ void Unknown::Unknown::updateWindow()
 	SDL_RenderPresent(this->windowRenderer);
 }
 
-std::shared_ptr<Unknown::Unknown> Unknown::instance;
-
 std::shared_ptr<Unknown::Unknown>& Unknown::getUnknown()
 {
-	if (!instance)
-		instance = std::make_shared<Unknown>();
+    static std::shared_ptr<Unknown> instance = std::make_shared<Unknown>();
 
 	return instance;
 }
 
 void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
-	auto& hooks = getUnknown()->hooks;
-
 	printf("Registering a hook %d\n", (int)type);
+
+	auto& hooks = getUnknown()->hooks;
 
 	if(hooks.find(type) == hooks.end()) {
 //	    // If there is no hooks
@@ -317,7 +312,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 
 void Unknown::callHooks(HookType type)
 {
-	auto& hooks = getUnknown()->hooks;
+    auto& hooks = getUnknown()->hooks;
 
 	auto vec = hooks[type];
 
