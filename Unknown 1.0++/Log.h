@@ -12,6 +12,9 @@
 namespace Unknown {
 	extern std::string logStatus[];
 
+	// Concatinate n strings together
+	std::string concat(int n, const std::string& delim, ...);
+
 //    template<class ... T>
 //	void log(int logLevel, T ... args) 	{
 //	    int size = sizeof...(args);

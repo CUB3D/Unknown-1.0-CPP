@@ -10,11 +10,12 @@
 #include "Utils.h"
 #include "Scene/SceneManager.h"
 #include "Event/EventManager.h"
-#include "SharedVariable.h"
 
 
 namespace Unknown
 {
+    class SharedVariable;
+
 	enum ErrorCodes
 	{
 		SDL_INITIALIZATION_FAIL = -10,
@@ -37,13 +38,11 @@ namespace Unknown
 		UK_QUIT // Game loop finished
 	};
 
-	enum HookType
-	{
-		RENDER = 0,
-		UPDATE = 1
-	};
-
-	class SharedVariable;
+    enum HookType
+    {
+        RENDER = 0,
+        UPDATE = 1
+    };
 
 	class Unknown
 	{
@@ -60,11 +59,9 @@ namespace Unknown
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
 
-
-		std::map<HookType, std::vector<std::function<void()>>> hooks;
-		std::map<EventType, std::vector<EventHandler>> eventHandlers;
-		std::map<std::string, SharedVariable*> variablelookup;
-
+        std::map<HookType, std::vector<std::function<void()>>> hooks;
+        std::map<EventType, std::vector<EventHandler>> eventHandlers;
+        std::map<std::string, SharedVariable*> variablelookup;
 
 
 		bool running = true;
@@ -94,8 +91,6 @@ namespace Unknown
 
 		void updateWindow();
 	};
-
-	extern std::shared_ptr<Unknown> instance;
 
 	std::shared_ptr<Unknown>& getUnknown();
 	

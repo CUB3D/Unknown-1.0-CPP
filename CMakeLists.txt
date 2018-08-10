@@ -62,10 +62,15 @@ endif()
 
 #TODO: Add this back in when cmake 3.12 is available
 
+
 find_package(Py3 REQUIRED)
 if(Py3_FOUND)
     message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
 endif()
+
+set(PYTHON_INCLUDE_DIRS /usr/include/python3.7m)
+set(PYTHON_LIBRARIES /usr/lib/libpython3.7m.so)
+
 
 if(UNIX)
     # Find box2d

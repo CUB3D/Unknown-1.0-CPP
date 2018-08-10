@@ -7,7 +7,7 @@
 
 void Unknown::registerEventHandler(EventType listenerType, std::string name, std::function<void(Event&)> func)
 {
-	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
+    auto& eventHandlers = getUnknown()->eventHandlers;
 
     auto iter = eventHandlers.find(listenerType);
 
@@ -30,8 +30,7 @@ void Unknown::registerEventHandler(EventType listenerType, std::string name, std
 
 void Unknown::removeEventHandler(EventType type, std::string name)
 {
-	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
-
+    auto& eventHandlers = getUnknown()->eventHandlers;
     std::vector<EventHandler>& handlers = eventHandlers[type];
 
     for(EventHandler a : handlers)
@@ -42,8 +41,7 @@ void Unknown::removeEventHandler(EventType type, std::string name)
 
 void Unknown::postEvent(EventType type, Event& event)
 {
-	auto& eventHandlers = ::Unknown::getUnknown()->eventHandlers;
-
+    auto& eventHandlers = getUnknown()->eventHandlers;
     std::vector<EventHandler>& handlers = eventHandlers[type];
     for(auto a : handlers)
     {
