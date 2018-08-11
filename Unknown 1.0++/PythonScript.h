@@ -43,6 +43,7 @@ namespace Unknown
         };
 
 
+#ifndef WIN32
         //TODO: find a good place for this
         // Take a variable number of variable typed args and the current recursion level as well as the tuple to store in
         auto tmp = [](PyObject* t, int x, auto&& a, auto&&... b) {
@@ -64,6 +65,7 @@ namespace Unknown
                 ::Unknown::Python::getInterpreter()->callMethod(name, tuple);
             };
         };
+#endif // !WIN32
     }
 }
 
