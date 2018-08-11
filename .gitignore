@@ -225,3 +225,26 @@ Output/
 UnknownTestPublish/
 
 *.dll
+.idea/fileTemplates/
+
+### CMake template
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+.idea/.name
+.idea/Unknown-1.0-CPP.iml
+.idea/codeStyles/
+.idea/dictionaries/
+.idea/inspectionProfiles/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/webResources.xml
+DevLib
+UKTest
