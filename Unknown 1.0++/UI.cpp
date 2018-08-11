@@ -216,7 +216,11 @@ void Unknown::ButtonComponent::render() const
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Colour col = *this->colour;
+	Colour col = Colour::GREEN;
+
+	if(this->colour) {
+        col = *this->colour;
+    }
 
 	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.width)
 	{
