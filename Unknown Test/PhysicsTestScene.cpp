@@ -55,6 +55,7 @@ PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     ui = Loader::loadUI("PhysGameGUI.json");
     ui.setGlobalFont(std::make_shared<TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();
+
     this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
 
     this->addObject(UK_LOAD_ENTITY("Ground.json"));
