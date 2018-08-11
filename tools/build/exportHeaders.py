@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import os
 import shutil
-import pathlib
 import sys
 
 base = sys.argv[-2]
