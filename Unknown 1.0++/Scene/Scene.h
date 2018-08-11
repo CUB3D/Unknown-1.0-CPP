@@ -64,7 +64,7 @@ namespace Unknown
         }
 
         template<typename T>
-        std::vector<std::shared_ptr<T>> getObjects(const std::string& tag) {
+        std::vector<std::shared_ptr<T>> getObjects(const std::string& tag) const {
             std::vector<std::shared_ptr<T>> objs;
             for (auto& tagable : this->tagables) {
                 if(tagable->getTag() == tag) {
