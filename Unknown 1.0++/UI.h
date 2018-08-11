@@ -107,7 +107,7 @@ namespace Unknown
     void removeUIListener(std::string listnerID);
     void callUIListeners(std::shared_ptr<UIEvent> evnt);
 
-    #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](::Unknown::UIEvent evnt) {listener(evnt);}, id)
+    #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_REMOVE_UI_LISTENER(id) ::Unknown::removeUIListener(id)
 
