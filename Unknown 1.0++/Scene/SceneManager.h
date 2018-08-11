@@ -18,7 +18,7 @@ namespace Unknown
     class SceneManager
     {
     private:
-        std::map<std::string, std::shared_ptr<Scene>> scenes;
+        std::map<std::string, std::shared_ptr<Scene>>& getSceneMap() const;
     public:
         std::string currentSceneName;
         std::shared_ptr<Scene> currentScene;
