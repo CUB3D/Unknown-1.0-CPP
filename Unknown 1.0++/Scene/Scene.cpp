@@ -17,12 +17,15 @@ void Unknown::Scene::update()
    this->world.Step(getUnknown()->tickSpeed / 1000, 8, 3);
 
    for(auto& updateable : this->updatables) {
-       updateable->update();
+       if(updateable)
+           updateable->update();
    }
 }
 
 void Unknown::Scene::render() const {
     for(auto& renderable : this->renderables) {
+        if(!renderable)
+            continue;
         // Only render things that are in the view of the camera
         if(cam.getBounds().contains(renderable->getRenderBounds()) || true) {
             //TODO: pass some offset
