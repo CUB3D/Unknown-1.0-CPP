@@ -25,4 +25,4 @@ matrix:
         - eval "${MATRIX_EVAL}"
 
 
-script: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=`which gcc-8` -DCMAKE_CXX_COMPILER=`which g++-8`  .. && make
+script: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=`which gcc-8` -DCMAKE_CXX_COMPILER=`which g++-8` -DBOX2D_LIBRARIES=/usr/lib/x86_64-linux-gnu/libBox2D.so .. && make
