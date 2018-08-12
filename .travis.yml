@@ -12,6 +12,13 @@ matrix:
                       - g++-8
                       - cmake
                       - cmake-data
+                      - libsdl2-dev
+                      - libsdl2-image-dev
+                      - libsdl2-mixer-dev
+                      - libsdl2-ttf-dev
+                      - libbox2d-dev
+                      - rapidjson-dev
+                      - python
           env:
               - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
