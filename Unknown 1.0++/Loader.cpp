@@ -283,7 +283,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (member->name == "Frame")
 		{
 			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
-			std::unique_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
+			std::shared_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
 			
 			rapidjson::Value::MemberIterator delayMemeber = member->value.FindMember("Delay");
 
@@ -297,7 +297,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 			::Unknown::Graphics::AnimationFrame animationFrame;
 
 			animationFrame.delayms = delay;
-			animationFrame.frameImage = image.get();
+			animationFrame.frameImage = image;
 
 			animation->addFrame(animationFrame);
 		}
@@ -327,7 +327,7 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 		return imagePrefab->clone();
 	}
 
-	std::unique_ptr<Graphics::Image> image(new Graphics::Image(name));
+	std::unique_ptr<Graphics::Image> image = std::make_unique<Graphics::Image>(name);
 
 	//Give the map ownership of the pointer
 	imagePool[name] = std::move(image);
