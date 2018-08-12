@@ -15,15 +15,16 @@ namespace Unknown
 		class Image
 		{
 		private:
-			SDL_Surface* imageSurface;
-			SDL_Texture* imageTexture;
+			std::string filename;
+
+			std::shared_ptr<SDL_Texture> imageTexture;
 
 		public:
 			SDL_Rect textureRect;
 
 			Image(const std::string& filename);
-			Image(const char* fileName);
-			~Image();
+			Image& operator=(const Image& img);
+			virtual ~Image() = default;
 
 			void init();
 			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
