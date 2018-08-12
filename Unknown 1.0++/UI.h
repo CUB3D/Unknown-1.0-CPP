@@ -94,6 +94,16 @@ namespace Unknown
         virtual void init() override;
     };
 
+    class ImageComponent : public UIComponent
+	{
+	public:
+		std::shared_ptr<Graphics::Image> image;
+
+		ImageComponent();
+		virtual void render() const override;
+		virtual void init() override;
+	};
+
     struct UIEvent
     {
         std::string componentName;

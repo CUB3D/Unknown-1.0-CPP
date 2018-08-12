@@ -226,7 +226,7 @@ void Unknown::ButtonComponent::render() const
 	{
 		if (mouseY >= this->location.y && mouseY <= this->location.y + this->size.height)
 		{
-			col = Colour::WHITE;
+			col = Colour::darken(col, 40);
 		}
 	}
 
@@ -325,4 +325,14 @@ void Unknown::TextBoxComponent::init()
 
 Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
 {
+}
+
+Unknown::ImageComponent::ImageComponent() {}
+
+void Unknown::ImageComponent::render() const {
+    this->image->render(this->location.x, this->location.y);
+}
+
+void Unknown::ImageComponent::init() {
+    this->image = std::make_shared<Graphics::Image>(this->content);
 }
