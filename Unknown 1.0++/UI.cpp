@@ -8,21 +8,27 @@
 #include <memory>
 #include <ctime>
 #include <regex>
+#include "Log.h"
 
+//TODO: this should be in unknown
 std::map <std::string, std::function<void(std::shared_ptr<Unknown::UIEvent>)> > Unknown::UIListeners;
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
-    UIListeners[listenerID] = listener;
+    UK_LOG_INFO("Registering listener", listenerID);
+    UIListeners[listenerID] = std::move(listener);
 }
 
 void Unknown::removeUIListener(std::string listenerID)
 {
+    UK_LOG_INFO("Removing listener:", listenerID);
     UIListeners.erase(listenerID);
 }
 
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
+    UK_LOG_INFO("Sending ui event to", intToString(UIListeners.size()), "listeners");
+
     std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
 
     for (listeners = UIListeners.begin(); listeners != UIListeners.end(); listeners++)
@@ -184,10 +190,7 @@ void Unknown::TextComponent::render() const
 
 //ButtonComponent
 
-Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)
-{
-	UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
-}
+Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 
 void Unknown::ButtonComponent::mouseListener(MouseEvent evnt)
 {
@@ -236,6 +239,10 @@ void Unknown::ButtonComponent::render() const
 	{
 		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.height / 2 - font->getStringHeight(this->content) / 2);
 	}
+}
+
+void Unknown::ButtonComponent::init() {
+    UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
 }
 
 //TextBoxComponent
