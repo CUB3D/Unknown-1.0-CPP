@@ -77,7 +77,7 @@ namespace Unknown
 #define UK_ADD_MOUSE_LISTENER_INTERNAL(listener, id) ::Unknown::registerMouseListener([this](::Unknown::MouseEvent evnt) {listener(evnt);}, id)
 #define UK_ADD_MOUSE_LISTENER_EXTERNAL(listener, id) ::Unknown::registerMouseListener([](::Unknown::MouseEvent evnt) {listener(evnt);}, id)
 #define UK_REMOVE_MOUSE_LISTENER(id) ::Unknown::removeMouseListener(id)
-#define UK_GET_MOUSE_POS(point) SDL_GetMouseState(&p.x, &p.y)
+#define UK_GET_MOUSE_POS(p) SDL_GetMouseState(&p.x, &p.y)
 }
 
 #endif

@@ -9,8 +9,6 @@
 #include <any>
 #include <functional>
 
-#include "Unknown.h"
-
 namespace Unknown
 {
     class SharedVariable
@@ -25,10 +23,8 @@ namespace Unknown
         SharedVariable(const std::string& name);
 
         template<typename T>
-        SharedVariable(const std::string& name, T starting) : name(name) {
+        SharedVariable(const std::string& name, T starting) : SharedVariable(name) {
             *this = starting;
-
-            getUnknown()->variablelookup[name] = this;
         }
 
 

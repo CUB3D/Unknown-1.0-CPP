@@ -12,7 +12,7 @@ namespace Unknown
 	{
 		struct AnimationFrame
 		{
-			Image* frameImage;
+			std::shared_ptr<Image> frameImage;
 			int delayms;
 		};
 
@@ -21,16 +21,23 @@ namespace Unknown
 		private:
 			Timer frameTimer;
 			bool hasInit = false;
+			bool done;
 
 		public:
 			std::vector<AnimationFrame> frames;
 			int currentFrameIndex = 0;
+			bool loop;
 
-			void addFrame(Image* frame, const int delayms);
+			Animation();
+
+			void addFrame(std::shared_ptr<Image> frame, int delayms);
 			void addFrame(AnimationFrame frame);
 
 			void draw(const int x, const int y, const double angle);
 			void draw(const int x, const int y);
+
+			void drawNoAdvance(const int x, const int y, const double angle) const;
+			void attemptAdvanceFrame();
 		};
 	}
 }

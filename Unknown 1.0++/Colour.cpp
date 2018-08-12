@@ -31,3 +31,11 @@ const Unknown::Colour Unknown::Colour::GREEN = Colour(0, 255, 0);
 const Unknown::Colour Unknown::Colour::BLUE = Colour(0, 0, 255);
 const Unknown::Colour Unknown::Colour::BLACK = Colour(0, 0, 0);
 const Unknown::Colour Unknown::Colour::WHITE = Colour(255, 255, 255);
+
+Unknown::Colour Unknown::Colour::darken(const Colour &col, const double amount) {
+    int change = 2.25 * amount;
+    int r = std::max(col.red - change, 0);
+    int g = std::max(col.green - change, 0);
+    int b = std::max(col.blue - change, 0);
+	return Colour(r, g, b, col.alpha);
+}

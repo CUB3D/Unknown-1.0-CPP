@@ -16,8 +16,8 @@ namespace Unknown
 		void drawPoint(const int x, const int y, const int size, const Colour& colour);
 		void drawCircle(const int cx, const int cy, const int radius, const Colour& col);
 
+		//TODO: merge these
 		void GL_setColour(const Colour& colour);
-
 		void setDrawColour(const Colour colour);
 	}
 }

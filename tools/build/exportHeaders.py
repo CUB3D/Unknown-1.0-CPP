@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 import os
 import shutil
-import pathlib
 import sys
 
-base = sys.argv[-1]
-outDir = os.path.join(base, "Output", "lib", "linux", "include")
+base = sys.argv[-2]
+platform = sys.argv[-1]
+outDir = os.path.join(base, "Output", "lib", platform, "include")
 inDir = os.path.join(base, "Unknown 1.0++")
 
 try:

@@ -97,15 +97,13 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
 	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_LOG_INFO("Performing late init for", intToString(Graphics::imageLateInit.size()), "images");
-	for(auto& image : Graphics::imageLateInit) {
+	UK_LOG_INFO("Performing late init for", intToString(imageLateInit.size()), "images");
+	for(auto& image : imageLateInit) {
 		image->init();
 	}
 
-
-	//TODO: this should be in constructor, but can't until registerHooks is moved into this class
-	registerHook([=] {globalSceneManager.render(); }, RENDER);
-	registerHook([=] {globalSceneManager.update(); }, UPDATE);
+    registerHook([=]{globalSceneManager.render();}, RENDER);
+    registerHook([=]{globalSceneManager.update();}, UPDATE);
 
 	currentState = UK_POST_INIT;
 }
@@ -299,21 +297,18 @@ void Unknown::Unknown::updateWindow()
     SDL_GL_SwapWindow(window);
 }
 
-std::shared_ptr<Unknown::Unknown> Unknown::instance;
-
 std::shared_ptr<Unknown::Unknown>& Unknown::getUnknown()
 {
-	if (!instance)
-		instance = std::make_shared<Unknown>();
+    static std::shared_ptr<Unknown> instance = std::make_shared<Unknown>();
 
 	return instance;
 }
 
 void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
-	auto& hooks = getUnknown()->hooks;
-
 	printf("Registering a hook %d\n", (int)type);
+
+	auto& hooks = getUnknown()->hooks;
 
 	if(hooks.find(type) == hooks.end()) {
 //	    // If there is no hooks
@@ -329,7 +324,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 
 void Unknown::callHooks(HookType type)
 {
-	auto& hooks = getUnknown()->hooks;
+    auto& hooks = getUnknown()->hooks;
 
 	auto vec = hooks[type];
 

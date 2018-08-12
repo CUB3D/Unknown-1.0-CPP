@@ -9,28 +9,25 @@ namespace Unknown
 {
 	namespace Graphics
 	{
-		class Image;
-		extern std::vector<Image*> imageLateInit;
-
 		class Image
 		{
 		private:
-			SDL_Surface* imageSurface;
-			SDL_Texture* imageTexture;
+			std::string filename;
+			unsigned int textureID;
 
 		public:
 			SDL_Rect textureRect;
 
-			Image(const std::string& filename);
-			Image(const char* fileName);
-			~Image();
+			explicit Image(const std::string& filename);
+			Image& operator=(const Image& img);
+			virtual ~Image();
 
 			void init();
 			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
 			void render(const int x, const int y, const double angle) const;
 			void render(const int x, const int y) const;
 
-			virtual std::unique_ptr<Image> clone() const;
+			//virtual std::unique_ptr<Image> clone() const;
 		};
 	}
 }

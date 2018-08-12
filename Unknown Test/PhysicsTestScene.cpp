@@ -17,8 +17,8 @@
 #include "Audio/WAVSound.h"
 #include "Editor/EditorBase.h"
 
-using namespace Unknown;
-using namespace Unknown::Graphics;
+using namespace ::Unknown;
+using namespace ::Unknown::Graphics;
 
 KeyBind p1up(SDLK_UP, "jump");
 KeyBind p1left(SDLK_LEFT, "left");
@@ -55,10 +55,11 @@ WAVSound hit("Hit.wav");
 
 
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
-    UK_PYTHON_LOAD_SCRIPT("Test");
+    //UK_PYTHON_LOAD_SCRIPT("Test");
     ui = Loader::loadUI("PhysGameGUI.json");
     ui.setGlobalFont(std::make_shared<TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();
+
     this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
 
     this->addObject(UK_LOAD_ENTITY("Ground.json"));

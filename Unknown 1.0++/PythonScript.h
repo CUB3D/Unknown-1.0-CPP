@@ -43,31 +43,29 @@ namespace Unknown
         };
 
 
-		// Currently only works on gcc8+
-#ifdef UNIX
-		//TODO: find a good place for this
-// Take a variable number of variable typed args and the current recursion level as well as the tuple to store in
-		auto tmp = [](PyObject* t, int x, auto&& a, auto&&... b) {
-			// Get the python type of the current variable
-			PyObject* result = ::Unknown::Python::getPyType(a);
-			// Store it in the tuple
-			PyTuple_SetItem(t, x, result);
-			// If not on the last element, recursively call self, this will take the next value out of the param pack and deduce its type for auto
-			if constexpr (sizeof...(b) > 0) {
-				tmp(t, x, b...);
-			}
-		};
+#ifndef WIN32
+        //TODO: find a good place for this
+        // Take a variable number of variable typed args and the current recursion level as well as the tuple to store in
+        auto tmp = [](PyObject* t, int x, auto&& a, auto&&... b) {
+            // Get the python type of the current variable
+            PyObject* result = ::Unknown::Python::getPyType(a);
+            // Store it in the tuple
+            PyTuple_SetItem(t, x, result);
+            // If not on the last element, recursively call self, this will take the next value out of the param pack and deduce its type for auto
+            if constexpr (sizeof...(b) > 0) {
+                tmp(t, x, b...);
+            }
+        };
 
-		auto pythonFunc = [](const std::string& name) {
-			return [name](auto... args) {
-				auto size = sizeof...(args);
-				PyObject *tuple = PyTuple_New(size);
-				tmp(tuple, 0, args...);
-				::Unknown::Python::getInterpreter()->callMethod(name, tuple);
-			};
-		};
-#endif // 
-
+        auto pythonFunc = [](const std::string& name) {
+            return [name](auto... args) {
+                auto size = sizeof...(args);
+                PyObject *tuple = PyTuple_New(size);
+                tmp(tuple, 0, args...);
+                ::Unknown::Python::getInterpreter()->callMethod(name, tuple);
+            };
+        };
+#endif // !WIN32
     }
 }
 

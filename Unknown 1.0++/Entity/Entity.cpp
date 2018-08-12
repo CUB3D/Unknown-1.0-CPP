@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "PhysicsBodyComponent.h"
 
+Unknown::Entity::Entity(const std::string& tag) : size(0, 0), position(0, 0), tag(tag), enabled(true), queueDissable(false), angle(0) {}
+
 void Unknown::Entity::render(double Xoffset, double Yoffset) const {
     if(!enabled)
         return;
@@ -30,8 +32,6 @@ void Unknown::Entity::update() {
 Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
     return Rect<int>(position.x, position.y, size.height, size.width);
 }
-
-Unknown::Entity::Entity(const std::string& tag) : size(0, 0), position(0, 0), tag(tag), enabled(true), queueDissable(false) {}
 
 void Unknown::Entity::setPosition(double x, double y) {
     this->position = Point<double>(x, y);

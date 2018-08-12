@@ -12,14 +12,6 @@
 namespace Unknown {
 	extern std::string logStatus[];
 
-//    template<class ... T>
-//	void log(int logLevel, T ... args) 	{
-//	    int size = sizeof...(args);
-//	    std::string full = concat(size, " ", args...);
-//
-//        printf("[%s]: %s\n", logStatus[logLevel].c_str(), full.c_str());
-//    }
-
     void log(int logLevel, std::initializer_list<std::string> args);
 }
 

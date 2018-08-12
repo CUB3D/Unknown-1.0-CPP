@@ -46,11 +46,9 @@ endif()
 set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
 
 # Find python
-
 if(WIN32)
-    set(PYTHONLIBS_FOUND TRUE)
     set(PYTHON_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
-    set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\Python36.lib)
+    set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\python36.lib)
 endif()
 
 #TODO: Make work on windows and add REQUIRED
@@ -62,9 +60,18 @@ endif()
 
 #TODO: Add this back in when cmake 3.12 is available
 
-find_package(Py3 REQUIRED)
-if(Py3_FOUND)
-endif()
+if(UNIX)
+find_package(Py3)
+	if(Py3_FOUND)
+		message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
+    else(Py3_FOUND)
+        # If not try using pythonlibs
+        find_package(PythonLibs)
+        if(PYTHONLIBS_FOUND)
+            message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
+        endif(PYTHONLIBS_FOUND)
+	endif(Py3_FOUND)
+endif(UNIX)
 
 if(UNIX)
     # Find box2d
@@ -74,9 +81,11 @@ if(WIN32)
     find_package(Box2DWin REQUIRED)
 endif()
 
-if(BOX2D_FOUND)
-    message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
-endif(BOX2D_FOUND)
+if(TRAVIS)
+    set(BOX2D_LIBRARY /usr/lib/x86_64-linux-gnu/libBox2D.so)
+endif(TRAVIS)
+
+message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
 
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
@@ -104,7 +113,7 @@ target_link_libraries(UK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${UK_LIB})
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${UK_LIB})
-add_custom_command(TARGET UK POST_BUILD COMMAND python ${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py ${PROJECT_SOURCE_DIR})
+add_custom_command(TARGET UK POST_BUILD COMMAND python ${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py ${PROJECT_SOURCE_DIR} ${CMAKE_HOST_SYSTEM_NAME})
 
 FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.cpp")
 add_executable(UKTest ${UK_TEST_SRC})
