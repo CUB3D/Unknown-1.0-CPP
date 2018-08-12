@@ -78,6 +78,7 @@ namespace Unknown
 		ButtonComponent();
 		void mouseListener(MouseEvent evnt);
 		virtual void render() const override;
+		virtual void init() override;
 	};
 
     class TextBoxComponent : public UIComponent

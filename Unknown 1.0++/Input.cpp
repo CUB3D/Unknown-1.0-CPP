@@ -147,8 +147,10 @@ Unknown::MouseButton Unknown::SDLTOMouseButton(const int SDLCode)
 
 std::map <std::string, std::function<void(const Unknown::MouseEvent)> > Unknown::mouseListeners;
 
+//TODO: listener id should be const reference
 void Unknown::registerMouseListener(std::function<void(const Unknown::MouseEvent)> listener, std::string listenerID)
 {
+	UK_LOG_INFO("Registering mouse listener:", listenerID);
 	mouseListeners[listenerID] = listener;
 }
 
