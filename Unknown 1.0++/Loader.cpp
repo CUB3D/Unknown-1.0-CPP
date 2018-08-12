@@ -383,6 +383,10 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
             }
         }
 
+        if(typeString == "Image") {
+            comp = std::make_shared<ImageComponent>();
+        }
+
 		comp->name = componenetName;
 
 		auto colour = member->value.FindMember("Colour");
@@ -504,14 +508,14 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
                 if(bounds->value[x].IsInt())
                 {
                     boundsArray[x] = bounds->value[x].GetInt();
-                    std::cout << "Bounds[" << x << "] = " << boundsArray[x] << std::endl;
+                   // std::cout << "Bounds[" << x << "] = " << boundsArray[x] << std::endl;
                 }
             }
 
             comp->location = Point<int>(boundsArray[0], boundsArray[1]);
             comp->size = Dimension<int>(boundsArray[2], boundsArray[3]);
 
-            std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
+            //std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
 
             if(comp->size.width == -1)
             {

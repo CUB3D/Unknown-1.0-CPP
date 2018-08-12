@@ -26,6 +26,9 @@ namespace Unknown
 		Colour& operator=(const Colour& other);
 
 		SDL_Color toSDLColour() const;
+
+
+		static Colour darken(const Colour &col, const double amount);
 	};
 
 	#define UK_COLOUR_RGBA(r, g, b, a) ::Unknown::Colour(r, g, b, a)

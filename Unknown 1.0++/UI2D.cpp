@@ -39,5 +39,22 @@ void Unknown::Graphics::setDrawColour(const Colour colour)
 }
 
 void Unknown::Graphics::drawCircle(const int x, const int y, const int radius, const Colour &col) {
+	setDrawColour(col);
 
+	int segments = 100;
+
+	SDL_Point points[100];
+
+	for(int ii = 0; ii < segments; ii++)
+	{
+		float theta = 2.0f * 3.1415926f * float(ii) / float(segments);//get the current angle
+
+		float dx = radius * cosf(theta);//calculate the x component
+		float dy = radius * sinf(theta);//calculate the y component
+
+		points[ii].x = x + dx;
+		points[ii].y = y + dy;
+	}
+
+	SDL_RenderDrawLines(getUnknown()->windowRenderer, points, segments);
 }
