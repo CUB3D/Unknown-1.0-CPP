@@ -37,3 +37,7 @@ void Unknown::Graphics::setDrawColour(const Colour colour)
 
 	SDL_SetRenderDrawColor(uk->windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
 }
+
+void Unknown::Graphics::drawCircle(const int x, const int y, const int radius, const Colour &col) {
+
+}

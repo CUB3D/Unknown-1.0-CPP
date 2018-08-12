@@ -79,7 +79,7 @@ void Unknown::Graphics::Animation::attemptAdvanceFrame() {
 	{
 		currentFrameIndex++;
 
-		if (currentFrameIndex == frames.size() - 1g) {
+		if (currentFrameIndex == frames.size() - 1) {
             if (loop) {
                 currentFrameIndex = 0;
             } else {
