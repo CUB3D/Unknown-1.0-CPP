@@ -83,7 +83,13 @@ if(WIN32)
     find_package(Box2DWin REQUIRED)
 endif()
 
+if(TRAVIS)
+    set(BOX2D_LIBRARY /usr/lib/x86_64-linux-gnu/libBox2D.so)
+endif(TRAVIS)
+
 message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
+
+
 
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
