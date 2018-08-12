@@ -9,9 +9,6 @@ namespace Unknown
 {
 	namespace Graphics
 	{
-		class Image;
-		extern std::vector<Image*> imageLateInit;
-
 		class Image
 		{
 		private:

@@ -92,8 +92,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
 	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_LOG_INFO("Performing late init for", intToString(Graphics::imageLateInit.size()), "images");
-	for(auto& image : Graphics::imageLateInit) {
+	UK_LOG_INFO("Performing late init for", intToString(imageLateInit.size()), "images");
+	for(auto& image : imageLateInit) {
 		image->init();
 	}
 
