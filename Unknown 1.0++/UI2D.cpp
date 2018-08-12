@@ -70,7 +70,7 @@ void Unknown::Graphics::setDrawColour(const Colour colour)
 }
 
 void Unknown::Graphics::GL_setColour(const Colour &colour) {
-    glColor3f((float) colour.red / 255, (float) colour.green / 255, (float) colour.blue / 255);
+    glColor4f((float) colour.red / 255.0, (float) colour.green / 255.0, (float) colour.blue / 255.0, (float) colour.alpha / 255.0);
 }
 
 void Unknown::Graphics::drawPoint(const int x, const int y, const int size, const Colour &colour) {
@@ -99,5 +99,13 @@ void Unknown::Graphics::drawCircle(const int cx, const int cy, const int radius,
         glVertex2f(x + cx, y + cy);//output vertex
 
     }
+    glEnd();
+}
+
+void Unknown::Graphics::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) {
+    GL_setColour(col);
+    glBegin(GL_LINE);
+    glVertex3f(sx, sy, 0);
+    glVertex3f(ex, ey, 0);
     glEnd();
 }
