@@ -324,7 +324,8 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 	{
 		std::unique_ptr<Graphics::Image>& imagePrefab = imagePool.find(name)->second;
 		//Clone so that original remains unmodified
-		return imagePrefab->clone();
+		//return imagePrefab->clone();
+		return nullptr;
 	}
 
 	std::unique_ptr<Graphics::Image> image = std::make_unique<Graphics::Image>(name);
@@ -334,7 +335,8 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
 
 	//Again, clone to keep original unmodified
     // After std::move image.get() -> nullptr therefore clone the one in the pool
-	return imagePool[name]->clone();
+	//return imagePool[name]->clone();
+	return nullptr;
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)
