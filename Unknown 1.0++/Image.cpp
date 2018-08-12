@@ -7,7 +7,6 @@
 
 #include "Unknown.h"
 
-std::vector<Unknown::Graphics::Image*> Unknown::Graphics::imageLateInit;
 
 void Unknown::Graphics::Image::init()
 {
@@ -27,8 +26,9 @@ void Unknown::Graphics::Image::init()
 		uk->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
 	}
 
-	this->imageTexture = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(uk->windowRenderer, imageSurface), [](SDL_Texture* tex) {
-		SDL_DestroyTexture(tex);
+	this->imageTexture = std::shared_ptr<SDL_Texture>(SDL_CreateTextureFromSurface(uk->windowRenderer, imageSurface), [](SDL_Texture* text) {
+		if(text)
+			SDL_DestroyTexture(text);
 	});
 
 	if (!imageTexture) {
@@ -79,7 +79,7 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 
 Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename) {
 	if(getUnknown()->currentState < UK_POST_INIT) {
-		imageLateInit.push_back(this);
+	    getUnknown()->imageLateInit.push_back(this);
 	} else { // There is a renderer, init now
 		this->init();
 	}
