@@ -168,6 +168,12 @@
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Colour.h">
 			<Option target="UK"/>
 		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Entity/AnimationRenderComponent.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Entity/AnimationRenderComponent.h">
+			<Option target="UK"/>
+		</Unit>
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Entity/BasicRenderComponent.cpp">
 			<Option target="UK"/>
 		</Unit>

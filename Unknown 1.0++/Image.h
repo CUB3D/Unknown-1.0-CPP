@@ -14,21 +14,21 @@ namespace Unknown
 		private:
 			std::string filename;
 
-			std::shared_ptr<SDL_Texture> imageTexture;
+			SDL_Texture* imageTexture;
 
 		public:
 			SDL_Rect textureRect;
 
-			Image(const std::string& filename);
+			explicit Image(const std::string& filename);
 			Image& operator=(const Image& img);
-			virtual ~Image() = default;
+			virtual ~Image();
 
 			void init();
 			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
 			void render(const int x, const int y, const double angle) const;
 			void render(const int x, const int y) const;
 
-			virtual std::unique_ptr<Image> clone() const;
+			//virtual std::unique_ptr<Image> clone() const;
 		};
 	}
 }
