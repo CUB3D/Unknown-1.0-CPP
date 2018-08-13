@@ -58,3 +58,10 @@ void Unknown::Graphics::drawCircle(const int x, const int y, const int radius, c
 
 	SDL_RenderDrawLines(getUnknown()->windowRenderer, points, segments);
 }
+
+void Unknown::Graphics::drawLine(int sx, int sy, int ex, int ey, const Colour &col) {
+	auto uk = getUnknown();
+
+	setDrawColour(col);
+	SDL_RenderDrawLine(uk->windowRenderer, sx, sy, ex, ey);
+}

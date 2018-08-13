@@ -17,7 +17,7 @@
 #include "Entity/ImageRenderComponent.h"
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
-std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
+std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 {
@@ -318,25 +318,20 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	return animation.get();
 }
 
-std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const char* name)
-{
-	if (imagePool.find(name) != imagePool.end())
-	{
-		std::unique_ptr<Graphics::Image>& imagePrefab = imagePool.find(name)->second;
-		//Clone so that original remains unmodified
-		//return imagePrefab->clone();
-		return nullptr;
+std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std::string &name) {
+	if (imagePool.find(name) != imagePool.end()) {
+		return imagePool.find(name)->second;
 	}
 
-	std::unique_ptr<Graphics::Image> image = std::make_unique<Graphics::Image>(name);
+	std::shared_ptr<Graphics::Image> image = std::make_shared<Graphics::Image>(name);
 
-	//Give the map ownership of the pointer
-	imagePool[name] = std::move(image);
+	// copy to map
+	imagePool[name] = image;
 
 	//Again, clone to keep original unmodified
     // After std::move image.get() -> nullptr therefore clone the one in the pool
 	//return imagePool[name]->clone();
-	return nullptr;
+	return image;
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)

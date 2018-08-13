@@ -165,7 +165,7 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
     const char* fileName_cStr = PY_GET_UTF8(args, 0);
     printf("Loading file '%s'\n", fileName_cStr);
 
-    std::unique_ptr<Unknown::Graphics::Image> image = UK_LOAD_IMAGE(fileName_cStr);
+    std::unique_ptr<Unknown::Graphics::Image> image =  std::make_unique<::Unknown::Graphics::Image>(std::string(fileName_cStr));
     PyObject* capsule = PY_MAKE_CAPSULE(image.release(), "Image", [](PyObject* a){});
 
     if(!capsule) {
