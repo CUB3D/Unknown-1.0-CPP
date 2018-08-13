@@ -13,8 +13,8 @@ Unknown::Graphics::Font::Font() : Font(nullptr, "", 0)
 
 void Unknown::Graphics::Font::drawChar(const char character, const int x, const int y) const
 {
-	fontSheet->textureRect.w = this->charSize;
-	fontSheet->textureRect.h = this->charSize;
+	fontSheet->imageSize.width = this->charSize;
+	fontSheet->imageSize.height = this->charSize;
 
 	int position = layout.find(character);
 

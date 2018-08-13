@@ -25,7 +25,7 @@ Unknown::ImageDirectoryTileMapRenderer::ImageDirectoryTileMapRenderer(Unknown::M
    this->renderer = [&](int x, int y, int id, int data) {
        auto img = images[id];
        if(img) {
-           img->render(x * img->textureRect.w, y * img->textureRect.h);
+           img->render(x * img->imageSize.width, y * img->imageSize.height);
        } else {
            printf("Error: no image for %d\n", id);
        }
