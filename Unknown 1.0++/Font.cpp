@@ -61,10 +61,10 @@ Unknown::Graphics::TTFont::TTFont(std::string name, const int size, Colour colou
 void Unknown::Graphics::TTFont::drawString(const std::string string, const int x, const int y) const
 {
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, string.c_str(), this->color);
-	auto texture = SDL_CreateTextureFromSurface(getUnknown()->windowRenderer, textSurface);
+	auto texture = SDL_CreateTextureFromSurface(getUnknown().windowRenderer, textSurface);
 	SDL_Rect quad = {x, y, textSurface->w, textSurface->h};
 	SDL_FreeSurface(textSurface);
-	SDL_RenderCopy( getUnknown()->windowRenderer, texture, NULL, &quad );
+	SDL_RenderCopy( getUnknown().windowRenderer, texture, NULL, &quad );
     SDL_DestroyTexture(texture);
 }
 

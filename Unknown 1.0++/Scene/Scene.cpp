@@ -7,14 +7,14 @@
 #include "../Font.h"
 
 Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f)),
-cam(getUnknown()->screenSize->width, getUnknown()->screenSize->height)
+cam(getUnknown().screenSize->width, getUnknown().screenSize->height)
 {
     world.SetContactListener(&contactManager);
 }
 
 void Unknown::Scene::update()
 {
-   this->world.Step(getUnknown()->tickSpeed / 1000, 8, 3);
+   this->world.Step(getUnknown().tickSpeed / 1000, 8, 3);
 
    for(auto& updateable : this->updatables) {
        if(updateable)

@@ -112,8 +112,6 @@ namespace Unknown
         std::string relatedKey;
     };
 
-    extern std::map<std::string, std::function<void(std::shared_ptr<UIEvent>)>> UIListeners;
-
     void registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID);
     void removeUIListener(std::string listnerID);
     void callUIListeners(std::shared_ptr<UIEvent> evnt);
