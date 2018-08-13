@@ -119,7 +119,7 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		double height = heightValue->GetDouble();
 		ent->size = Dimension<double>(width, height);
 	} else {
-		printf("[WARN] Entity %s has no size\n", name.c_str());
+		printf("[ERR] Entity %s has no size\n", name.c_str());
 		return ent;
 	}
 

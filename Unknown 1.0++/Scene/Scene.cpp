@@ -27,6 +27,7 @@ void Unknown::Scene::render() const {
         if(cam.getBounds().contains(renderable->getRenderBounds()) || true) {
             //TODO: pass some offset
             renderable->render(cam.area.x, cam.area.y);
+			printf("Rendering\n");
         }
     }
 }

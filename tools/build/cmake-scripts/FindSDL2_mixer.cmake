@@ -59,7 +59,7 @@ find_path(SDL2_MIXER_INCLUDE_DIR SDL_mixer.h
         /opt/local # DarwinPorts
         /opt/csw # Blastwave
         /opt
-	${PROJECT_SOURCE_DIR}/Libs/SDL2_mixer
+	${UK_DIR}/Libs/SDL2_mixer
         )
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -84,7 +84,7 @@ find_library(SDL2_MIXER_LIBRARY
         /opt/local # DarwinPorts
         /opt/csw # Blastwave
         /opt
-	${PROJECT_SOURCE_DIR}/Libs/SDL2_mixer
+	${UK_DIR}/Libs/SDL2_mixer
         )
 
 if(SDL2_MIXER_INCLUDE_DIR AND EXISTS "${SDL2_MIXER_INCLUDE_DIR}/SDL_MIXER.h")
