@@ -17,7 +17,7 @@
 #include "Entity/ImageRenderComponent.h"
 
 std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
-std::map<const char*, std::unique_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
+std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
 {
@@ -283,7 +283,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (member->name == "Frame")
 		{
 			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
-			std::unique_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
+			std::shared_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
 			
 			rapidjson::Value::MemberIterator delayMemeber = member->value.FindMember("Delay");
 
@@ -297,7 +297,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 			::Unknown::Graphics::AnimationFrame animationFrame;
 
 			animationFrame.delayms = delay;
-			animationFrame.frameImage = image.get();
+			animationFrame.frameImage = image;
 
 			animation->addFrame(animationFrame);
 		}
@@ -318,23 +318,20 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	return animation.get();
 }
 
-std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const char* name)
-{
-	if (imagePool.find(name) != imagePool.end())
-	{
-		std::unique_ptr<Graphics::Image>& imagePrefab = imagePool.find(name)->second;
-		//Clone so that original remains unmodified
-		return imagePrefab->clone();
+std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std::string &name) {
+	if (imagePool.find(name) != imagePool.end()) {
+		return imagePool.find(name)->second;
 	}
 
-	std::unique_ptr<Graphics::Image> image(new Graphics::Image(name));
+	std::shared_ptr<Graphics::Image> image = std::make_shared<Graphics::Image>(name);
 
-	//Give the map ownership of the pointer
-	imagePool[name] = std::move(image);
+	// copy to map
+	imagePool[name] = image;
 
 	//Again, clone to keep original unmodified
     // After std::move image.get() -> nullptr therefore clone the one in the pool
-	return imagePool[name]->clone();
+	//return imagePool[name]->clone();
+	return image;
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)
@@ -381,6 +378,10 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
             if(numerical != member->value.MemberEnd()) {
                 comp_->isNumerical = numerical->value.GetBool();
             }
+        }
+
+        if(typeString == "Image") {
+            comp = std::make_shared<ImageComponent>();
         }
 
 		comp->name = componenetName;
@@ -504,23 +505,23 @@ std::unique_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const cha
                 if(bounds->value[x].IsInt())
                 {
                     boundsArray[x] = bounds->value[x].GetInt();
-                    std::cout << "Bounds[" << x << "] = " << boundsArray[x] << std::endl;
+                   // std::cout << "Bounds[" << x << "] = " << boundsArray[x] << std::endl;
                 }
             }
 
             comp->location = Point<int>(boundsArray[0], boundsArray[1]);
             comp->size = Dimension<int>(boundsArray[2], boundsArray[3]);
 
-            std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
+            //std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
 
             if(comp->size.width == -1)
             {
-                comp->size.width = getUnknown()->screenSize->width;
+                comp->size.width = getUnknown().screenSize->width;
             }
 
             if(comp->size.height == -1)
             {
-                comp->size.height = getUnknown()->screenSize->height;
+                comp->size.height = getUnknown().screenSize->height;
             }
         }
 
