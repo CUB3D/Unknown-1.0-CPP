@@ -4,6 +4,7 @@
 #include <SDL.h>
 #include <memory>
 #include <vector>
+#include "Utils.h"
 
 namespace Unknown
 {
@@ -13,11 +14,10 @@ namespace Unknown
 		{
 		private:
 			std::string filename;
-
 			SDL_Texture* imageTexture;
 
 		public:
-			SDL_Rect textureRect;
+		    ::Unknown::Dimension<int> imageSize;
 
 			explicit Image(const std::string& filename);
 			Image& operator=(const Image& img);

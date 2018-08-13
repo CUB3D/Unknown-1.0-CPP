@@ -27,10 +27,8 @@ void Unknown::Graphics::Image::init()
 		uk->quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
 	}
 
-	this->textureRect.x = 0;
-	this->textureRect.y = 0;
-	this->textureRect.w = imageSurface->w;
-	this->textureRect.h = imageSurface->h;
+	this->imageSize.width = imageSurface->w;
+	this->imageSize.height = imageSurface->h;
 
 	SDL_FreeSurface(imageSurface);
 }
@@ -57,9 +55,11 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
         uk->quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
     }
 
-	auto textRect = this->textureRect;
-	textRect.x = x;
-	textRect.y = y;
+    SDL_Rect textRect;
+    textRect.x = x;
+    textRect.y = y;
+    textRect.w = imageSize.width;
+    textRect.h = imageSize.height;
 
     int status = SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &textRect, angle, NULL, SDL_FLIP_NONE);
     if(status) {
