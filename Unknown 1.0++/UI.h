@@ -78,6 +78,7 @@ namespace Unknown
 		ButtonComponent();
 		void mouseListener(MouseEvent evnt);
 		virtual void render() const override;
+		virtual void init() override;
 	};
 
     class TextBoxComponent : public UIComponent
@@ -94,6 +95,16 @@ namespace Unknown
         virtual void init() override;
     };
 
+    class ImageComponent : public UIComponent
+	{
+	public:
+		std::shared_ptr<Graphics::Image> image;
+
+		ImageComponent();
+		virtual void render() const override;
+		virtual void init() override;
+	};
+
     struct UIEvent
     {
         std::string componentName;
@@ -101,13 +112,11 @@ namespace Unknown
         std::string relatedKey;
     };
 
-    extern std::map<std::string, std::function<void(std::shared_ptr<UIEvent>)>> UIListeners;
-
     void registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID);
     void removeUIListener(std::string listnerID);
     void callUIListeners(std::shared_ptr<UIEvent> evnt);
 
-    #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](::Unknown::UIEvent evnt) {listener(evnt);}, id)
+    #define UK_ADD_UI_LISTENER_INTERNAL(listener, id) ::Unknown::registerUIListener([this](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_ADD_UI_LISTENER_EXTERNAL(listener, id) ::Unknown::registerUIListener([](std::shared_ptr<::Unknown::UIEvent> evnt) {listener(evnt);}, id)
     #define UK_REMOVE_UI_LISTENER(id) ::Unknown::removeUIListener(id)
 

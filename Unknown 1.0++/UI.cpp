@@ -8,21 +8,28 @@
 #include <memory>
 #include <ctime>
 #include <regex>
-
-std::map <std::string, std::function<void(std::shared_ptr<Unknown::UIEvent>)> > Unknown::UIListeners;
+#include "Log.h"
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
-    UIListeners[listenerID] = listener;
+    UK_LOG_INFO("Registering listener", listenerID);
+
+    auto& UIListeners = getUnknown().UIListeners;
+    UIListeners[listenerID] = std::move(listener);
 }
 
 void Unknown::removeUIListener(std::string listenerID)
 {
+    UK_LOG_INFO("Removing listener:", listenerID);
+    auto& UIListeners = getUnknown().UIListeners;
     UIListeners.erase(listenerID);
 }
 
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
+    auto& UIListeners = getUnknown().UIListeners;
+    UK_LOG_INFO("Sending ui event to", intToString(UIListeners.size()), "listeners");
+
     std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
 
     for (listeners = UIListeners.begin(); listeners != UIListeners.end(); listeners++)
@@ -158,7 +165,7 @@ void Unknown::TextComponent::render() const
     std::smatch results;
     std::regex_search(this->content, results, var);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
 	if (std::regex_search(this->content, results, var)) {
 
@@ -184,10 +191,7 @@ void Unknown::TextComponent::render() const
 
 //ButtonComponent
 
-Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)
-{
-	UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
-}
+Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 
 void Unknown::ButtonComponent::mouseListener(MouseEvent evnt)
 {
@@ -216,13 +220,17 @@ void Unknown::ButtonComponent::render() const
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Colour col = *this->colour;
+	Colour col = Colour::GREEN;
+
+	if(this->colour) {
+        col = *this->colour;
+    }
 
 	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.width)
 	{
 		if (mouseY >= this->location.y && mouseY <= this->location.y + this->size.height)
 		{
-			col = Colour::WHITE;
+			col = Colour::darken(col, 40);
 		}
 	}
 
@@ -232,6 +240,10 @@ void Unknown::ButtonComponent::render() const
 	{
 		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.height / 2 - font->getStringHeight(this->content) / 2);
 	}
+}
+
+void Unknown::ButtonComponent::init() {
+    UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
 }
 
 //TextBoxComponent
@@ -321,4 +333,14 @@ void Unknown::TextBoxComponent::init()
 
 Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
 {
+}
+
+Unknown::ImageComponent::ImageComponent() {}
+
+void Unknown::ImageComponent::render() const {
+    this->image->render(this->location.x, this->location.y);
+}
+
+void Unknown::ImageComponent::init() {
+    this->image = std::make_shared<Graphics::Image>(this->content);
 }

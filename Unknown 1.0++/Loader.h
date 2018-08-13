@@ -13,7 +13,7 @@ namespace Unknown
     namespace Loader
     {
         extern std::map<const char*, std::unique_ptr<Sprite>> spritePool;
-        extern std::map<const char*, std::unique_ptr<Graphics::Image>> imagePool;
+        extern std::map<std::string, std::shared_ptr<Graphics::Image>> imagePool;
 
         ::Unknown::Sprite* loadSprite(const char* name);
 
@@ -22,7 +22,7 @@ namespace Unknown
 
 
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);
-        std::unique_ptr<::Unknown::Graphics::Image> loadImage(const char* name);
+        std::shared_ptr<::Unknown::Graphics::Image> loadImage(const std::string& name);
         ::Unknown::UIContainer loadUI(const std::string &name);
     }
 }
