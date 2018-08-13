@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Font.h"
+#include "GL/glad/glad.h"
 
 #include <iostream>
 #include <SDL_ttf.h>
@@ -60,13 +61,68 @@ Unknown::Graphics::TTFont::TTFont(std::string name, const int size, Colour colou
 
 void Unknown::Graphics::TTFont::drawString(const std::string string, const int x, const int y) const
 {
-	return;
+    //TODO: every character should have its own texture and they should be cached
+    glPushMatrix();
+
 	SDL_Surface* textSurface = TTF_RenderText_Blended(font, string.c_str(), this->color);
-	auto texture = SDL_CreateTextureFromSurface(getUnknown()->windowRenderer, textSurface);
-	SDL_Rect quad = {x, y, textSurface->w, textSurface->h};
-	SDL_FreeSurface(textSurface);
-	SDL_RenderCopy( getUnknown()->windowRenderer, texture, NULL, &quad );
-    SDL_DestroyTexture(texture);
+
+	if(!textSurface) {
+	    //TODO:
+	}
+
+	unsigned int texture;
+
+    Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+
+    //TODO: why rerender
+	SDL_Surface* tmp = SDL_CreateRGBSurface(0, textSurface->w, textSurface->h, 32, rmask, gmask, bmask, amask);
+	SDL_BlitSurface(textSurface, NULL, tmp, NULL);
+
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp->pixels);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glEnable(GL_TEXTURE_2D);
+    glColor3f(1, 1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+
+    glBegin(GL_TRIANGLES);
+    // Top right
+    glTexCoord2f(0, 0);
+    glVertex3f(x, y, 0);
+    glTexCoord2f(1, 0);
+    glVertex3f(x + textSurface->w, y, 0);
+    glTexCoord2f(1, 1);
+    glVertex3f(x + textSurface->w, y + textSurface->h, 0);
+
+    // Bottom left
+    glTexCoord2f(0, 0);
+    glVertex3f(x, y, 0);
+    glTexCoord2f(0, 1);
+    glVertex3f(x, y + textSurface->h, 0);
+    glTexCoord2f(1, 1);
+    glVertex3f(x + textSurface->w, y + textSurface->h, 0);
+
+    glEnd();
+    glPopMatrix();
 }
 
 int Unknown::Graphics::TTFont::getStringWidth(const std::string str) const

@@ -168,6 +168,36 @@
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Colour.h">
 			<Option target="UK"/>
 		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/EditorBase.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/EditorBase.h">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui.h">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_demo.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_draw.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_impl_opengl3.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_impl_opengl3.h">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_impl_sdl.cpp">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Editor/imgui_impl_sdl.h">
+			<Option target="UK"/>
+		</Unit>
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Entity/AnimationRenderComponent.cpp">
 			<Option target="UK"/>
 		</Unit>
@@ -232,6 +262,12 @@
 			<Option target="UK"/>
 		</Unit>
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/Font.h">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/GL/glad/glad.c">
+			<Option target="UK"/>
+		</Unit>
+		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/GL/glad/glad.h">
 			<Option target="UK"/>
 		</Unit>
 		<Unit filename="/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown 1.0++/ITagable.cpp">
