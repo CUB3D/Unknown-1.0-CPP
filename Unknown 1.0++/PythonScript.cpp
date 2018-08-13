@@ -406,7 +406,7 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
     const char* name_c = PY_GET_UTF8(args, 0);
     std::string name(name_c);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];
@@ -430,7 +430,7 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
     PyObject* data = PY_GET_OBJ(args, 1);
     std::string name(name_c);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];

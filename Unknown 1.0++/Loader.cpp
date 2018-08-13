@@ -516,12 +516,12 @@ std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std
 
             if(comp->size.width == -1)
             {
-                comp->size.width = getUnknown()->screenSize->width;
+                comp->size.width = getUnknown().screenSize->width;
             }
 
             if(comp->size.height == -1)
             {
-                comp->size.height = getUnknown()->screenSize->height;
+                comp->size.height = getUnknown().screenSize->height;
             }
         }
 

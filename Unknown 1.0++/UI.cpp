@@ -10,23 +10,24 @@
 #include <regex>
 #include "Log.h"
 
-//TODO: this should be in unknown
-std::map <std::string, std::function<void(std::shared_ptr<Unknown::UIEvent>)> > Unknown::UIListeners;
-
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
     UK_LOG_INFO("Registering listener", listenerID);
+
+    auto& UIListeners = getUnknown().UIListeners;
     UIListeners[listenerID] = std::move(listener);
 }
 
 void Unknown::removeUIListener(std::string listenerID)
 {
     UK_LOG_INFO("Removing listener:", listenerID);
+    auto& UIListeners = getUnknown().UIListeners;
     UIListeners.erase(listenerID);
 }
 
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
+    auto& UIListeners = getUnknown().UIListeners;
     UK_LOG_INFO("Sending ui event to", intToString(UIListeners.size()), "listeners");
 
     std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
@@ -164,7 +165,7 @@ void Unknown::TextComponent::render() const
     std::smatch results;
     std::regex_search(this->content, results, var);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
 	if (std::regex_search(this->content, results, var)) {
 

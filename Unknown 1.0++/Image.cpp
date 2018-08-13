@@ -10,21 +10,21 @@
 
 void Unknown::Graphics::Image::init()
 {
-	auto uk = getUnknown();
+	auto& uk = getUnknown();
 
 	SDL_Surface* imageSurface = IMG_Load(this->filename.c_str());
 
 	if (!imageSurface)
 	{
 		printf("Error: failed to load image, %s\n", IMG_GetError());
-		uk->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
+		uk.quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
 	}
 
-	this->imageTexture = SDL_CreateTextureFromSurface(uk->windowRenderer, imageSurface);
+	this->imageTexture = SDL_CreateTextureFromSurface(uk.windowRenderer, imageSurface);
 
 	if (!imageTexture) {
 		printf("Error: failed to create texture, %s\n", IMG_GetError());
-		uk->quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
+		uk.quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
 	}
 
 	this->imageSize.width = imageSurface->w;
@@ -48,11 +48,11 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 }
 
 void Unknown::Graphics::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
-    auto uk = getUnknown();
+    auto& uk = getUnknown();
 
     if (!imageTexture) {
         printf("Error: failed to create texture, %s\n", IMG_GetError());
-        uk->quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
+        uk.quit(ErrorCodes::SDL_IMAGE_TEXTURE_CREATE_FAIL);
     }
 
     SDL_Rect textRect;
@@ -61,7 +61,7 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     textRect.w = imageSize.width;
     textRect.h = imageSize.height;
 
-    int status = SDL_RenderCopyEx(uk->windowRenderer, this->imageTexture, clip, &textRect, angle, NULL, SDL_FLIP_NONE);
+    int status = SDL_RenderCopyEx(uk.windowRenderer, this->imageTexture, clip, &textRect, angle, NULL, SDL_FLIP_NONE);
     if(status) {
         printf("Error rendering image: %s\n", SDL_GetError());
         SDL_ClearError();
@@ -69,8 +69,8 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 }
 
 Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename), imageTexture(nullptr) {
-	if(getUnknown()->currentState < UK_POST_INIT) {
-	    getUnknown()->imageLateInit.push_back(this);
+	if(getUnknown().currentState < UK_POST_INIT) {
+	    getUnknown().imageLateInit.push_back(this);
 	} else { // There is a renderer, init now
 		this->init();
 	}
@@ -80,8 +80,8 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 	this->filename = img.filename;
 	this->imageTexture = nullptr;
 
-    if(getUnknown()->currentState < UK_POST_INIT) {
-        getUnknown()->imageLateInit.push_back(this);
+    if(getUnknown().currentState < UK_POST_INIT) {
+        getUnknown().imageLateInit.push_back(this);
     } else { // There is a renderer, init now
         this->init();
     }
@@ -90,7 +90,7 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 }
 
 Unknown::Graphics::Image::~Image() {
-	if (this->imageTexture && getUnknown()->windowRenderer && getUnknown()->window) {
+	if (this->imageTexture && getUnknown().windowRenderer && getUnknown().window) {
 		SDL_DestroyTexture(this->imageTexture);
 		this->imageTexture = NULL;
 	}
