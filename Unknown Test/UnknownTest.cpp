@@ -61,11 +61,11 @@ void createBoard()
     Unknown::BinaryMapGenerator().generate(map);
 
     boardRenderer = std::make_shared<Unknown::BasicTileMapRenderer>(map, renderTile, false);
-    Unknown::getUnknown()->globalSceneManager.getScene<Unknown::CustomScene>()->renderables.push_back(static_cast<std::shared_ptr<Unknown::IRenderable>>(boardRenderer));
+    Unknown::getUnknown().globalSceneManager.getScene<Unknown::CustomScene>()->renderables.push_back(static_cast<std::shared_ptr<Unknown::IRenderable>>(boardRenderer));
 
-    auto uk = Unknown::getUnknown();
-    scaleX = uk->screenSize->width / width;
-    scaleY = uk->screenSize->height / height;
+    auto& uk = Unknown::getUnknown();
+    scaleX = uk.screenSize->width / width;
+    scaleY = uk.screenSize->height / height;
 
     printf("Board creation complete\n");
 }
@@ -85,7 +85,7 @@ void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 {
     if(evnt->componentName == "ButtonStart")
     {
-        Unknown::UIContainer& mainMenu = Unknown::getUnknown()->globalSceneManager.getScene<Unknown::MenuScene>()->menu;
+        Unknown::UIContainer& mainMenu = Unknown::getUnknown().globalSceneManager.getScene<Unknown::MenuScene>()->menu;
         std::string widthText = mainMenu.getComponentValue("TextBoxWidth");
         std::string heightText = mainMenu.getComponentValue("TextBoxHeight");
         std::string speedText = mainMenu.getComponentValue("TextBoxSpeed");
@@ -112,12 +112,12 @@ void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 }
 
 void onResize(Unknown::Event& evt) {
-    if(Unknown::getUnknown()->globalSceneManager.currentSceneName == "Simulator") {
-        auto uk = Unknown::getUnknown();
-        scaleX = uk->screenSize->width / width;
-        scaleY = uk->screenSize->height / height;
+    if(Unknown::getUnknown().globalSceneManager.currentSceneName == "Simulator") {
+        auto& uk = Unknown::getUnknown();
+        scaleX = uk.screenSize->width / width;
+        scaleY = uk.screenSize->height / height;
     } else {
-        auto menu = dynamic_cast<Unknown::MenuScene*>(Unknown::getUnknown()->globalSceneManager.currentScene.get());
+        auto menu = dynamic_cast<Unknown::MenuScene*>(Unknown::getUnknown().globalSceneManager.currentScene.get());
         if(menu) {
             menu->reloadMenu();
         }
@@ -178,9 +178,9 @@ void init()
     UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
-    UK_LOAD_SCENE("MainMenu");
+    //UK_LOAD_SCENE("MainMenu");
     UK_LOAD_SCENE("Phys");
-    UK_LOAD_SCENE("RTest");
+    //UK_LOAD_SCENE("RTest");
 }
 
 

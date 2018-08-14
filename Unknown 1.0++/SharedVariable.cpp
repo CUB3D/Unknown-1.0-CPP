@@ -8,7 +8,7 @@
 #include "Unknown.h"
 
 Unknown::SharedVariable::SharedVariable(const std::string &name) :name(name) {
-    getUnknown()->variablelookup[name] = this;
+    getUnknown().variablelookup[name] = this;
 }
 
 const std::type_info& Unknown::SharedVariable::type() const {

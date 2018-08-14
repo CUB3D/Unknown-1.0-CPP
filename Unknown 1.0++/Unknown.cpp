@@ -297,9 +297,9 @@ void Unknown::Unknown::updateWindow()
     SDL_GL_SwapWindow(window);
 }
 
-std::shared_ptr<Unknown::Unknown>& Unknown::getUnknown()
+Unknown::Unknown& Unknown::getUnknown()
 {
-    static std::shared_ptr<Unknown> instance = std::make_shared<Unknown>();
+    static Unknown instance;
 
 	return instance;
 }
@@ -308,7 +308,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
 	printf("Registering a hook %d\n", (int)type);
 
-	auto& hooks = getUnknown()->hooks;
+	auto& hooks = getUnknown().hooks;
 
 	if(hooks.find(type) == hooks.end()) {
 //	    // If there is no hooks
@@ -324,7 +324,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 
 void Unknown::callHooks(HookType type)
 {
-    auto& hooks = getUnknown()->hooks;
+    auto& hooks = getUnknown().hooks;
 
 	auto vec = hooks[type];
 

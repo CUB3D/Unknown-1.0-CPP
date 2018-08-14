@@ -17,9 +17,9 @@ Unknown::EditorBase::EditorBase() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
-    auto uk = getUnknown();
+    auto& uk = getUnknown();
 
-    ImGui_ImplSDL2_InitForOpenGL(uk->window, uk->glContext);
+    ImGui_ImplSDL2_InitForOpenGL(uk.window, uk.glContext);
     ImGui_ImplOpenGL3_Init("#version 130");
 
     //TODO: profiler
@@ -39,7 +39,7 @@ Unknown::EditorBase::~EditorBase() {
 void Unknown::EditorBase::update() {
     bool done;
 
-    auto uk = getUnknown();
+    auto& uk = getUnknown();
 
     ImGuiIO& io = ImGui::GetIO();
 
@@ -47,14 +47,14 @@ void Unknown::EditorBase::update() {
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(uk->window);
+    ImGui_ImplSDL2_NewFrame(uk.window);
     ImGui::NewFrame();
 
     ImGui::Begin("Profiler");
 
     ImGui::Text("GUI framerate %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-    this->fps.push_front((float)getUnknown()->lastFrameTimeMS);
+    this->fps.push_front((float)getUnknown().lastFrameTimeMS);
 
     ImGui::PlotLines("Frame Time", [](void* d, int x) -> float {return (*(std::vector<float>*)d)[x];}, &fps, 10, 0);
 
@@ -71,7 +71,7 @@ void Unknown::EditorBase::update() {
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT)
             done = true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(uk->window))
+        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(uk.window))
             done = true;
     }
 

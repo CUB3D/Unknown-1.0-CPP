@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include "IInitable.h"
+#include "Utils.h"
 
 namespace Unknown
 {
@@ -17,7 +18,7 @@ namespace Unknown
 			unsigned int textureID;
 
 		public:
-			SDL_Rect textureRect;
+		    ::Unknown::Dimension<int> imageSize;
 
 			explicit Image(const std::string& filename);
 			Image& operator=(const Image& img);

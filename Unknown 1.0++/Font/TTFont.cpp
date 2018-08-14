@@ -13,8 +13,8 @@ Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const
         printf("Error [Font]: %s\n", TTF_GetError());
     }
 
-    if(getUnknown()->currentState < UK_POST_INIT) {
-        getUnknown()->lateInit.push_back(this);
+    if(getUnknown().currentState < UK_POST_INIT) {
+        getUnknown().lateInit.push_back(this);
     } else { // There is a renderer, init now
         this->init();
     }

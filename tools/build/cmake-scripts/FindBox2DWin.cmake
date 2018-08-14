@@ -53,7 +53,7 @@ find_path(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
-		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D
+		${UK_DIR}/Libs/Box2D/Box2D
 )
 
 find_library(
@@ -69,7 +69,7 @@ find_library(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
-		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Release
+		${UK_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Release
 )
 
 find_library(
@@ -85,7 +85,7 @@ find_library(
 		${BOX2D_ROOT}
 		$ENV{BOX2DDIR}
 		$ENV{BOX2D_ROOT}
-		${PROJECT_SOURCE_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Debug
+		${UK_DIR}/Libs/Box2D/Box2D/Build/vs2017/bin/Debug
 )
 
 

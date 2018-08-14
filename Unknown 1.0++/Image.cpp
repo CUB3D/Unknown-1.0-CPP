@@ -11,19 +11,17 @@
 
 void Unknown::Graphics::Image::init()
 {
-	auto uk = getUnknown();
+	auto& uk = getUnknown();
 
 	SDL_Surface* imageSurface = IMG_Load(this->filename.c_str());
 
 	if (!imageSurface) {
 		printf("Error: failed to load image, %s\n", IMG_GetError());
-		uk->quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
+		uk.quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
 	}
 
-	this->textureRect.x = 0;
-	this->textureRect.y = 0;
-	this->textureRect.w = imageSurface->w;
-	this->textureRect.h = imageSurface->h;
+	this->imageSize.width = imageSurface->w;
+	this->imageSize.height = imageSurface->h;
 
 	glGenTextures(1, &this->textureID);
 	glBindTexture(GL_TEXTURE_2D, this->textureID);
@@ -53,7 +51,7 @@ void Unknown::Graphics::Image::init()
         }
     }
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureRect.w, textureRect.h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
 
     SDL_FreeSurface(imageSurface);
 }
@@ -73,11 +71,13 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 }
 
 void Unknown::Graphics::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
-    auto uk = getUnknown();
+    auto& uk = getUnknown();
 
-	auto textRect = this->textureRect;
+	SDL_Rect textRect;
 	textRect.x = x;
 	textRect.y = y;
+	textRect.w = this->imageSize.width;
+	textRect.h = this->imageSize.height;
 
     int centerX = (x + textRect.w / 2);
     int centerY = (y + textRect.h /2);
@@ -125,9 +125,9 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     glPopMatrix();
 }
 
-Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename) {
-	if(getUnknown()->currentState < UK_POST_INIT) {
-	    getUnknown()->lateInit.push_back(this);
+Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename), textureID(0) {
+	if(getUnknown().currentState < UK_POST_INIT) {
+	    getUnknown().lateInit.push_back(this);
 	} else { // There is a renderer, init now
 		this->init();
 	}
@@ -136,8 +136,8 @@ Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename
 Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) {
 	this->filename = img.filename;
 
-    if(getUnknown()->currentState < UK_POST_INIT) {
-        getUnknown()->lateInit.push_back(this);
+    if(getUnknown().currentState < UK_POST_INIT) {
+        getUnknown().lateInit.push_back(this);
     } else { // There is a renderer, init now
         this->init();
     }
