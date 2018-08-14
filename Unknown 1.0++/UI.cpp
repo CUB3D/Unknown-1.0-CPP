@@ -101,7 +101,7 @@ Unknown::UIComponent::UIComponent() : UIComponent(UI_NULL)
 	//NOOP
 }
 
-Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type), font(std::make_shared<Graphics::NullFont>())
+Unknown::UIComponent::UIComponent(const UIComponent_Type type) : type(type), font(nullptr)
 {
 
 }

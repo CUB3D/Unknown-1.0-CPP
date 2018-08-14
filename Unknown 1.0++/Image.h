@@ -4,12 +4,13 @@
 #include <SDL.h>
 #include <memory>
 #include <vector>
+#include "IInitable.h"
 
 namespace Unknown
 {
 	namespace Graphics
 	{
-		class Image
+		class Image : public IInitable
 		{
 		private:
 			std::string filename;
@@ -22,7 +23,7 @@ namespace Unknown
 			Image& operator=(const Image& img);
 			virtual ~Image();
 
-			void init();
+			virtual void init() override;
 			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
 			void render(const int x, const int y, const double angle) const;
 			void render(const int x, const int y) const;

@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_DEBUGSCENE_H
 
 #include "Scene.h"
-#include "../Font.h"
+#include "../Font/Font.h"
 
 namespace Unknown
 {

@@ -86,7 +86,9 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->textureID);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -96,10 +98,7 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     glRotated(angle, 0, 0, 1);
     glTranslated(-centerX, -centerY, 0);
 
-
     glColor4f(1, 1, 1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
 
     glBegin(GL_TRIANGLES);
     // Top right
@@ -118,13 +117,17 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     glTexCoord2f(1, 1);
     glVertex3f(x + textRect.w, y + textRect.h, 0);
 
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+
+
     glEnd();
     glPopMatrix();
 }
 
 Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename) {
 	if(getUnknown()->currentState < UK_POST_INIT) {
-	    getUnknown()->imageLateInit.push_back(this);
+	    getUnknown()->lateInit.push_back(this);
 	} else { // There is a renderer, init now
 		this->init();
 	}
@@ -134,7 +137,7 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 	this->filename = img.filename;
 
     if(getUnknown()->currentState < UK_POST_INIT) {
-        getUnknown()->imageLateInit.push_back(this);
+        getUnknown()->lateInit.push_back(this);
     } else { // There is a renderer, init now
         this->init();
     }

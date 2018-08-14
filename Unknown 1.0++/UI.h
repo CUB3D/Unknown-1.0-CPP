@@ -5,7 +5,7 @@
 
 #include "Colour.h"
 #include "Utils.h"
-#include "Font.h"
+#include "Font/Font.h"
 #include "Event/Event.h"
 #include "Renderer/IRenderable.h"
 

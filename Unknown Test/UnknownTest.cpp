@@ -11,7 +11,7 @@
 #include "Input.h"
 #include "Loader.h"
 #include "Animation.h"
-#include "Font.h"
+#include "Font/Font.h"
 #include "Particle.h"
 #include "UI.h"
 #include "UI2D.h"
@@ -32,8 +32,10 @@
 #include <SDL_mixer.h>
 #include <Renderer/BasicTileMapRenderer.h>
 #include "Map/BinaryMapGenerator.h"
+#include "Font/TTFont.h"
 
 #include "PhysicsTestScene.h"
+#include "RenderTestScene.h"
 
 Unknown::Map map(1, 1);
 Unknown::Timer timer(0.2f);
@@ -171,12 +173,14 @@ void init()
 
     font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
+    UK_ADD_SCENE(std::make_shared<RenderTestScene>());
     UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
     UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
     UK_LOAD_SCENE("MainMenu");
     UK_LOAD_SCENE("Phys");
+    UK_LOAD_SCENE("RTest");
 }
 
 

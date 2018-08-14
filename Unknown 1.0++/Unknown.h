@@ -11,6 +11,7 @@
 #include "Scene/SceneManager.h"
 #include "Event/EventManager.h"
 #include "Image.h"
+#include "IInitable.h"
 
 
 namespace Unknown
@@ -66,7 +67,7 @@ namespace Unknown
         std::map<HookType, std::vector<std::function<void()>>> hooks;
         std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
-		std::vector<Graphics::Image*> imageLateInit;
+		std::vector<::Unknown::IInitable*> lateInit;
 
 
 		bool running = true;
