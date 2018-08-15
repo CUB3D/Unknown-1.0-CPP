@@ -4,18 +4,10 @@
 #include <functional>
 #include <map>
 #include <vector>
-
 #include "Event.h"
 
 namespace Unknown
 {
-    enum EventType
-    {
-        ET_MOUSEBUTTON = 0,
-        ET_KEYPRESS = 1,
-        ET_WINDOW_RESIZE = 2
-    };
-
     struct EventHandler
     {
         std::function<void(Event&)> callback;

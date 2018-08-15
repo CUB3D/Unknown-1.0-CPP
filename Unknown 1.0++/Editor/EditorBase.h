@@ -8,25 +8,21 @@
 #include <SDL2/SDL.h>
 #include "imgui.h"
 #include <deque>
+#include "../Scene/Scene.h"
 
 namespace Unknown
 {
-    class EditorBase
+class EditorBase : public ::Unknown::Scene
     {
         std::deque<float> fps;
 
     public:
         EditorBase();
 
-        void update();
+        virtual void update() override;
 
         virtual ~EditorBase();
     };
-
-    EditorBase& getEditor() {
-        static EditorBase base;
-        return base;
-    }
 }
 
 

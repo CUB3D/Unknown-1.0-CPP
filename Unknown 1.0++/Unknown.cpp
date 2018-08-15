@@ -156,8 +156,6 @@ void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
 
-	initKeySystem();
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -228,30 +226,34 @@ void Unknown::Unknown::checkEvents()
 
 		if (eventType == SDL_KEYDOWN || eventType == SDL_KEYUP)
 		{
-			KeyEvent evt;
+			Event evt;
 
-			evt.SDLCode = evnt.key.keysym.sym;
-			evt.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
+			evt.key.SDLCode = evnt.key.keysym.sym;
+			evt.key.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
             postEvent(ET_KEYPRESS, evt);
 		}
 
 		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP)
 		{
-			MouseEvent evt;
+			Event evt;
 
-			evt.SDLButtonCode = evnt.button.button;
-			evt.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
-			evt.location.x = evnt.button.x;
-			evt.location.y = evnt.button.y;
+			evt.mouse.SDLButtonCode = evnt.button.button;
+			evt.mouse.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
+			evt.mouse.location.x = evnt.button.x;
+			evt.mouse.location.y = evnt.button.y;
 
-            postMouseEvent(evt);
+			postEvent(ET_MOUSEBUTTON, evt);
 		}
 
 		if(eventType == SDL_WINDOWEVENT) {
             if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
                 this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
-                ResizeEvent evt = ResizeEvent(this->screenSize->width, this->screenSize->height);
+
+                Event evt;
+                evt.resize.newWidth = this->screenSize->width;
+                evt.resize.newHeight = this->screenSize->height;
+
                 postEvent(ET_WINDOW_RESIZE, evt);
             }
         }
@@ -274,7 +276,6 @@ void Unknown::Unknown::quit(const int exitCode)
 	this->windowRenderer = nullptr;
 	this->window = nullptr;
 
-	exitKeySystem();
 	Mix_CloseAudio();
 
 	SDL_Quit();

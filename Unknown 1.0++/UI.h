@@ -76,7 +76,7 @@ namespace Unknown
 	{
 	public:
 		ButtonComponent();
-		void mouseListener(MouseEvent evnt);
+		void mouseListener(Event &evnt);
 		virtual void render() const override;
 		virtual void init() override;
 	};
@@ -90,7 +90,7 @@ namespace Unknown
         TextBoxComponent();
         TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
         void onKeyTyped(Event& evnt);
-        void onMouseClick(MouseEvent evnt);
+        void onMouseClick(Event &evnt);
         virtual void render() const override;
         virtual void init() override;
     };

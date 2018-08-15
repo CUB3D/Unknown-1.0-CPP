@@ -10,10 +10,10 @@
 
 class StaticText
 {
-protected:
-    std::vector<Unknown::Graphics::FontGlyph> glyphs;
-
 public:
+    GLuint textureID;
+    Unknown::Dimension<int> size;
+
     StaticText(const Unknown::Graphics::TTFont &font, const std::string &text);
     void render(const int x, const int y) const;
 };

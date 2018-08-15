@@ -33,9 +33,6 @@ KeyBind p2right(SDLK_d, "right2");
 KeyBind p2fire(SDLK_e, "shoot2");
 Timer p2FireTimer(0.3f);
 
-
-KeyBind debug(SDLK_q, "debug", [](Event& t) {getEditor();});
-
 bool p1onGround;
 bool p2onGround;
 

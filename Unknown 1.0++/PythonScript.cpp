@@ -7,6 +7,7 @@
 #include "Loader.h"
 #include "Image.h"
 #include "Event/EventManager.h"
+#include "Input.h"
 
 std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::instance;
 
@@ -258,9 +259,9 @@ PyObject* registerRawEventHandler(PyObject* self, PyObject* args)
 
     ::Unknown::registerEventHandler(type, handlerName_cStr, [=](Unknown::Event& evnt) {
         PyObject* args = PyTuple_New(3);
-        PyTuple_SetItem(args, 0, PyLong_FromLong(evnt.SDLCode));
-        PyTuple_SetItem(args, 1, PyLong_FromLong(evnt.keyCode));
-        PyTuple_SetItem(args, 2, PyLong_FromLong(evnt.keyState));
+        PyTuple_SetItem(args, 0, PyLong_FromLong(evnt.key.SDLCode));
+        PyTuple_SetItem(args, 1, PyLong_FromLong(0)); //keycode
+        PyTuple_SetItem(args, 2, PyLong_FromLong(evnt.key.keyState));
 
         if(!PyObject_CallObject(callback, args)) {
             UK_LOG_ERROR("Unable to call func");

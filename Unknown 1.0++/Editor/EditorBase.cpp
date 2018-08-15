@@ -7,7 +7,7 @@
 #include "imgui_impl_opengl3.h"
 #include "../Unknown.h"
 
-Unknown::EditorBase::EditorBase() {
+Unknown::EditorBase::EditorBase() : Scene("Editor") {
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -59,6 +59,12 @@ void Unknown::EditorBase::update() {
     ImGui::PlotLines("Frame Time", [](void* d, int x) -> float {return (*(std::vector<float>*)d)[x];}, &fps, 10, 0);
 
     ImGui::End();
+
+    ImGui::Begin("Scene Edit");
+    bool b = true;
+    ImGui::ShowDemoWindow(&b);
+    ImGui::End();
+
 
     // Poll and handle events (inputs, window resize, etc.)
     // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.

@@ -31,6 +31,7 @@
 #include "Event/EventManager.h"
 #include <SDL_mixer.h>
 #include <Renderer/BasicTileMapRenderer.h>
+#include <Editor/EditorBase.h>
 #include "Map/BinaryMapGenerator.h"
 #include "Font/TTFont.h"
 
@@ -178,9 +179,10 @@ void init()
     UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
+    UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>());
     //UK_LOAD_SCENE("MainMenu");
-    UK_LOAD_SCENE("Phys");
-    //UK_LOAD_SCENE("RTest");
+    //UK_LOAD_SCENE("Phys");
+    UK_LOAD_SCENE("Editor");
 }
 
 

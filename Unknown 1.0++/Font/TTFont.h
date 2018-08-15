@@ -17,11 +17,12 @@ namespace Unknown
         class TTFont : public Font, public IInitable
         {
         private:
-            TTF_Font* font;
             ::Unknown::Colour colour;
             std::map<char, FontGlyph> glyphMap;
 
         public:
+            TTF_Font* font;
+
             TTFont(const std::string& name, const int size, const Colour& colour);
 
             virtual void drawString(const std::string& string, const int x, const int y) const;

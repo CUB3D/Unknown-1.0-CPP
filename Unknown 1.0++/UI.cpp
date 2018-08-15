@@ -4,6 +4,7 @@
 #include "UI2D.h"
 #include "Event/Event.h"
 #include "Event/EventManager.h"
+#include "Input.h"
 
 #include <memory>
 #include <ctime>
@@ -193,22 +194,20 @@ void Unknown::TextComponent::render() const
 
 Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 
-void Unknown::ButtonComponent::mouseListener(MouseEvent evnt)
+void Unknown::ButtonComponent::mouseListener(Event &evnt)
 {
-	if(evnt.mouseButton == MouseButton::BUTTON_LEFT)
+	if(evnt.mouse.mouseButton == MouseButton::BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED)
 	{
-        if(evnt.buttonState == InputState::PRESSED)
+	    auto& location = evnt.mouse.location;
+        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
         {
-            if (evnt.location.x >= this->location.x && evnt.location.x <= this->location.x + this->size.width)
+            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
             {
-                if (evnt.location.y >= this->location.y && evnt.location.y <= this->location.y + this->size.height)
-                {
-                    // If the button has been clicked
-                    std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
-                    evnt->componentName = this->name;
-                    evnt->action = "buttonClicked";
-                    callUIListeners(evnt);
-                }
+                // If the button has been clicked
+                std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
+                evnt->componentName = this->name;
+                evnt->action = "buttonClicked";
+                callUIListeners(evnt);
             }
         }
 	}
@@ -256,9 +255,9 @@ void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
 {
     if(this->isEditing)
     {
-        if (evnt.keyState == InputState::PRESSED)
+        if (evnt.key.keyState == InputState::PRESSED)
         {
-            std::string key = std::string(SDL_GetKeyName(evnt.SDLCode));
+            std::string key = std::string(SDL_GetKeyName(evnt.key.SDLCode));
 
             if(this->isNumerical) {
                 if(!isStringNumerical(key)) {
@@ -273,7 +272,7 @@ void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
             evnt_->relatedKey = key;
             callUIListeners(evnt_);
 
-            if (evnt.SDLCode == SDLK_BACKSPACE)
+            if (evnt.key.SDLCode == SDLK_BACKSPACE)
             {
                 if (this->content.size() > 0)
                 {
@@ -287,13 +286,14 @@ void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
     }
 }
 
-void Unknown::TextBoxComponent::onMouseClick(MouseEvent evnt)
+void Unknown::TextBoxComponent::onMouseClick(Event &evnt)
 {
-    if(evnt.buttonState == InputState::PRESSED)
+    if(evnt.mouse.buttonState == InputState::PRESSED)
     {
-        if (evnt.location.x >= this->location.x && evnt.location.x <= this->location.x + this->size.width)
+        auto& location = evnt.mouse.location;
+        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
         {
-            if (evnt.location.y >= this->location.y && evnt.location.y <= this->location.y + this->size.height)
+            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
             {
                 // If the button has been clicked
                 this->isEditing = true;
