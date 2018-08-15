@@ -82,3 +82,8 @@ void Unknown::EditorBase::update() {
    // glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
+
+Unknown::EditorBase& Unknown::getEditor() {
+	static EditorBase base;
+	return base;
+}

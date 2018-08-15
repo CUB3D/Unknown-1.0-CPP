@@ -5,7 +5,7 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_EDITORBASE_H
 #define UNKNOWN_DEVELOPMENT_TOOL_EDITORBASE_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "imgui.h"
 #include <deque>
 
@@ -23,10 +23,7 @@ namespace Unknown
         virtual ~EditorBase();
     };
 
-    EditorBase& getEditor() {
-        static EditorBase base;
-        return base;
-    }
+	EditorBase& getEditor();
 }
 
 
