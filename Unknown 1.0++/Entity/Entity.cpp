@@ -33,11 +33,15 @@ Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
     return Rect<int>(position.x, position.y, size.height, size.width);
 }
 
-void Unknown::Entity::setPosition(double x, double y) {
+void Unknown::Entity::setPosition(double x, double y, double angle) {
     this->position = Point<double>(x, y);
+    this->angle = angle;
+
     auto physicsComp = getComponent<PhysicsBodyComponent>();
     if(physicsComp) {
-        physicsComp->body->SetTransform(b2Vec2(x, y), physicsComp->body->GetAngle());
+        physicsComp->body->SetTransform(b2Vec2(x, y), angle);
+        // Make sure to wake the body so that phys sim keeps working
+        physicsComp->body->SetAwake(true);
     }
 }
 

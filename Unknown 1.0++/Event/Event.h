@@ -53,6 +53,7 @@ namespace Unknown
         KeyEvent key;
         ResizeEvent resize;
         MouseEvent mouse;
+        SDL_Event* original;
 
         EventType type;
     };

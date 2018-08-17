@@ -14,11 +14,12 @@ namespace Unknown
     {
     public:
         Graphics::Image img;
-        const int renderScale = 1;
+        int renderScale = 1;
 
         ImageRenderComponent(const std::string& filename, const int renderScale);
 
         virtual void render(const Entity &ent, double Xoffset, double Yoffset) const;
+        virtual void populateEditor();
     };
 }
 

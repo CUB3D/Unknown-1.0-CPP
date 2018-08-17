@@ -17,12 +17,16 @@ namespace Unknown
         Colour col;
         int renderScale;
 
+        std::array<float, 4> editorColour;
+
         BasicRenderComponent();
         BasicRenderComponent(Colour c);
         BasicRenderComponent(Colour c, int renderScale);
 
         virtual void render(const Entity &ent, double Xoffset, double Yoffset) const override;
         virtual void update(Entity &ent);
+
+        virtual void populateEditor() override;
     };
 
     REFLECT {

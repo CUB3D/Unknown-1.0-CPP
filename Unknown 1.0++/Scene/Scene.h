@@ -26,6 +26,7 @@ namespace Unknown
         std::vector<std::shared_ptr<IRenderable>> renderables;
         std::vector<std::shared_ptr<IUpdateable>> updatables;
         std::vector<std::shared_ptr<ITagable>> tagables;
+        std::vector<std::shared_ptr<Entity>> entities;
         b2World world;
         CollisionManager contactManager;
         Camera cam;
@@ -47,6 +48,9 @@ namespace Unknown
             }
             if(dynamic_cast<ITagable*>(obj.get())) {
                 tagables.push_back(std::dynamic_pointer_cast<ITagable>(obj));
+            }
+            if(dynamic_cast<Entity*>(obj.get())) {
+                entities.push_back(std::dynamic_pointer_cast<Entity>(obj));
             }
         }
 

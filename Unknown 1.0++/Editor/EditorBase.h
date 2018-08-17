@@ -9,20 +9,30 @@
 #include "imgui.h"
 #include <deque>
 #include "../Scene/Scene.h"
+#include "EntityEditor.h"
 
 namespace Unknown
 {
 class EditorBase : public ::Unknown::Scene
     {
         std::deque<float> fps;
+        std::vector<EntityEditor> entityEditors;
+        std::string under;
+
+        bool editing;
 
     public:
-        EditorBase();
+        EditorBase(const std::string &under);
 
         virtual void update() override;
+        virtual void render() const override;
 
         virtual ~EditorBase();
-    };
+
+        std::shared_ptr<::Unknown::Scene> getLastScene() const;
+
+    void createMenuBar();
+};
 }
 
 

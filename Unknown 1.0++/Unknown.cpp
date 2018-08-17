@@ -25,12 +25,12 @@
 #include "Event/EventManager.h"
 #include "Image.h"
 #include "Log.h"
+#include "Editor/imgui.h"
+#include "Editor/imgui_impl_sdl.h"
 
 // unknown class
 
-Unknown::Unknown::Unknown()
-{
-}
+Unknown::Unknown::Unknown() {}
 
 void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
 {
@@ -214,30 +214,33 @@ void Unknown::Unknown::initGameLoop()
 void Unknown::Unknown::checkEvents()
 {
 	SDL_Event evnt;
+    ImGuiIO& io = ImGui::GetIO();
+    bool postImguiEvents = io.WantCaptureKeyboard || io.WantCaptureMouse;
 
 	while (SDL_PollEvent(&evnt) != 0)
 	{
+	    if(postImguiEvents) {
+            ImGui_ImplSDL2_ProcessEvent(&evnt);
+            continue;
+        }
+
 		Uint32 eventType = evnt.type;
 
-		if (eventType == SDL_QUIT)
-		{
+		if (eventType == SDL_QUIT) {
 			this->quit(0);
 		}
 
-		if (eventType == SDL_KEYDOWN || eventType == SDL_KEYUP)
-		{
-			Event evt;
+		Event evt;
+		evt.original = &evnt;
 
+		if (eventType == SDL_KEYDOWN || eventType == SDL_KEYUP) {
 			evt.key.SDLCode = evnt.key.keysym.sym;
 			evt.key.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
             postEvent(ET_KEYPRESS, evt);
 		}
 
-		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP)
-		{
-			Event evt;
-
+		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP) {
 			evt.mouse.SDLButtonCode = evnt.button.button;
 			evt.mouse.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
 			evt.mouse.location.x = evnt.button.x;
@@ -250,7 +253,6 @@ void Unknown::Unknown::checkEvents()
             if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
                 this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
 
-                Event evt;
                 evt.resize.newWidth = this->screenSize->width;
                 evt.resize.newHeight = this->screenSize->height;
 

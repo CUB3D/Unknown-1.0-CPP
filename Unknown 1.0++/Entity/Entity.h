@@ -37,7 +37,7 @@ namespace Unknown
         virtual void queueDisable();
 
 
-        void setPosition(double x, double y);
+        void setPosition(double x, double y, double angle=0);
 
 
         virtual Rect<int> getRenderBounds();
