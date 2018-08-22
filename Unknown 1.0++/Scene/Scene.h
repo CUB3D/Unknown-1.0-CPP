@@ -11,7 +11,7 @@
 #include "Box2D/Box2D.h"
 
 #include "../UI.h"
-#include "../Font.h"
+#include "../Font/Font.h"
 #include "../Renderer/IRenderable.h"
 #include "../IUpdateable.h"
 #include "../ITagable.h"

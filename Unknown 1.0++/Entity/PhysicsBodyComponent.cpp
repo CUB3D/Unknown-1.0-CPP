@@ -4,7 +4,7 @@
 
 #include "PhysicsBodyComponent.h"
 
-//TODO: better way of doing this
+//TODO: better way of doing this, also dont take pointer
 
 Unknown::PhysicsBodyComponent::PhysicsBodyComponent(std::shared_ptr<Entity> ent, Scene *scene, b2BodyType type,
                                                     const bool bullet, int groupIndex) {

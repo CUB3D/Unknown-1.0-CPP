@@ -8,7 +8,7 @@
 #include "Scene/Scene.h"
 #include "../Unknown 1.0++/Scene/Scene.h"
 
-class PhysicsTestScene : public Unknown::Scene
+class PhysicsTestScene : public ::Unknown::Scene
 {
 public:
     PhysicsTestScene();

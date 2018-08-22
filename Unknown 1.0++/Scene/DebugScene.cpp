@@ -18,26 +18,26 @@ void Unknown::DebugScene::update()
 
 void Unknown::DebugScene::render() const
 {
-    auto uk = getUnknown();
+    auto& uk = getUnknown();
 
-    UK_DRAW_RECT(0, 0, uk->screenSize->width, uk->screenSize->height, Colour::WHITE);
+    UK_DRAW_RECT(0, 0, uk.screenSize->width, uk.screenSize->height, Colour::WHITE);
 
     std::string fps = "FPS: ";
-    fps += std::to_string(uk->fps);
+    fps += std::to_string(uk.fps);
 
     printf("Test1\n");
 
-    font->drawString(fps, uk->screenSize->width - font->getStringWidth(fps) - 10, 10);
+    font->drawString(fps, uk.screenSize->width - font->getStringWidth(fps) - 10, 10);
 
     printf("Test2\n");
 
     std::string frameTime = "FrameTime: ";
-    frameTime += std::to_string(uk->lastFrameTimeMS);
-    font->drawString(frameTime, uk->screenSize->width - font->getStringWidth(frameTime) - 10, 30);
+    frameTime += std::to_string(uk.lastFrameTimeMS);
+    font->drawString(frameTime, uk.screenSize->width - font->getStringWidth(frameTime) - 10, 30);
 
     std::string updateTime = "UpdateTime: ";
-    updateTime += std::to_string(uk->lastUpdateTimeMS);
-    font->drawString(updateTime, uk->screenSize->width - font->getStringWidth(updateTime) - 10, 50);
+    updateTime += std::to_string(uk.lastUpdateTimeMS);
+    font->drawString(updateTime, uk.screenSize->width - font->getStringWidth(updateTime) - 10, 50);
 
     MenuScene::render();
 }

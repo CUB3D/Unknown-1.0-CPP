@@ -7,6 +7,7 @@
 #include "Loader.h"
 #include "Image.h"
 #include "Event/EventManager.h"
+#include "Input.h"
 
 std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::instance;
 
@@ -165,7 +166,7 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
     const char* fileName_cStr = PY_GET_UTF8(args, 0);
     printf("Loading file '%s'\n", fileName_cStr);
 
-    std::unique_ptr<Unknown::Graphics::Image> image = UK_LOAD_IMAGE(fileName_cStr);
+    std::unique_ptr<Unknown::Graphics::Image> image =  std::make_unique<::Unknown::Graphics::Image>(std::string(fileName_cStr));
     PyObject* capsule = PY_MAKE_CAPSULE(image.release(), "Image", [](PyObject* a){});
 
     if(!capsule) {
@@ -258,9 +259,9 @@ PyObject* registerRawEventHandler(PyObject* self, PyObject* args)
 
     ::Unknown::registerEventHandler(type, handlerName_cStr, [=](Unknown::Event& evnt) {
         PyObject* args = PyTuple_New(3);
-        PyTuple_SetItem(args, 0, PyLong_FromLong(evnt.SDLCode));
-        PyTuple_SetItem(args, 1, PyLong_FromLong(evnt.keyCode));
-        PyTuple_SetItem(args, 2, PyLong_FromLong(evnt.keyState));
+        PyTuple_SetItem(args, 0, PyLong_FromLong(evnt.key.SDLCode));
+        PyTuple_SetItem(args, 1, PyLong_FromLong(0)); //keycode
+        PyTuple_SetItem(args, 2, PyLong_FromLong(evnt.key.keyState));
 
         if(!PyObject_CallObject(callback, args)) {
             UK_LOG_ERROR("Unable to call func");
@@ -406,7 +407,7 @@ PyObject* getSharedValue(PyObject* self, PyObject* args) {
     const char* name_c = PY_GET_UTF8(args, 0);
     std::string name(name_c);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];
@@ -430,7 +431,7 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
     PyObject* data = PY_GET_OBJ(args, 1);
     std::string name(name_c);
 
-    auto& variablelookup = ::Unknown::getUnknown()->variablelookup;
+    auto& variablelookup = ::Unknown::getUnknown().variablelookup;
 
     if(variablelookup.find(name) != variablelookup.end()) {
         Unknown::SharedVariable* x = variablelookup[name];

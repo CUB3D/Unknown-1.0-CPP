@@ -105,7 +105,7 @@ FIND_PATH(SDL2_IMAGE_INCLUDE_DIR SDL_image.h
 	/opt/local # DarwinPorts
 	/opt/csw # Blastwave
 	/opt
-	${PROJECT_SOURCE_DIR}/Libs/SDL2_image
+	${UK_DIR}/Libs/SDL2_image
 )
 
 # Lookup the 64 bit libs on x64
@@ -124,7 +124,7 @@ IF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		/opt/local
 		/opt/csw
 		/opt
-		${PROJECT_SOURCE_DIR}/Libs/SDL2_image
+		${UK_DIR}/Libs/SDL2_image
 	)
 # On 32bit build find the 32bit libs
 ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -142,7 +142,7 @@ ELSE(CMAKE_SIZEOF_VOID_P EQUAL 8)
 		/opt/local
 		/opt/csw
 		/opt
-		${PROJECT_SOURCE_DIR}/Libs/SDL2_image
+		${UK_DIR}/Libs/SDL2_image
 	)
 ENDIF(CMAKE_SIZEOF_VOID_P EQUAL 8)
 

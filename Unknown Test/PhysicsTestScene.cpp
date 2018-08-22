@@ -5,6 +5,7 @@
 #include <Loader.h>
 #include <SharedVariable.h>
 #include <Log.h>
+#include <Font/TTFont.h>
 #include "PhysicsTestScene.h"
 #include "UI2D.h"
 #include "KeyBind.h"
@@ -13,7 +14,7 @@
 #include "Entity/PhysicsBodyComponent.h"
 #include "PythonScript.h"
 #include "Entity/TimerComponent.h"
-#include "Font.h"
+#include "Font/Font.h"
 #include "Audio/WAVSound.h"
 #include "Editor/EditorBase.h"
 
@@ -31,9 +32,6 @@ KeyBind p2left(SDLK_a, "left2");
 KeyBind p2right(SDLK_d, "right2");
 KeyBind p2fire(SDLK_e, "shoot2");
 Timer p2FireTimer(0.3f);
-
-
-KeyBind debug(SDLK_q, "debug", [](Event& t) {getEditor();});
 
 bool p1onGround;
 bool p2onGround;
@@ -57,7 +55,7 @@ WAVSound hit("Hit.wav");
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     //UK_PYTHON_LOAD_SCRIPT("Test");
     ui = Loader::loadUI("PhysGameGUI.json");
-    ui.setGlobalFont(std::make_shared<TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
+    ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();
 
     this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));

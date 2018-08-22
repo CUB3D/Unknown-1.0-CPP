@@ -11,11 +11,14 @@
 #include "Scene/SceneManager.h"
 #include "Event/EventManager.h"
 #include "Image.h"
+#include "IInitable.h"
+#include "UI.h"
 
 
 namespace Unknown
 {
     class SharedVariable;
+    struct UIEvent;
 
 	enum ErrorCodes
 	{
@@ -66,7 +69,8 @@ namespace Unknown
         std::map<HookType, std::vector<std::function<void()>>> hooks;
         std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
-		std::vector<Graphics::Image*> imageLateInit;
+		std::vector<::Unknown::IInitable*> lateInit;
+        std::map<std::string, std::function<void(std::shared_ptr<::Unknown::UIEvent>)> > UIListeners;
 
 
 		bool running = true;
@@ -96,15 +100,13 @@ namespace Unknown
 
 		void updateWindow();
 	};
+
+	Unknown& getUnknown();
 	
-	#define UK_CREATE_WINDOW() ::Unknown::getUnknown()->createWindow();
-	#define UK_INIT_GAME() ::Unknown::getUnknown()->initGameLoop()
+	#define UK_CREATE_WINDOW() ::Unknown::getUnknown().createWindow();
+	#define UK_INIT_GAME() ::Unknown::getUnknown().initGameLoop()
 
 	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
-
-	extern std::shared_ptr<Unknown> instance;
-
-	std::shared_ptr<Unknown> &getUnknown();
 
 
 	void registerHook(std::function<void()> hook, HookType type);
@@ -115,7 +117,7 @@ namespace Unknown
 	void callHooks(HookType type);
 }
 
-#define UK_ADD_SCENE(x) ::Unknown::getUnknown()->globalSceneManager.add(x)
-#define UK_LOAD_SCENE(x) ::Unknown::getUnknown()->globalSceneManager.loadScene(x)
+#define UK_ADD_SCENE(x) ::Unknown::getUnknown().globalSceneManager.add(x)
+#define UK_LOAD_SCENE(x) ::Unknown::getUnknown().globalSceneManager.loadScene(x)
 
 #endif

@@ -14,7 +14,7 @@
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {
-	auto uk = getUnknown();
+	auto& uk = getUnknown();
 
 //	int startX = std::max(0, x);
 //	int startY = std::max(0, y);
@@ -53,10 +53,6 @@ void Unknown::Graphics::drawRect(const int x, const int y, const int width, cons
     glPopMatrix();
 }
 
-void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour colour) {
-    drawRect(x, y, width, height, 0, colour);
-}
-
 void Unknown::Graphics::drawSquare(const int x, const int y, const int size, const Colour colour)
 {
 	drawRect(x, y, size, size, colour);
@@ -64,9 +60,9 @@ void Unknown::Graphics::drawSquare(const int x, const int y, const int size, con
 
 void Unknown::Graphics::setDrawColour(const Colour colour)
 {
-	auto uk = getUnknown();
+	auto& uk = getUnknown();
 
-	SDL_SetRenderDrawColor(uk->windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
+	SDL_SetRenderDrawColor(uk.windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
 }
 
 void Unknown::Graphics::GL_setColour(const Colour &colour) {
@@ -109,3 +105,9 @@ void Unknown::Graphics::drawLine(const int sx, const int sy, const int ex, const
     glVertex3f(ex, ey, 0);
     glEnd();
 }
+
+void
+Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour colour) {
+    drawRect(x, y, width, height, 0, colour);
+}
+

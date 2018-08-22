@@ -248,3 +248,5 @@ CTestTestfile.cmake
 .idea/webResources.xml
 DevLib
 UKTest
+
+*.cbp

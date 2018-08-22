@@ -97,9 +97,9 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
 	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_LOG_INFO("Performing late init for", intToString(imageLateInit.size()), "images");
-	for(auto& image : imageLateInit) {
-		image->init();
+	UK_LOG_INFO("Performing late init for", intToString(lateInit.size()), " objects");
+	for(auto& initable : lateInit) {
+		initable->init();
 	}
 
     registerHook([=]{globalSceneManager.render();}, RENDER);
@@ -155,8 +155,6 @@ void Unknown::Unknown::createWindow()
 void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
-
-	initKeySystem();
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -228,30 +226,34 @@ void Unknown::Unknown::checkEvents()
 
 		if (eventType == SDL_KEYDOWN || eventType == SDL_KEYUP)
 		{
-			KeyEvent evt;
+			Event evt;
 
-			evt.SDLCode = evnt.key.keysym.sym;
-			evt.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
+			evt.key.SDLCode = evnt.key.keysym.sym;
+			evt.key.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
             postEvent(ET_KEYPRESS, evt);
 		}
 
 		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP)
 		{
-			MouseEvent evt;
+			Event evt;
 
-			evt.SDLButtonCode = evnt.button.button;
-			evt.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
-			evt.location.x = evnt.button.x;
-			evt.location.y = evnt.button.y;
+			evt.mouse.SDLButtonCode = evnt.button.button;
+			evt.mouse.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
+			evt.mouse.location.x = evnt.button.x;
+			evt.mouse.location.y = evnt.button.y;
 
-            postMouseEvent(evt);
+			postEvent(ET_MOUSEBUTTON, evt);
 		}
 
 		if(eventType == SDL_WINDOWEVENT) {
             if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
                 this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
-                ResizeEvent evt = ResizeEvent(this->screenSize->width, this->screenSize->height);
+
+                Event evt;
+                evt.resize.newWidth = this->screenSize->width;
+                evt.resize.newHeight = this->screenSize->height;
+
                 postEvent(ET_WINDOW_RESIZE, evt);
             }
         }
@@ -274,7 +276,6 @@ void Unknown::Unknown::quit(const int exitCode)
 	this->windowRenderer = nullptr;
 	this->window = nullptr;
 
-	exitKeySystem();
 	Mix_CloseAudio();
 
 	SDL_Quit();
@@ -297,9 +298,9 @@ void Unknown::Unknown::updateWindow()
     SDL_GL_SwapWindow(window);
 }
 
-std::shared_ptr<Unknown::Unknown>& Unknown::getUnknown()
+Unknown::Unknown& Unknown::getUnknown()
 {
-    static std::shared_ptr<Unknown> instance = std::make_shared<Unknown>();
+    static Unknown instance;
 
 	return instance;
 }
@@ -308,7 +309,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 {
 	printf("Registering a hook %d\n", (int)type);
 
-	auto& hooks = getUnknown()->hooks;
+	auto& hooks = getUnknown().hooks;
 
 	if(hooks.find(type) == hooks.end()) {
 //	    // If there is no hooks
@@ -324,7 +325,7 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 
 void Unknown::callHooks(HookType type)
 {
-    auto& hooks = getUnknown()->hooks;
+    auto& hooks = getUnknown().hooks;
 
 	auto vec = hooks[type];
 

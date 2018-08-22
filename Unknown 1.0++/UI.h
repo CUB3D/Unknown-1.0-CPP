@@ -5,7 +5,7 @@
 
 #include "Colour.h"
 #include "Utils.h"
-#include "Font.h"
+#include "Font/Font.h"
 #include "Event/Event.h"
 #include "Renderer/IRenderable.h"
 
@@ -76,7 +76,7 @@ namespace Unknown
 	{
 	public:
 		ButtonComponent();
-		void mouseListener(MouseEvent evnt);
+		void mouseListener(Event &evnt);
 		virtual void render() const override;
 		virtual void init() override;
 	};
@@ -90,7 +90,7 @@ namespace Unknown
         TextBoxComponent();
         TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
         void onKeyTyped(Event& evnt);
-        void onMouseClick(MouseEvent evnt);
+        void onMouseClick(Event &evnt);
         virtual void render() const override;
         virtual void init() override;
     };
@@ -111,8 +111,6 @@ namespace Unknown
         std::string action;
         std::string relatedKey;
     };
-
-    extern std::map<std::string, std::function<void(std::shared_ptr<UIEvent>)>> UIListeners;
 
     void registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID);
     void removeUIListener(std::string listnerID);

@@ -11,7 +11,7 @@
 #include "Input.h"
 #include "Loader.h"
 #include "Animation.h"
-#include "Font.h"
+#include "Font/Font.h"
 #include "Particle.h"
 #include "UI.h"
 #include "UI2D.h"
@@ -31,9 +31,12 @@
 #include "Event/EventManager.h"
 #include <SDL_mixer.h>
 #include <Renderer/BasicTileMapRenderer.h>
+#include <Editor/EditorBase.h>
 #include "Map/BinaryMapGenerator.h"
+#include "Font/TTFont.h"
 
 #include "PhysicsTestScene.h"
+#include "RenderTestScene.h"
 
 Unknown::Map map(1, 1);
 Unknown::Timer timer(0.2f);
@@ -59,11 +62,11 @@ void createBoard()
     Unknown::BinaryMapGenerator().generate(map);
 
     boardRenderer = std::make_shared<Unknown::BasicTileMapRenderer>(map, renderTile, false);
-    Unknown::getUnknown()->globalSceneManager.getScene<Unknown::CustomScene>()->renderables.push_back(static_cast<std::shared_ptr<Unknown::IRenderable>>(boardRenderer));
+    Unknown::getUnknown().globalSceneManager.getScene<Unknown::CustomScene>()->renderables.push_back(static_cast<std::shared_ptr<Unknown::IRenderable>>(boardRenderer));
 
-    auto uk = Unknown::getUnknown();
-    scaleX = uk->screenSize->width / width;
-    scaleY = uk->screenSize->height / height;
+    auto& uk = Unknown::getUnknown();
+    scaleX = uk.screenSize->width / width;
+    scaleY = uk.screenSize->height / height;
 
     printf("Board creation complete\n");
 }
@@ -83,7 +86,7 @@ void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 {
     if(evnt->componentName == "ButtonStart")
     {
-        Unknown::UIContainer& mainMenu = Unknown::getUnknown()->globalSceneManager.getScene<Unknown::MenuScene>()->menu;
+        Unknown::UIContainer& mainMenu = Unknown::getUnknown().globalSceneManager.getScene<Unknown::MenuScene>()->menu;
         std::string widthText = mainMenu.getComponentValue("TextBoxWidth");
         std::string heightText = mainMenu.getComponentValue("TextBoxHeight");
         std::string speedText = mainMenu.getComponentValue("TextBoxSpeed");
@@ -110,12 +113,12 @@ void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 }
 
 void onResize(Unknown::Event& evt) {
-    if(Unknown::getUnknown()->globalSceneManager.currentSceneName == "Simulator") {
-        auto uk = Unknown::getUnknown();
-        scaleX = uk->screenSize->width / width;
-        scaleY = uk->screenSize->height / height;
+    if(Unknown::getUnknown().globalSceneManager.currentSceneName == "Simulator") {
+        auto& uk = Unknown::getUnknown();
+        scaleX = uk.screenSize->width / width;
+        scaleY = uk.screenSize->height / height;
     } else {
-        auto menu = dynamic_cast<Unknown::MenuScene*>(Unknown::getUnknown()->globalSceneManager.currentScene.get());
+        auto menu = dynamic_cast<Unknown::MenuScene*>(Unknown::getUnknown().globalSceneManager.currentScene.get());
         if(menu) {
             menu->reloadMenu();
         }
@@ -171,12 +174,15 @@ void init()
 
     font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
+    UK_ADD_SCENE(std::make_shared<RenderTestScene>());
     UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
     UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
-    UK_LOAD_SCENE("MainMenu");
-    UK_LOAD_SCENE("Phys");
+    UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>());
+    //UK_LOAD_SCENE("MainMenu");
+    //UK_LOAD_SCENE("Phys");
+    UK_LOAD_SCENE("Editor");
 }
 
 

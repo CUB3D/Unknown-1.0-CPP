@@ -13,8 +13,8 @@ Unknown::KeyBind::KeyBind(int keycode, const std::string& name, std::function<vo
 }
 
 void Unknown::KeyBind::handle(Event& evt) {
-    if(evt.SDLCode == this->keycode) {
-        this->currentState = evt.keyState;
+    if(evt.key.SDLCode == this->keycode) {
+        this->currentState = evt.key.keyState;
 
         if(this->callback) {
             callback(evt);

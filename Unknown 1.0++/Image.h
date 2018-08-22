@@ -4,25 +4,27 @@
 #include <SDL.h>
 #include <memory>
 #include <vector>
+#include "IInitable.h"
+#include "Utils.h"
 
 namespace Unknown
 {
 	namespace Graphics
 	{
-		class Image
+		class Image : public IInitable
 		{
 		private:
 			std::string filename;
 			unsigned int textureID;
 
 		public:
-			SDL_Rect textureRect;
+		    ::Unknown::Dimension<int> imageSize;
 
 			explicit Image(const std::string& filename);
 			Image& operator=(const Image& img);
 			virtual ~Image();
 
-			void init();
+			virtual void init() override;
 			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
 			void render(const int x, const int y, const double angle) const;
 			void render(const int x, const int y) const;
