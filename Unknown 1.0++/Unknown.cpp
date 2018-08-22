@@ -195,7 +195,6 @@ void Unknown::Unknown::initGameLoop()
 		this->render();
 		auto renderFinishTime = std::chrono::high_resolution_clock::now();
         this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
-        this->fps = 1000 / this->lastFrameTimeMS;
 
 		this->frames++;
 
@@ -204,6 +203,7 @@ void Unknown::Unknown::initGameLoop()
 		if (fpsCounter.isTickComplete())
 		{
 			std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
+			this->fps = this->frames;
 
 			this->frames = 0;
 			this->ticks = 0;

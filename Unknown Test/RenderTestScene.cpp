@@ -14,8 +14,8 @@ std::shared_ptr<StaticText> tex;
 
 void RenderTestScene::render() const {
     for(int i = 0; i < 80; i+=8) {
-        UK_DRAW_RECT(10, 10 * i, 20, 20, UK_COLOUR_RGB(255, 0, 0));
-        Unknown::Graphics::drawCircle(50, 15 * i, 10, UK_COLOUR_RGB(0, 255, 0));
+        UK_DRAW_RECT(10, 10 * i, 20, 20, 0, UK_COLOUR_RGB(255, 0, 0));
+        Unknown::Graphics::drawCircle(50, 15 * i, 15, UK_COLOUR_RGB(0, 255, 0));
         img.render(70, 10 * i);
         tex->render(150, 10*i);
     }

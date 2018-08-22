@@ -20,6 +20,8 @@ namespace Unknown
 
         virtual void render(const Entity &ent, double Xoffset, double Yoffset) const;
         virtual void populateEditor();
+
+        virtual Rect<int> getRenderBounds(const Entity& ent);
     };
 }
 

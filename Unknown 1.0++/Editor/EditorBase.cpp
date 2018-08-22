@@ -9,6 +9,7 @@
 #include "../Entity/Entity.h"
 #include "../Loader.h"
 #include "../Event/Event.h"
+#include "../UI2D.h"
 
 Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), under(under), editing(false) {
 
@@ -27,9 +28,16 @@ Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), und
 
     //TODO: profiler
 
-    for(auto& e : getLastScene()->entities) {
-        this->entityEditors.push_back(EntityEditor(e));
-    }
+    registerEventHandler(ET_MOUSEBUTTON, "editSelect", [this](Event& evt){
+        if(evt.mouse.buttonState == PRESSED) {
+            for(auto& e : getLastScene()->entities) {
+                if(e->getRenderBounds().contains(evt.mouse.location)) {
+                    this->selected = e;
+                    this->entityEditors.emplace_back(e);
+                }
+            }
+        }
+    });
 }
 
 Unknown::EditorBase::~EditorBase() {
@@ -69,6 +77,7 @@ void Unknown::EditorBase::update() {
     ImGui::Begin("Profiler");
 
     ImGui::Text("GUI framerate %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Core framerate %.5lf ms/frame (%.1lf FPS)", uk.lastFrameTimeMS, uk.fps);
 
     this->fps.push_front((float)getUnknown().lastFrameTimeMS);
 
@@ -86,7 +95,14 @@ void Unknown::EditorBase::update() {
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Unknown::EditorBase::render() const {}
+void Unknown::EditorBase::render() const {
+    if(selected) {
+        int x = selected->getRenderBounds().center().x;
+        int y = selected->getRenderBounds().center().y;
+        ::Unknown::Graphics::drawRect(x, y, 50, 5, 0, UK_COLOUR_RGB(255, 0, 0));
+        ::Unknown::Graphics::drawRect(x, y - 50, 5, 50, 0, UK_COLOUR_RGB(0, 255, 0));
+    }
+}
 
 std::shared_ptr<::Unknown::Scene> Unknown::EditorBase::getLastScene() const {
     auto& gcm = ::Unknown::getUnknown().globalSceneManager;

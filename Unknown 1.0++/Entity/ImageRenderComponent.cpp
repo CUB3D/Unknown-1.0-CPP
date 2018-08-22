@@ -23,3 +23,11 @@ void Unknown::ImageRenderComponent::populateEditor() {
     ImGui::InputInt("Render scale", &this->renderScale);
     ImGui::EndChild();
 }
+
+Unknown::Rect<int> Unknown::ImageRenderComponent::getRenderBounds(const Entity &ent) {
+    int Xoffset = 0;
+    int Yoffset = 0;
+
+    return ::Unknown::Rect<int>((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
+                              (ent.position.y - ent.size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
+}

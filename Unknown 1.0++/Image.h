@@ -6,6 +6,7 @@
 #include <vector>
 #include "IInitable.h"
 #include "Utils.h"
+#include "GL/glad/glad.h"
 
 namespace Unknown
 {
@@ -16,6 +17,10 @@ namespace Unknown
 		private:
 			std::string filename;
 			unsigned int textureID;
+
+			GLuint vao;
+			GLuint vbo[3];
+			int prog;
 
 		public:
 		    ::Unknown::Dimension<int> imageSize;

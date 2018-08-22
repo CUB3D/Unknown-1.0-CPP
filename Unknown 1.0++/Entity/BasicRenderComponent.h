@@ -27,6 +27,8 @@ namespace Unknown
         virtual void update(Entity &ent);
 
         virtual void populateEditor() override;
+
+        virtual Rect<int> getRenderBounds(const Entity& ent);
     };
 
     REFLECT {

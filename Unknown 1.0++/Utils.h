@@ -82,6 +82,19 @@ namespace Unknown
 		bool contains(Rect<R> other) {
 			return !(other.x + other.w < x || other.x > x + w || other.y + other.h < y || other.y > y + h);
 		}
+
+		Point<T> center() {
+		    return Point<T>(x + w / 2, y + h / 2);
+		}
+
+		template<typename R>
+		bool contains(Point<R> t) {
+			bool X = t.x > x && t.x < x + w;
+			bool Y = t.y > y && t.y < y + h;
+
+			return X && Y;
+		}
+
 	};
 
 	::rapidjson::Document readJSONFile(const char* filename);

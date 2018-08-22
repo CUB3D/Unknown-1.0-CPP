@@ -182,6 +182,7 @@ void init()
     UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("Phys"));
     //UK_LOAD_SCENE("MainMenu");
     UK_LOAD_SCENE("Phys");
+    //UK_LOAD_SCENE("RTest");
     UK_LOAD_SCENE("Editor");
 }
 

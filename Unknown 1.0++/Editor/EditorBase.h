@@ -19,6 +19,8 @@ class EditorBase : public ::Unknown::Scene
         std::vector<EntityEditor> entityEditors;
         std::string under;
 
+        std::shared_ptr<Entity> selected;
+
         bool editing;
 
     public:
