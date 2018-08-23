@@ -54,66 +54,52 @@ void Unknown::Graphics::Image::init()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
 
 
-    //TODO: switch to single packed vbo to reduce binding times
     // TODO: add ibo support
 
     // Will be offset by x/y when rendering
     // Init vbo
-    GLfloat verticies[18] = {
+    constexpr const int SIZE = 6 * (3 + 4 + 2);
+    GLfloat data[SIZE] {
+        // Format is vertex coord
+        // Then colour
+        // Then texcoord
+        // TODO: then normal
         0, 0, 0,
-        (GLfloat)imageSurface->w, 0, 0,
-        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0,
-
-        0, 0, 0,
-        0, (GLfloat)imageSurface->h, 0,
-        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0
-    };
-
-    GLfloat colours[4 * 6] {
         1, 1, 1, 1,
-        1, 0, 1, 1,
-        0, 1, 1, 1,
-
-        1, 0, 1, 1,
-        0, 1, 1, 1,
-        1, 0, 1, 1
-    };
-
-    GLfloat texture[2 * 6] {
         0, 0,
+
+        (GLfloat)imageSurface->w, 0, 0,
+        1, 1, 1, 1,
         1, 0,
+
+        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0,
+        1, 1, 1, 1,
         1, 1,
 
+        0, 0, 0,
+        1, 1, 1, 1,
         0, 0,
+
+        0, (GLfloat)imageSurface->h, 0,
+        1, 1, 1, 1,
         0, 1,
+
+        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0,
+        1, 1, 1, 1,
         1, 1
     };
 
     glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
-    glGenBuffers(3, &vbo[0]);
+    glGenBuffers(1, &vbo);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glEnableVertexAttribArray(0);
-    glBufferData(GL_ARRAY_BUFFER, 3 * 6 * sizeof(GLfloat), verticies, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glEnableVertexAttribArray(1);
-    glBufferData(GL_ARRAY_BUFFER, 4 * 6 * sizeof(GLfloat), colours, GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glEnableVertexAttribArray(2);
-    glBufferData(GL_ARRAY_BUFFER, 2 * 6 * sizeof(GLfloat), texture, GL_STATIC_DRAW);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-    glBindVertexArray(0);
-    //glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(2);
-    glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);
+    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -124,10 +110,12 @@ void Unknown::Graphics::Image::init()
     const GLchar* vert = ""
                          "#version 420\n"
                          "\n"
-                         "in vec3 vertex_position;\n"
+                         "in vec4 inVertex;\n"
+                     "uniform mat4 projmat;\n"
                          "\n"
                          "void main() {\n"
-                         "  gl_Position = vec4(vertex_position, 1.0);\n"
+                         //"  gl_Position = vec4(vertex_position, 1.0);\n"
+                     "  gl_Position = projmat * vertex_position;\n"
                          "}";
     // todo: is null strlen shader
     glShaderSource(vertShader, 1, &vert, nullptr);
@@ -191,40 +179,42 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glMatrixMode(GL_MODELVIEW);
-    // Rotation and translation for vbo
+glMatrixMode(GL_MODELVIEW);
+    // Rotation and translation
     glLoadIdentity();
 
     glTranslated(x + centerX, y + centerY, 0);
     glRotated(angle, 0, 0, 1);
     glTranslated(-centerX, -centerY, 0);
 
-    //glUseProgram(prog);
-    //int loc = glGetUniformLocation(prog, "inputColour");
-    //glUniform4f(loc, 1, 1, 1, 1);
+//    //HAX BEGIN
+    std::array<GLfloat, 16> projection{};
+    glGetFloatv(GL_PROJECTION_MATRIX, projection.data());
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glVertexPointer(3, GL_FLOAT, 0, 0);
+    // Load shader
+//    glUseProgram(prog);
+//    glUniform4f(glGetUniformLocation(prog, "inputColour"), 1, 1, 1, 1);
+//    glUniformMatrix4fv(glGetUniformLocation(prog, "projmat"), 2, GL_FALSE, projection.data());
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glColorPointer(4, GL_FLOAT, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    constexpr const int stride = (3 + 4 + 2) * sizeof(GLfloat); // Size of each sub block
+    glVertexPointer(3, GL_FLOAT, stride, 0); // + 3 ?
+    glColorPointer(4, GL_FLOAT, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
+    glTexCoordPointer(2, GL_FLOAT, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glTexCoordPointer(2, GL_FLOAT, 0, 0);
-
+    // Render data
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    //glDrawElements(GL_TRIANGLES, 6, GL_FLOAT, 0);
 
+    // Unbind stuff
     //glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
 
-
-   // glEnd();
     glPopMatrix();
 }
 

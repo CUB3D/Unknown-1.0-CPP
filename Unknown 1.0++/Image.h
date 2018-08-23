@@ -19,7 +19,7 @@ namespace Unknown
 			unsigned int textureID;
 
 			GLuint vao;
-			GLuint vbo[3];
+			GLuint vbo;
 			int prog;
 
 		public:

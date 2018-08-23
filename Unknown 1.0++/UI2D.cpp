@@ -85,10 +85,7 @@ void Unknown::Graphics::drawPoint(const int x, const int y, const int size, cons
 
 void Unknown::Graphics::drawCircle(const int cx, const int cy, const int radius, const Colour &col) {
 
-    int vertexCount = 0;
-    static double vert = 0;
-    vertexCount = vert;
-    vert += 0.0001;
+    int vertexCount = 100;
     //float verticies[vertexCount * 3];
 
     glEnable(GL_POINT_SMOOTH);
