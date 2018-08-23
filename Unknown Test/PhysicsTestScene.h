@@ -14,6 +14,7 @@ public:
     PhysicsTestScene();
 
     virtual void update() override;
+    virtual void render() const override;
 
 };
 

@@ -31,6 +31,7 @@ namespace Unknown
         b2Vec2 getBox2DVec() const;
 	};
 
+
 	REFLECT
 	{
 		addClass(Vector)

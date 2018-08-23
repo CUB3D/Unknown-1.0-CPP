@@ -10,8 +10,12 @@ namespace Unknown
 {
 	namespace Graphics
 	{
+		void drawVerticies(GLenum renderMode, const float *verticies, const int vertexCount, const double x,
+                           const double y, const double centerX, const double centerY, const double angle,
+                           const Colour &colour);
+
 		void drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour);
-		void drawRect(const int x, const int y, const int width, const int height, const Colour colour);
+		void drawRect(const int x, const int y, const int width, const int height, const Colour &colour);
 		void drawSquare(const int x, const int y, const int size, const Colour colour);
 		void drawPoint(const int x, const int y, const int size, const Colour& colour);
 		void drawCircle(const int cx, const int cy, const int radius, const Colour& col);
@@ -24,7 +28,7 @@ namespace Unknown
 }
 
 #define UK_SET_COLOUR(colour) ::Unknown::Graphics::setDrawColour(colour)
-#define UK_DRAW_RECT(x, y, w, h, ...) ::Unknown::Graphics::drawRect(x, y, w, h, ##__VA_ARGS__)
+#define UK_DRAW_RECT(x, y, w, h, a, ...) ::Unknown::Graphics::drawRect(x, y, w, h, a, ##__VA_ARGS__)
 #define UK_DRAW_SQUARE(x, y, s, c) ::Unknown::Graphics::drawSquare(x, y, s, c)
 
 #endif

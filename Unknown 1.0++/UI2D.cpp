@@ -12,45 +12,50 @@
 //TODO: refactor out sdl stuff, should have some kind of init() func that will create the screen (and make the canvas on web)
 //TODO: for textures should just have a load texture that returns an id and a bind/unbind that uses that id
 
+void Unknown::Graphics::drawVerticies(GLenum renderMode, const float *verticies, const int vertexCount, const double x,
+                                      const double y, const double centerX, const double centerY, const double angle,
+                                      const Colour &colour) {
+    glPushMatrix();
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslated(x + centerX, y + centerY, 0);
+    glRotated(angle, 0, 0, 1);
+    glTranslated(-centerX, -centerY, 0);
+
+    GL_setColour(colour);
+
+    glVertexPointer(3, GL_FLOAT, 0, verticies);
+    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+}
+
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {
 	auto& uk = getUnknown();
 
-//	int startX = std::max(0, x);
-//	int startY = std::max(0, y);
-//	int endX = std::min(x + width, uk->screenSize->width);
-//	int endY = std::min(y + height, uk->screenSize->height);
-    int endX = x + width;
-    int endY = y + height;
+    constexpr int VERTEX_COUNT = 18;
 
+    float verticies[VERTEX_COUNT] =  {
+        0, 0, 0,
+        (float)width, 0, 0,
+        0, (float)height, 0,
 
-	int centerX = (x + width / 2);
-	int centerY = (y + height /2);
+        0, (float)height, 0,
+        (float)width, (float)height, 0,
+        (float)width, 0, 0
+    };
 
-	const double angle_ = (angle / (2.0*PI)) * 360.0;
+    double centerX = width / 2.0;
+    double centerY = height / 2.0;
 
-	glPushMatrix();
-    glMatrixMode(GL_MODELVIEW);
-	glTranslated(centerX, centerY, 0);
-	glRotated(angle_, 0, 0, 1);
-	glTranslated(-centerX, -centerY, 0);
+    const double angle_ = (angle / (2.0*PI)) * 360.0;
 
-	GL_setColour(colour);
-
-
-	glBegin(GL_TRIANGLES);
-	// bottom left
-	glVertex3f(x, y, 0);
-    glVertex3f(endX, y, 0);
-    glVertex3f(x, endY, 0);
-
-    // top left
-    glVertex3f(x, endY, 0);
-    glVertex3f(endX, endY, 0);
-    glVertex3f(endX, y, 0);
-    glEnd();
-
-    glPopMatrix();
+    drawVerticies(GL_TRIANGLES, verticies, 6, x, y, centerX, centerY, angle_, colour);
 }
 
 void Unknown::Graphics::drawSquare(const int x, const int y, const int size, const Colour colour)
@@ -70,44 +75,74 @@ void Unknown::Graphics::GL_setColour(const Colour &colour) {
 }
 
 void Unknown::Graphics::drawPoint(const int x, const int y, const int size, const Colour &colour) {
-    GL_setColour(colour);
+    constexpr int vertexCount = 1;
+    float verticies[vertexCount * 3] = {
+        (float) x, (float) y, 0
+    };
 
-    glBegin(GL_POINTS);
-    glPointSize(size);
-    glVertex3f(x, y, 0);
-    glEnd();
+    drawVerticies(GL_POINTS, verticies, vertexCount, 0, 0, 0, 0, 0, colour);
 }
 
 void Unknown::Graphics::drawCircle(const int cx, const int cy, const int radius, const Colour &col) {
 
+    int vertexCount = 0;
+    static double vert = 0;
+    vertexCount = vert;
+    vert += 0.0001;
+    //float verticies[vertexCount * 3];
+
+    glEnable(GL_POINT_SMOOTH);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+
     GL_setColour(col);
 
-    int segments = 100;
+//    for(int i = 0; i < vertexCount; i++) {
+//        float theta = 2.0f * 3.1415926f * float(i) / float(vertexCount);//get the current angle
+//
+//        float x = radius * cosf(theta);//calculate the x component
+//        float y = radius * sinf(theta);//calculate the y component
+//
+//        verticies[3 * i] = x;
+//        verticies[3 * i + 1] = y;
+//        verticies[3 * i + 2] = 0;
+//    }
 
-    glBegin(GL_LINE_LOOP);
-    for(int ii = 0; ii < segments; ii++)
+
+    float theta = 2 * 3.1415926 / float(vertexCount);
+    float c = cosf(theta);//precalculate the sine and cosine
+    float s = sinf(theta);
+    float t;
+
+    float x = radius;
+    float y = 0;
+
+    glBegin(GL_POLYGON);
+    for(int ii = 0; ii < vertexCount; ii++)
     {
-        float theta = 2.0f * 3.1415926f * float(ii) / float(segments);//get the current angle
+       glVertex3f(x + cx, y + cy, 0);
 
-        float x = radius * cosf(theta);//calculate the x component
-        float y = radius * sinf(theta);//calculate the y component
-
-        glVertex2f(x + cx, y + cy);//output vertex
-
+        //apply the rotation matrix
+        t = x;
+        x = c * x - s * y;
+        y = s * t + c * y;
     }
     glEnd();
+
+    //drawVerticies(GL_LINE_LOOP, verticies, vertexCount, cx, cy, 0, 0, 0, col);
 }
 
 void Unknown::Graphics::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) {
-    GL_setColour(col);
-    glBegin(GL_LINE);
-    glVertex3f(sx, sy, 0);
-    glVertex3f(ex, ey, 0);
-    glEnd();
+    //TODO: fix
+    constexpr int vertexCount = 2;
+    float verticies[vertexCount * 3] = {
+        (float) sx, (float) sy, 0,
+        (float) ex, (float) ey, 0
+    };
+
+    drawVerticies(GL_LINES, verticies, vertexCount, 0, 0, 0, 0, 0, col);
 }
 
-void
-Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour colour) {
+void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour &colour) {
     drawRect(x, y, width, height, 0, colour);
 }
 

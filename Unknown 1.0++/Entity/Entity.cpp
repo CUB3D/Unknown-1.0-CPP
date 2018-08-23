@@ -4,6 +4,8 @@
 
 #include "Entity.h"
 #include "PhysicsBodyComponent.h"
+#include "ImageRenderComponent.h"
+#include "BasicRenderComponent.h"
 
 Unknown::Entity::Entity(const std::string& tag) : size(0, 0), position(0, 0), tag(tag), enabled(true), queueDissable(false), angle(0) {}
 
@@ -30,14 +32,28 @@ void Unknown::Entity::update() {
 
 
 Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
-    return Rect<int>(position.x, position.y, size.height, size.width);
+    auto&& i = getComponent<ImageRenderComponent>();
+    if(i) {
+        return i->getRenderBounds(*this);
+    }
+
+    auto&& ii = getComponent<BasicRenderComponent>();
+    if(ii) {
+        return ii->getRenderBounds(*this);
+    }
+
+    return Rect<int>(position.x, position.y, size.width, size.height);
 }
 
-void Unknown::Entity::setPosition(double x, double y) {
+void Unknown::Entity::setPosition(double x, double y, double angle) {
     this->position = Point<double>(x, y);
+    this->angle = angle;
+
     auto physicsComp = getComponent<PhysicsBodyComponent>();
     if(physicsComp) {
-        physicsComp->body->SetTransform(b2Vec2(x, y), physicsComp->body->GetAngle());
+        physicsComp->body->SetTransform(b2Vec2(x, y), angle);
+        // Make sure to wake the body so that phys sim keeps working
+        physicsComp->body->SetAwake(true);
     }
 }
 

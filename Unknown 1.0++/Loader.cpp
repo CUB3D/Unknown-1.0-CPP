@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Loader.h"
 
+#include "document.h"
 #include "Sprite.h"
 #include "Utils.h"
 #include "UI.h"
-#include "document.h"
 #include "Log.h"
 
 #include <map>
@@ -140,6 +140,12 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		printf("[WARN] Entity %s has no components\n", name.c_str());
 		return ent;
 	}
+
+#ifdef WIN32
+// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
+// What is this, some kind of sick joke
+#define GetObjectA GetObject
+#endif
 
 	for(auto x = components->GetObject().MemberBegin(); x != components->MemberEnd(); x++) {
 		auto component = x->value.GetObject();

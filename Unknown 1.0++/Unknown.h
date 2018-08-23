@@ -79,7 +79,7 @@ namespace Unknown
 		int frames = 0;
 		int ticks = 0;
 
-        int fps = 0;
+        double fps = 0;
         double lastFrameTimeMS = 0;
         double lastUpdateTimeMS = 0;
 

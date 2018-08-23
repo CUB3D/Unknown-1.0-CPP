@@ -6,8 +6,12 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "../Unknown.h"
+#include "../Entity/Entity.h"
+#include "../Loader.h"
+#include "../Event/Event.h"
+#include "../UI2D.h"
 
-Unknown::EditorBase::EditorBase() : Scene("Editor") {
+Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), under(under), editing(false) {
 
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -24,10 +28,16 @@ Unknown::EditorBase::EditorBase() : Scene("Editor") {
 
     //TODO: profiler
 
-
-    registerHook([&]{
-        this->update();
-    }, HookType::RENDER);
+    registerEventHandler(ET_MOUSEBUTTON, "editSelect", [this](Event& evt){
+        if(evt.mouse.buttonState == PRESSED) {
+            for(auto& e : getLastScene()->entities) {
+                if(e->getRenderBounds().contains(evt.mouse.location)) {
+                    this->selected = e;
+                    this->entityEditors.emplace_back(e);
+                }
+            }
+        }
+    });
 }
 
 Unknown::EditorBase::~EditorBase() {
@@ -36,23 +46,38 @@ Unknown::EditorBase::~EditorBase() {
     ImGui::DestroyContext();
 }
 
+
 void Unknown::EditorBase::update() {
-    bool done;
+    //TODO: dont update scene when editing, ability to disable editor (e.g. menu bar) and abillity to
+    if(!editing)
+        getLastScene()->update();
+
+    getLastScene()->render();
 
     auto& uk = getUnknown();
-
-    ImGuiIO& io = ImGui::GetIO();
-
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(uk.window);
     ImGui::NewFrame();
 
+    ImGui::BeginMainMenuBar();
+    createMenuBar();
+    ImGui::EndMainMenuBar();
+
+    if(!editing) {
+        ImGui::EndFrame();
+        ImGui::Render();
+
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        return;
+    }
+
+
     ImGui::Begin("Profiler");
 
     ImGui::Text("GUI framerate %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Core framerate %.5lf ms/frame (%.1lf FPS)", uk.lastFrameTimeMS, uk.fps);
 
     this->fps.push_front((float)getUnknown().lastFrameTimeMS);
 
@@ -60,31 +85,31 @@ void Unknown::EditorBase::update() {
 
     ImGui::End();
 
-    ImGui::Begin("Scene Edit");
-    bool b = true;
-    ImGui::ShowDemoWindow(&b);
-    ImGui::End();
-
-
-    // Poll and handle events (inputs, window resize, etc.)
-    // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
-    // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
-    // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
-    // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
-    SDL_Event event;
-    if (SDL_PollEvent(&event))
-    {
-        ImGui_ImplSDL2_ProcessEvent(&event);
-        if (event.type == SDL_QUIT)
-            done = true;
-        if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(uk.window))
-            done = true;
+    for(auto& ent : entityEditors) {
+        ent.populateGui();
     }
 
-    // Rendering
+    ImGui::EndFrame();
     ImGui::Render();
-    //SDL_GL_MakeCurrent(uk->window, uk->glContext);
-    //glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-   // glClear(GL_COLOR_BUFFER_BIT);
+
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Unknown::EditorBase::render() const {
+    if(selected) {
+        int x = selected->getRenderBounds().center().x;
+        int y = selected->getRenderBounds().center().y;
+        ::Unknown::Graphics::drawRect(x, y, 50, 5, 0, UK_COLOUR_RGB(255, 0, 0));
+        ::Unknown::Graphics::drawRect(x, y - 50, 5, 50, 0, UK_COLOUR_RGB(0, 255, 0));
+    }
+}
+
+std::shared_ptr<::Unknown::Scene> Unknown::EditorBase::getLastScene() const {
+    auto& gcm = ::Unknown::getUnknown().globalSceneManager;
+    return gcm.scenes[this->under];
+}
+
+void Unknown::EditorBase::createMenuBar() {
+    //ImGui::MenuItem("Editor");
+    ImGui::Checkbox("Editor", &this->editing);
 }
