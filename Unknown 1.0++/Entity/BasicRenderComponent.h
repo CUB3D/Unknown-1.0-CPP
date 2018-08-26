@@ -33,7 +33,7 @@ namespace Unknown
     };
 
 
-    REFLECT {
+	REFLECT {
         addClass(BasicRenderComponent)
         ->addProp(col)
         ->addProp(renderScale);

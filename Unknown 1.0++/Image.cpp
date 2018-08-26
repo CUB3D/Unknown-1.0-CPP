@@ -134,6 +134,7 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+#if FALSE
 glMatrixMode(GL_MODELVIEW);
     // Rotation and translation
     glLoadIdentity();
@@ -141,6 +142,7 @@ glMatrixMode(GL_MODELVIEW);
     glTranslated(x + centerX, y + centerY, 0);
     glRotated(angle, 0, 0, 1);
     glTranslated(-centerX, -centerY, 0);
+#endif
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     constexpr const int stride = (3 + 4 + 2) * sizeof(GLfloat); // Size of each sub block

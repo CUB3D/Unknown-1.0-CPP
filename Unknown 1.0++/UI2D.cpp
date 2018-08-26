@@ -20,6 +20,9 @@ void Unknown::Graphics::drawVerticies(GLenum renderMode, const float *verticies,
     glEnableClientState(GL_VERTEX_ARRAY);
 
 
+   //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
+//Also I think that client states are needed for native but not for emscripten
+
     glVertexPointer(3, GL_FLOAT, 0, verticies);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
