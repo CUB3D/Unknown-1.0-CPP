@@ -5,8 +5,10 @@
 #include <SDL_image.h>
 #include "Colour.h"
 #include "Unknown.h"
-#include "GL/glad/glad.h"
-#include <cmath>
+
+#include "GL/GL.h"
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
 
 //TODO: rotation both here and for images
 //TODO: refactor out sdl stuff, should have some kind of init() func that will create the screen (and make the canvas on web)
@@ -15,29 +17,24 @@
 void Unknown::Graphics::drawVerticies(GLenum renderMode, const float *verticies, const int vertexCount, const double x,
                                       const double y, const double centerX, const double centerY, const double angle,
                                       const Colour &colour) {
-    glPushMatrix();
-
     glEnableClientState(GL_VERTEX_ARRAY);
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslated(x + centerX, y + centerY, 0);
-    glRotated(angle, 0, 0, 1);
-    glTranslated(-centerX, -centerY, 0);
-
-    GL_setColour(colour);
 
     glVertexPointer(3, GL_FLOAT, 0, verticies);
     glDrawArrays(GL_TRIANGLES, 0, vertexCount);
 
+
     glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
+
+    GLenum err;
+    while((err = glGetError()) != GL_NO_ERROR)
+    {
+        printf("%d\n", err);
+    }
 }
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {
-	auto& uk = getUnknown();
-
     constexpr int VERTEX_COUNT = 18;
 
     float verticies[VERTEX_COUNT] =  {

@@ -4,7 +4,8 @@
 
 #include "TTFont.h"
 #include "Font.h"
-#include "../GL/glad/glad.h"
+
+#include "../GL/GL.h"
 
 Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), colour(colour) {
     this->font = TTF_OpenFont(name.c_str(), size);
@@ -22,6 +23,7 @@ Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const
 
 void Unknown::Graphics::TTFont::drawString(const std::string &string, const int x, const int y) const
 {
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
 
     int xPos = x;
@@ -33,6 +35,7 @@ void Unknown::Graphics::TTFont::drawString(const std::string &string, const int 
     }
 
     glPopMatrix();
+#endif
 }
 
 int Unknown::Graphics::TTFont::getStringWidth(const std::string &str) const

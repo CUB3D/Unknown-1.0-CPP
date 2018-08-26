@@ -5,9 +5,14 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_SHAREDVARIABLE_H
 #define UNKNOWN_DEVELOPMENT_TOOL_SHAREDVARIABLE_H
 
+#include <string>
 #include <map>
 #include <any>
 #include <functional>
+#include <vector>
+
+// If clang
+#include <experimental/any>
 
 namespace Unknown
 {
@@ -16,7 +21,9 @@ namespace Unknown
         std::string name;
 
     public:
-        std::any data;
+        // If clang
+        std::experimental::any data;
+        //std::any data;
 
         std::vector<std::function<void(SharedVariable v)>> changeListeners;
 
@@ -43,7 +50,9 @@ namespace Unknown
 
         template<typename U>
         U getValue() const {
-            return std::any_cast<U>(this->data);
+            //return std::any_cast<U>(this->data);
+            // if clang
+            return std::experimental::any_cast<U>(this->data);
         }
 
         operator bool();

@@ -5,6 +5,7 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_RESOURCEMANAGER_H
 #define UNKNOWN_DEVELOPMENT_TOOL_RESOURCEMANAGER_H
 
+#include <string>
 
 class ResourceManager
 {

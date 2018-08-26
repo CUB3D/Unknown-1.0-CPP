@@ -25,8 +25,8 @@ namespace Unknown
 
             TTFont(const std::string& name, const int size, const Colour& colour);
 
-            virtual void drawString(const std::string& string, const int x, const int y) const;
-            virtual void drawChar(const char c, const int x, const int y) const;
+            virtual void drawString(const std::string& string, const int x, const int y) const override;
+            virtual void drawChar(const char c, const int x, const int y) const override;
 
             virtual int getStringWidth(const std::string &str) const override;
             virtual int getCharWidth(const char c) const override;

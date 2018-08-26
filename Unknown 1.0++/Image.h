@@ -6,7 +6,9 @@
 #include <vector>
 #include "IInitable.h"
 #include "Utils.h"
-#include "GL/glad/glad.h"
+// if clang
+//#include "GL/glad/glad.h"
+#include <GLES2/gl2.h>
 
 namespace Unknown
 {
@@ -20,7 +22,6 @@ namespace Unknown
 
 			GLuint vao;
 			GLuint vbo;
-			int prog;
 
 		public:
 		    ::Unknown::Dimension<int> imageSize;

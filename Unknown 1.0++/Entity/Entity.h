@@ -40,7 +40,7 @@ namespace Unknown
         void setPosition(double x, double y, double angle=0);
 
 
-        virtual Rect<int> getRenderBounds();
+        virtual Rect<int> getRenderBounds() override;
 
         template<typename T>
         std::shared_ptr<T> getComponent() {
@@ -54,7 +54,7 @@ namespace Unknown
             return nullptr;
         }
 
-        virtual const std::string getTag() const;
+        virtual const std::string getTag() const override;
     };
 }
 

@@ -12,7 +12,6 @@
 #include "Timer.h"
 #include "Entity/Entity.h"
 #include "Entity/PhysicsBodyComponent.h"
-#include "PythonScript.h"
 #include "Entity/TimerComponent.h"
 #include "Font/Font.h"
 #include "Audio/WAVSound.h"
@@ -55,7 +54,7 @@ WAVSound hit("Hit.wav");
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     //UK_PYTHON_LOAD_SCRIPT("Test");
     ui = Loader::loadUI("PhysGameGUI.json");
-    ui.setGlobalFont(std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
+    ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();
 
     this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));

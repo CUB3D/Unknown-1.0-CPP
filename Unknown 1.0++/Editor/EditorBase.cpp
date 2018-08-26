@@ -30,7 +30,10 @@ Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), und
 
     registerEventHandler(ET_MOUSEBUTTON, "editSelect", [this](Event& evt){
         if(evt.mouse.buttonState == PRESSED) {
-            for(auto& e : getLastScene()->entities) {
+            auto lc = getLastScene();
+            if(!lc)
+                return;
+            for(auto& e : lc->entities) {
                 if(e->getRenderBounds().contains(evt.mouse.location)) {
                     this->selected = e;
                     this->entityEditors.emplace_back(e);

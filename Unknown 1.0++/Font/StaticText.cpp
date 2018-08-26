@@ -42,6 +42,7 @@ StaticText::StaticText(const Unknown::Graphics::TTFont &font, const std::string 
 }
 
 void StaticText::render(const int x, const int y) const {
+#ifndef __EMSCRIPTEN__
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->textureID);
 
@@ -76,4 +77,5 @@ void StaticText::render(const int x, const int y) const {
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+#endif
 }

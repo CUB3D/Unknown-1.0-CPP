@@ -45,6 +45,8 @@ Unknown::Graphics::FontGlyph::FontGlyph(const char c, TTF_Font *font, const Colo
 }
 
 void Unknown::Graphics::FontGlyph::drawGlyph(const int x, const int y) const {
+#ifndef __EMSCRIPTEN__
+
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->textureID);
 
@@ -79,4 +81,5 @@ void Unknown::Graphics::FontGlyph::drawGlyph(const int x, const int y) const {
 
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
+#endif
 }

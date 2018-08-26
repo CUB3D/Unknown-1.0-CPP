@@ -6,9 +6,10 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_FONTGLYPH_H
 
 #include <SDL_ttf.h>
-#include "../GL/glad/glad.h"
 #include "../Colour.h"
 #include "../Utils.h"
+
+#include "../GL/GL.h"
 
 namespace Unknown
 {

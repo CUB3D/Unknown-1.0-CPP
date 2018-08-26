@@ -20,6 +20,11 @@ rapidjson::Document Unknown::readJSONFile(const char* filename)
 {
 	std::ifstream config(filename);
 
+	if(!config.good()) {
+		printf("Unable to find config file\n");
+		exit(0);
+	}
+
 	std::ostringstream oss;
 	oss << config.rdbuf();
 	std::string doc = oss.str();
@@ -124,16 +129,14 @@ std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::s
 	std::string token;
     std::string lastTokenType = "str";
 
-	for(char c = ' '; *temp != '\0', c = *temp; temp++)
+	for(char c = ' '; c = *temp, *temp != '\0'; temp++)
 	{
         if(isCharCodeNumber(&c))
         {
-            if(lastTokenType == "num")
-            {
+            if(lastTokenType == "num") {
                 token += c;
             } else {
-                if(!token.empty())
-                {
+                if(!token.empty()) {
                     tokens.push_back(token);
                 }
                 token = "";
@@ -142,12 +145,10 @@ std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::s
             }
         }
         else {
-            if(lastTokenType == "str")
-            {
+            if(lastTokenType == "str") {
                 token += c;
             } else {
-                if(!token.empty())
-                {
+                if(!token.empty()) {
                     tokens.push_back(token);
                 }
                 token = "";
@@ -156,10 +157,8 @@ std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::s
             }
         }
 
-        for(auto extToken : extTokens)
-        {
-            if(extToken == token)
-            {
+        for(const auto &extToken : extTokens) {
+            if(extToken == token) {
 				tokens.push_back(token);
                 token = "";
             }

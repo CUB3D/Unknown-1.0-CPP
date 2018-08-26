@@ -3,7 +3,6 @@
 
 #include "Image.h"
 #include "Entity/Entity.h"
-#include "Sprite.h"
 #include "Timer.h"
 
 namespace Unknown

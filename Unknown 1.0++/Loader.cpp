@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Loader.h"
 
-#include "Sprite.h"
 #include "Utils.h"
 #include "UI.h"
 #include "document.h"
@@ -16,82 +15,7 @@
 #include "Entity/TimerComponent.h"
 #include "Entity/ImageRenderComponent.h"
 
-std::map<const char*, std::unique_ptr<Unknown::Sprite>> Unknown::Loader::spritePool;
 std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
-
-Unknown::Sprite* Unknown::Loader::loadSprite(const char* name)
-{
-	if (spritePool.find(name) != spritePool.end())
-	{
-		std::unique_ptr<Sprite>& spritePrefab = spritePool.find(name)->second;
-		Sprite* returnValue = spritePrefab->clone();
-		return returnValue;
-	}
-
-	int x;
-	int y;
-
-	rapidjson::Document doc = readJSONFile(name);
-
-	rapidjson::Value* xValue = getValue("X", rapidjson::Type::kNumberType, doc);
-
-	if (xValue)
-	{
-		x = xValue->GetInt();
-	}
-
-	rapidjson::Value* yValue = getValue("Y", rapidjson::Type::kNumberType, doc);
-
-	if (yValue)
-	{
-		y = yValue->GetInt();
-	}
-
-	std::unique_ptr<Sprite> sprite;
-
-	std::unique_ptr<rapidjson::Value> typeValue(getValue("Type", rapidjson::Type::kStringType, doc));
-
-	if (typeValue)
-	{
-		std::string type = typeValue->GetString();
-		if (type == "Sprite")
-		{
-			sprite = std::unique_ptr<Sprite>(new Sprite(x, y));
-		}
-		else
-		{
-			if (type == "Image")
-			{
-				rapidjson::Value* imageValue = getValue("Image", rapidjson::Type::kStringType, doc);
-
-				if (imageValue)
-				{
-					Graphics::Image* image = new Graphics::Image(imageValue->GetString());
-
-					sprite = std::unique_ptr<Graphics::ImageSprite>(new Graphics::ImageSprite(x, y, image));
-				}
-			}
-			else
-			{
-				if (type == "Animated")
-				{
-					rapidjson::Value* animationLocation = getValue("Animation", rapidjson::kStringType, doc);
-
-					if (animationLocation)
-					{
-						Graphics::Animation* animation = UK_LOAD_ANIMATION(animationLocation->GetString());
-
-						sprite = std::unique_ptr<Graphics::AnimatedSprite>(new Graphics::AnimatedSprite(x, y, animation));
-					}
-				}
-			}
-		}
-	}
-
-	spritePool[name] = std::move(sprite);
-
-	return sprite.get();
-}
 
 std::shared_ptr<Unknown::Entity>
 Unknown::Loader::loadEntityAt(const std::string &name, Scene &scene, double x, double y) {

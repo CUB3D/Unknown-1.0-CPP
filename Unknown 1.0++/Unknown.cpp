@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Unknown.h"
 
-#include "Python.h"
 #include <SDL.h>
 #include <iostream>
 #include <map>
@@ -14,13 +13,18 @@
 #include <fstream>
 #include <string>
 #include "document.h"
-#include "PythonScript.h"
 #include "Utils.h"
 
 #include <chrono>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
-#include "GL/glad/glad.h"
+
+#include "GL/GL.h"
+
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 #include "Event/Event.h"
 #include "Event/EventManager.h"
 #include "Image.h"
@@ -58,7 +62,9 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	}
 
 	this->glContext = SDL_GL_CreateContext(this->window);
-	gladLoadGL();
+
+	::Unknown::initGL();
+
 	SDL_GL_SetSwapInterval(0);
 
 
@@ -156,59 +162,82 @@ void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
 
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+ //   glMatrixMode(GL_MODELVIEW);
+ //   glLoadIdentity();
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, screenSize->width, screenSize->height, 0, 0, 1);
+  //  glMatrixMode(GL_PROJECTION);
+  //  glLoadIdentity();
+
+#ifdef THREE_D
+    glFrustum(-1, 1, -1, 1, 0.1, 10);
+#else
+    //glOrtho(0, screenSize->width, screenSize->height, 0, 0, 1);
+#endif
     glViewport(0, 0, screenSize->width, screenSize->height);
 
-	while (running)
-	{
-        const char* err = SDL_GetError();
-        if (strlen(err) > 0) {
-        	//TODO: move to stderr
-           // printf("Error: %s\n", err);
-            SDL_ClearError();
-        }
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
+    glClearDepth(1.0f);                   // Set background depth to farthest
+   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+   // glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+    //glShadeModel(GL_SMOOTH);   // Enable smooth shading
+   // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
 
-		this->checkEvents();
-
-		long time = SDL_GetTicks();
-
-		this->unprocessed += (time - startTime) / tickSpeed;
-		this->startTime = time;
-
-		while (this->unprocessed >= 1)
-		{
-            auto renderStartTime = std::chrono::high_resolution_clock::now();
-			this->update();
-            auto renderFinishTime = std::chrono::high_resolution_clock::now();
-            this->lastUpdateTimeMS = this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
-
-			this->ticks++;
-			this->unprocessed--;
-		}
-
-        auto renderStartTime = std::chrono::high_resolution_clock::now();
-		this->render();
-		auto renderFinishTime = std::chrono::high_resolution_clock::now();
-        this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
-
-		this->frames++;
-
-		this->updateWindow();
-
-		if (fpsCounter.isTickComplete())
-		{
-			std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
-			this->fps = this->frames;
-
-			this->frames = 0;
-			this->ticks = 0;
-		}
+#ifdef __EMSCRIPTEN__
+	emscripten_set_main_loop(doSingleLoopItterC, 0, 1);
+#else
+	while (running) {
+        doSingleLoopIttr();
 	}
+#endif
+}
+
+void ::Unknown::doSingleLoopItterC() {
+	::Unknown::getUnknown().doSingleLoopIttr();
+}
+
+void Unknown::Unknown::doSingleLoopIttr() {
+    const char* err = SDL_GetError();
+    if (strlen(err) > 0) {
+        //TODO: move to stderr
+        // printf("Error: %s\n", err);
+        SDL_ClearError();
+    }
+
+    this->checkEvents();
+
+    long time = SDL_GetTicks();
+
+    this->unprocessed += (time - startTime) / tickSpeed;
+    this->startTime = time;
+
+    while (this->unprocessed >= 1)
+    {
+        auto renderStartTime = std::chrono::high_resolution_clock::now();
+        this->update();
+        auto renderFinishTime = std::chrono::high_resolution_clock::now();
+        this->lastUpdateTimeMS = this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
+
+        this->ticks++;
+        this->unprocessed--;
+    }
+
+    auto renderStartTime = std::chrono::high_resolution_clock::now();
+    this->render();
+    auto renderFinishTime = std::chrono::high_resolution_clock::now();
+    this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
+
+    this->frames++;
+
+    this->updateWindow();
+
+    if (fpsCounter.isTickComplete())
+    {
+        std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
+        this->fps = this->frames;
+
+        this->frames = 0;
+        this->ticks = 0;
+    }
 }
 
 void Unknown::Unknown::checkEvents()

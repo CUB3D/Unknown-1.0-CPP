@@ -7,6 +7,7 @@
 
 #include "../Entity/Entity.h"
 #include <memory>
+#include <array>
 
 namespace Unknown
 {

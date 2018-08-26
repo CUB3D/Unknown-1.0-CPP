@@ -1,3 +1,5 @@
+#if FALSE
+
 #ifndef PYTHONSCRIPT_H
 #define PYTHONSCRIPT_H
 
@@ -72,5 +74,7 @@ namespace Unknown
 #define UK_PYTHON_ADD_SEARCH_PATH(path) ::Unknown::Python::getInterpreter()->addSearchPath(path)
 #define UK_PYTHON_LOAD_SCRIPT(name) ::Unknown::Python::getInterpreter()->loadScript(name)
 #define UK_PYTHON_FUNC(name) ::Unknown::Python::pythonFunc(name)
+
+#endif
 
 #endif

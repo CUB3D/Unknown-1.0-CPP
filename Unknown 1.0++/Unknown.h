@@ -89,6 +89,7 @@ namespace Unknown
 		void createWindow();
 
 		void initGameLoop();
+		inline void doSingleLoopIttr();
 
 		void quit(const int exitCode);
 
@@ -102,6 +103,8 @@ namespace Unknown
 	};
 
 	Unknown& getUnknown();
+
+	void doSingleLoopItterC();
 	
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown().createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown().initGameLoop()

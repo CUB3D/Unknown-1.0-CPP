@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "Unknown.h"
-#include "GL/glad/glad.h"
+#include "GL/GL.h"
 
 
 void Unknown::Graphics::Image::init()
@@ -89,9 +89,6 @@ void Unknown::Graphics::Image::init()
         1, 1
     };
 
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
-
     glGenBuffers(1, &vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -99,50 +96,8 @@ void Unknown::Graphics::Image::init()
     glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
 
     glDisableVertexAttribArray(0);
-    glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-
-    // Create shaders
-    int vertShader = glCreateShader(GL_VERTEX_SHADER);
-    int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-    const GLchar* vert = ""
-                         "#version 420\n"
-                         "\n"
-                         "in vec4 inVertex;\n"
-                     "uniform mat4 projmat;\n"
-                         "\n"
-                         "void main() {\n"
-                         //"  gl_Position = vec4(vertex_position, 1.0);\n"
-                     "  gl_Position = projmat * vertex_position;\n"
-                         "}";
-    // todo: is null strlen shader
-    glShaderSource(vertShader, 1, &vert, nullptr);
-    glCompileShader(vertShader);
-
-    const GLchar* frag = "#version 420\n"
-                         "\n"
-                         "uniform vec4 inputColour;\n"
-                         "out vec4 fragColour;\n"
-                         "\n"
-                         "void main() {\n"
-                         "  fragColour = inputColour;\n"
-                         "}";
-    glShaderSource(fragShader, 1, &frag, nullptr);
-    glCompileShader(fragShader);
-
-    prog = glCreateProgram();
-    glAttachShader(prog, vertShader);
-    glAttachShader(prog, fragShader);
-
-    glLinkProgram(prog);
-    glValidateProgram(prog);
-
-    char err[3000];
-    glGetProgramInfoLog(prog, 3000, nullptr, err);
-
-    printf("Error: %s\n", err);
 
     SDL_FreeSurface(imageSurface);
 }
@@ -187,18 +142,9 @@ glMatrixMode(GL_MODELVIEW);
     glRotated(angle, 0, 0, 1);
     glTranslated(-centerX, -centerY, 0);
 
-//    //HAX BEGIN
-    std::array<GLfloat, 16> projection{};
-    glGetFloatv(GL_PROJECTION_MATRIX, projection.data());
-
-    // Load shader
-//    glUseProgram(prog);
-//    glUniform4f(glGetUniformLocation(prog, "inputColour"), 1, 1, 1, 1);
-//    glUniformMatrix4fv(glGetUniformLocation(prog, "projmat"), 2, GL_FALSE, projection.data());
-
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     constexpr const int stride = (3 + 4 + 2) * sizeof(GLfloat); // Size of each sub block
-    glVertexPointer(3, GL_FLOAT, stride, 0); // + 3 ?
+    glVertexPointer(3, GL_FLOAT, stride, 0);
     glColorPointer(4, GL_FLOAT, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
     glTexCoordPointer(2, GL_FLOAT, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
 
@@ -206,7 +152,6 @@ glMatrixMode(GL_MODELVIEW);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     // Unbind stuff
-    //glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);

@@ -1,3 +1,5 @@
+#if FALSE
+
 #include "stdafx.h"
 #include "PythonScript.h"
 #include <Python.h>
@@ -531,3 +533,5 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
         }
     }
 }
+
+#endif

@@ -18,9 +18,10 @@
         http://glad.dav1d.de/#profile=compatibility&language=c&specification=gl&loader=on&api=gl%3D4.0
 */
 
-#include "../../../../../../../../usr/include/stdio.h"
-#include "../../../../../../../../usr/include/c++/8.2.0/stdlib.h"
-#include "../../../../../../../../usr/include/string.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "glad.h"
 
 static void* get_proc(const char *namez);
@@ -72,7 +73,7 @@ void close_gl(void) {
     }
 }
 #else
-#include "../../../../../../../../usr/include/dlfcn.h"
+#include <dlfcn.h>
 static void* libGL;
 
 #ifndef __APPLE__
@@ -95,6 +96,7 @@ int open_gl(void) {
 
     unsigned int index = 0;
     for(index = 0; index < (sizeof(NAMES) / sizeof(NAMES[0])); index++) {
+        // if clang
         libGL = dlopen(NAMES[index], RTLD_NOW | RTLD_GLOBAL);
 
         if(libGL != NULL) {

@@ -8,6 +8,7 @@
 #include "Component.h"
 #include "../Colour.h"
 #include "Reflex.h"
+#include <array>
 
 namespace Unknown
 {
@@ -24,12 +25,13 @@ namespace Unknown
         BasicRenderComponent(Colour c, int renderScale);
 
         virtual void render(const Entity &ent, double Xoffset, double Yoffset) const override;
-        virtual void update(Entity &ent);
+        virtual void update(Entity &ent) override;
 
         virtual void populateEditor() override;
 
         virtual Rect<int> getRenderBounds(const Entity& ent);
     };
+
 
     REFLECT {
         addClass(BasicRenderComponent)
