@@ -58,44 +58,50 @@ void Unknown::Graphics::Image::init()
 
     // Will be offset by x/y when rendering
     // Init vbo
-    constexpr const int SIZE = 6 * (3 + 4 + 2);
+    constexpr const int SIZE = 6 * (3 + 4 + 2 + 3);
     GLfloat data[SIZE] {
         // Format is vertex coord
         // Then colour
         // Then texcoord
-        // TODO: then normal
+        // Then normal
         0, 0, 0,
         1, 1, 1, 1,
         0, 0,
+        0, 0, 1,
 
         (GLfloat)imageSurface->w, 0, 0,
         1, 1, 1, 1,
         1, 0,
+        (GLfloat)imageSurface->w, 0, 1,
 
         (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0,
         1, 1, 1, 1,
         1, 1,
+        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 1,
 
         0, 0, 0,
         1, 1, 1, 1,
         0, 0,
+        0, 0, 1,
 
         0, (GLfloat)imageSurface->h, 0,
         1, 1, 1, 1,
         0, 1,
+        0, (GLfloat)imageSurface->h, 1,
 
         (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 0,
         1, 1, 1, 1,
-        1, 1
+        1, 1,
+        (GLfloat)imageSurface->w, (GLfloat)imageSurface->h, 1
     };
 
     glGenBuffers(1, &vbo);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glEnableVertexAttribArray(0);
+    //glEnableVertexAttribArray(0);
     glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
 
-    glDisableVertexAttribArray(0);
+    //glDisableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 
@@ -116,53 +122,55 @@ void Unknown::Graphics::Image::render(const int x, const int y, const double ang
     int centerX = imageSize.width / 2;
     int centerY = imageSize.height / 2;
 
-    glPushMatrix();
+    //glPushMatrix();
 
     // Texture setup
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, this->textureID);
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-
-    // Texture config
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // Texture parameters
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_BASE_LEVEL, 0);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, 0);
+//    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+//    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+//    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 
     // Blending
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-#if FALSE
-glMatrixMode(GL_MODELVIEW);
-    // Rotation and translation
-    glLoadIdentity();
-
-    glTranslated(x + centerX, y + centerY, 0);
-    glRotated(angle, 0, 0, 1);
-    glTranslated(-centerX, -centerY, 0);
-#endif
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    constexpr const int stride = (3 + 4 + 2) * sizeof(GLfloat); // Size of each sub block
-    glVertexPointer(3, GL_FLOAT, stride, 0);
-    glColorPointer(4, GL_FLOAT, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
-    glTexCoordPointer(2, GL_FLOAT, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
+    constexpr const int stride = (3 + 4 + 2 + 3) * sizeof(GLfloat); // Size of each sub block
+    // Verticies
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
+    // Colours
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
+    // Texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
+    // Normals
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4 + 2) * sizeof(GLfloat)));
+
 
     // Render data
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     // Unbind stuff
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
+    //glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    glDisableVertexAttribArray(3);
 
-    glPopMatrix();
+//    glDisable(GL_BLEND);
+//    glDisable(GL_TEXTURE_2D);
+
+   // glPopMatrix();
 }
 
 Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename), textureID(0) {

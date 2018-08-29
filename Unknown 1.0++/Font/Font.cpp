@@ -1,6 +1,6 @@
 #include "../stdafx.h"
 #include "Font.h"
-#include "../GL/glad/glad.h"
+#include "../GL/GL.h"
 
 #include <iostream>
 #include <SDL_ttf.h>

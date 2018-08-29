@@ -70,11 +70,16 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 //	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
 
+
+#ifndef __EMSCRIPTEN__ // SDL_image isn't linked against libpng in emscripten, it uses browser decoding so init isnt needed
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
 	{
 		printf("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
 		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
 	}
+#else
+	printf("Using emscripten, not initialsing SDL_image\n");
+#endif
 
     if(TTF_Init() == -1)
     {

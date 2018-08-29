@@ -6,9 +6,8 @@
 #include <vector>
 #include "IInitable.h"
 #include "Utils.h"
-// if clang
-//#include "GL/glad/glad.h"
-#include <GLES2/gl2.h>
+
+#include "GL/GL.h"
 
 namespace Unknown
 {
@@ -16,11 +15,12 @@ namespace Unknown
 	{
 		class Image : public IInitable
 		{
-		private:
+		    //TODO: no
+		    //private:
+		public:
 			std::string filename;
 			unsigned int textureID;
 
-			GLuint vao;
 			GLuint vbo;
 
 		public:

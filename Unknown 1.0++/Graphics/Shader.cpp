@@ -22,15 +22,8 @@ void Shader::compile() {
 
     GLint ok = GL_FALSE;
 
-    const GLchar* vert = "#version 300 es\n"
-                         "\n"
-                         "in vec4 inVertex;\n"
-                         "uniform mat4 projmat;\n"
-                         "\n"
-                         "void main() {\n"
-                         "  gl_Position = projmat * inVertex;\n"
-                         "}";
     // todo: is null strlen shader
+    const GLchar* vert = vertexSrc.c_str();
     glShaderSource(vertShader, 1, &vert, nullptr);
     glCompileShader(vertShader);
 
@@ -53,15 +46,7 @@ void Shader::compile() {
         }
     }
 
-    const GLchar* frag = "#version 300 es\n"
-                         "precision mediump float;\n"
-                         "\n"
-                         "uniform vec4 inputColour;\n"
-                         "out vec4 fragColour;\n"
-                         "\n"
-                         "void main() {\n"
-                         "  fragColour = inputColour;\n"
-                         "}";
+    const GLchar* frag = fragmentSrc.c_str();
     glShaderSource(fragShader, 1, &frag, nullptr);
     glCompileShader(fragShader);
 

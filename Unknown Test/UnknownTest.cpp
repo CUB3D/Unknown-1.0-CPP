@@ -181,6 +181,7 @@ void init()
 }
 
 
+
 #ifdef _WIN32
 int _tmain(int argc, _TCHAR* argv[])
 #else
@@ -191,7 +192,6 @@ int main(int argc, char* argv[])
 	::Unknown::getUnknown().createWindow("Test", 1024, 1024, 60);
 
 	init();
-
 	UK_INIT_GAME();
 
 	return 0;

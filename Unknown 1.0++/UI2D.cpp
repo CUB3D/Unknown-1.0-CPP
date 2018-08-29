@@ -9,6 +9,7 @@
 #include "GL/GL.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include "Graphics/RenderingBackend.h"
 
 //TODO: rotation both here and for images
 //TODO: refactor out sdl stuff, should have some kind of init() func that will create the screen (and make the canvas on web)
@@ -38,24 +39,28 @@ void Unknown::Graphics::drawVerticies(GLenum renderMode, const float *verticies,
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {
-    constexpr int VERTEX_COUNT = 18;
+    auto renderer = getRendererBackend();
 
-    float verticies[VERTEX_COUNT] =  {
-        0, 0, 0,
-        (float)width, 0, 0,
-        0, (float)height, 0,
+    renderer->drawRect(x, y, width, height, angle, colour);
 
-        0, (float)height, 0,
-        (float)width, (float)height, 0,
-        (float)width, 0, 0
-    };
-
-    double centerX = width / 2.0;
-    double centerY = height / 2.0;
-
-    const double angle_ = (angle / (2.0*PI)) * 360.0;
-
-    drawVerticies(GL_TRIANGLES, verticies, 6, x, y, centerX, centerY, angle_, colour);
+//    constexpr int VERTEX_COUNT = 18;
+//
+//    float verticies[VERTEX_COUNT] =  {
+//        0, 0, 0,
+//        (float)width, 0, 0,
+//        0, (float)height, 0,
+//
+//        0, (float)height, 0,
+//        (float)width, (float)height, 0,
+//        (float)width, 0, 0
+//    };
+//
+//    double centerX = width / 2.0;
+//    double centerY = height / 2.0;
+//
+//    const double angle_ = (angle / (2.0*PI)) * 360.0;
+//
+//    drawVerticies(GL_TRIANGLES, verticies, 6, x, y, centerX, centerY, angle_, colour);
 }
 
 void Unknown::Graphics::drawSquare(const int x, const int y, const int size, const Colour colour)
