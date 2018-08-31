@@ -14,7 +14,7 @@ except:
 	pass
 
 try:
-    os.makedirs(outDir, exist_ok=True)
+    os.makedirs(outDir)
 except:
     pass
 
