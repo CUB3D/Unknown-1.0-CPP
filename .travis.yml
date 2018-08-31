@@ -18,6 +18,7 @@ matrix:
                       - libsdl2-ttf-dev
                       - libbox2d-dev
                       - python
+                      - libassimp-dev
           env:
               - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
