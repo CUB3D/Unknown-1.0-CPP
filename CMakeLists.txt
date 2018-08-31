@@ -111,7 +111,11 @@ endif()
 message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
 
 
-find_package(assimp REQUIRED)
+if(TRAVIS)
+    set(ASSIMP_LIBRARY_DIRS /usr/lib/x86_64-linux-gnu/libassimp.so)
+endif(TRAVIS)
+
+find_package(assimp)
 if(assimp_FOUND)
     message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 endif()
