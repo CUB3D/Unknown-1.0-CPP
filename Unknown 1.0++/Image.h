@@ -9,24 +9,21 @@
 
 #include "GL/GL.h"
 #include "Graphics/RenderingBackend.h"
+#include "Graphics/Shader.h"
 
 namespace Unknown
 {
 	namespace Graphics
 	{
-		class Image : public IInitable
+	    class Image : public IInitable
 		{
-		    //TODO: no
-		    //private:
-		public:
+		private:
 			std::string filename;
-			unsigned int textureID;
-
-			GLuint vbo;
-			GLuint vao;
 
 			TextureInfo textureInfo;
 			VertexInfo vertexInfo;
+			Shader shader;
+
 
 		public:
 		    ::Unknown::Dimension<int> imageSize;

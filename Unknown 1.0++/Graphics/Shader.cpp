@@ -7,11 +7,11 @@
 
 #include "../GL/GL.h"
 
-void Shader::bind() {
+void Shader::bind() const {
     glUseProgram(prog);
 }
 
-void Shader::unbind() {
+void Shader::unbind() const {
     glUseProgram(0);
 }
 
@@ -101,3 +101,5 @@ void Shader::compile() {
 }
 
 Shader::Shader() : prog(-1) {}
+
+Shader::Shader(const std::string &vertex, const std::string &fragment) : prog(-1), vertexSrc(vertex), fragmentSrc(fragment) {}

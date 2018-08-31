@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
-std::shared_ptr<Unknown::Graphics::Image> img;
+Unknown::Graphics::Image img("Player.png");
 
 //std::shared_ptr<Unknown::Graphics::TTFont> font_;
 //std::shared_ptr<StaticText> tex;
@@ -46,33 +46,16 @@ void RenderTestScene::render() const {
     constexpr double centerX = width / 2.0;
     constexpr double centerY = height / 2.0;
 
-    if(s.prog == -1) {
-        img = std::make_shared<Unknown::Graphics::Image>("Player.png");
+    //if(s.prog == -1) {
+        //img = std::make_shared<Unknown::Graphics::Image>("Player.png");
 
-        s.compile();
-        s.bind();
-
-        // Create the ortagonal projection
-        glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
-
-        // Create the view matrix
-        glm::mat4 view = glm::mat4(1.0f);
-
-        // Create the model matrix
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
-        model = glm::rotate(model, 0.0f, glm::vec3(0, 0, 1.0f));
-        model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
-
-        // Projection * view * model
-        glm::mat4 proj = projection * view * model;
-
-        glUniformMatrix4fv(glGetUniformLocation(s.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
-        glUniform1i(glGetUniformLocation(s.prog, "texture0"), 0);
-    }
+        //s.compile();
+        //s.bind();
+   // }
 
    // s.bind();
 
-    img->render(200, 200);
+    img.render(200, 200);
 
   //  s.unbind();
 

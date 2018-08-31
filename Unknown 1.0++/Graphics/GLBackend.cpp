@@ -112,7 +112,7 @@ void Unknown::GLBackend::drawRect(const int x, const int y, const int width, con
 //    glDisableVertexAttribArray(1);
 }
 
-Unknown::GLBackend::GLBackend() :  shad(FileShader("Vert.glsl", "Frag.glsl")) {
+Unknown::GLBackend::GLBackend() :  shad(FileShader("Vert.glsl", "Frag.glsl")), textureRenderer(imageVertexShader, imageFragmentShader) {
 
 }
 
@@ -407,6 +407,34 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const int x, const i
 
 void
 Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) {
+    auto& uk = getUnknown();
+
+    float centerX = texture.width / 2.0f;
+    float centerY = texture.height / 2.0f;
+
+    // Create the ortagonal projection
+    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
+
+    // Create the view matrix
+    glm::mat4 view = glm::mat4(1.0f);
+
+    // Create the model matrix
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
+    model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
+    model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
+
+    // Projection * view * model
+    glm::mat4 proj = projection * view * model;
+
+    if(textureRenderer.prog == -1) {
+        textureRenderer.compile();
+    }
+
+    textureRenderer.bind();
+
+    glUniformMatrix4fv(glGetUniformLocation(textureRenderer.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
+    glUniform1i(glGetUniformLocation(textureRenderer.prog, "texture0"), 0);
+
     glBindTexture(GL_TEXTURE_2D, (GLuint)texture.pointer);
 
     glBindVertexArray(verticies.vao);
@@ -417,4 +445,6 @@ Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, 
 
     // Unbind stuff
     glBindVertexArray(0);
+
+    textureRenderer.unbind();
 }

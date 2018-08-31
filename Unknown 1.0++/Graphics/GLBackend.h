@@ -12,9 +12,51 @@
 
 namespace Unknown
 {
+    const static std::string imageVertexShader = "#version 300 es\n"
+                                                 "\n"
+                                                 "precision highp float;\n"
+                                                 "\n"
+                                                 "layout(location = 0) in vec3 inVertex; // Input in model space\n"
+                                                 "layout(location = 1) in vec4 inColour;\n"
+                                                 "layout(location = 2) in vec2 vertexUV; // Input tex coord for this vertex\n"
+                                                 "layout(location = 3) in vec3 inVertexNormal; // The normal for this vertex\n"
+                                                 "\n"
+                                                 "out vec2 UV;\n"
+                                                 "out vec3 vertexNormal;\n"
+                                                 "\n"
+                                                 "uniform mat4 MVP; // The modelview matrix\n"
+                                                 "\n"
+                                                 "void main() {\n"
+                                                 "    UV = vertexUV;\n"
+                                                 "    vertexNormal = inVertexNormal;\n"
+                                                 "\n"
+                                                 "    gl_Position = MVP * vec4(inVertex, 1.0);\n"
+                                                 "}";
+
+    const static std::string imageFragmentShader = "#version 300 es\n"
+                                                   "\n"
+                                                   "precision highp float;\n"
+                                                   "\n"
+                                                   "uniform sampler2D texture0;\n"
+                                                   "\n"
+                                                   "in vec2 UV;\n"
+                                                   "in vec3 vertexNormal;\n"
+                                                   "\n"
+                                                   "out vec4 fragColour;\n"
+                                                   "\n"
+                                                   "void main() {\n"
+                                                   "    vec3 lightColour = vec3(1, 1, 1);\n"
+                                                   "\n"
+                                                   "    float ambientLightStrength = 1.0;\n"
+                                                   "    vec3 ambient = ambientLightStrength * lightColour;\n"
+                                                   "\n"
+                                                   "    fragColour = texture(texture0, UV) * vec4(ambient, 1.0);\n"
+                                                   "}";
+
     class GLBackend : public RenderingBackend
     {
         FileShader shad;
+        Shader textureRenderer;
 
     public:
         GLBackend();

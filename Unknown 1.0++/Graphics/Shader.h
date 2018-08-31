@@ -15,11 +15,12 @@ public:
     std::string fragmentSrc;
 
     Shader();
+    Shader(const std::string& vertex, const std::string& fragment);
 
     void compile();
 
-    void bind();
-    void unbind();
+    void bind() const;
+    void unbind() const;
 };
 
 
