@@ -63,85 +63,20 @@ void Unknown::Graphics::drawRect(const int x, const int y, const int width, cons
 //    drawVerticies(GL_TRIANGLES, verticies, 6, x, y, centerX, centerY, angle_, colour);
 }
 
-void Unknown::Graphics::drawSquare(const int x, const int y, const int size, const Colour colour)
-{
+void Unknown::Graphics::drawSquare(const int x, const int y, const int size, const Colour colour) {
 	drawRect(x, y, size, size, colour);
 }
 
-void Unknown::Graphics::setDrawColour(const Colour colour)
-{
-	auto& uk = getUnknown();
-
-	SDL_SetRenderDrawColor(uk.windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
-}
-
-void Unknown::Graphics::GL_setColour(const Colour &colour) {
-    glColor4f((float) colour.red / 255.0, (float) colour.green / 255.0, (float) colour.blue / 255.0, (float) colour.alpha / 255.0);
-}
-
-void Unknown::Graphics::drawPoint(const int x, const int y, const int size, const Colour &colour) {
-    constexpr int vertexCount = 1;
-    float verticies[vertexCount * 3] = {
-        (float) x, (float) y, 0
-    };
-
-    drawVerticies(GL_POINTS, verticies, vertexCount, 0, 0, 0, 0, 0, colour);
+void Unknown::Graphics::drawPoint(const int x, const int y, const Colour &colour) {
+    getRendererBackend()->drawPoint(x, y, colour);
 }
 
 void Unknown::Graphics::drawCircle(const int cx, const int cy, const int radius, const Colour &col) {
-
-    int vertexCount = 100;
-    //float verticies[vertexCount * 3];
-
-    glEnable(GL_POINT_SMOOTH);
-    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
-
-    GL_setColour(col);
-
-//    for(int i = 0; i < vertexCount; i++) {
-//        float theta = 2.0f * 3.1415926f * float(i) / float(vertexCount);//get the current angle
-//
-//        float x = radius * cosf(theta);//calculate the x component
-//        float y = radius * sinf(theta);//calculate the y component
-//
-//        verticies[3 * i] = x;
-//        verticies[3 * i + 1] = y;
-//        verticies[3 * i + 2] = 0;
-//    }
-
-
-    float theta = 2 * 3.1415926 / float(vertexCount);
-    float c = cosf(theta);//precalculate the sine and cosine
-    float s = sinf(theta);
-    float t;
-
-    float x = radius;
-    float y = 0;
-
-    glBegin(GL_POLYGON);
-    for(int ii = 0; ii < vertexCount; ii++)
-    {
-       glVertex3f(x + cx, y + cy, 0);
-
-        //apply the rotation matrix
-        t = x;
-        x = c * x - s * y;
-        y = s * t + c * y;
-    }
-    glEnd();
-
-    //drawVerticies(GL_LINE_LOOP, verticies, vertexCount, cx, cy, 0, 0, 0, col);
+    getRendererBackend()->drawCircle(cx, cy, radius, col);
 }
 
 void Unknown::Graphics::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) {
-    //TODO: fix
-    constexpr int vertexCount = 2;
-    float verticies[vertexCount * 3] = {
-        (float) sx, (float) sy, 0,
-        (float) ex, (float) ey, 0
-    };
-
-    drawVerticies(GL_LINES, verticies, vertexCount, 0, 0, 0, 0, 0, col);
+    getRendererBackend()->drawLine(sx, sy, ex, ey, col);
 }
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const Colour &colour) {

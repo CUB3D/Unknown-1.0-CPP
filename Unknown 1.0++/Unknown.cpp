@@ -21,6 +21,8 @@
 
 #include "GL/GL.h"
 
+#include "Graphics/RenderingBackend.h"
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -298,8 +300,7 @@ void Unknown::Unknown::checkEvents()
 
 void Unknown::Unknown::clearScreen()
 {
-	UK_SET_COLOUR(Colour::BLACK);
-	SDL_RenderClear(this->windowRenderer);
+    getRendererBackend()->drawRect(0, 0, this->screenSize->width, this->screenSize->height, 0, Colour::BLACK);
 }
 
 void Unknown::Unknown::quit(const int exitCode)

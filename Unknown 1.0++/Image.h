@@ -8,6 +8,7 @@
 #include "Utils.h"
 
 #include "GL/GL.h"
+#include "Graphics/RenderingBackend.h"
 
 namespace Unknown
 {
@@ -22,6 +23,10 @@ namespace Unknown
 			unsigned int textureID;
 
 			GLuint vbo;
+			GLuint vao;
+
+			TextureInfo textureInfo;
+			VertexInfo vertexInfo;
 
 		public:
 		    ::Unknown::Dimension<int> imageSize;
@@ -31,9 +36,7 @@ namespace Unknown
 			virtual ~Image();
 
 			virtual void init() override;
-			void render(const int x, const int y, const double angle, SDL_Rect* clip) const;
-			void render(const int x, const int y, const double angle) const;
-			void render(const int x, const int y) const;
+			void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;
 
 			//virtual std::unique_ptr<Image> clone() const;
 		};

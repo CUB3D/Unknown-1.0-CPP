@@ -21,7 +21,7 @@ rapidjson::Document Unknown::readJSONFile(const char* filename)
 	std::ifstream config(filename);
 
 	if(!config.good()) {
-		printf("Unable to find config file\n");
+		printf("Unable to find config file '%s'\n", filename);
 		exit(0);
 	}
 

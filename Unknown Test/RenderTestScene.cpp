@@ -28,9 +28,13 @@ void RenderTestScene::render() const {
     static float angle = 0;
     angle += 0.0001;
 
-    // TODO: make this work correctly, currently the rendering sometimes causes artifacts
-    //TODO: move all of rendering work from ui2d to rendering backend
-    // TODO: fix shader rendering inconsistantly
+    //Fix flickering on windows
+    // Move everyting to rendering backends
+    // make core shaders part of src char[] etc
+    // make all ui2d rendering batched and triangles
+    // make ui2d circle just a scaled image embedded in src
+    // add pak file support for better web fs support
+
     //UK_DRAW_RECT(0, 0, 1024, 1024, 0, UK_COLOUR_RGB(255, 0, 0));
 
 
@@ -66,7 +70,19 @@ void RenderTestScene::render() const {
         glUniform1i(glGetUniformLocation(s.prog, "texture0"), 0);
     }
 
+   // s.bind();
+
     img->render(200, 200);
+
+  //  s.unbind();
+
+    ::Unknown::Graphics::drawPoint(10, 10, UK_COLOUR_RGB(255, 0, 0));
+
+    ::Unknown::Graphics::drawLine(100, 100, 200, 200, UK_COLOUR_RGB(0, 255, 0));
+
+    ::Unknown::Graphics::drawCircle(200, 200, 100, UK_COLOUR_RGB(0, 0, 255));
+
+    //UK_DRAW_RECT(0, 0, 200, 200, 0, UK_COLOUR_RGB(255, 0, 0));
 
 
 
