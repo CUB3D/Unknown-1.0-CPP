@@ -28,5 +28,9 @@ for base, dirs, files in os.walk(inDir):
 			outFileDir = os.path.dirname(outFile)
 
 			if not os.path.exists(outFileDir):
-			    os.makedirs(outFileDir, exist_ok=True)
+                            try:
+        		        os.makedirs(outFileDir)
+                            except:
+                                pass
+
 			shutil.copy(file, outFile)
