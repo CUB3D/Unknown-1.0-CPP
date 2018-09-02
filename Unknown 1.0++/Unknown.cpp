@@ -169,25 +169,8 @@ void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
 
- //   glMatrixMode(GL_MODELVIEW);
- //   glLoadIdentity();
-
-  //  glMatrixMode(GL_PROJECTION);
-  //  glLoadIdentity();
-
-#ifdef THREE_D
-    glFrustum(-1, 1, -1, 1, 0.1, 10);
-#else
-    //glOrtho(0, screenSize->width, screenSize->height, 0, 0, 1);
-#endif
+	//TODO: move to render backend setup
     glViewport(0, 0, screenSize->width, screenSize->height);
-
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
-    glClearDepth(1.0f);                   // Set background depth to farthest
-   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
-   // glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
-    //glShadeModel(GL_SMOOTH);   // Enable smooth shading
-   // glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  // Nice perspective corrections
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(doSingleLoopItterC, 0, 1);

@@ -64,52 +64,6 @@ void Unknown::GLBackend::drawRect(const int x, const int y, const int width, con
     glDisableClientState(GL_VERTEX_ARRAY);
 
     shad.unbind();
-
-//    constexpr int VERTEX_COUNT = (3 + 4) * 6;
-//
-//    float r = colour.red / 255.0f;
-//    float g = colour.green / 255.0f;
-//    float b = colour.blue / 255.0f;
-//    float a = colour.alpha / 255.0f;
-//
-//    float verticies[VERTEX_COUNT] =  {
-//        // Format is x, y, z
-//        // Then r, g, b, a
-//        0, 0, 0,
-//        r, g, b, a,
-//
-//        (float)width, 0, 0,
-//        r, g, b, a,
-//
-//        0, (float)height, 0,
-//        r, g, b, a,
-//
-//
-//        0, (float)height, 0,
-//        r, g, b, a,
-//
-//        (float)width, (float)height, 0,
-//        r, g, b, a,
-//
-//        (float)width, 0, 0,
-//        r, g, b, a
-//    };
-//
-//    constexpr const int stride = (3 + 4) * sizeof(GLfloat);
-//
-//    glBindVertexArray(verticies);
-//
-//    // Verticies
-//    glEnableVertexAttribArray(0);
-//    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
-//    // Colours
-//    glEnableVertexAttribArray(1);
-//    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
-//
-//    glDrawArrays(GL_TRIANGLES, 0, VERTEX_COUNT);
-//
-//    glDisableVertexAttribArray(0);
-//    glDisableVertexAttribArray(1);
 }
 
 Unknown::GLBackend::GLBackend() :  shad(FileShader("Vert.glsl", "Frag.glsl")), textureRenderer(imageVertexShader, imageFragmentShader) {

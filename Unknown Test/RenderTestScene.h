@@ -12,6 +12,7 @@ public:
     RenderTestScene();
 
     virtual void render() const;
+    virtual void update();
 };
 
 

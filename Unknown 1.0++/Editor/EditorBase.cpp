@@ -24,7 +24,7 @@ Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), und
     auto& uk = getUnknown();
 
     ImGui_ImplSDL2_InitForOpenGL(uk.window, uk.glContext);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    ImGui_ImplOpenGL3_Init("#version 140");
 
     //TODO: profiler
 

@@ -13,8 +13,7 @@
 
 namespace Unknown
 {
-class EditorBase : public ::Unknown::Scene
-    {
+class EditorBase : public ::Unknown::Scene {
         std::deque<float> fps;
         std::vector<EntityEditor> entityEditors;
         std::string under;
