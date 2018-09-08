@@ -7,8 +7,8 @@
 
 #include "GL/GL.h"
 #include "Graphics/FileShader.h"
-#include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include <glm/glm.hpp>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -61,7 +61,7 @@ public:
 
         int SIZE = verticies.size() * (tmp);
 
-        GLfloat data[SIZE];
+        GLfloat* data = (GLfloat*) malloc(SIZE * sizeof(GLfloat));
 
         int x = 0;
 
@@ -178,7 +178,7 @@ void init___() {
     auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
-    texPath = "tree.jpg";
+    //texPath = "tree.jpg";
 
     t = Unknown::getRendererBackend()->loadTexture(texPath);
 

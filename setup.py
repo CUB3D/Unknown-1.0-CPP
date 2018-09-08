@@ -22,7 +22,13 @@ commands = {
             "commands": [
                 "cp Libs/SDL2/lib/x64/SDL2.dll:Unknown Test/",
                 "cp Libs/SDL2_image/lib/x64/SDL2_image.dll:Unknown Test/",
-                "cp Libs/SDL2_ttf/lib/x64/SDL2_ttf.dll:Unknown Test/"
+                "cp Libs/SDL2_image/lib/x64/libpng16-16.dll:Unknown Test/",
+		"cp Libs/SDL2_image/lib/x64/libjpeg-9.dll:Unknown Test/",
+                "cp Libs/SDL2_ttf/lib/x64/libfreetype-6.dll:Unknown Test/",
+                "cp Libs/SDL2_ttf/lib/x64/SDL2_ttf.dll:Unknown Test/",
+		"cp Libs/SDL2_mixer/lib/x64/SDL2_mixer.dll:Unknown Test/",
+		"cp Libs/assimp/bin/Debug/assimp-vc140-mt.dll:Unknown Test/",
+		"cp Libs/SDL2_image/lib/x64/zlib1.dll:Unknown Test/"
             ]
         }
     },
@@ -71,10 +77,11 @@ commands = {
             "Windows": [
                 "dl https://github.com/assimp/assimp/archive/v4.1.0.zip tools/assimp.zip",
                 "extract tools/assimp.zip Libs/",
+                "rm Libs/assimp",
                 "mv Libs/assimp-4.1.0 Libs/assimp",
                 "dl https://cmake.org/files/v3.12/cmake-3.12.2-win64-x64.zip tools/cmake.zip",
                 "extract tools/cmake.zip tools/build/cmake-dist",
-                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" CMakeLists.txt",
+                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" -G \"Visual Studio 15 2017 Win64\" CMakeLists.txt",
                 "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" --build ."
             ]
         }
@@ -119,6 +126,10 @@ def command_extract(args):
 @command("mv")
 def command_mv(args):
 	os.rename(args[0], args[1]) 
+
+@command("rm")
+def command_rm(args):
+    shutil.rmtree(args[0])
 
 @command("exec")
 def command_exec(args):
@@ -173,9 +184,8 @@ def setupPlatform(platformID):
 
 
 def main():
-    installLib("assimp")
-#    setupPlatform("common")
-#    setupPlatform(platform.system())
+    setupPlatform("common")
+    setupPlatform(platform.system())
 
 
 def download(url, out):
