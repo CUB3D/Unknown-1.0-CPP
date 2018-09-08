@@ -38,10 +38,12 @@ void Shader::compile() {
 
         if (infologLength > 0)
         {
-            char infoLog[infologLength];
+			char* infoLog = (char*)malloc(infologLength * sizeof(char));
             glGetShaderInfoLog(vertShader, infologLength, &charsWritten, infoLog);
 
             printf("%s\n", infoLog);
+
+			free(infoLog);
             return;
         }
     }
@@ -61,10 +63,12 @@ void Shader::compile() {
 
         if (infologLength > 0)
         {
-            char infoLog[infologLength];
+			char* infoLog = (char*)malloc(infologLength * sizeof(char));
             glGetShaderInfoLog(fragShader, infologLength, &charsWritten, infoLog);
 
             printf("%s\n", infoLog);
+
+			free(infoLog);
             return;
         }
     }
@@ -88,10 +92,12 @@ void Shader::compile() {
 
         if (infologLength > 0)
         {
-            char infoLog[infologLength];
+			char* infoLog = (char*)malloc(infologLength * sizeof(char));
             glGetShaderInfoLog(prog, infologLength, &charsWritten, infoLog);
 
             printf("%s\n", infoLog);
+
+			free(infoLog);
         }
     }
 

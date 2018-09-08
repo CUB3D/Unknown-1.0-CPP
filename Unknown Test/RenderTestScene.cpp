@@ -175,7 +175,7 @@ void init___() {
     const char* face = "/home/cub3d/Downloads/untitled.obj";
     const char* teapot = "teapot.obj";
     const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
-    auto scene = importer.ReadFile(ns, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     texPath = "tree.jpg";

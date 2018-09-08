@@ -11,8 +11,13 @@
 #include <functional>
 #include <vector>
 
-// If clang
+#ifdef __EMSCRIPTEN__
 #include <experimental/any>
+#define ANY_BASE std::experimental
+#else
+#include <any>
+#define ANY_BASE std
+#endif
 
 namespace Unknown
 {
@@ -21,9 +26,7 @@ namespace Unknown
         std::string name;
 
     public:
-        // If clang
-        std::experimental::any data;
-        //std::any data;
+		ANY_BASE::any data;
 
         std::vector<std::function<void(SharedVariable v)>> changeListeners;
 
@@ -50,9 +53,7 @@ namespace Unknown
 
         template<typename U>
         U getValue() const {
-            //return std::any_cast<U>(this->data);
-            // if clang
-            return std::experimental::any_cast<U>(this->data);
+            return ANY_BASE::any_cast<U>(this->data);
         }
 
         operator bool();
