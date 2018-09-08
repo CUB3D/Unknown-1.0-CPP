@@ -8,15 +8,23 @@ import subprocess
 import zipfile
 import os
 import sys
+import shutil
 
 
 commands = {
     "platforms": {
         # For all platforms
         "common": {
-            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "Box2D"]
+            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "SDL2_mixer", "Box2D", "assimp"]
         },
-        # Platform specific stuff
+        # Windows specific setup
+        "Windows": {
+            "commands": [
+                "cp Libs/SDL2/lib/x64/SDL2.dll:Unknown Test/",
+                "cp Libs/SDL2_image/lib/x64/SDL2_image.dll:Unknown Test/",
+                "cp Libs/SDL2_ttf/lib/x64/SDL2_ttf.dll:Unknown Test/"
+            ]
+        }
     },
     "libs": {
         ## How to get sdl2 on different platforms
@@ -24,7 +32,7 @@ commands = {
             "Windows": [
                 "dl https://www.libsdl.org/release/SDL2-devel-2.0.8-VC.zip tools/SDL2.zip",
                 "extract tools/SDL2.zip Libs",
-		"mv Libs/SDL2-2.0.8 Libs/SDL2"
+                "mv Libs/SDL2-2.0.8 Libs/SDL2"
             ],
             "Linux": [
                 "install libsdl2,sdl2"
@@ -44,14 +52,32 @@ commands = {
 				"mv Libs/SDL2_ttf-2.0.14 Libs/SDL2_ttf"
 			]
 		},
+		"SDL2_mixer": {
+			"Windows": [
+				"dl https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.2-VC.zip tools/SDL2_mixer.zip",
+				"extract tools/SDL2_mixer.zip Libs",
+				"mv Libs/SDL2_mixer-2.0.2 Libs/SDL2_mixer"
+			]
+		},
 		"Box2D": {
 			"Windows": [
 				"dl https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip tools/premake.zip",
-				"extract tools/premake.zip Libs/Box2D",
-				"exec cd Libs/Box2D && premake5.exe vs2017",
-				"make Libs/Box2D/Build/Box2D.sln"
+				"extract tools/premake.zip Libs/Box2D/Box2D",
+				"exec cd Libs/Box2D/Box2D && premake5.exe vs2017",
+				"make Libs/Box2D/Box2D/Build/vs2017/Box2D.sln"
 			]
-		}
+		},
+        "assimp": {
+            "Windows": [
+                "dl https://github.com/assimp/assimp/archive/v4.1.0.zip tools/assimp.zip",
+                "extract tools/assimp.zip Libs/",
+                "mv Libs/assimp-4.1.0 Libs/assimp",
+                "dl https://cmake.org/files/v3.12/cmake-3.12.2-win64-x64.zip tools/cmake.zip",
+                "extract tools/cmake.zip tools/build/cmake-dist",
+                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" CMakeLists.txt",
+                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" --build ."
+            ]
+        }
     }
 }
 
@@ -108,8 +134,12 @@ def command_make(args):
 		tmp.stdout.readline();
 		location = " ".join(tmp.stdout.readline().decode("utf-8").rstrip("\r\n").split(" ")[12:])
 		msBuildPath = os.path.join(location, "MSBuild", "15.0", "Bin", "MSBuild.exe")
-		subprocess.Popen([msBuildPath, args[0]]).wait()
+		subprocess.Popen([msBuildPath, args[0], "/p:Configuration=Release"]).wait()
 
+@command("cp")
+def command_mv(args):
+    tmp = " ".join(args).split(":")
+    shutil.copy2(tmp[0], tmp[1])
 
 def runCommandList(commands):
 	for command,*args in [x.split(" ") for x in commands]:
@@ -129,15 +159,23 @@ def installLib(name):
 
 def setupPlatform(platformID):
     print(f"Running setup for platform '{platformID}'")
-    print("Installing libs")
 
-    for lib in commands["platforms"][platformID]["Libs"]:
-        installLib(lib)
+    platformCommands = commands["platforms"][platformID]
+
+    if "Libs" in platformCommands:
+        print("Installing libs")
+
+        for lib in platformCommands["Libs"]:
+            installLib(lib)
+
+    if "commands" in platformCommands:
+        runCommandList(platformCommands["commands"])
 
 
 def main():
-	installLib(sys.argv[-1])
-    #setupPlatform("common")
+    installLib("assimp")
+#    setupPlatform("common")
+#    setupPlatform(platform.system())
 
 
 def download(url, out):
