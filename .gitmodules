@@ -13,9 +13,6 @@
 [submodule "Libs/Reflex"]
 	path = Libs/Reflex
 	url = https://gogs.cub3d.pw/CUB3D/Reflex.git
-[submodule "Libs/glm"]
-	path = Libs/glm
-	url = https://github.com/g-truc/glm
 [submodule "Libs/assimp"]
 	path = Libs/assimp
 	url = https://github.com/assimp/assimp
