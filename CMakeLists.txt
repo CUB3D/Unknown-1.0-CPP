@@ -116,9 +116,12 @@ if(TRAVIS)
 endif(TRAVIS)
 
 find_package(assimp)
-if(assimp_FOUND)
-    message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARIES}")
+
+if(WIN32)
+	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
 endif()
+
+message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARIES}")
 
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm/)
 
