@@ -116,9 +116,16 @@ def command(name):
 @command("install")
 def command_install(args):
     print(f"Installing package {args[-1]}", end="")
-    for x in args[-1].split(","):
-        proc = subprocess.Popen(["sudo", "pacman", "--quiet", "--noconfirm", "-Sy", x], stdout=subprocess.PIPE)
-        proc.wait()
+
+    possible_commands = [["sudo", "pacman", "--quiet", "--noconfirm", "-Sy"],
+                         ["sudo", "apt-get", "-y", "install"]]
+
+    # TODO: can't ship a python lib for now and no stdlib way to detect linux distro
+
+    for command_ in possible_commands:
+        for x in args[-1].split(","):
+            proc = subprocess.Popen(command_ + [x], stdout=subprocess.PIPE)
+            proc.wait()
     print("    [Done]")
 
 
