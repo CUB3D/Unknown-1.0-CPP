@@ -1,5 +1,4 @@
 #ifndef LOADER_H
-			//postKeyEvent(evt);
 
 #include "Entity/Entity.h"
 #include "Animation.h"
@@ -14,8 +13,8 @@ namespace Unknown
         extern std::map<std::string, std::shared_ptr<Graphics::Image>> imagePool;
 
 
-        std::shared_ptr<Entity> loadEntityAt(const std::string &name, Scene &scene, double x, double y);
-        std::shared_ptr<Entity> loadEntity(const std::string &name, Scene& scene);
+        std::shared_ptr<::Unknown::Entity> loadEntityAt(const std::string &name, double x, double y);
+        std::shared_ptr<::Unknown::Entity> loadEntity(const std::string &name);
 
 
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);
@@ -24,7 +23,7 @@ namespace Unknown
     }
 }
 
-#define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x, *this)
+#define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x)
 #define UK_LOAD_ANIMATION(x) ::Unknown::Loader::loadAnimation(x)
 #define UK_LOAD_IMAGE(name) ::Unknown::Loader::loadImage(name)
 

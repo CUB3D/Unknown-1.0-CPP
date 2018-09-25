@@ -20,8 +20,9 @@ namespace Unknown
         class FontGlyph
         {
         public:
-            VertexInfo verts;
             TextureInfo texture;
+            VertexInfo verts;
+
             Dimension<int> size;
 
             FontGlyph(const char c, TTF_Font *font, const Colour &col);

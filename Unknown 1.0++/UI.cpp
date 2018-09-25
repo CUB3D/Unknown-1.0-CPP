@@ -23,7 +23,7 @@ void Unknown::removeUIListener(std::string listenerID)
 {
     UK_LOG_INFO("Removing listener:", listenerID);
     auto& UIListeners = getUnknown().UIListeners;
-    UIListeners.erase(listenerID);
+    UIListeners.erase(UIListeners.find(listenerID));
 }
 
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
@@ -194,15 +194,12 @@ void Unknown::TextComponent::render() const
 
 Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 
-void Unknown::ButtonComponent::mouseListener(Event &evnt)
-{
-	if(evnt.mouse.mouseButton == MouseButton::BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED)
-	{
+void Unknown::ButtonComponent::mouseListener(Event &evnt) {
+	if(evnt.mouse.SDLButtonCode == SDL_BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED) {
 	    auto& location = evnt.mouse.location;
-        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
-        {
-            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
-            {
+
+        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width) {
+            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height) {
                 // If the button has been clicked
                 std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
                 evnt->componentName = this->name;

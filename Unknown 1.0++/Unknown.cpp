@@ -118,6 +118,12 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
     registerHook([=]{globalSceneManager.render();}, RENDER);
     registerHook([=]{globalSceneManager.update();}, UPDATE);
 
+
+    // Imgui init
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
 	currentState = UK_POST_INIT;
 }
 
@@ -132,33 +138,28 @@ void Unknown::Unknown::createWindow()
 
 	rapidjson::Value* heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
 
-	if (heightValue)
-	{
+	if (heightValue) {
 		height = heightValue->GetInt();
 	}
 
 	rapidjson::Value* widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
 
-	if (widthValue)
-	{
+	if (widthValue) {
 		width = widthValue->GetInt();
 	}
 
 	rapidjson::Value* titleValue = getValue("Title", rapidjson::Type::kStringType, doc);
 
-	if (titleValue)
-	{
+	if (titleValue) {
 		title = titleValue->GetString();
 	}
 
     rapidjson::Value* upsValue = getValue("ups", rapidjson::Type::kNumberType, doc);
 
-    if(upsValue)
-    {
+    if(upsValue) {
         ups = upsValue->GetInt();
     }
-    else
-    {
+    else {
         printf("[UK] No update speed specified, defaulting to 60tps\n");
     }
 
@@ -212,6 +213,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
     }
 
     auto renderStartTime = std::chrono::high_resolution_clock::now();
+    getRendererBackend()->clearScreen();
     this->render();
     auto renderFinishTime = std::chrono::high_resolution_clock::now();
     this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;

@@ -4,78 +4,14 @@
 
 #include "StaticText.h"
 
-StaticText::StaticText(const Unknown::Graphics::TTFont &font, const std::string &text) {
-    // Draw char
-    SDL_Surface* textSurface = TTF_RenderText_Blended(font.font, text.c_str(), Unknown::Colour::RED.toSDLColour());
+Unknown::StaticText::StaticText(Graphics::TTFont &font, const std::string &text, const Colour &col) {
+    texture = getRendererBackend()->createFontTexture(*font.font, text.c_str(), col);
+    verts = getRendererBackend()->createRectVerticies(0, 0, texture.width, texture.height);
 
-    if(!textSurface) {
-        //TODO:
-    }
-
-    // Convert to known format
-    Uint32 rmask, gmask, bmask, amask;
-#if SDL_BYTEORDER == SDL_BIG_ENDIAN
-    rmask = 0xff000000;
-    gmask = 0x00ff0000;
-    bmask = 0x0000ff00;
-    amask = 0x000000ff;
-#else
-    rmask = 0x000000ff;
-    gmask = 0x0000ff00;
-    bmask = 0x00ff0000;
-    amask = 0xff000000;
-#endif
-
-    SDL_Surface* tmp = SDL_CreateRGBSurface(0, textSurface->w, textSurface->h, 32, rmask, gmask, bmask, amask);
-    SDL_BlitSurface(textSurface, NULL, tmp, NULL);
-
-    // Copy to gpu
-    glGenTextures(1, &this->textureID);
-    glBindTexture(GL_TEXTURE_2D, this->textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp->pixels);
-
-    this->size.width = textSurface->w;
-    this->size.height = textSurface->h;
-
-    SDL_FreeSurface(textSurface);
-    SDL_FreeSurface(tmp);
+    this->size.width = this->texture.width;
+    this->size.height = this->texture.height;
 }
 
-void StaticText::render(const int x, const int y) const {
-#ifndef __EMSCRIPTEN__
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, this->textureID);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    glColor3f(1, 1, 1);
-
-    glMatrixMode(GL_MODELVIEW);
-
-    glBegin(GL_TRIANGLES);
-    // Top right
-    glTexCoord2f(0, 0);
-    glVertex3f(x, y, 0);
-    glTexCoord2f(1, 0);
-    glVertex3f(x + size.width, y, 0);
-    glTexCoord2f(1, 1);
-    glVertex3f(x + size.width, y + size.height, 0);
-
-    // Bottom left
-    glTexCoord2f(0, 0);
-    glVertex3f(x, y, 0);
-    glTexCoord2f(0, 1);
-    glVertex3f(x, y + size.height, 0);
-    glTexCoord2f(1, 1);
-    glVertex3f(x + size.width, y + size.height, 0);
-
-    glEnd();
-
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-#endif
+void Unknown::StaticText::render(const int x, const int y) const {
+    getRendererBackend()->renderTexture(x, y, 0, this->texture, this->verts);
 }

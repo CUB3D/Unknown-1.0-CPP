@@ -7,16 +7,20 @@
 
 #include "TTFont.h"
 #include "FontGlyph.h"
+#include "../Graphics/RenderingBackend.h"
 
-class StaticText
-{
-public:
-    GLuint textureID;
-    Unknown::Dimension<int> size;
+namespace Unknown {
+    class StaticText {
+    public:
+        TextureInfo texture;
+        VertexInfo verts;
+        Dimension<int> size;
 
-    StaticText(const Unknown::Graphics::TTFont &font, const std::string &text);
-    void render(const int x, const int y) const;
-};
+        StaticText(Graphics::TTFont &font, const std::string &text, const Colour &col);
+
+        void render(const int x, const int y) const;
+    };
+}
 
 
 #endif //UNKNOWN_DEVELOPMENT_TOOL_STATICTEXT_H

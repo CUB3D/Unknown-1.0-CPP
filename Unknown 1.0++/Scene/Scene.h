@@ -15,11 +15,15 @@
 #include "../Renderer/IRenderable.h"
 #include "../IUpdateable.h"
 #include "../ITagable.h"
-#include "CollisionManager.h"
 #include "../Renderer/Camera.h"
+#include "../Entity/Entity.h"
+#include "CollisionManager.h"
 
 namespace Unknown
 {
+    class Entity;
+    class CollisionManager;
+
     class Scene
     {
     public:
@@ -50,7 +54,15 @@ namespace Unknown
                 tagables.push_back(std::dynamic_pointer_cast<ITagable>(obj));
             }
             if(dynamic_cast<Entity*>(obj.get())) {
-                entities.push_back(std::dynamic_pointer_cast<Entity>(obj));
+                auto ent = std::dynamic_pointer_cast<Entity>(obj);
+
+                for(auto& comp : ent->components) {
+                    if(dynamic_cast<IInitable<Scene&, std::shared_ptr<Entity>>*>(comp.get())) {
+                        std::dynamic_pointer_cast<IInitable<Scene&, std::shared_ptr<Entity>>>(comp)->init(*this, ent);
+                    }
+                }
+
+                entities.push_back(ent);
             }
         }
 
@@ -110,7 +122,7 @@ namespace Unknown
     };
 }
 
-#define UK_LOAD_ENTITY_AT(name, x, y) ::Unknown::Loader::loadEntityAt(name, *this, x, y)
+#define UK_LOAD_ENTITY_AT(name, x, y) ::Unknown::Loader::loadEntityAt(name, x, y)
 
 
 #endif //UNKNOWN_1_0_CPP_SCENE_H

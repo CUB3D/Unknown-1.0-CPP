@@ -51,6 +51,11 @@ void Unknown::Entity::setPosition(double x, double y, double angle) {
 
     auto physicsComp = getComponent<PhysicsBodyComponent>();
     if(physicsComp) {
+        // Check to see if it has been inited
+        if(!physicsComp->body) {
+            return;
+        }
+
         physicsComp->body->SetTransform(b2Vec2(x, y), angle);
         // Make sure to wake the body so that phys sim keeps working
         physicsComp->body->SetAwake(true);
@@ -71,4 +76,12 @@ void Unknown::Entity::disable() {
 
 void Unknown::Entity::queueDisable() {
     this->queueDissable = true;
+}
+
+void Unknown::Entity::move(double x, double y) {
+    setPosition(position.x + x, position.y + y);
+}
+
+void Unknown::Entity::rotate(double delta) {
+    setPosition(position.x, position.y, angle + delta);
 }

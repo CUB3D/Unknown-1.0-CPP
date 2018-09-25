@@ -25,6 +25,10 @@ namespace Unknown
         virtual VertexInfo createRectVerticies(const int x, const int y, const int w, const int h) override;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                            const VertexInfo &verticies) override;
+
+        virtual void clearScreen();
+
+        TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col);
     };
 }
 

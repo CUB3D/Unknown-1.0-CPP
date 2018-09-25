@@ -15,7 +15,7 @@ namespace Unknown
 {
 	namespace Graphics
 	{
-	    class Image : public IInitable
+	    class Image : public IInitable<>
 		{
 		private:
 			std::string filename;

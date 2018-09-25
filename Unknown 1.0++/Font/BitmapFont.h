@@ -21,10 +21,10 @@ namespace Unknown
         public:
             BitmapFont(Image img, const std::string& layout, const int fontSize);
 
-            virtual void drawChar(const char c, const int x, const int y) const;
+            virtual void drawChar(const char c, const int x, const int y) const override;
             virtual int getStringWidth(const std::string &str) const override;
 
-            virtual void init();
+            virtual void init() override;
         };
     }
 }

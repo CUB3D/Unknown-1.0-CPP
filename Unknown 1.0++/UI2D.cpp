@@ -11,32 +11,6 @@
 #include <glm/ext.hpp>
 #include "Graphics/RenderingBackend.h"
 
-//TODO: rotation both here and for images
-//TODO: refactor out sdl stuff, should have some kind of init() func that will create the screen (and make the canvas on web)
-//TODO: for textures should just have a load texture that returns an id and a bind/unbind that uses that id
-
-void Unknown::Graphics::drawVerticies(GLenum renderMode, const float *verticies, const int vertexCount, const double x,
-                                      const double y, const double centerX, const double centerY, const double angle,
-                                      const Colour &colour) {
-    glEnableClientState(GL_VERTEX_ARRAY);
-
-
-   //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
-//Also I think that client states are needed for native but not for emscripten
-
-    glVertexPointer(3, GL_FLOAT, 0, verticies);
-    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    GLenum err;
-    while((err = glGetError()) != GL_NO_ERROR)
-    {
-        printf("%d\n", err);
-    }
-}
-
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {
     auto renderer = getRendererBackend();

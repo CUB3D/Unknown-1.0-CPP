@@ -11,6 +11,7 @@
 #include <vector>
 #include "../Utils.h"
 #include "../ITagable.h"
+#include "../IInitable.h"
 
 namespace Unknown
 {
@@ -38,6 +39,8 @@ namespace Unknown
 
 
         void setPosition(double x, double y, double angle=0);
+        void move(double x, double y);
+        void rotate(double delta);
 
 
         virtual Rect<int> getRenderBounds() override;

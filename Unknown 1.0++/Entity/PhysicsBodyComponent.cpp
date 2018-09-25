@@ -6,25 +6,8 @@
 
 //TODO: better way of doing this, also dont take pointer
 
-Unknown::PhysicsBodyComponent::PhysicsBodyComponent(std::shared_ptr<Entity> ent, Scene *scene, b2BodyType type,
-                                                    const bool bullet, int groupIndex) {
-    this->bodyDefinition.type = type;
-   // this->bodyDefinition.fixedRotation = true; //TODO:
+Unknown::PhysicsBodyComponent::PhysicsBodyComponent(std::shared_ptr<Entity> ent) : body(nullptr), fixture(nullptr) {
     this->bodyDefinition.position.Set(ent->position.x, ent->position.y);
-    this->bodyDefinition.bullet = bullet;
-
-    this->filter.groupIndex = groupIndex;
-
-    this->body = scene->world.CreateBody(&this->bodyDefinition);
-
-    this->shape.SetAsBox(ent->size.width / 2.0, ent->size.height / 2.0);
-
-    this->fixtureDefinition.shape = &this->shape;
-    this->fixtureDefinition.density = 1.0f; //TODO:
-    this->fixtureDefinition.friction = 0.9f; //TODO:
-    this->fixtureDefinition.filter = filter;
-
-    this->fixture = this->body->CreateFixture(&this->fixtureDefinition);
 }
 
 void Unknown::PhysicsBodyComponent::update(Entity &ent) {
@@ -60,4 +43,20 @@ Unknown::Vector Unknown::PhysicsBodyComponent::getXDirection() const {
 void Unknown::PhysicsBodyComponent::applyForce(const Vector &vec) {
     this->body->ApplyForceToCenter(vec.getBox2DVec(), true);
     this->lastForce = vec;
+}
+
+void Unknown::PhysicsBodyComponent::init(Scene &scene, std::shared_ptr<Entity> ent) {
+    this->body = scene.world.CreateBody(&this->bodyDefinition);
+
+    this->shape.SetAsBox(ent->size.width / 2.0, ent->size.height / 2.0);
+    this->circle.m_p.Set(0, 0);
+    body->SetTransform(b2Vec2(ent->position.x, ent->position.y), ent->angle);
+    body->SetAwake(true);
+
+//    this->fixtureDefinition.friction = 0.9f; //TODO:
+    this->fixtureDefinition.filter = filter;
+//    this->fixtureDefinition.restitution = 0.3; //TODO:
+
+    this->fixture = this->body->CreateFixture(&this->fixtureDefinition);
+
 }

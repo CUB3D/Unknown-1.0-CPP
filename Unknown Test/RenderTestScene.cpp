@@ -118,11 +118,6 @@ public:
 
     void render() {
         glBindVertexArray(vao);
-//
-//        unsigned int ind[indicies.size()];
-//        for (int i = 0; i < indicies.size(); ++i) {
-//            ind[i] = indicies[i];
-//        }
 
         glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, &indicies[0]);
         glBindVertexArray(0);
@@ -178,7 +173,7 @@ void init___() {
     auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
-    //texPath = "tree.jpg";
+    texPath = "tree.jpg";
 
     t = Unknown::getRendererBackend()->loadTexture(texPath);
 
@@ -234,8 +229,8 @@ void RenderTestScene::render() const {
         glClearDepth(1);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        glShadeModel(GL_SMOOTH);
-        glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+        //glShadeModel(GL_SMOOTH);
+        //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         s.compile();
@@ -249,7 +244,7 @@ void RenderTestScene::render() const {
     angle += 0.1;
 
     // Create the ortagonal projection
-    glm::mat4 projection = glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);//glm::fru//glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
+    glm::mat4 projection = glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);//glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
 
     // Create the view matrix
     glm::mat4 view = glm::mat4(1.0f);
