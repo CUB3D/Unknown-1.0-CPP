@@ -18,13 +18,13 @@
 std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
 std::shared_ptr<Unknown::Entity>
-Unknown::Loader::loadEntityAt(const std::string &name, Scene &scene, double x, double y) {
-	auto ent = loadEntity(name, scene);
+Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
+	auto ent = loadEntity(name);
 	ent->setPosition(x, y);
 	return ent;
 }
 
-std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& name, Scene& scene)
+std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
 	rapidjson::Document doc = readJSONFile(name.c_str());
 
@@ -147,6 +147,8 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 
 
 		if(typeString == "Collider") {
+			auto phys = std::make_shared<PhysicsBodyComponent>(ent);
+
 		    auto colliderTypeValue = component.FindMember("ColliderType");
 			b2BodyType bodyType = b2_staticBody;
 
@@ -160,7 +162,12 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		        if(colliderTypeString == "Static") {
 		        	bodyType = b2_staticBody;
 		        }
+
+		        if(colliderTypeString == "Kinematic") {
+					bodyType = b2_kinematicBody;
+				}
 		    }
+		    phys->bodyDefinition.type = bodyType;
 
 
 		    auto bulletValue = component.FindMember("Bullet");
@@ -168,15 +175,14 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		    if(bulletValue != component.MemberEnd()) {
 		        bullet = bulletValue->value.GetBool();
 		    }
+		    phys->bodyDefinition.bullet = bullet;
 
 		    auto groupIndexValue = component.FindMember("GroupIndex");
 		    int groupIndex = 0;
-
 		    if(groupIndexValue != component.MemberEnd()) {
 		        groupIndex = groupIndexValue->value.GetInt();
 		    }
-
-		    auto phys = std::make_shared<PhysicsBodyComponent>(ent, &scene, bodyType, bullet, groupIndex);
+		    phys->filter.groupIndex = groupIndex;
 
 
 		    auto maxSpeedValue = component.FindMember("MaxSpeed");
@@ -184,6 +190,53 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string& 
 		    	double maxSpeed = maxSpeedValue->value.GetDouble();
 		    	phys->maxSpeed = maxSpeed;
 		    }
+
+		    bool sensor = false;
+		    auto sensorValue = component.FindMember("Sensor");
+		    if(sensorValue != component.MemberEnd()) {
+		        sensor = sensorValue->value.GetBool();
+		    }
+            phys->fixtureDefinition.isSensor = sensor;
+
+		    bool fixedRotation = true;
+		    auto frValue = component.FindMember("FixedRotation");
+		    if(frValue != component.MemberEnd()) {
+		        fixedRotation = frValue->value.GetBool();
+		    }
+		    phys->bodyDefinition.fixedRotation = fixedRotation;
+
+		    float density = 1;
+		    auto dValue = component.FindMember("Density");
+		    if(dValue != component.MemberEnd()) {
+		        density = dValue->value.GetFloat();
+		    }
+		    phys->fixtureDefinition.density = density;
+
+		    double radius = 1;
+		    auto rValue = component.FindMember("Radius");
+		    if(rValue != component.MemberEnd()) {
+		        radius = rValue->value.GetDouble();
+		    }
+		    phys->circle.m_radius = radius;
+
+		    double restitution = 0;
+		    auto reValue = component.FindMember("Restitution");
+		    if(reValue != component.MemberEnd()) {
+		        restitution = reValue->value.GetDouble();
+		    }
+		    phys->fixtureDefinition.restitution = restitution;
+
+
+		    b2Shape* shape = &phys->shape;
+		    auto shapeValue = component.FindMember("Shape");
+		    if(shapeValue != component.MemberEnd()) {
+		        std::string shapeName = std::string(shapeValue->value.GetString());
+		        if(shapeName == "Circle") {
+                    shape = &phys->circle;
+                }
+		    }
+		    phys->fixtureDefinition.shape = shape;
+
 
             ent->components.push_back(phys);
 		}

@@ -110,3 +110,31 @@ void Unknown::SDLBackend::renderTexture(const int x, const int y, const double a
     vert.y = y;
     SDL_RenderCopyEx(uk.windowRenderer, (SDL_Texture*)texture.pointer, NULL, &vert, angle, NULL, SDL_FLIP_NONE);
 }
+
+Unknown::TextureInfo Unknown::SDLBackend::createFontTexture(TTF_Font *font, const char character, const Colour &col) {
+    printf("Creating texture for %c\n", character);
+
+    TextureInfo& tex = fontLookup.emplace_back();
+
+    // Draw char
+    char str[2] = {character, '\0'};
+    SDL_Surface* textSurface = TTF_RenderText_Blended(font, str, col.toSDLColour());
+
+    if(!textSurface) {
+        printf("Unable to create texture for character '%c'\n", character);
+    }
+
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(::Unknown::getUnknown().windowRenderer, textSurface);
+
+    tex.width = textSurface->w;
+    tex.height = textSurface->h;
+    tex.pointer = (unsigned long long int) texture;
+
+    SDL_FreeSurface(textSurface);
+
+    return tex;
+}
+
+void Unknown::SDLBackend::clearScreen() {
+    SDL_RenderClear(getUnknown().windowRenderer);
+}

@@ -14,7 +14,7 @@ namespace Unknown
 {
     namespace Graphics
     {
-        class TTFont : public Font, public IInitable
+        class TTFont : public Font, public IInitable<>
         {
         private:
             ::Unknown::Colour colour;

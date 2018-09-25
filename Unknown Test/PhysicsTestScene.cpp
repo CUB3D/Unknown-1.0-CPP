@@ -170,4 +170,5 @@ void PhysicsTestScene::update() {
 void PhysicsTestScene::render() const {
     UK_DRAW_RECT(0, 0, 1024, 1024, UK_COLOUR_RGB(0, 0, 0));
     Scene::render();
+    ::Unknown::Graphics::drawPoint(100, 100, UK_COLOUR_RGB(255, 0, 0));
 }

@@ -53,9 +53,32 @@ namespace Unknown
                                                    "    fragColour = texture(texture0, UV) * vec4(ambient, 1.0);\n"
                                                    "}";
 
+    const static std::string renderingVertexShader = "#version 300 es\n"
+                                                     "\n"
+                                                     "precision highp float;\n"
+                                                     "in vec4 inVertex;\n"
+                                                     "uniform mat4 projmat;\n"
+                                                     "\n"
+                                                     "void main() {\n"
+                                                     "    gl_Position = projmat * inVertex;\n"
+                                                     "}";
+
+    const static std::string renderingFragmentShader = "#version 300 es\n"
+                                                       "\n"
+                                                       "precision highp float;\n"
+                                                       "\n"
+                                                       "uniform vec4 inputColour;\n"
+                                                       "\n"
+                                                       "out vec4 fragColour;\n"
+                                                       "\n"
+                                                       "void main() {\n"
+                                                       "    fragColour = inputColour;\n"
+                                                       "}";
+
+
     class GLBackend : public RenderingBackend
     {
-        FileShader shad;
+        Shader basicRenderer;
         Shader textureRenderer;
 
     public:
@@ -69,6 +92,11 @@ namespace Unknown
         virtual TextureInfo loadTexture(std::string &path) override;
         virtual VertexInfo createRectVerticies(const int x, const int y, const int w, const int h) override;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies)  override;
+        virtual void renderQuad(const int x, const int y, const double angle, const VertexInfo& verts, Shader& shader);
+
+        virtual void clearScreen();
+
+        TextureInfo createFontTexture(TTF_Font* font, const char character, const Colour& col);
     };
 }
 

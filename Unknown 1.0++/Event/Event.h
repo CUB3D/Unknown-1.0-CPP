@@ -31,18 +31,9 @@ namespace Unknown
         int newHeight;
     };
 
-    enum MouseButton
-    {
-        BUTTON_NONE,
-        BUTTON_LEFT,
-        BUTTON_RIGHT,
-        BUTTON_MIDDLE
-    };
-
     struct MouseEvent
     {
         int SDLButtonCode;
-        MouseButton mouseButton;
         InputState buttonState;
         Point<int> location;
     };

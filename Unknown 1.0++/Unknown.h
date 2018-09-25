@@ -69,7 +69,7 @@ namespace Unknown
         std::map<HookType, std::vector<std::function<void()>>> hooks;
         std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
-		std::vector<::Unknown::IInitable*> lateInit;
+		std::vector<::Unknown::IInitable<>*> lateInit;
         std::map<std::string, std::function<void(std::shared_ptr<::Unknown::UIEvent>)> > UIListeners;
 
 

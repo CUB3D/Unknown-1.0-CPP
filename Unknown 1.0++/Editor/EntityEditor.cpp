@@ -5,11 +5,11 @@
 #include "EntityEditor.h"
 #include "imgui.h"
 
-Unknown::EntityEditor::EntityEditor(std::shared_ptr<Unknown::Entity>&& ent) : ent(ent) {
+Unknown::EntityEditor::EntityEditor(std::shared_ptr<::Unknown::Entity>&& ent) : ent(ent) {
     init();
 }
 
-Unknown::EntityEditor::EntityEditor(std::shared_ptr<Unknown::Entity> &ent) : ent(ent) {
+Unknown::EntityEditor::EntityEditor(std::shared_ptr<::Unknown::Entity> &ent) : ent(ent) {
     init();
 }
 

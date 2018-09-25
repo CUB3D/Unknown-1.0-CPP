@@ -23,9 +23,6 @@ Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const
 
 void Unknown::Graphics::TTFont::drawString(const std::string &string, const int x, const int y) const
 {
-#ifndef __EMSCRIPTEN__
-    glPushMatrix();
-
     int xPos = x;
 
     for(char c : string) {
@@ -33,9 +30,6 @@ void Unknown::Graphics::TTFont::drawString(const std::string &string, const int 
 
         xPos += getCharWidth(c);
     }
-
-    glPopMatrix();
-#endif
 }
 
 int Unknown::Graphics::TTFont::getStringWidth(const std::string &str) const

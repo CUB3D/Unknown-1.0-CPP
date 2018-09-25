@@ -10,118 +10,42 @@
 #include "../Unknown.h"
 
 void Unknown::GLBackend::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) {
-    if(shad.prog == -1)
-        shad.compile();
+    VertexInfo info = this->createRectVerticies(0, 0, width, height);
 
-    shad.bind();
+    if(basicRenderer.prog == -1)
+        basicRenderer.compile();
 
-    auto& uk = getUnknown();
+    basicRenderer.bind();
 
-    double centerX = width / 2.0;
-    double centerY = height / 2.0;
+    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
 
-    // Create the ortagonal projection
-    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
+    this->renderQuad(x, y, angle, info, basicRenderer);
 
-    // Create the view matrix
-    glm::mat4 view = glm::translate(glm::mat4(1), glm::vec3(x + centerX, y + centerY, 0.0f));
-
-    // Create the model matrix
-    glm::mat4 modelView = view * glm::rotate(glm::mat4(1.0f), (float) angle, glm::vec3(0, 0, 1));
-    modelView = modelView * glm::translate(glm::mat4(1.0f), glm::vec3(-centerX, -centerY, 0.0f));
-
-    // Projection * view * model
-    glm::mat4 proj = projection * modelView;
-
-    //TODO: better way of setting uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shad.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
-
-    glUniform4f(glGetUniformLocation(shad.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
-
-
-    constexpr int VERTEX_COUNT = 18;
-
-    float verticies[VERTEX_COUNT] =  {
-        0, 0, 0,
-        (float)width, 0, 0,
-        0, (float)height, 0,
-
-        0, (float)height, 0,
-        (float)width, (float)height, 0,
-        (float)width, 0, 0
-    };
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-
-
-    //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
-//Also I think that client states are needed for native but not for emscripten
-
-    glVertexPointer(3, GL_FLOAT, 0, verticies);
-    glDrawArrays(GL_TRIANGLES, 0, VERTEX_COUNT); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
-
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    shad.unbind();
+    basicRenderer.unbind();
 }
 
-Unknown::GLBackend::GLBackend() :  shad(FileShader("Vert.glsl", "Frag.glsl")), textureRenderer(imageVertexShader, imageFragmentShader) {
-
-}
+Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderingFragmentShader), textureRenderer(imageVertexShader, imageFragmentShader) {}
 
 void Unknown::GLBackend::drawPoint(const int x, const int y, const Colour &colour) {
-    if(shad.prog == -1)
-        shad.compile();
+    VertexInfo info = this->createRectVerticies(0, 0, 1, 1);
 
-    shad.bind();
+    if(basicRenderer.prog == -1)
+        basicRenderer.compile();
 
-    auto& uk = getUnknown();
+    basicRenderer.bind();
 
-    // Create the ortagonal projection
-    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
+    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
 
-    // Create the view matrix
-    glm::mat4 view = glm::mat4(1.0f);
+    this->renderQuad(x, y, 0, info, basicRenderer);
 
-    // Create the model matrix
-    glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(x, y, 0.0f));
-
-    // Projection * view * model
-    glm::mat4 proj = projection * view * model;
-
-    //TODO: better way of setting uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shad.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
-
-    glUniform4f(glGetUniformLocation(shad.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
-
-
-    constexpr int VERTEX_COUNT = 3;
-
-    float verticies[VERTEX_COUNT] =  {
-        0, 0, 0,
-    };
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-
-
-    //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
-//Also I think that client states are needed for native but not for emscripten
-
-    glVertexPointer(3, GL_FLOAT, 0, verticies);
-    glDrawArrays(GL_POINTS, 0, VERTEX_COUNT); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
-
-
-    glDisableClientState(GL_VERTEX_ARRAY);
-
-    shad.unbind();
+    basicRenderer.unbind();
 }
 
 void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &colour) {
-    if(shad.prog == -1)
-        shad.compile();
+    if(basicRenderer.prog == -1)
+        basicRenderer.compile();
 
-    shad.bind();
+    basicRenderer.bind();
 
     auto& uk = getUnknown();
 
@@ -138,9 +62,9 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
     glm::mat4 proj = projection * view * model;
 
     //TODO: better way of setting uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shad.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
 
-    glUniform4f(glGetUniformLocation(shad.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
+    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
 
 
     constexpr int VERTEX_COUNT = 6;
@@ -165,14 +89,14 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
-    shad.unbind();
+    basicRenderer.unbind();
 }
 
 void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius, const Colour &colour) {
-    if(shad.prog == -1)
-        shad.compile();
+    if(basicRenderer.prog == -1)
+        basicRenderer.compile();
 
-    shad.bind();
+    basicRenderer.bind();
 
     auto& uk = getUnknown();
 
@@ -189,9 +113,9 @@ void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius
     glm::mat4 proj = projection * view * model;
 
     //TODO: better way of setting uniforms
-    glUniformMatrix4fv(glGetUniformLocation(shad.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
 
-    glUniform4f(glGetUniformLocation(shad.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
+    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
 
 
     constexpr int segments = 100;
@@ -232,7 +156,7 @@ void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius
 
     glDisableClientState(GL_VERTEX_ARRAY);
 
-    shad.unbind();
+    basicRenderer.unbind();
 }
 
 Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
@@ -358,9 +282,8 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const int x, const i
 
     return vertexInfo;
 }
-
-void
-Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) {
+//TODO: abstract rendering texture out from rendering quad
+void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) {
     auto& uk = getUnknown();
 
     float centerX = texture.width / 2.0f;
@@ -401,4 +324,93 @@ Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, 
     glBindVertexArray(0);
 
     textureRenderer.unbind();
+}
+
+Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font *font, const char character, const Colour &col) {
+    TextureInfo& tex = fontLookup.emplace_back();
+
+    // Draw char
+    char str[2] = {character, '\0'};
+    SDL_Surface* textSurface = TTF_RenderText_Blended(font, str, col.toSDLColour());
+
+    if(!textSurface) {
+        //TODO:
+    }
+
+    // Convert to known format
+    Uint32 rmask, gmask, bmask, amask;
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+    rmask = 0xff000000;
+    gmask = 0x00ff0000;
+    bmask = 0x0000ff00;
+    amask = 0x000000ff;
+#else
+    rmask = 0x000000ff;
+    gmask = 0x0000ff00;
+    bmask = 0x00ff0000;
+    amask = 0xff000000;
+#endif
+
+    SDL_Surface* tmp = SDL_CreateRGBSurface(0, textSurface->w, textSurface->h, 32, rmask, gmask, bmask, amask);
+    SDL_BlitSurface(textSurface, NULL, tmp, NULL);
+
+    // Copy to gpu
+    glGenTextures(1, (GLuint*)&tex.pointer);
+    glBindTexture(GL_TEXTURE_2D, tex.pointer);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //how the texture should wrap in t direction
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    //how the texture lookup should be interpolated when the face is smaller than the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //how the texture lookup should be interpolated when the face is bigger than the texture
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, 4, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp->pixels);
+
+    tex.width = textSurface->w;
+    tex.height = textSurface->h;
+
+    SDL_FreeSurface(textSurface);
+    SDL_FreeSurface(tmp);
+
+    return tex;
+}
+
+void Unknown::GLBackend::clearScreen() {
+    // TODO: need a setup function for the backends, also put glv
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle, const VertexInfo &verts, Shader& shader) {
+    auto& uk = getUnknown();
+
+    float centerX = verts.bounds.w / 2.0f;
+    float centerY = verts.bounds.h / 2.0f;
+
+    // Create the ortagonal projection
+    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
+
+    // Create the view matrix
+    glm::mat4 view = glm::mat4(1.0f);
+
+    // Create the model matrix
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
+    model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
+    model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
+
+    // Projection * view * model
+    glm::mat4 proj = projection * view * model;
+
+    glUniformMatrix4fv(glGetUniformLocation(shader.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
+
+    glBindVertexArray(verts.vao);
+
+    // Render data
+    //TODO: should store vertex count in vertexinfo
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // Unbind stuff
+    glBindVertexArray(0);
 }

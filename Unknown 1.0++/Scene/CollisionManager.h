@@ -6,12 +6,15 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_COLLISIONMANAGER_H
 
 
+#include <functional>
 #include <map>
 #include "Box2D/Box2D.h"
 #include "../Entity/Entity.h"
 
 namespace Unknown
 {
+    class Entity;
+
     class CollisionManager : public b2ContactListener
     {
         virtual void BeginContact(b2Contact *contact) override;

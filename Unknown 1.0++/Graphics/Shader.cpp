@@ -5,8 +5,6 @@
 #include <cstdio>
 #include "Shader.h"
 
-#include "../GL/GL.h"
-
 void Shader::bind() const {
     glUseProgram(prog);
 }

@@ -9,27 +9,30 @@
 #include "Box2D/Box2D.h"
 #include "../Scene/Scene.h"
 #include "../Vector.h"
+#include "../IInitable.h"
 
 namespace Unknown
 {
-    class PhysicsBodyComponent : public Component
+    class PhysicsBodyComponent : public Component, public IInitable<Scene&, std::shared_ptr<Entity>>
     {
         //TODO: no
     public:
         b2BodyDef bodyDefinition;
         b2Body* body;
         b2PolygonShape shape;
+        b2CircleShape circle;
         b2FixtureDef fixtureDefinition;
         b2Fixture* fixture;
         b2Filter filter;
 
-        Vector lastForce;
-
         double maxSpeed = -1;
 
+        Vector lastForce;
+
         //public:
-        PhysicsBodyComponent(std::shared_ptr<Entity> ent, Scene *scene, b2BodyType type,
-                             const bool bullet, int groupIndex);
+        PhysicsBodyComponent(std::shared_ptr<Entity> ent);
+
+        virtual void init(Scene& scene, std::shared_ptr<Entity> ent);
 
         virtual void update(Entity &ent) override;
         virtual void onDisable(Entity& ent) override;

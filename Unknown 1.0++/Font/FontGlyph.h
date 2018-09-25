@@ -10,6 +10,7 @@
 #include "../Utils.h"
 
 #include "../GL/GL.h"
+#include "../Graphics/RenderingBackend.h"
 
 namespace Unknown
 {
@@ -18,7 +19,10 @@ namespace Unknown
         class FontGlyph
         {
         public:
-            GLuint textureID;
+            TextureInfo texture;
+            VertexInfo verts;
+
+           // GLuint textureID;
             Dimension<int> size;
 
             FontGlyph(const char c, TTF_Font *font, const Colour &col);

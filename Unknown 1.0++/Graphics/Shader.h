@@ -6,11 +6,12 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_SHADER_H
 
 #include <string>
+#include "../GL/GL.h"
 
 class Shader
 {
 public:
-    int prog;
+    GLuint prog;
     std::string vertexSrc;
     std::string fragmentSrc;
 

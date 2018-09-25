@@ -7,10 +7,11 @@
 
 namespace Unknown
 {
+    template<typename... initArgs>
     class IInitable
     {
     public:
-        virtual void init() = 0;
+        virtual void init(initArgs... args) = 0;
     };
 }
 
