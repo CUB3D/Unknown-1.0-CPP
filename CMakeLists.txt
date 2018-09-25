@@ -115,7 +115,7 @@ if(TRAVIS)
     set(ASSIMP_LIBRARY_DIRS /usr/lib/x86_64-linux-gnu/libassimp.so)
 endif(TRAVIS)
 
-#find_package(assimp)
+find_package(assimp)
 
 if(WIN32)
 	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)

@@ -6,7 +6,9 @@
 #include <SDL_surface.h>
 #include "FontGlyph.h"
 
-Unknown::Graphics::FontGlyph::FontGlyph(const char c, TTF_Font *font, const Colour &col) : textureID(0){
+Unknown::Graphics::FontGlyph::FontGlyph(const char c, TTF_Font *font, const Colour &col) {
+    this->texture = getRendererBackend()->
+
     // Draw char
     char str[2] = {c, '\0'};
     SDL_Surface* textSurface = TTF_RenderText_Blended(font, str, col.toSDLColour());
@@ -45,6 +47,8 @@ Unknown::Graphics::FontGlyph::FontGlyph(const char c, TTF_Font *font, const Colo
 }
 
 void Unknown::Graphics::FontGlyph::drawGlyph(const int x, const int y) const {
+    ::Unknown::getRendererBackend()->createRectVerticies(x, y, )
+
 #ifndef __EMSCRIPTEN__
 
     glEnable(GL_TEXTURE_2D);
