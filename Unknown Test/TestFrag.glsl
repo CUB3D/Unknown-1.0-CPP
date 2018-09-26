@@ -11,7 +11,7 @@ in vec2 UV;
 out vec4 fragColour;
 
 void main() {
-    vec3 objectColour = vec3(texture(texture0, UV)) * 2.0f;
+    vec3 objectColour = vec3(texture(texture0, UV));
     //vec3 objectColour = vec3(0.4f, 0.6f, 0);
     vec3 lightColour = vec3(1.0f, 1.0f, 1.0f);
 
@@ -19,7 +19,7 @@ void main() {
     vec3 lightPos = vec3(1.2f, -1.0f, 2);
 
     // Calc ambient light
-    float ambientStrength = 0.7;
+    float ambientStrength = 0.1f;
 
     vec3 ambientLight = ambientStrength * lightColour;
 
@@ -32,7 +32,7 @@ void main() {
     vec3 diffuse = diff * lightColour;
 
     // Calc specular
-    float specularStrength = 0.5;
+    float specularStrength = 0.9f;
     vec3 viewDir = normalize(viewPos - fragmentPosition);
     vec3 reflectDir = reflect(-lightDir, norm);
 
@@ -42,6 +42,5 @@ void main() {
 
 
     fragColour = vec4((ambientLight + diffuse + specularLight) * objectColour, 1.0f);
-    //fragColour = vec4(tmp * objectColour, 1.0f);
-   //fragColour = vec4(ambientLight * objectColour, 1.0f);
+    //fragColour = vec4(objectColour, 1.0f);
 }

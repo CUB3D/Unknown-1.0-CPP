@@ -48,6 +48,10 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 2);
+    SDL_GL_SetSwapInterval(0);
+
 	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	if (!window)
@@ -60,15 +64,12 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	if (!windowRenderer)
 	{
 		printf("Error: SDL failed to create renderer, %s\n", SDL_GetError());
-		//quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
+		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
 	this->glContext = SDL_GL_CreateContext(this->window);
 
 	::Unknown::initGL();
-
-	SDL_GL_SetSwapInterval(0);
-
 
 //	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
 

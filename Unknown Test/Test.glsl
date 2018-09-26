@@ -15,6 +15,7 @@ out vec3 fragmentPosition;
 out vec2 UV;
 
 void main() {
+    UV = inUV;
     normal = inNormal;
     fragmentPosition = vec3(modelMatrix * vec4(inVertex, 1.0));
 

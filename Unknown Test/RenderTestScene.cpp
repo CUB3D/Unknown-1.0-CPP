@@ -105,11 +105,14 @@ public:
             tmp2 += 3;
         }
 
+        printf("Found %d uvs\n", uvs.size());
+
         if(uvs.size() > 0) {
             // UV's
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
                                   reinterpret_cast<const void *>(tmp2 * sizeof(GLfloat)));
+            tmp2 += 2;
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -170,10 +173,13 @@ void init___() {
     const char* face = "/home/cub3d/Downloads/untitled.obj";
     const char* teapot = "teapot.obj";
     const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
-    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    const char* suz = "Suz.obj";
+    const char* uv = "uv.obj";
+    auto scene = importer.ReadFile(suz, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
-    texPath = "tree.jpg";
+    //texPath = "tree.jpg";
+    texPath = "wood-texture.jpg";
 
     t = Unknown::getRendererBackend()->loadTexture(texPath);
 
@@ -197,7 +203,11 @@ void init___() {
             if(mesh->mTextureCoords[0]) {
                 auto t = mesh->mTextureCoords[0][i];
                 m.uvs.emplace_back(t.x, t.y);
+            } else {
+                m.uvs.emplace_back(0.0f, 0.0f);
             }
+
+            printf("UV: %d\n", mesh->GetNumUVChannels());
         }
 
         for(int i = 0; i < mesh->mNumFaces; i++) {
@@ -229,28 +239,27 @@ void RenderTestScene::render() const {
         glClearDepth(1);
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
-        //glShadeModel(GL_SMOOTH);
-        //glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         s.compile();
         s.bind();
-        glBindTexture(GL_TEXTURE_2D, t.pointer);
+        glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
+        glEnable(GL_MULTISAMPLE);
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    static float angle;
-    angle += 0.1;
+    static float angle = 12;
+    //angle += 0.005;
 
-    // Create the ortagonal projection
+    // Create the projection matrix
     glm::mat4 projection = glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);//glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
 
     // Create the view matrix
     glm::mat4 view = glm::mat4(1.0f);
 
     // Create the model matrix
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -10));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1, -1, -10));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(1, 0, 1));
 
     glm::mat4 modelView = view * model;
@@ -262,7 +271,6 @@ void RenderTestScene::render() const {
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelMatrix"), 1, GL_FALSE, &model[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelView"), 1, GL_FALSE, &modelView[0][0]);
     glUniform1i(glGetUniformLocation(s.prog, "texture0"), GL_TEXTURE0);
-
 
     mc.render();
 
