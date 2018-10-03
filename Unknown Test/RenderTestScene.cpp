@@ -47,17 +47,13 @@ Unknown::TextureInfo specular;
 
 void init___() {
     Assimp::Importer importer;
-    const char* glk = "/home/cub3d/Downloads/Glock/OBJ MTL/Glock 3d.obj";
-    const char* bug = "/mnt/Data/Downloads/bugatti/bugatti.obj";
-    const char* test = "Test.obj";
-    const char* fourseven = "/home/cub3d/Downloads/obj/Handgun_obj.obj";
-    const char* face = "/home/cub3d/Downloads/untitled.obj";
     const char* teapot = "teapot.obj";
     const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
     const char* suz = "Suz.obj";
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
-    auto scene = importer.ReadFile(stick, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    const char* block = "block.obj";
+    auto scene = importer.ReadFile(block, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";
@@ -172,18 +168,40 @@ void RenderTestScene::render() const {
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelMatrix"), 1, GL_FALSE, &model[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelView"), 1, GL_FALSE, &modelView[0][0]);
-    glUniform1i(glGetUniformLocation(s.prog, "mat.diffuse"), GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(s.prog, "mat.specular"), GL_TEXTURE1);
+    glUniform1i(glGetUniformLocation(s.prog, "mat.diffuse"), 0);
+    glUniform1i(glGetUniformLocation(s.prog, "mat.specular"), 1);
 
     s.setVec3("mat.ambient", 1.0f, 0.5f, 0.31f);
     s.setVec3("mat.diffuse", 1.0f, 0.5f, 0.31f);
     s.setVec3("mat.specular", 0.5f, 0.5f, 0.5f);
     s.setFloat("mat.shine", 32.0f);
 
-    s.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-    s.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
-    s.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-    s.setVec3("light.position", camX, -1.0f, camY);
+    s.setVec3("directionalLights[0].ambient", 0.2f, 0.2f, 0.2f);
+    s.setVec3("directionalLights[0].diffuse", 0.5f, 0.5f, 0.5f);
+    s.setVec3("directionalLights[0].specular", 1.0f, 1.0f, 1.0f);
+    s.setVec3("directionalLights[0].direction", -0.2f, -1.0f, -0.3f);
+
+    // point
+
+    s.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
+    s.setVec3("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
+    s.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
+    s.setVec3("pointLights[0].position", camX, 2.0f, camY);
+
+    s.setFloat("pointLights[0].constant", 1.0f);
+    s.setFloat("pointLights[0].linear", 0.09f);
+    s.setFloat("pointLights[0].quadratic", 0.032f);
+
+    // spot
+
+    s.setVec3("spotlights[0].ambient", 0.2f, 0.2f, 0.2f);
+    s.setVec3("spotlights[0].diffuse", 0.5f, 0.5f, 0.5f);
+    s.setVec3("spotlights[0].specular", 1.0f, 1.0f, 1.0f);
+    s.setVec3("spotlights[0].position", camX, 2.0f, camY);
+
+    s.setVec3("spotlights[0].position", camX, 2.0f, camY);
+    s.setVec3("spotlights[0].direction", 0, -1, 0);
+    s.setFloat("spotlights[0].cutOff", glm::cos(glm::radians(12.5f)));
 
     mc.render();
 
