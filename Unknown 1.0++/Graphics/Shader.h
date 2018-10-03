@@ -20,8 +20,13 @@ public:
 
     void compile();
 
+    // Same as bind(bool) except will never attempt to compile on bind
     void bind() const;
+    void bind(bool compile=true);
     void unbind() const;
+
+    void setVec3(const char* name, float x, float y, float z);
+    void setFloat(const char* name, float f);
 };
 
 

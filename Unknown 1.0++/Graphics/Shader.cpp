@@ -5,13 +5,9 @@
 #include <cstdio>
 #include "Shader.h"
 
-void Shader::bind() const {
-    glUseProgram(prog);
-}
+Shader::Shader() : prog(-1) {}
 
-void Shader::unbind() const {
-    glUseProgram(0);
-}
+Shader::Shader(const std::string &vertex, const std::string &fragment) : prog(-1), vertexSrc(vertex), fragmentSrc(fragment) {}
 
 void Shader::compile() {
     // Create shaders
@@ -101,9 +97,26 @@ void Shader::compile() {
 
 
     glValidateProgram(prog);
-
 }
 
-Shader::Shader() : prog(-1) {}
+void Shader::bind(bool compile) {
+    if(compile && this->prog == -1)
+        this->compile();
+    glUseProgram(prog);
+}
 
-Shader::Shader(const std::string &vertex, const std::string &fragment) : prog(-1), vertexSrc(vertex), fragmentSrc(fragment) {}
+void Shader::bind() const {
+    glUseProgram(prog);
+}
+
+void Shader::unbind() const {
+    glUseProgram(0);
+}
+
+void Shader::setVec3(const char *name, float x, float y, float z) {
+    glUniform3f(glGetUniformLocation(this->prog, name), x, y, z);
+}
+
+void Shader::setFloat(const char *name, float f) {
+    glUniform1f(glGetUniformLocation(this->prog, name), f);
+}

@@ -12,138 +12,18 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "Model/MeshContainer.h"
 
 Unknown::Graphics::Image img("Player.png");
-
-//std::shared_ptr<Unknown::Graphics::TTFont> font_;
-//std::shared_ptr<StaticText> tex;
-
-// TODO: make this initable
-
-// TODO: create a setup script that will install the repo packages on linux and dl + extract the zips for libs on win as well as build box2d, will fix above
 
 glm::mat4 glmhPerspectivef2(float fovyInDegrees, float aspectRatio,
                       float znear, float zfar)
 {
     float ymax, xmax;
-    float temp, temp2, temp3, temp4;
     ymax = znear * tanf(fovyInDegrees * M_PI / 360.0);
-    // ymin = -ymax;
-    // xmin = -ymax * aspectRatio;
     xmax = ymax * aspectRatio;
     return glm::frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
 }
-
-class Mesh {
-public:
-    std::vector<glm::vec3> verticies;
-    std::vector<glm::vec3> normals;
-    std::vector<glm::vec2> uvs;
-    std::vector<unsigned int> indicies;
-
-    GLuint vbo = 0;
-    GLuint vao = 0;
-
-    void loadVBO() {
-        glGenVertexArrays(1, &vao);
-        glBindVertexArray(vao);
-
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
-        int tmp = 3;
-
-        if(normals.size() > 0)
-            tmp += 3;
-
-        if(uvs.size() > 0)
-            tmp += 2;
-
-        int SIZE = verticies.size() * (tmp);
-
-        GLfloat* data = (GLfloat*) malloc(SIZE * sizeof(GLfloat));
-
-        int x = 0;
-
-        for(int i = 0; i < verticies.size(); i++) {
-            auto &v = verticies[i];
-
-            data[x++] = v.x;
-            data[x++] = v.y;
-            data[x++] = v.z;
-
-            if(normals.size() > 0) {
-                auto& n = normals[i];
-                data[x++] = n.x;
-                data[x++] = n.y;
-                data[x++] = n.z;
-            }
-
-            if(uvs.size() > 0) {
-                auto& uv = uvs[i];
-                data[x++] = uv.x;
-                data[x++] = uv.y;
-            }
-        }
-
-        //TODO: sizeof float *
-        glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
-
-        int stride = (tmp) * sizeof(GLfloat);
-
-        int tmp2 = 3;
-
-        // Verticies
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
-
-        if(normals.size() > 0) {
-            // Normals
-            glEnableVertexAttribArray(1);
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride,
-                                  reinterpret_cast<const void *>(tmp2 * sizeof(GLfloat)));
-            tmp2 += 3;
-        }
-
-        printf("Found %d uvs\n", uvs.size());
-
-        if(uvs.size() > 0) {
-            // UV's
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
-                                  reinterpret_cast<const void *>(tmp2 * sizeof(GLfloat)));
-            tmp2 += 2;
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
-
-    void render() {
-        glBindVertexArray(vao);
-
-        glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, &indicies[0]);
-        glBindVertexArray(0);
-    }
-};
-
-class MeshContainer {
-public:
-    std::vector<Mesh> meshes;
-
-    void loadVBO() {
-        printf("Gening %d vbos\n", meshes.size());
-        for(auto& m : meshes) {
-            m.loadVBO();
-        }
-    }
-
-    void render() {
-        for(auto& m : meshes) {
-            m.render();
-        }
-    }
-};
 
 
 
@@ -163,6 +43,7 @@ void p1(aiNode* node, const aiScene* sce) {
 
 MeshContainer mc;
 Unknown::TextureInfo t;
+Unknown::TextureInfo specular;
 
 void init___() {
     Assimp::Importer importer;
@@ -175,13 +56,18 @@ void init___() {
     const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
     const char* suz = "Suz.obj";
     const char* uv = "uv.obj";
-    auto scene = importer.ReadFile(suz, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    const char* stick = "stick.obj";
+    auto scene = importer.ReadFile(stick, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";
-    texPath = "wood-texture.jpg";
+    //texPath = "wood-texture.jpg";
+    texPath = "/home/cub3d/Downloads/crate.png";
 
     t = Unknown::getRendererBackend()->loadTexture(texPath);
+
+    std::string specPath = "/home/cub3d/Downloads/crate_spec.png";
+    specular = Unknown::getRendererBackend()->loadTexture(specPath);
 
     p1(scene->mRootNode, scene);
 
@@ -243,14 +129,32 @@ void RenderTestScene::render() const {
 
         s.compile();
         s.bind();
+
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
+
         glEnable(GL_MULTISAMPLE);
     }
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     static float angle = 12;
-    //angle += 0.005;
+    angle += 0.01;
+
+    static float camX = 1.2f;
+    camX+=0.001;
+
+    if(camX > 10) {
+        camX = 0;
+    }
+
+    static float camY = -2.0f;
+    camY += 0.001;
+    if(camY > 10)
+        camY = -2.0f;
 
     // Create the projection matrix
     glm::mat4 projection = glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);//glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
@@ -259,8 +163,8 @@ void RenderTestScene::render() const {
     glm::mat4 view = glm::mat4(1.0f);
 
     // Create the model matrix
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1, -1, -10));
-    model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(1, 0, 1));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1, -1, -12));
+    model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 1, 0));
 
     glm::mat4 modelView = view * model;
 
@@ -270,7 +174,18 @@ void RenderTestScene::render() const {
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelMatrix"), 1, GL_FALSE, &model[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelView"), 1, GL_FALSE, &modelView[0][0]);
-    glUniform1i(glGetUniformLocation(s.prog, "texture0"), GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(s.prog, "mat.diffuse"), GL_TEXTURE0);
+    glUniform1i(glGetUniformLocation(s.prog, "mat.specular"), GL_TEXTURE1);
+
+    s.setVec3("mat.ambient", 1.0f, 0.5f, 0.31f);
+    s.setVec3("mat.diffuse", 1.0f, 0.5f, 0.31f);
+    s.setVec3("mat.specular", 0.5f, 0.5f, 0.5f);
+    s.setFloat("mat.shine", 32.0f);
+
+    s.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
+    s.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+    s.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+    s.setVec3("light.position", camX, -1.0f, camY);
 
     mc.render();
 

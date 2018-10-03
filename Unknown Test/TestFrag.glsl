@@ -2,7 +2,23 @@
 
 precision highp float;
 
-uniform sampler2D texture0;
+
+struct Material {
+    sampler2D diffuse;
+    sampler2D specular;
+
+    float shine;
+};
+uniform Material mat;
+
+struct Light {
+    vec3 position;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform Light light;
 
 in vec3 normal;
 in vec3 fragmentPosition;
@@ -11,36 +27,31 @@ in vec2 UV;
 out vec4 fragColour;
 
 void main() {
-    vec3 objectColour = vec3(texture(texture0, UV));
-    //vec3 objectColour = vec3(0.4f, 0.6f, 0);
-    vec3 lightColour = vec3(1.0f, 1.0f, 1.0f);
+    vec3 objectColour = vec3(1, 1, 1);
+    vec3 diffuseColour = vec3(texture(mat.diffuse, UV));
+    // Use specular texture for spcular hilights
+    vec3 specularColour = vec3(texture(mat.specular, UV));
 
-    vec3 viewPos = vec3(1.0f, 1.0f, 2);
-    vec3 lightPos = vec3(1.2f, -1.0f, 2);
+    vec3 viewPos = vec3(1.0f, 1.0f, 1.0f);
 
-    // Calc ambient light
-    float ambientStrength = 0.1f;
-
-    vec3 ambientLight = ambientStrength * lightColour;
+    // Calc ambient light, diffuse often the same as ambient
+    vec3 ambientLight = diffuseColour * light.ambient;
 
 
     // Calc diffuse light
     vec3 norm = normalize(normal);
-    vec3 lightDir = normalize(lightPos - fragmentPosition);
+    vec3 lightDir = normalize(light.position - fragmentPosition);
 
-    float diff = max(dot(norm, lightDir), 0.0);
-    vec3 diffuse = diff * lightColour;
+    float diffuseStrength = max(dot(norm, lightDir), 0.0);
+    vec3 diffuse = (diffuseColour * diffuseStrength) * light.diffuse;
 
     // Calc specular
-    float specularStrength = 0.9f;
     vec3 viewDir = normalize(viewPos - fragmentPosition);
     vec3 reflectDir = reflect(-lightDir, norm);
 
-    float specularFocus = 128.0f;
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularFocus);
-    vec3 specularLight = specularStrength * spec * lightColour;
+    float specularStrength = pow(max(dot(viewDir, reflectDir), 0.0), mat.shine);
+    vec3 specularLight = specularColour * specularStrength * light.specular;
 
 
     fragColour = vec4((ambientLight + diffuse + specularLight) * objectColour, 1.0f);
-    //fragColour = vec4(objectColour, 1.0f);
 }
