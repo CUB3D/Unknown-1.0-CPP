@@ -49,7 +49,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	}
 
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 2);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetSwapInterval(0);
 
 	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);

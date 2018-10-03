@@ -206,8 +206,6 @@ void init___() {
             } else {
                 m.uvs.emplace_back(0.0f, 0.0f);
             }
-
-            printf("UV: %d\n", mesh->GetNumUVChannels());
         }
 
         for(int i = 0; i < mesh->mNumFaces; i++) {
