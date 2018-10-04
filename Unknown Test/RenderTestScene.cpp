@@ -17,59 +17,9 @@
 #include "Model/TexturedMeshRenderer.h"
 #include "KeyBind.h"
 #include "Input.h"
+#include "Graphics/SkyBox3D.h"
 
 Unknown::Graphics::Image img("Player.png");
-
-// Cubemap stuff
-
-GLuint loadCubeMap(std::vector<std::string>& faces) {
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-    for(int i = 0; i < faces.size(); i++) {
-        printf("Loading %s\n", faces[i].c_str());
-
-        SDL_Surface* imageSurface = IMG_Load(faces[i].c_str());
-
-        if (!imageSurface) {
-            printf("Error: failed to load image, %s\n", IMG_GetError());
-            return 0;
-        }
-
-        int nOfColors = imageSurface->format->BytesPerPixel;
-        int mode = GL_RGBA;
-        if( nOfColors == 4 )     // contains an alpha channel
-        {
-            if(imageSurface->format->Rmask == 0x000000ff) {
-                mode = GL_RGBA;
-            } else {
-                mode = GL_BGRA;
-            }
-        } else if( nOfColors == 3 ) {
-            if(imageSurface->format->Rmask == 0x000000ff) {
-                mode = GL_RGB;
-            } else {
-                mode = GL_BGR;
-            }
-        }
-
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
-
-        SDL_FreeSurface(imageSurface);
-    }
-
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-    return textureID;
-}
-
-
-
 
 std::vector<aiMesh*> meshes;
 
@@ -104,13 +54,7 @@ Unknown::TextureInfo specular;
 
 RenderingPipeline3D ren;
 
-GLuint cubemap;
-GLuint cubeMapVAO;
-GLuint cubeMapVBO;
-
-FileShader sky("Sky_vert.glsl", "Sky_frag.glsl");
-
-
+SkyBox3D* skybox;
 
 void init___() {
     std::vector<std::string> faces {
@@ -121,71 +65,9 @@ void init___() {
         "skybox/front.jpg",
         "skybox/back.jpg"
     };
-    cubemap = loadCubeMap(faces);
 
-    float skyboxVertices[] = {
-        // positions
-        -1.0f,  1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f, -1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f, -1.0f,  1.0f,
-        -1.0f, -1.0f,  1.0f,
-
-        -1.0f,  1.0f, -1.0f,
-        1.0f,  1.0f, -1.0f,
-        1.0f,  1.0f,  1.0f,
-        1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f,  1.0f,
-        -1.0f,  1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f,  1.0f,
-        1.0f, -1.0f,  1.0f
-    };
-
-    glGenBuffers(1, &cubeMapVBO);
-
-    // Bind VBO and put data in it
-    glBindBuffer(GL_ARRAY_BUFFER, cubeMapVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &cubeMapVAO);
-
-    // Bind the VAO and fill in the locations of each piece of vertex data
-    glBindVertexArray(cubeMapVAO);
-
-    // Verticies
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+    skybox = new SkyBox3D(faces);
+    skybox->init();
 
     MeshContainer mc;
 
@@ -262,75 +144,31 @@ Unknown::KeyBind back(SDLK_s, "fs");
 Unknown::KeyBind left(SDLK_a, "fw");
 Unknown::KeyBind right(SDLK_d, "fd");
 
-int lastX=-1, lastY=-1;
-double yaw=0, pitch=0;
-
-glm::vec3 cameraPos   = glm::vec3(0);//glm::vec3(0.0f, 0.0f,  0.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
-
 void RenderTestScene::update() {
     SDL_SetRelativeMouseMode(SDL_TRUE);
-    SDL_SetWindowGrab(Unknown::getUnknown().window, SDL_TRUE);
-
-    float cameraSpeed = 1;
 
     if(forward.pressed()) {
-        cameraPos += cameraSpeed * cameraFront;
+        ren.getCamera().forwards();
     }
 
     if(back.pressed()) {
-        cameraPos -= cameraSpeed * cameraFront;
+        ren.getCamera().backwards();
     }
 
     if(left.pressed()) {
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        ren.getCamera().left();
     }
 
     if(right.pressed()) {
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        ren.getCamera().right();
     }
 
-
-    Unknown::Point<int> pos;
-    //TODO: warp mouse, not this, this dosent work as expected
-    //SDL_GetRelativeMouseState(&pos.x, &pos.y);
-
-    if(lastX == -1 || lastY == -1) {
-        lastX = pos.x;
-        lastY = pos.y;
-    }
-
-    float xOff = pos.x - lastX;
-    float yOff = lastY - pos.y;
-
-    lastX = pos.x;
-    lastY = pos.y;
-
-    float sens = 0.05f;
-    xOff *= sens;
-    yOff *= sens;
-
-    yaw += xOff;
-    pitch += yOff;
-
-    //if(pitch > 89.0f)
-    //    pitch = 89.0f;
-    //if(pitch < -89.0f)
-     //   pitch = -89.0f;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
-
-
-    ren.viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-
+    ren.getCamera().onMouseMove();
 }
 
 bool tmp = false;
+
+
 
 void RenderTestScene::render() const {
 
@@ -347,17 +185,8 @@ void RenderTestScene::render() const {
 
 
     // Draw skybox
-    glDepthMask(GL_FALSE);
-    glDepthFunc(GL_LEQUAL);
-    sky.bind(true);
-    sky.setFloat("skybox", 0);
-    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "proj"), 1, GL_FALSE, &ren.projectionMatrix[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "view"), 1, GL_FALSE, &glm::mat4(glm::mat3(ren.viewMatrix))[0][0]);
-    glBindVertexArray(cubeMapVAO);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glDepthMask(GL_TRUE);
-    //sky.unbind();
+    // TODO: j
+    skybox->render(ren);
 
 
 
