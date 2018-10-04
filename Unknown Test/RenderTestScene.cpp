@@ -333,6 +333,11 @@ void RenderTestScene::update() {
 bool tmp = false;
 
 void RenderTestScene::render() const {
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CCW);
+
     glClearColor(0, 0, 0, 1);
     glClearDepth(1);
     glEnable(GL_DEPTH_TEST);
