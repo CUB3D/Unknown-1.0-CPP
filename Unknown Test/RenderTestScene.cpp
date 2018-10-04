@@ -15,6 +15,8 @@
 #include "Model/MeshContainer.h"
 #include "Graphics/RenderingPipeline3D.h"
 #include "Model/TexturedMeshRenderer.h"
+#include "KeyBind.h"
+#include "Input.h"
 
 Unknown::Graphics::Image img("Player.png");
 
@@ -255,7 +257,77 @@ void init___() {
     ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(mc));
 }
 
+Unknown::KeyBind forward(SDLK_w, "fw");
+Unknown::KeyBind back(SDLK_s, "fs");
+Unknown::KeyBind left(SDLK_a, "fw");
+Unknown::KeyBind right(SDLK_d, "fd");
+
+int lastX=-1, lastY=-1;
+double yaw=0, pitch=0;
+
+glm::vec3 cameraPos   = glm::vec3(0);//glm::vec3(0.0f, 0.0f,  0.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraUp    = glm::vec3(0.0f, 1.0f,  0.0f);
+
 void RenderTestScene::update() {
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetWindowGrab(Unknown::getUnknown().window, SDL_TRUE);
+
+    float cameraSpeed = 1;
+
+    if(forward.pressed()) {
+        cameraPos += cameraSpeed * cameraFront;
+    }
+
+    if(back.pressed()) {
+        cameraPos -= cameraSpeed * cameraFront;
+    }
+
+    if(left.pressed()) {
+        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+
+    if(right.pressed()) {
+        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+    }
+
+
+    Unknown::Point<int> pos;
+    //TODO: warp mouse, not this, this dosent work as expected
+    //SDL_GetRelativeMouseState(&pos.x, &pos.y);
+
+    if(lastX == -1 || lastY == -1) {
+        lastX = pos.x;
+        lastY = pos.y;
+    }
+
+    float xOff = pos.x - lastX;
+    float yOff = lastY - pos.y;
+
+    lastX = pos.x;
+    lastY = pos.y;
+
+    float sens = 0.05f;
+    xOff *= sens;
+    yOff *= sens;
+
+    yaw += xOff;
+    pitch += yOff;
+
+    //if(pitch > 89.0f)
+    //    pitch = 89.0f;
+    //if(pitch < -89.0f)
+     //   pitch = -89.0f;
+
+    glm::vec3 front;
+    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    front.y = sin(glm::radians(pitch));
+    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    cameraFront = glm::normalize(front);
+
+
+    ren.viewMatrix = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+
 }
 
 bool tmp = false;
@@ -264,13 +336,14 @@ void RenderTestScene::render() const {
     glClearColor(0, 0, 0, 1);
     glClearDepth(1);
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_MULTISAMPLE);
 
 
 
     // Draw skybox
     glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LEQUAL);
     sky.bind(true);
     sky.setFloat("skybox", 0);
     glUniformMatrix4fv(glGetUniformLocation(sky.prog, "proj"), 1, GL_FALSE, &ren.projectionMatrix[0][0]);
@@ -279,7 +352,7 @@ void RenderTestScene::render() const {
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glDepthMask(GL_TRUE);
-    sky.unbind();
+    //sky.unbind();
 
 
 
@@ -289,8 +362,6 @@ void RenderTestScene::render() const {
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
-
-    glEnable(GL_MULTISAMPLE);
 
     ren.render();
 }
