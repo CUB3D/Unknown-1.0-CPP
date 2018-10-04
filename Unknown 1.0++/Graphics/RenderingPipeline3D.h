@@ -8,22 +8,26 @@
 #include "../Model/MeshRenderer.h"
 #include "Shader.h"
 #include <memory>
+#include "Camera3D.h"
 
 class MeshRenderer;
 
 class RenderingPipeline3D
 {
     Shader s;
+    Camera3D camera;
+
 
 public:
     glm::mat4 projectionMatrix;
-    glm::mat4 viewMatrix;
 
     RenderingPipeline3D();
 
     std::vector<std::shared_ptr<MeshRenderer>> meshes;
 
     void render();
+
+    Camera3D& getCamera();
 };
 
 

@@ -28,10 +28,10 @@ void TexturedMeshRenderer::render(Shader &s, RenderingPipeline3D &renderPipeline
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 0, -10));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 1, 0));
 
-    glm::mat4 modelView = renderPipeline.viewMatrix * model;
+    glm::mat4 modelView = renderPipeline.getCamera().getViewMatrix() * model;
 
     // Projection * view * model
-    glm::mat4 proj = renderPipeline.projectionMatrix * renderPipeline.viewMatrix * model;
+    glm::mat4 proj = renderPipeline.projectionMatrix * renderPipeline.getCamera().getViewMatrix() * model;
 
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
     glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelMatrix"), 1, GL_FALSE, &model[0][0]);

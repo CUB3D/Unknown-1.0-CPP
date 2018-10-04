@@ -58,5 +58,8 @@ void RenderingPipeline3D::render() {
 
 RenderingPipeline3D::RenderingPipeline3D() : s(FileShader("Test.glsl", "TestFrag.glsl")) {
     this->projectionMatrix = Unknown::glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);
-    this->viewMatrix = glm::mat4(1.0f);
+}
+
+Camera3D &RenderingPipeline3D::getCamera() {
+    return this->camera;
 }
