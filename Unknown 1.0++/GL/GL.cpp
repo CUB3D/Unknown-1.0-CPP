@@ -11,3 +11,10 @@ void Unknown::initGL() {
     gladLoadGL();
 #endif
 }
+
+glm::mat4 Unknown::glmhPerspectivef2(float fovyInDegrees, float aspectRatio, float znear, float zfar) {
+    float ymax, xmax;
+    ymax = znear * tanf(fovyInDegrees * M_PI / 360.0);
+    xmax = ymax * aspectRatio;
+    return glm::frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
+}

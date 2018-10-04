@@ -19,6 +19,7 @@ namespace Unknown
     struct TextureInfo {
         int width;
         int height;
+        unsigned char* pixelData;
         unsigned long long int pointer;
     };
 

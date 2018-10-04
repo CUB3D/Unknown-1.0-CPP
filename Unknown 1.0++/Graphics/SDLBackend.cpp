@@ -87,7 +87,7 @@ Unknown::TextureInfo Unknown::SDLBackend::loadTexture(std::string &path) {
 
     SDL_Texture* texture = SDL_CreateTextureFromSurface(uk.windowRenderer, image);
 
-    TextureInfo info = {image->w, image->h, (unsigned long long int) texture};
+    TextureInfo info = {image->w, image->h, nullptr, (unsigned long long int) texture};
     textureMap.insert(std::pair<std::string, TextureInfo>(path, info));
 
     SDL_FreeSurface(image);

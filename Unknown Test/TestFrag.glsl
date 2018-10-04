@@ -11,15 +11,6 @@ struct Material {
 };
 uniform Material mat;
 
-//struct Light {
-//    vec3 position;
-//
-//    vec3 ambient;
-//    vec3 diffuse;
-//    vec3 specular;
-//};
-//uniform Light light;
-
 #define LIGHT_COUNT 1
 
 // Directional lights
@@ -191,14 +182,14 @@ vec3 calculateSpotLight(SpotLight light) {
 //}
 
 void main() {
-    vec3 directionalColour = vec3(0);
-    vec3 pointColour = vec3(0);
-    vec3 spotcolour = vec3(0);
+    vec3 outCol = vec3(0);
+
     for(int i = 0; i < LIGHT_COUNT; i++) {
-        directionalColour+=calculateDirectionalLight(directionalLights[i]);
-        pointColour += calculatePointLight(pointLights[i]);
-        spotcolour += calculateSpotLight(spotlights[i]);
+        outCol+=calculateDirectionalLight(directionalLights[i]);
+        outCol += calculatePointLight(pointLights[i]);
+        outCol += calculateSpotLight(spotlights[i]);
     }
 
-    fragColour = vec4(pointColour + directionalColour + spotcolour, 1.0);
+    //outCol = vec3(1.0, 0, 0);
+    fragColour = vec4(outCol, 1.0);
 }

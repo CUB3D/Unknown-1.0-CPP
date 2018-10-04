@@ -13,17 +13,59 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "Model/MeshContainer.h"
+#include "Graphics/RenderingPipeline3D.h"
+#include "Model/TexturedMeshRenderer.h"
 
 Unknown::Graphics::Image img("Player.png");
 
-glm::mat4 glmhPerspectivef2(float fovyInDegrees, float aspectRatio,
-                      float znear, float zfar)
-{
-    float ymax, xmax;
-    ymax = znear * tanf(fovyInDegrees * M_PI / 360.0);
-    xmax = ymax * aspectRatio;
-    return glm::frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
+// Cubemap stuff
+
+GLuint loadCubeMap(std::vector<std::string>& faces) {
+    GLuint textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    for(int i = 0; i < faces.size(); i++) {
+        printf("Loading %s\n", faces[i].c_str());
+
+        SDL_Surface* imageSurface = IMG_Load(faces[i].c_str());
+
+        if (!imageSurface) {
+            printf("Error: failed to load image, %s\n", IMG_GetError());
+            return 0;
+        }
+
+        int nOfColors = imageSurface->format->BytesPerPixel;
+        int mode = GL_RGBA;
+        if( nOfColors == 4 )     // contains an alpha channel
+        {
+            if(imageSurface->format->Rmask == 0x000000ff) {
+                mode = GL_RGBA;
+            } else {
+                mode = GL_BGRA;
+            }
+        } else if( nOfColors == 3 ) {
+            if(imageSurface->format->Rmask == 0x000000ff) {
+                mode = GL_RGB;
+            } else {
+                mode = GL_BGR;
+            }
+        }
+
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
+
+        SDL_FreeSurface(imageSurface);
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
 }
+
 
 
 
@@ -40,20 +82,119 @@ void p1(aiNode* node, const aiScene* sce) {
 }
 
 
+std::vector<Unknown::TextureInfo> loadMaterialTexutres(aiMaterial* mat, aiTextureType type, std::string typeName) {
+    std::vector<Unknown::TextureInfo> vec;
 
-MeshContainer mc;
+
+    for(int i = 0; i < mat->GetTextureCount(type); i++) {
+        aiString str;
+        mat->GetTexture(type, i, &str);
+        std::string s = std::string(str.C_Str());
+        s = "/home/cub3d/Downloads/nano/" + s;
+        vec.push_back(Unknown::getRendererBackend()->loadTexture(s));
+    }
+
+    return vec;
+}
+
 Unknown::TextureInfo t;
 Unknown::TextureInfo specular;
 
+RenderingPipeline3D ren;
+
+GLuint cubemap;
+GLuint cubeMapVAO;
+GLuint cubeMapVBO;
+
+FileShader sky("Sky_vert.glsl", "Sky_frag.glsl");
+
+
+
 void init___() {
+    std::vector<std::string> faces {
+        "skybox/right.jpg",
+        "skybox/left.jpg",
+        "skybox/top.jpg",
+        "skybox/bottom.jpg",
+        "skybox/front.jpg",
+        "skybox/back.jpg"
+    };
+    cubemap = loadCubeMap(faces);
+
+    float skyboxVertices[] = {
+        // positions
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f, -1.0f,
+        1.0f,  1.0f,  1.0f,
+        1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f, -1.0f,
+        1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+        1.0f, -1.0f,  1.0f
+    };
+
+    glGenBuffers(1, &cubeMapVBO);
+
+    // Bind VBO and put data in it
+    glBindBuffer(GL_ARRAY_BUFFER, cubeMapVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+
+    glGenVertexArrays(1, &cubeMapVAO);
+
+    // Bind the VAO and fill in the locations of each piece of vertex data
+    glBindVertexArray(cubeMapVAO);
+
+    // Verticies
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+    MeshContainer mc;
+
     Assimp::Importer importer;
     const char* teapot = "teapot.obj";
     const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
     const char* suz = "Suz.obj";
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
-    const char* block = "block.obj";
-    auto scene = importer.ReadFile(block, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    //const char* block = "block.obj";
+    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";
@@ -96,6 +237,13 @@ void init___() {
                 m.indicies.push_back(face.mIndices[j]);
             }
         }
+        // Check for materials
+        //TODO: remove
+        if(mesh->mMaterialIndex >= 0 && false) {
+            aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+            std::vector<Unknown::TextureInfo> diffuseMaps = loadMaterialTexutres(mat, aiTextureType_DIFFUSE, "texture_diffuse");
+            std::vector<Unknown::TextureInfo> specularMaps = loadMaterialTexutres(mat, aiTextureType_SPECULAR, "texture_specular");
+        }
 
         printf("Found %d indicies\n", m.indicies.size());
 
@@ -103,9 +251,9 @@ void init___() {
     }
 
     mc.loadVBO();
-}
 
-FileShader s("Test.glsl", "TestFrag.glsl");
+    ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(mc));
+}
 
 void RenderTestScene::update() {
 }
@@ -113,99 +261,38 @@ void RenderTestScene::update() {
 bool tmp = false;
 
 void RenderTestScene::render() const {
-    if(s.prog == -1) {
-
-        glClearColor(0, 0, 0, 1);
-        glClearDepth(1);
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        s.compile();
-        s.bind();
-
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
-
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
-
-        glEnable(GL_MULTISAMPLE);
-    }
-
+    glClearColor(0, 0, 0, 1);
+    glClearDepth(1);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    static float angle = 12;
-    angle += 0.01;
 
-    static float camX = 1.2f;
-    camX+=0.001;
 
-    if(camX > 10) {
-        camX = 0;
-    }
+    // Draw skybox
+    glDepthMask(GL_FALSE);
+    sky.bind(true);
+    sky.setFloat("skybox", 0);
+    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "proj"), 1, GL_FALSE, &ren.projectionMatrix[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "view"), 1, GL_FALSE, &glm::mat4(glm::mat3(ren.viewMatrix))[0][0]);
+    glBindVertexArray(cubeMapVAO);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDepthMask(GL_TRUE);
+    sky.unbind();
 
-    static float camY = -2.0f;
-    camY += 0.001;
-    if(camY > 10)
-        camY = -2.0f;
 
-    // Create the projection matrix
-    glm::mat4 projection = glmhPerspectivef2(45.0f, 1.0f, 0.1f, 100.0f);//glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
 
-    // Create the view matrix
-    glm::mat4 view = glm::mat4(1.0f);
+    // Draw model
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
 
-    // Create the model matrix
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(1, -1, -12));
-    model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 1, 0));
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
 
-    glm::mat4 modelView = view * model;
+    glEnable(GL_MULTISAMPLE);
 
-    // Projection * view * model
-    glm::mat4 proj = projection * view * model;
-
-    glUniformMatrix4fv(glGetUniformLocation(s.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelMatrix"), 1, GL_FALSE, &model[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(s.prog, "modelView"), 1, GL_FALSE, &modelView[0][0]);
-    glUniform1i(glGetUniformLocation(s.prog, "mat.diffuse"), 0);
-    glUniform1i(glGetUniformLocation(s.prog, "mat.specular"), 1);
-
-    s.setVec3("mat.ambient", 1.0f, 0.5f, 0.31f);
-    s.setVec3("mat.diffuse", 1.0f, 0.5f, 0.31f);
-    s.setVec3("mat.specular", 0.5f, 0.5f, 0.5f);
-    s.setFloat("mat.shine", 32.0f);
-
-    s.setVec3("directionalLights[0].ambient", 0.2f, 0.2f, 0.2f);
-    s.setVec3("directionalLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-    s.setVec3("directionalLights[0].specular", 1.0f, 1.0f, 1.0f);
-    s.setVec3("directionalLights[0].direction", -0.2f, -1.0f, -0.3f);
-
-    // point
-
-    s.setVec3("pointLights[0].ambient", 0.2f, 0.2f, 0.2f);
-    s.setVec3("pointLights[0].diffuse", 0.5f, 0.5f, 0.5f);
-    s.setVec3("pointLights[0].specular", 1.0f, 1.0f, 1.0f);
-    s.setVec3("pointLights[0].position", camX, 2.0f, camY);
-
-    s.setFloat("pointLights[0].constant", 1.0f);
-    s.setFloat("pointLights[0].linear", 0.09f);
-    s.setFloat("pointLights[0].quadratic", 0.032f);
-
-    // spot
-
-    s.setVec3("spotlights[0].ambient", 0.2f, 0.2f, 0.2f);
-    s.setVec3("spotlights[0].diffuse", 0.5f, 0.5f, 0.5f);
-    s.setVec3("spotlights[0].specular", 1.0f, 1.0f, 1.0f);
-    s.setVec3("spotlights[0].position", camX, 2.0f, camY);
-
-    s.setVec3("spotlights[0].position", camX, 2.0f, camY);
-    s.setVec3("spotlights[0].direction", 0, -1, 0);
-    s.setFloat("spotlights[0].cutOff", glm::cos(glm::radians(12.5f)));
-
-    mc.render();
-
-   // s.unbind();
+    ren.render();
 }
 
 RenderTestScene::RenderTestScene() : Scene("RTest") {

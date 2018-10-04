@@ -16,7 +16,8 @@ out vec2 UV;
 
 void main() {
     UV = inUV;
-    normal = inNormal;
+    normal = mat3(transpose(inverse(modelMatrix))) * inNormal;
+    //normal = inNormal;
     fragmentPosition = vec3(modelMatrix * vec4(inVertex, 1.0));
 
     gl_Position = MVP * vec4(inVertex, 1.0);

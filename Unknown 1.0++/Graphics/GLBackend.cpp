@@ -206,6 +206,8 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
         }
     }
 
+    info.pixelData = (unsigned char*)imageSurface->pixels;
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
 
     return info;
