@@ -10,6 +10,8 @@
 #include <memory>
 #include "Camera3D.h"
 #include <array>
+#include "RenderingBackend.h"
+#include "SkyBox3D.h"
 
 struct DirectionalLight {
     glm::vec3 direction;
@@ -33,6 +35,7 @@ struct PointLight {
 
 
 class MeshRenderer;
+class SkyBox3D;
 
 class RenderingPipeline3D
 {
@@ -42,11 +45,20 @@ class RenderingPipeline3D
     std::array<struct PointLight, 10> pointLights;
     std::array<struct DirectionalLight, 10> directionalLights;
 
+    Shader fboS;
+    GLuint fbo;
+    GLuint texBuffer;
+    Unknown::VertexInfo fbov;
+    GLuint rbo;
 
 public:
     glm::mat4 projectionMatrix;
 
+    //TODO: move
+    SkyBox3D* skybox;
+
     RenderingPipeline3D();
+    void init();
 
     std::vector<std::shared_ptr<MeshRenderer>> meshes;
 
