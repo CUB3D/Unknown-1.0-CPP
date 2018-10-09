@@ -1,6 +1,19 @@
 # Use the standard find on windows
 if(WIN32)
-	#find_package(Box2DWin REQUIRED)
+	find_path(ASSIMP_INCLUDE_DIRS
+		NAMES assimp/scene.h
+		PATH_SUFFIXES include
+		PATHS
+		${UK_DIR}/Libs/assimp
+	)
+
+	FIND_LIBRARY(ASSIMP_LIBRARY_DIRS
+        NAMES assimp-vc140-mt
+        PATH_SUFFIXES lib/Debug
+        PATHS
+        ${UK_DIR}/Libs/assimp/
+        NO_DEFAULT_PATH
+        )
 elseif(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     # Look for manually cross compiled libs
     FIND_LIBRARY(ASSIMP_LIBRARY_DIRS

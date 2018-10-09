@@ -88,19 +88,13 @@ if(UNIX)
 endif(UNIX)
 
 # Find box2d
-find_package(UKBox2D)
+find_package(UKBox2D REQUIRED)
 if(BOX2D_FOUND)
     message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
 endif()
 
 
-find_package(UKAssimp)
-
-#if(WIN32)
-#	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
-#	set(ASSIMP_LIBRARY_DIRS ${UK_DIR}/Libs/assimp/lib/Debug/assimp-vc140-mt.lib)
-#endif()
-
+find_package(UKAssimp REQUIRED)
 if(ASSIMP_FOUND)
     message("Found assimp: ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 endif()
