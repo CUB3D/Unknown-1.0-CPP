@@ -4,9 +4,8 @@ if(WIN32)
     find_package(PythonLibs)
 elseif(UNIX)
 	FIND_LIBRARY(PYTHON_LIBRARIES
-        NAMES python3.8 python3.7 python3.6
-        HINTS
-        PATH_SUFFIXES
+        NAMES python3.8m python3.7m python3.6m
+        PATH_SUFFIXES lib
         PATHS
 		/usr
         NO_DEFAULT_PATH
