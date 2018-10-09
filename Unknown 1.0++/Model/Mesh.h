@@ -19,6 +19,7 @@ public:
 
     GLuint vbo = 0;
     GLuint vao = 0;
+    GLuint ebo = 0;
 
     void loadVBO();
 

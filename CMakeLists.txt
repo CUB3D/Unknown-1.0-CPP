@@ -87,40 +87,29 @@ if(UNIX)
     endif(PYTHONLIBS_FOUND)
 endif(UNIX)
 
-if(UNIX)
-    # Find box2d
-    find_package(Box2D REQUIRED)
-endif()
-if(WIN32)
-    find_package(Box2DWin REQUIRED)
+# Find box2d
+find_package(UKBox2D)
+if(BOX2D_FOUND)
+    message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
 endif()
 
-if(TRAVIS)
-    set(BOX2D_LIBRARY /usr/lib/x86_64-linux-gnu/libBox2D.so)
-endif(TRAVIS)
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    set(BOX2D_INCLUDE_DIR ${UK_DIR}/Libs/Box2D/Box2D)
-    set(BOX2D_LIBRARY  ${UK_DIR}/Libs/Box2D/Box2D/Build/gmake2/bin/Debug/libBox2D.a)
+find_package(UKAssimp)
+
+#set(ASSIMP_LIBRARY_DIRS /usr/lib/libassimp.so)
+#
+#if(TRAVIS)
+#    set(ASSIMP_LIBRARY_DIRS /usr/lib/x86_64-linux-gnu/libassimp.so)
+#endif(TRAVIS)
+#
+#if(WIN32)
+#	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
+#	set(ASSIMP_LIBRARY_DIRS ${UK_DIR}/Libs/assimp/lib/Debug/assimp-vc140-mt.lib)
+#endif()
+
+if(ASSIMP_FOUND)
+    message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 endif()
-
-message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
-
-
-set(ASSIMP_LIBRARY_DIRS /usr/lib/libassimp.so)
-
-if(TRAVIS)
-    set(ASSIMP_LIBRARY_DIRS /usr/lib/x86_64-linux-gnu/libassimp.so)
-endif(TRAVIS)
-
-find_package(assimp)
-
-if(WIN32)
-	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
-	set(ASSIMP_LIBRARY_DIRS ${UK_DIR}/Libs/assimp/lib/Debug/assimp-vc140-mt.lib)
-endif()
-
-message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 
 # Find glm
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm/)

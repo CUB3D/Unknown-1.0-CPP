@@ -78,7 +78,7 @@ void init___() {
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
     //const char* block = "block.obj";
-    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    auto scene = importer.ReadFile(suz, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";
@@ -123,7 +123,7 @@ void init___() {
         }
         // Check for materials
         //TODO: remove
-        if(mesh->mMaterialIndex >= 0 && false) {
+        if(mesh->mMaterialIndex >= 0) {
             aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
             std::vector<Unknown::TextureInfo> diffuseMaps = loadMaterialTexutres(mat, aiTextureType_DIFFUSE, "texture_diffuse");
             std::vector<Unknown::TextureInfo> specularMaps = loadMaterialTexutres(mat, aiTextureType_SPECULAR, "texture_specular");
@@ -172,9 +172,9 @@ bool tmp = false;
 
 void RenderTestScene::render() const {
 
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CCW);
+    //glEnable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
+    //glFrontFace(GL_CCW);
 
     glClearColor(0, 0, 0, 1);
     glClearDepth(1);

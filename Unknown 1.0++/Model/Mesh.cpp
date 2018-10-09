@@ -11,6 +11,10 @@ void Mesh::loadVBO() {
     glGenBuffers(1, &vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
+    glGenBuffers(1, &ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), &indicies[0], GL_STATIC_DRAW);
+
     int tmp = 3;
 
     if(normals.size() > 0)
@@ -46,7 +50,6 @@ void Mesh::loadVBO() {
         }
     }
 
-    //TODO: sizeof float *
     glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
 
     int stride = (tmp) * sizeof(GLfloat);
@@ -80,6 +83,6 @@ void Mesh::loadVBO() {
 void Mesh::render() {
     glBindVertexArray(vao);
 
-    glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, &indicies[0]);
+    glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
 }

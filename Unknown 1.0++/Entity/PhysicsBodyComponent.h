@@ -32,7 +32,7 @@ namespace Unknown
         //public:
         PhysicsBodyComponent(std::shared_ptr<Entity> ent);
 
-        virtual void init(Scene& scene, std::shared_ptr<Entity> ent);
+        virtual void init(Scene& scene, std::shared_ptr<Entity> ent) override;
 
         virtual void update(Entity &ent) override;
         virtual void onDisable(Entity& ent) override;
