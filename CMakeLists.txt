@@ -102,7 +102,7 @@ find_package(UKAssimp)
 #endif()
 
 if(ASSIMP_FOUND)
-    message("Found assimp ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
+    message("Found assimp: ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 endif()
 
 # Find glm

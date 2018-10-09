@@ -6,7 +6,7 @@ elseif(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     FIND_LIBRARY(BOX2D_LIBRARY
             NAMES Box2D
             HINTS
-            PATH_SUFFIXES lib/x86_64-linux-gnu Debug
+            PATH_SUFFIXES Debug
             PATHS
             /usr
             # For emscripten
@@ -22,7 +22,22 @@ elseif(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
             NO_DEFAULT_PATH
             )
 elseif(UNIX)
-    find_package(Box2D REQUIRED)
+    FIND_LIBRARY(BOX2D_LIBRARY
+            NAMES Box2D
+            HINTS
+            PATH_SUFFIXES lib/x86_64-linux-gnu lib
+            PATHS
+            /usr
+            NO_DEFAULT_PATH
+            )
+
+    find_path(BOX2D_INCLUDE_DIR
+            Box2D/Box2D.h
+            PATH_SUFFIXES include
+            PATHS
+            /usr
+            NO_DEFAULT_PATH
+            )
 endif()
 
 if(BOX2D_INCLUDE_DIR)
