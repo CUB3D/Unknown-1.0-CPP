@@ -54,8 +54,6 @@ Unknown::TextureInfo specular;
 
 RenderingPipeline3D ren;
 
-SkyBox3D* skybox;
-
 void init___() {
     std::vector<std::string> faces {
         "skybox/right.jpg",
@@ -66,8 +64,10 @@ void init___() {
         "skybox/back.jpg"
     };
 
-    skybox = new SkyBox3D(faces);
-    skybox->init();
+    ren.init();
+
+    ren.skybox = new SkyBox3D(faces);
+    ren.skybox->init();
 
     MeshContainer mc;
 
@@ -171,22 +171,14 @@ bool tmp = false;
 
 
 void RenderTestScene::render() const {
-
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
     //glFrontFace(GL_CCW);
-
-    glClearColor(0, 0, 0, 1);
-    glClearDepth(1);
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_MULTISAMPLE);
 
 
 
     // Draw skybox
     // TODO: j
-    skybox->render(ren);
 
 
 

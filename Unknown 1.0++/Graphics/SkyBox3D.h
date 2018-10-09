@@ -9,6 +9,8 @@
 #include "Shader.h"
 #include "RenderingPipeline3D.h"
 
+class RenderingPipeline3D;
+
 class SkyBox3D {
     GLuint vao;
     GLuint skyboxTexture;
