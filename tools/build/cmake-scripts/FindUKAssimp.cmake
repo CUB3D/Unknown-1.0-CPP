@@ -33,7 +33,24 @@ elseif(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     # Append generated and standard includes
     set(ASSIMP_INCLUDE_DIRS "${ASSIMP_INCLUDE_DIRS};${ASSIMP_GENERATED_INCLUDES}")
 elseif(UNIX)
-    find_package(assimp)
+    #find_package(assimp)
+
+    FIND_LIBRARY(ASSIMP_LIBRARY_DIRS
+            NAMES assimp
+            HINTS
+            PATH_SUFFIXES lib lib/x86_64-linux-gnu
+            PATHS
+            /usr
+            NO_DEFAULT_PATH
+            )
+
+    find_path(ASSIMP_INCLUDE_DIRS
+            NAMES assimp/scene.h
+            PATH_SUFFIXES include
+            PATHS
+            /usr
+            NO_DEFAULT_PATH
+            )
 endif()
 
 if(ASSIMP_INCLUDE_DIRS)

@@ -96,12 +96,6 @@ endif()
 
 find_package(UKAssimp)
 
-#set(ASSIMP_LIBRARY_DIRS /usr/lib/libassimp.so)
-#
-#if(TRAVIS)
-#    set(ASSIMP_LIBRARY_DIRS /usr/lib/x86_64-linux-gnu/libassimp.so)
-#endif(TRAVIS)
-#
 #if(WIN32)
 #	set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
 #	set(ASSIMP_LIBRARY_DIRS ${UK_DIR}/Libs/assimp/lib/Debug/assimp-vc140-mt.lib)
