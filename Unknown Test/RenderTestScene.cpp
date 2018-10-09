@@ -99,16 +99,16 @@ void init___() {
         printf("Found %d verticies\n", mesh->mNumVertices);
         for(int i = 0; i < mesh->mNumVertices; i ++) {
 
-            auto v = mesh->mVertices[i];
+            auto& v = mesh->mVertices[i];
             m.verticies.emplace_back(v.x, v.y, v.z);
 
             if(mesh->HasNormals()) {
-                auto n = mesh->mNormals[i];
+                auto& n = mesh->mNormals[i];
                 m.normals.emplace_back(n.x, n.y, n.z);
             }
 
             if(mesh->mTextureCoords[0]) {
-                auto t = mesh->mTextureCoords[0][i];
+                auto& t = mesh->mTextureCoords[0][i];
                 m.uvs.emplace_back(t.x, t.y);
             } else {
                 m.uvs.emplace_back(0.0f, 0.0f);
