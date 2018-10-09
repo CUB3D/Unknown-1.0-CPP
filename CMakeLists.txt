@@ -17,7 +17,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 endif()
 
 # Emscripten support
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     set(UK_PROJECT_NAME ${UK_PROJECT_NAME}.html)
 
     # TODO: add simd when it is supported with wasm
@@ -34,9 +34,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Hit.wav@Hit.wav'")
 endif()
 
-
-# Find rapidjson
-set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
 # Find SDL2
 find_package(SDL2 REQUIRED)
@@ -62,30 +59,11 @@ if(SDL_MXIXER_FOUND)
     message("SDL2_mixer: ${SDL2_MIXER_INCLUDE_DIR}:${SDL2_MIXER_LIBRARY}")
 endif()
 
-# Find Reflex
-set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
-
 # Find python
-if(WIN32)
-    set(PYTHON_INCLUDE_DIRS B:\\Programs\\python3.6.6\\include)
-    set(PYTHON_LIBRARIES B:\\Programs\\python3.6.6\\libs\\python36.lib)
-endif()
-
-#TODO: Make work on windows and add REQUIRED
-
-#find_package(Python3 COMPONENTS Development)
-#if(Python3_FOUND)
-#    message("Python found: ${Python3_INCLUDE_DIRS}:${Python3_LIBRARIES}")
-#endif()
-
-#TODO: Add this back in when cmake 3.12 is available
-
-if(UNIX)
-    find_package(PythonLibs)
-    if(PYTHONLIBS_FOUND)
-        message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
-    endif(PYTHONLIBS_FOUND)
-endif(UNIX)
+find_package(UKPython)
+if(PYTHONLIBS_FOUND)
+    message("Python found: ${PYTHON_INCLUDE_DIRS}:${PYTHON_LIBRARIES}")
+endif(PYTHONLIBS_FOUND)
 
 # Find box2d
 find_package(UKBox2D REQUIRED)
@@ -93,11 +71,17 @@ if(BOX2D_FOUND)
     message("Found box2d: ${BOX2D_INCLUDE_DIR}:${BOX2D_LIBRARY}")
 endif()
 
-
+# Find assimp
 find_package(UKAssimp REQUIRED)
 if(ASSIMP_FOUND)
     message("Found assimp: ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
 endif()
+
+# Find rapidjson
+set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
+
+# Find Reflex
+set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
 
 # Find glm
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm/)
