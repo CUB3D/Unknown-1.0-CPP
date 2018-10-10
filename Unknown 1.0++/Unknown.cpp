@@ -67,6 +67,10 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
 	this->glContext = SDL_GL_CreateContext(this->window);
 
 	::Unknown::initGL();
