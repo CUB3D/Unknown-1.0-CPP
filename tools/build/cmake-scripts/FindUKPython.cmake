@@ -5,7 +5,7 @@ if(WIN32)
 elseif(UNIX)
 	FIND_LIBRARY(PYTHON_LIBRARIES
         NAMES python3.8m python3.7m python3.6m
-        PATH_SUFFIXES lib
+        PATH_SUFFIXES lib lib/x86_64-linux-gnu
         PATHS
 		/usr
         NO_DEFAULT_PATH
