@@ -25,7 +25,7 @@ std::vector<aiMesh*> meshes;
 
 void p1(aiNode* node, const aiScene* sce) {
     for(int i = 0; i < node->mNumMeshes; i++) {
-        meshes.push_back(sce->mMeshes[i]);
+        meshes.push_back(sce->mMeshes[node->mMeshes[i]]);
     }
 
     for(int i = 0; i < node->mNumChildren; i++) {
@@ -78,7 +78,7 @@ void init___() {
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
     //const char* block = "block.obj";
-    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    auto scene = importer.ReadFile(ns, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";
@@ -125,8 +125,8 @@ void init___() {
         //TODO: remove
         if(mesh->mMaterialIndex >= 0) {
             aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-            std::vector<Unknown::TextureInfo> diffuseMaps = loadMaterialTexutres(mat, aiTextureType_DIFFUSE, "texture_diffuse");
-            std::vector<Unknown::TextureInfo> specularMaps = loadMaterialTexutres(mat, aiTextureType_SPECULAR, "texture_specular");
+            m.diffuseMaps = loadMaterialTexutres(mat, aiTextureType_DIFFUSE, "texture_diffuse");
+            m.specularMaps = loadMaterialTexutres(mat, aiTextureType_SPECULAR, "texture_specular");
         }
 
         printf("Found %d indicies\n", m.indicies.size());
@@ -183,8 +183,8 @@ void RenderTestScene::render() const {
 
 
     // Draw model
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
 
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);

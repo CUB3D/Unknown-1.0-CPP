@@ -9,6 +9,7 @@
 #include <glm/ext.hpp>
 #include <glm/glm.hpp>
 #include "../GL/GL.h"
+#include "../Graphics/RenderingBackend.h"
 
 class Mesh {
 public:
@@ -16,6 +17,9 @@ public:
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> uvs;
     std::vector<unsigned int> indicies;
+
+    std::vector<Unknown::TextureInfo> diffuseMaps;
+    std::vector<Unknown::TextureInfo> specularMaps;
 
     GLuint vbo = 0;
     GLuint vao = 0;

@@ -2,6 +2,7 @@
 // Created by cub3d on 02/10/18.
 //
 
+#include <cstdio>
 #include "Mesh.h"
 
 void Mesh::loadVBO() {
@@ -82,6 +83,18 @@ void Mesh::loadVBO() {
 
 void Mesh::render() {
     glBindVertexArray(vao);
+
+    // Diffuse map
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, (GLuint) diffuseMaps[0].pointer);
+
+    glActiveTexture(GL_TEXTURE1);
+    if(specularMaps.size() > 0) {
+        // Specular map
+        glBindTexture(GL_TEXTURE_2D, (GLuint) specularMaps[0].pointer);
+    } else {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 
     glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
