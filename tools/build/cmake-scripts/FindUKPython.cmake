@@ -3,8 +3,15 @@
 if(WIN32)
     find_package(PythonLibs)
 elseif(UNIX)
+
+	set(PYTHON_VERSIONS python3.8m
+						python3.7m
+						python3.6m
+						python3.5m
+						python3.4m)
+
 	FIND_LIBRARY(PYTHON_LIBRARIES
-        NAMES python3.8m python3.7m python3.6m
+        NAMES ${PYTHON_VERSIONS}
         PATH_SUFFIXES lib lib/x86_64-linux-gnu
         PATHS
 		/usr
@@ -13,7 +20,7 @@ elseif(UNIX)
 
 	FIND_PATH(PYTHON_INCLUDE_DIRS
 		NAMES Python.h
-		PATH_SUFFIXES python3.8m python3.7m python3.6m
+		PATH_SUFFIXES ${PYTHON_VERSIONS}
 		PATHS
 		/usr/include
 		)

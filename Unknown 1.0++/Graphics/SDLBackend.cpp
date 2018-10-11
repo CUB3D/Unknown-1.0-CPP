@@ -79,6 +79,7 @@ Unknown::TextureInfo Unknown::SDLBackend::loadTexture(std::string &path) {
     auto& uk = getUnknown();
 
     SDL_Surface* image = IMG_Load(path.c_str());
+    IMG_Load
 
     if(!image) {
         printf("Error: failed to load image, %s\n", IMG_GetError());
