@@ -8,6 +8,8 @@
 #include <glm/ext.hpp>
 #include "../Utils.h"
 #include "../Unknown.h"
+#include "../Filesystem/Filesystem.h"
+#include "../Filesystem/FSUtils.h"
 
 void Unknown::GLBackend::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) {
     VertexInfo info = this->createRectVerticies(0, 0, width, height);
@@ -168,7 +170,7 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
 
     auto& uk = getUnknown();
 
-    SDL_Surface* imageSurface = IMG_Load(path.c_str());
+    SDL_Surface* imageSurface = IMG_Load_RW(getRWopsForStream(*Filesystem::readFile(path)), false);
 
     if (!imageSurface) {
         printf("Error: failed to load image, %s\n", IMG_GetError());

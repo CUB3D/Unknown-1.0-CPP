@@ -6,6 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_FILESYSTEM_H
 
 #include <string>
+#include <boost/shared_ptr.hpp>
 
 namespace Unknown
 {
@@ -20,7 +21,8 @@ namespace Unknown
 
         bool exists(const std::string& str);
 
-        Filesystem& getFS();
+        static std::shared_ptr<std::istream> readFile(const std::string &path);
+        static Filesystem& getFS();
     };
 }
 
