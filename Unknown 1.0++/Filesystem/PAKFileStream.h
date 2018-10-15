@@ -1,0 +1,16 @@
+//
+// Created by cub3d on 11/10/18.
+//
+
+#ifndef UNKNOWN_DEVELOPMENT_TOOL_PAKFILESTREAM_H
+#define UNKNOWN_DEVELOPMENT_TOOL_PAKFILESTREAM_H
+
+
+
+class PAKFileStream {
+
+};
+
+
+
+#endif //UNKNOWN_DEVELOPMENT_TOOL_PAKFILESTREAM_H
