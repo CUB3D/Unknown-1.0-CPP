@@ -16,6 +16,9 @@
 [submodule "Libs/glm"]
 	path = Libs/glm
 	url = https://github.com/g-truc/glm
+[submodule "Lib/imgui"]
+    path = Lib/imgui
+    url = https://github.com/ocornut/imgui
 [submodule "Libs/libPAK"]
 	path = Libs/libPAK
 	url = https://gogs.cub3d.pw/CUB3D/libPAK
