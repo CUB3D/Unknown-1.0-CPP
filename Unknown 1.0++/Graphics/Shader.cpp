@@ -23,7 +23,7 @@ void Shader::compile() {
 
     glGetShaderiv(vertShader, GL_COMPILE_STATUS, &ok);
     if(!ok) {
-        printf("Error compiling vertex shader: ");
+        printf("Error compiling vertex shader (name: %s): ", getName().c_str());
 
         int infologLength = 0;
         int charsWritten;
@@ -48,7 +48,7 @@ void Shader::compile() {
 
     glGetShaderiv(fragShader, GL_COMPILE_STATUS, &ok);
     if(!ok) {
-        printf("Error compiling fragment shader: ");
+        printf("Error compiling fragment shader (name: %s): ", getName().c_str());
 
         int infologLength = 0;
         int charsWritten;
@@ -65,6 +65,13 @@ void Shader::compile() {
 			free(infoLog);
             return;
         }
+
+        //If debug
+        printf("Shader: \n");
+        printf("--------------\n");
+        printf("%s\n", frag);
+        printf("--------------\n");
+        exit(-1);
     }
 
 
@@ -77,7 +84,7 @@ void Shader::compile() {
 
     glGetProgramiv(prog, GL_LINK_STATUS, &ok);
     if(!ok) {
-        printf("Error linking shader: ");
+        printf("Error linking shader (name: %s): ", getName().c_str());
 
         int infologLength = 0;
         int charsWritten;
@@ -119,4 +126,8 @@ void Shader::setVec3(const char *name, float x, float y, float z) {
 
 void Shader::setFloat(const char *name, float f) {
     glUniform1f(glGetUniformLocation(this->prog, name), f);
+}
+
+std::string Shader::getName() {
+    return "RAM";
 }

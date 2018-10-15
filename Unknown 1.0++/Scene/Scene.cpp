@@ -14,7 +14,8 @@ cam(getUnknown().screenSize->width, getUnknown().screenSize->height)
 
 void Unknown::Scene::update()
 {
-   this->world.Step(getUnknown().tickSpeed / 1000, 8, 3);
+    this->world.Step(1.0f/60.0f, 8, 3);
+   //this->world.Step(getUnknown().tickSpeed / 1000, 8, 3);
 
    for(auto& updateable : this->updatables) {
        if(updateable)

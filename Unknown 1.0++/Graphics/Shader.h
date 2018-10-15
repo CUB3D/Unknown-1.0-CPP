@@ -25,6 +25,8 @@ public:
     void bind(bool compile=true);
     void unbind() const;
 
+    virtual std::string getName();
+
     void setVec3(const char* name, float x, float y, float z);
     void setFloat(const char* name, float f);
 };

@@ -19,9 +19,15 @@ endif()
 # Emscripten support
 if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     set(UK_PROJECT_NAME ${UK_PROJECT_NAME}.html)
+    set(CMAKE_CXX_COMPILE_FEATURES "cxx_template_template_parameters;cxx_alias_templates;cxx_alignas;cxx_alignof;cxx_attributes;cxx_auto_type;cxx_constexpr;cxx_decltype;cxx_decltype_incomplete_return_types;cxx_default_function_template_args;cxx_defaulted_functions;cxx_defaulted_move_initializers;cxx_delegating_constructors;cxx_deleted_functions;cxx_enum_forward_declarations;cxx_explicit_conversions;cxx_extended_friend_declarations;cxx_extern_templates;cxx_final;cxx_func_identifier;cxx_generalized_initializers;cxx_inheriting_constructors;cxx_inline_namespaces;cxx_lambdas;cxx_local_type_template_args;cxx_long_long_type;cxx_noexcept;cxx_nonstatic_member_init;cxx_nullptr;cxx_override;cxx_range_for;cxx_raw_string_literals;cxx_reference_qualified_functions;cxx_right_angle_brackets;cxx_rvalue_references;cxx_sizeof_member;cxx_static_assert;cxx_strong_enums;cxx_thread_local;cxx_trailing_return_types;cxx_unicode_literals;cxx_uniform_initialization;cxx_unrestricted_unions;cxx_user_literals;cxx_variadic_macros;cxx_variadic_templates;cxx_aggregate_default_initializers;cxx_attribute_deprecated;cxx_binary_literals;cxx_contextual_conversions;cxx_decltype_auto;cxx_digit_separators;cxx_generic_lambdas;cxx_lambda_init_captures;cxx_relaxed_constexpr;cxx_return_type_deduction;cxx_variable_templates")
 
     # TODO: add simd when it is supported with wasm
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s USE_LIBPNG=1 -s USE_WEBGL2=1 -s WASM=1 -s DEMANGLE_SUPPORT=1 -s FULL_ES2=1 -s FULL_ES3=1 NO_EXIT_RUNTIME=0 -s SDL2_IMAGE_FORMATS='[\"png\"]' --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Player.png@Player.png' --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/ImageVert.glsl@ImageVert.glsl' --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/ImageFrag.glsl@ImageFrag.glsl'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1")
+        #-s DEMANGLE_SUPPORT=1
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -isystem -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s USE_LIBPNG=1 -s USE_WEBGL2=1 -s WASM=1 -s USE_ZLIB=1 -s NO_EXIT_RUNTIME=0 -s ALLOW_MEMORY_GROWTH=1 -s SDL2_IMAGE_FORMATS='[\"png\"]'")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Player.png@Player.png'")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Ground.json@Ground.json'")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Obstacle.json@Obstacle.json'")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/PlayerEntity.json@PlayerEntity.json'")
@@ -32,6 +38,20 @@ if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Fonts/Arimo-Regular.ttf@Fonts/Arimo-Regular.ttf'")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Fonts/Arimo-Regular.ttf@Fonts/Arimo-Regular.ttf'")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Hit.wav@Hit.wav'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/skybox@skybox'")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/teapot.obj@teapot.obj'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Test.glsl@Test.glsl'")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/TestFrag.glsl@TestFrag.glsl'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/FBO_vert.glsl@FBO_vert.glsl'")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/FBO_Frag.glsl@FBO_Frag.glsl'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Sky_vert.glsl@Sky_vert.glsl'")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/Sky_frag.glsl@Sky_frag.glsl'")
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/nano@nano'")
 endif()
 
 
@@ -72,20 +92,29 @@ if(BOX2D_FOUND)
 endif()
 
 # Find assimp
-find_package(UKAssimp REQUIRED)
-if(ASSIMP_FOUND)
-    message("Found assimp: ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
-endif()
+# Need to build zlib also
+set(ASSIMP_BUILD_ZLIB TRUE)
+# Currently this importer won't build with emscripten
+set(ASSIMP_BUILD_GLTF_IMPORTER FALSE)
+add_subdirectory(${UK_DIR}/Libs/assimp)
+set(ASSIMP_LIBRARY_DIRS assimp)
+set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
+
+# Find glm
+add_subdirectory(${UK_DIR}/Libs/glm)
+set(GLM_LIBRARY_DIRS glm_static)
+set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm)
+
+
+add_subdirectory(${UK_DIR}/Libs/libPAK)
+set(PAK_LIBRARY PAK)
+set(PAK_INCLUDE_DIR ${UK_DIR}/Libs/libPAK/include)
 
 # Find rapidjson
 set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
 # Find Reflex
 set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
-
-# Find glm
-set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm/)
-
 
 # TODO: This is a mega hack
 link_directories(${UK_LIB})
@@ -95,8 +124,8 @@ if(UNIX)
 endif()
 
 
-SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} ${ASSIMP_LIBRARY_DIRS})
-SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE} ${GLM_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS})
+SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} ${ASSIMP_LIBRARY_DIRS} ${GLM_LIBRARY_DIRS} ${PAK_LIBRARY})
+SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE} ${GLM_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${PAK_INCLUDE_DIR})
 
 message("LIBS: ${COMBINED_LIBS}")
 message("INCLUDE: ${COMBINED_INCLUDE}")

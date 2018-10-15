@@ -9,7 +9,8 @@
 std::shared_ptr<Unknown::RenderingBackend> Unknown::getRendererBackend() {
 
 #ifdef __EMSCRIPTEN__
-    static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::SDLBackend>();
+    //SDL
+    static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::GLBackend>();
 #else
     static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::GLBackend>();
 #endif

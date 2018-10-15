@@ -86,7 +86,11 @@ void Mesh::render() {
 
     // Diffuse map
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, (GLuint) diffuseMaps[0].pointer);
+    if(diffuseMaps.size() > 0) {
+        glBindTexture(GL_TEXTURE_2D, (GLuint) diffuseMaps[0].pointer);
+    } else {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 
     glActiveTexture(GL_TEXTURE1);
     if(specularMaps.size() > 0) {
@@ -97,5 +101,5 @@ void Mesh::render() {
     }
 
     glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
 }

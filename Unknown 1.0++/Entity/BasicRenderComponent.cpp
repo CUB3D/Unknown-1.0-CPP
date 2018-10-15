@@ -12,7 +12,7 @@ void Unknown::BasicRenderComponent::render(const Entity &ent, double Xoffset, do
                  (ent.position.y - ent.size.height / 2) * renderScale - Yoffset,
                  (ent.size.width) * renderScale,
                  (ent.size.height) * renderScale,
-                 ent.angle, this->col);
+                 glm::degrees(ent.angle), this->col);
 }
 
 Unknown::BasicRenderComponent::BasicRenderComponent(Colour c) : BasicRenderComponent(c, 1) {}

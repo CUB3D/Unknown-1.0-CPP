@@ -1,6 +1,3 @@
-[submodule "tools/build"]
-	path = tools/build
-	url = https://github.com/CUB3D/cbuild.git
 [submodule "Libs/Box2D"]
 	path = Libs/Box2D
 	url = https://github.com/erincatto/Box2D

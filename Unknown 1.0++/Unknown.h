@@ -52,7 +52,7 @@ namespace Unknown
 	class Unknown
 	{
 	private:
-		long startTime = 0;
+		Uint32 startTime = 0;
 		double unprocessed = 0;
 		Timer fpsCounter;
 

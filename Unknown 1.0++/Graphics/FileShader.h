@@ -9,8 +9,12 @@
 
 class FileShader : public Shader
 {
+    std::string vertpath;
+    std::string fragpath;
+
 public:
     FileShader(const std::string& vert, const std::string& frag);
+    virtual std::string getName() override;
 };
 
 

@@ -8,7 +8,7 @@
 #include <vector>
 #include <memory>
 #include <random>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 
 namespace Unknown
