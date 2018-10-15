@@ -78,7 +78,7 @@ void init___() {
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
     //const char* block = "block.obj";
-    auto scene = importer.ReadFile(ns, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
     std::string texPath = "teapot-texture.jpg";
     //texPath = "tree.jpg";

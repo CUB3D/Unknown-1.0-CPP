@@ -61,7 +61,9 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
 //    glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(sx, sy, 0.0f));
 //
 //    // Projection * view * model
-//    glm::mat4 proj = projection * view * model;
+//    glm::mat4 proj = pr ..
+// ls
+// ojection * view * model;
 //
 //    //TODO: better way of setting uniforms
 //    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
