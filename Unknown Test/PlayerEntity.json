@@ -3,7 +3,7 @@
   "Width": 2,
   "Height": 2,
   "Components": {
-    "BRender": {
+    "IRender": {
       "Type": "ImageRenderer",
       "File": "Player.png",
       "RenderScale": 32
@@ -12,7 +12,8 @@
       "Type": "Collider",
       "ColliderType": "Dynamic",
       "GroupIndex": -1,
-      "MaxSpeed": 10
+      "MaxSpeed": 10,
+      "FixedRotation": false
     }
   }
 }

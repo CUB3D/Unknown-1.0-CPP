@@ -12,11 +12,12 @@ SDL_RWops* getRWopsForStream(std::istream& stream) {
     ops->close = istreamClose;
     ops->write = nullptr; //TODO
     ops->hidden.unknown.data1 = &stream;
+    ops->type = SDL_RWOPS_MEMORY_RO;
 
     return ops;
 }
 
-long istreamSeek(SDL_RWops *ops, long offset, int loc) {
+Sint64 istreamSeek(SDL_RWops *ops, Sint64 offset, int loc) {
     auto* stream = static_cast<std::istream*>(ops->hidden.unknown.data1);
 
     if(loc == SEEK_SET)

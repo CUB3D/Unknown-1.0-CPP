@@ -42,26 +42,25 @@ std::vector<Unknown::TextureInfo> loadMaterialTexutres(aiMaterial* mat, aiTextur
         aiString str;
         mat->GetTexture(type, i, &str);
         std::string s = std::string(str.C_Str());
-        s = "/home/cub3d/Downloads/nano/" + s;
+        s = "nano/" + s;
         vec.push_back(Unknown::getRendererBackend()->loadTexture(s));
     }
 
     return vec;
 }
 
-Unknown::TextureInfo t;
-Unknown::TextureInfo specular;
-
 RenderingPipeline3D ren;
+
+#include "Filesystem/Filesystem.h"
 
 void init___() {
     std::vector<std::string> faces {
-        "skybox/right.jpg",
-        "skybox/left.jpg",
-        "skybox/top.jpg",
-        "skybox/bottom.jpg",
-        "skybox/front.jpg",
-        "skybox/back.jpg"
+        "skybox/right.jpg.png",
+        "skybox/left.jpg.png",
+        "skybox/top.jpg.png",
+        "skybox/bottom.jpg.png",
+        "skybox/front.jpg.png",
+        "skybox/back.jpg.png"
     };
 
     ren.init();
@@ -73,22 +72,19 @@ void init___() {
 
     Assimp::Importer importer;
     const char* teapot = "teapot.obj";
-    const char* ns = "/home/cub3d/Downloads/nano/nanosuit.obj";
+    const char* ns = "nano/nanosuit.obj";
     const char* suz = "Suz.obj";
     const char* uv = "uv.obj";
     const char* stick = "stick.obj";
     //const char* block = "block.obj";
     auto scene = importer.ReadFile(ns, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
-    std::string texPath = "teapot-texture.jpg";
-    //texPath = "tree.jpg";
-    //texPath = "wood-texture.jpg";
-    texPath = "/home/cub3d/Downloads/crate.png";
 
-    t = Unknown::getRendererBackend()->loadTexture(texPath);
-
-    std::string specPath = "/home/cub3d/Downloads/crate_spec.png";
-    specular = Unknown::getRendererBackend()->loadTexture(specPath);
+//TODO: leave fs stuff for now
+//TODO: work on integrating imgui propely
+//    ::Unknown::Filesystem::mount("Test.pak");
+//    std::string s = "/Test.png";
+//    Unknown::getRendererBackend()->loadTexture(s);
 
     p1(scene->mRootNode, scene);
 
@@ -141,11 +137,11 @@ void init___() {
 
 Unknown::KeyBind forward(SDLK_w, "fw");
 Unknown::KeyBind back(SDLK_s, "fs");
-Unknown::KeyBind left(SDLK_a, "fw");
-Unknown::KeyBind right(SDLK_d, "fd");
+Unknown::KeyBind left2(SDLK_a, "fw");
+Unknown::KeyBind right2(SDLK_d, "fd");
 
 void RenderTestScene::update() {
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
 
     if(forward.pressed()) {
         ren.getCamera().forwards();
@@ -155,11 +151,11 @@ void RenderTestScene::update() {
         ren.getCamera().backwards();
     }
 
-    if(left.pressed()) {
+    if(left2.pressed()) {
         ren.getCamera().left();
     }
 
-    if(right.pressed()) {
+    if(right2.pressed()) {
         ren.getCamera().right();
     }
 
@@ -169,8 +165,11 @@ void RenderTestScene::update() {
 bool tmp = false;
 
 
+#include "Editor/imgui.h"
+#include "Editor/imgui_impl_opengl3.h"
 
 void RenderTestScene::render() const {
+
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
     //glFrontFace(GL_CCW);
@@ -186,8 +185,8 @@ void RenderTestScene::render() const {
 //    glActiveTexture(GL_TEXTURE0);
 //    glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
 
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
+    //glActiveTexture(GL_TEXTURE1);
+    //glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
 
     ren.render();
 }

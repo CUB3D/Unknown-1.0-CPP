@@ -92,13 +92,9 @@ if(BOX2D_FOUND)
 endif()
 
 # Find assimp
-#find_package(UKAssimp REQUIRED)
-#if(ASSIMP_FOUND)
-#    message("Found assimp: ${ASSIMP_INCLUDE_DIRS}:${ASSIMP_LIBRARY_DIRS}")
-#endif()
-
-# Find assimp
+# Need to build zlib also
 set(ASSIMP_BUILD_ZLIB TRUE)
+# Currently this importer won't build with emscripten
 set(ASSIMP_BUILD_GLTF_IMPORTER FALSE)
 add_subdirectory(${UK_DIR}/Libs/assimp)
 set(ASSIMP_LIBRARY_DIRS assimp)
@@ -119,7 +115,6 @@ set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
 # Find Reflex
 set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
-
 
 # TODO: This is a mega hack
 link_directories(${UK_LIB})

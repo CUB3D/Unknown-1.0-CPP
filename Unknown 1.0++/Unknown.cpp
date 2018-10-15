@@ -33,6 +33,7 @@
 #include "Log.h"
 #include "Editor/imgui.h"
 #include "Editor/imgui_impl_sdl.h"
+#include "Editor/imgui_impl_opengl3.h"
 
 // unknown class
 
@@ -129,6 +130,12 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
 
+	ImGui_ImplSDL2_InitForOpenGL(window, glContext);
+	ImGui_ImplOpenGL3_Init("#version 300 es");
+
+    auto& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2(width, height);
+
 	currentState = UK_POST_INIT;
 }
 
@@ -194,12 +201,16 @@ void ::Unknown::doSingleLoopItterC() {
 void Unknown::Unknown::doSingleLoopIttr() {
     const char* err = SDL_GetError();
     if (strlen(err) > 0) {
-        //TODO: move to stderr
+        //TODO: move to imgui
         // printf("Error: %s\n", err);
         SDL_ClearError();
     }
 
     this->checkEvents();
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame(window);
+    ImGui::NewFrame();
 
     long time = SDL_GetTicks();
 
@@ -222,6 +233,10 @@ void Unknown::Unknown::doSingleLoopIttr() {
     this->render();
     auto renderFinishTime = std::chrono::high_resolution_clock::now();
     this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
+
+    // Draw the imgui window
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     this->frames++;
 

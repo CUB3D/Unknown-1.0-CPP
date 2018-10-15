@@ -5,10 +5,10 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_FSUTILS_H
 #define UNKNOWN_DEVELOPMENT_TOOL_FSUTILS_H
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <istream>
 
-long istreamSeek(SDL_RWops* ops, long offset, int loc);
+Sint64 istreamSeek(SDL_RWops *ops, Sint64 offset, int loc);
 size_t istreamRead(SDL_RWops* ops, void* dat, size_t size, size_t max);
 int istreamClose(SDL_RWops* ops);
 

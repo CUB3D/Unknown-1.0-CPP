@@ -26,9 +26,9 @@ namespace Unknown
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                            const VertexInfo &verticies) override;
 
-        virtual void clearScreen();
+        virtual void clearScreen() override;
 
-        TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col);
+        TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) override;
     };
 }
 

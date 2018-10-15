@@ -208,9 +208,11 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
         }
     }
 
+    printf("Mode: %x\n", mode);
+
     info.pixelData = (unsigned char*)imageSurface->pixels;
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
 
     return info;
 }
@@ -287,6 +289,8 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const int x, const i
     return vertexInfo;
 }
 //TODO: abstract rendering texture out from rendering quad
+//TODO: should render functions not take radians,
+// Most of the time angle is retrieve from physics which works in radians already
 void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) {
     auto& uk = getUnknown();
 
@@ -387,6 +391,7 @@ void Unknown::GLBackend::clearScreen() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+//TODO: some bug here to do with positioning, or in basicrendercomponent
 void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle, const VertexInfo &verts, Shader& shader) {
     auto& uk = getUnknown();
 

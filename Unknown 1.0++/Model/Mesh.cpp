@@ -97,5 +97,5 @@ void Mesh::render() {
     }
 
     glDrawElements(GL_TRIANGLES, verticies.size(), GL_UNSIGNED_INT, 0);
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
 }

@@ -14,14 +14,14 @@
 Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), under(under), editing(false) {
 
     //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+    //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+    //SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     //SDL_GL_SetSwapInterval(0);
 
-    auto& uk = getUnknown();
+   // auto& uk = getUnknown();
 
-    ImGui_ImplSDL2_InitForOpenGL(uk.window, uk.glContext);
-    ImGui_ImplOpenGL3_Init("#version 130");
+    //ImGui_ImplSDL2_InitForOpenGL(uk.window, uk.glContext);
+   // ImGui_ImplOpenGL3_Init("#version 130");
 
     //TODO: profiler
 

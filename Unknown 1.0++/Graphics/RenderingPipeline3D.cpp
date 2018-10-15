@@ -8,9 +8,12 @@
 #include "../Utils.h"
 #include "../Unknown.h"
 
+#include "../Editor/imgui.h"
+#include "../Editor/imgui_impl_opengl3.h"
+
 void RenderingPipeline3D::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-    glClearColor(1, 0, 0, 1.0f);
+    glClearColor(0, 0, 0, 1.0f);
     glClearDepth(1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -60,21 +63,43 @@ void RenderingPipeline3D::render() {
         mesh->render(s, *this);
     }
 
-    s.unbind();
 
-    // Render the framebuffer
+    ::ImGui::Begin("Test");
+    ::ImGui::Text("This is a test");
+
+    static bool edit;
+    ImGui::Checkbox("Edit", &edit);
+    ::ImGui::End();
+
+    // Get rid of framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClearColor(1, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    fboS.bind(true);
-    glBindVertexArray(fbov.vao);
-    glDisable(GL_DEPTH_TEST);
-    fboS.setFloat("fboTexture", 0);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texBuffer);
-    //glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-    glDrawArrays(GL_TRIANGLES, 0, 6);
+    if(edit) {
+        ImGui::SetNextWindowSize(ImVec2(512 + 10, 512 + 10),
+                                 ImGuiSetCond_FirstUseEver);
+        ImGui::Begin("Game rendering");
+        int w = 512;
+        int h = 512;
+
+        ImVec2 pos = ImGui::GetCursorScreenPos();
+
+        ImGui::GetWindowDrawList()->AddImage(
+            (void *)texBuffer, ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y),
+            ImVec2(pos.x + w, pos.y + h), ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::End();
+    } else {
+        // Render the framebuffer
+        fboS.bind(true);
+        glBindVertexArray(fbov.vao);
+        glDisable(GL_DEPTH_TEST);
+        fboS.setFloat("fboTexture", 0);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texBuffer);
+        //glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
 }
 
 RenderingPipeline3D::RenderingPipeline3D() : s(FileShader("Test.glsl", "TestFrag.glsl")), fboS(FileShader("FBO_vert.glsl", "FBO_Frag.glsl")) {
