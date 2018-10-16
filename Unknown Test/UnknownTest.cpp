@@ -28,6 +28,8 @@
 #include <SDL_mixer.h>
 #include <Renderer/BasicTileMapRenderer.h>
 #include <Editor/EditorBase.h>
+#include <SDL_rwops.h>
+#include <LibPAK.h>
 #include "Map/BinaryMapGenerator.h"
 
 #include "PhysicsTestScene.h"
@@ -309,11 +311,8 @@ void init()
     UK_LOAD_SCENE("RTest");
 }
 
-
-
-#include "LibPAK.h"
-#include <fstream>
 #include "Filesystem/Filesystem.h"
+#include "PythonScript.h"
 
 #ifdef _WIN32
 int _tmain(int argc, _TCHAR* argv[])
@@ -323,9 +322,6 @@ int main(int argc, char* argv[])
 {
 	//UK_CREATE_WINDOW();
 	::Unknown::getUnknown().createWindow("Test", 1024, 1024, 60);
-
-//	PAKFile file;
-//	initPAK(&file, 1, 90000);
 //
 //    char *source = NULL;
 //    int bufsize;
@@ -338,7 +334,7 @@ int main(int argc, char* argv[])
 //            if (bufsize == -1) { /* Error */ }
 //
 //            /* Allocate our buffer to that size. */
-//            source = static_cast<char *>(malloc(sizeof(char) * (bufsize + 1)));
+//            source = static_cast<char *>(malloc(sizeof(char) * bufsize));
 //
 //            /* Go back to the start of the file. */
 //            if (fseek(fp, 0L, SEEK_SET) != 0) { /* Error */ }
@@ -351,15 +347,23 @@ int main(int argc, char* argv[])
 //        }
 //        fclose(fp);
 //    }
+//
+//
+//    PAKFile file;
+//	initPAK(&file, 1, 90000);
+//    auto ent = addFile(&file, bufsize, "/test.png");
+//    printf("Size %d\n", ent->fileSize);
+//    setFileData(&file, ent, source, bufsize);
+//    printf("finalizing\n");
+//    finallizePAK(&file);
+//	writePak(file);
+//
+//    free(source); /* Don't forget to call free() later! */
+//
 
-    //auto ent = addFile(&file, bufsize, "/test.png");
-    //printf("Size %d\n", ent->fileSize);
-    //setFileData(&file, ent, source, bufsize);
-    //finallizePAK(&file);
-	//writePak(file);
 
-    //free(source); /* Don't forget to call free() later! */
-
+    ::Unknown::Filesystem::mount("Test.pak");
+    UK_PYTHON_LOAD_SCRIPT("Test");
 
 	init();
 	UK_INIT_GAME();

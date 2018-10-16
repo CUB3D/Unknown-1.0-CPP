@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "PAKFileStream.h"
+#include "Imemstream.h"
 
 Unknown::Filesystem &Unknown::Filesystem::getFS() {
     static Filesystem fs;
@@ -19,6 +20,7 @@ void Unknown::Filesystem::mount(const std::string &path) {
     PAKFile pak;
     readPak(&pak, path.c_str());
     getFS().mounts.push_back(pak);
+    printf("Mounting '%s'\n", path.c_str());
 }
 
 void Unknown::Filesystem::alias(const std::string &src, const std::string &dest) {
@@ -35,6 +37,8 @@ std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &p
 
     if(file->good()) {
         return file;
+    } else {
+        printf("File not on system, looking in mounts\n");
     }
 
     // If there is no version on the filesystem, check the mounts
@@ -42,7 +46,11 @@ std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &p
         PAKFileEntry* file = getFileFromPath(&pak, path.c_str());
         // If the file exists
         if(file) {
-            return std::make_shared<std::istream>(new PAKFileStream(&pak, file));
+            printf("Found file in mounts\n");
+            //return std::make_shared<std::istream>(new PAKFileStream(&pak, file));
+            return std::make_shared<imemstream>(&pak, file);
         }
     }
+
+    printf("Error: file %s not found\n", path.c_str());
 }

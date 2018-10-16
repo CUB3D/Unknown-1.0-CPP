@@ -1,4 +1,3 @@
-#if FALSE
 
 #include "stdafx.h"
 #include "PythonScript.h"
@@ -288,50 +287,50 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 
 PyObject* createRawSprite(PyObject* self, PyObject* args)
 {
-    int typeValue = PY_GET_LONG(args, 0);
-
-    PyObject* data = PY_GET_OBJ(args, 1);
-
-    // All sprites have an x and a y coord
-
-    int xValue = PY_GET_LONG(data, 0);
-
-    int yValue = PY_GET_LONG(data, 1);
-
-    PyObject* capsule = nullptr;
-
-    if(typeValue == 0) // If is a regular sprite
-    {
-        Unknown::Sprite *sprite = new Unknown::Sprite(xValue, yValue);
-
-        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
-    }
-
-    if(typeValue == 1) // If is an image sprite
-    {
-        Unknown::Graphics::Image* imgValue = PY_UNPACK_OBJ(Unknown::Graphics::Image, "Image", data, 2);
-
-        Unknown::Graphics::ImageSprite* sprite = new Unknown::Graphics::ImageSprite(xValue, yValue, imgValue);
-
-        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
-    }
-
-    if(typeValue == 2) // If is an animated sprite
-    {
-        Unknown::Graphics::Animation* animationValue = PY_UNPACK_OBJ(Unknown::Graphics::Animation, "Animation", data, 2);
-
-        Unknown::Graphics::AnimatedSprite *sprite = new Unknown::Graphics::AnimatedSprite(xValue, yValue, animationValue);
-
-        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
-    }
-
-    if(!capsule) {
-        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
-        PyErr_PrintEx(1);
-        return nullptr;
-    }
-
-    return capsule;
+//    int typeValue = PY_GET_LONG(args, 0);
+//
+//    PyObject* data = PY_GET_OBJ(args, 1);
+//
+//    // All sprites have an x and a y coord
+//
+//    int xValue = PY_GET_LONG(data, 0);
+//
+//    int yValue = PY_GET_LONG(data, 1);
+//
+//    PyObject* capsule = nullptr;
+//
+//    if(typeValue == 0) // If is a regular sprite
+//    {
+//        Unknown::Sprite *sprite = new Unknown::Sprite(xValue, yValue);
+//
+//        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
+//    }
+//
+//    if(typeValue == 1) // If is an image sprite
+//    {
+//        Unknown::Graphics::Image* imgValue = PY_UNPACK_OBJ(Unknown::Graphics::Image, "Image", data, 2);
+//
+//        Unknown::Graphics::ImageSprite* sprite = new Unknown::Graphics::ImageSprite(xValue, yValue, imgValue);
+//
+//        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
+//    }
+//
+//    if(typeValue == 2) // If is an animated sprite
+//    {
+//        Unknown::Graphics::Animation* animationValue = PY_UNPACK_OBJ(Unknown::Graphics::Animation, "Animation", data, 2);
+//
+//        Unknown::Graphics::AnimatedSprite *sprite = new Unknown::Graphics::AnimatedSprite(xValue, yValue, animationValue);
+//
+//        capsule = PY_MAKE_CAPSULE(sprite, "Sprite", [](PyObject* a){});
+//    }
+//
+//    if(!capsule) {
+//        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
+//        PyErr_PrintEx(1);
+//        return nullptr;
+//    }
+//
+//    return capsule;
 }
 
 PyObject* getMousePos(PyObject *self, PyObject *args) {
@@ -342,63 +341,63 @@ PyObject* getMousePos(PyObject *self, PyObject *args) {
 }
 
 PyObject* rawSpriteCall(PyObject* self, PyObject* args) {
-    Unknown::Sprite* spr = PY_UNPACK_OBJ(Unknown::Sprite, "Sprite", args, 0);
-    int functionID = PY_GET_LONG(args, 1);
-    PyObject* data = PY_GET_OBJ(args, 2);
-
-    switch (functionID)
-    {
-        case 0: spr->render();break;
-        case 1: spr->init();break;
-        case 2: spr->move(PY_GET_LONG(data, 0), PY_GET_LONG(data, 1));break;
-        case 3:
-            return PY_MAKE_CAPSULE(spr->clone(), "Sprite", [](PyObject* sprite) {
-                Unknown::Sprite* s = getObjectCapsule<Unknown::Sprite>(sprite, "Sprite");
-                // TODO:
-                UK_LOG_INFO("Cleaned up sprite");
-            });
-        case 4:
-            return PY_MAKE_LONG(spr->getAngle());
-        case 5: spr->setAngle(PY_GET_FLOAT(data, 0));break;
-        //case 6: return PY_MAKE_CAPSULE(&spr->bounds, "Bounds", [](PyObject* bound){});
-        case 7: return PY_MAKE_CAPSULE(&spr->direction, "Direction", [](PyObject* dir){});
-        case 8: return PY_MAKE_CAPSULE(&spr->location, "Loc", [](PyObject* a){});
-        //case 9: spr->bounds = *PY_UNPACK_OBJ(Unknown::AABB, "Sprite", data, 0);break;
-        case 10: spr->direction = *PY_UNPACK_OBJ(Unknown::Vector, "Vector", data, 0);break;
-        case 11: spr->location = *PY_UNPACK_OBJ(Unknown::Point<double>, "Point", data, 0);break;
-
-    }
+//    Unknown::Sprite* spr = PY_UNPACK_OBJ(Unknown::Sprite, "Sprite", args, 0);
+//    int functionID = PY_GET_LONG(args, 1);
+//    PyObject* data = PY_GET_OBJ(args, 2);
+//
+//    switch (functionID)
+//    {
+//        case 0: spr->render();break;
+//        case 1: spr->init();break;
+//        case 2: spr->move(PY_GET_LONG(data, 0), PY_GET_LONG(data, 1));break;
+//        case 3:
+//            return PY_MAKE_CAPSULE(spr->clone(), "Sprite", [](PyObject* sprite) {
+//                Unknown::Sprite* s = getObjectCapsule<Unknown::Sprite>(sprite, "Sprite");
+//                // TODO:
+//                UK_LOG_INFO("Cleaned up sprite");
+//            });
+//        case 4:
+//            return PY_MAKE_LONG(spr->getAngle());
+//        case 5: spr->setAngle(PY_GET_FLOAT(data, 0));break;
+//        //case 6: return PY_MAKE_CAPSULE(&spr->bounds, "Bounds", [](PyObject* bound){});
+//        case 7: return PY_MAKE_CAPSULE(&spr->direction, "Direction", [](PyObject* dir){});
+//        case 8: return PY_MAKE_CAPSULE(&spr->location, "Loc", [](PyObject* a){});
+//        //case 9: spr->bounds = *PY_UNPACK_OBJ(Unknown::AABB, "Sprite", data, 0);break;
+//        case 10: spr->direction = *PY_UNPACK_OBJ(Unknown::Vector, "Vector", data, 0);break;
+//        case 11: spr->location = *PY_UNPACK_OBJ(Unknown::Point<double>, "Point", data, 0);break;
+//
+//    }
     Py_RETURN_NONE;
 }
 
 PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
-    int functionID = PY_GET_LONG(args, 1);
-    PyObject* data = PY_GET_OBJ(args, 2);
-
-    if (functionID == 0) {
-        return PY_MAKE_CAPSULE(new Unknown::Vector(PY_GET_FLOAT(data, 0), PY_GET_FLOAT(data, 1)), "Vector", [](PyObject* a){}); //TODO
-    }
-
-    Unknown::Vector* vector = PY_UNPACK_OBJ(Unknown::Vector, "Vector", args, 0);
-
-    switch (functionID) {
-        case 1:
-        {
-            return PY_MAKE_FLOAT(vector->getLength());
-        }
-        case 2:
-        {
-            UK_LOG_ERROR("Normalisation of vectors not impl");
-            return PY_GET_OBJ(args, 0);
-        }
-        case 3:
-        {
-            PyObject* args_ = PyTuple_New(2);
-            PyTuple_SetItem(args_, 0, PY_MAKE_FLOAT(vector->x));
-            PyTuple_SetItem(args_, 1, PY_MAKE_FLOAT(vector->y));
-            return args_;
-        }
-    }
+//    int functionID = PY_GET_LONG(args, 1);
+//    PyObject* data = PY_GET_OBJ(args, 2);
+//
+//    if (functionID == 0) {
+//        return PY_MAKE_CAPSULE(new Unknown::Vector(PY_GET_FLOAT(data, 0), PY_GET_FLOAT(data, 1)), "Vector", [](PyObject* a){}); //TODO
+//    }
+//
+//    Unknown::Vector* vector = PY_UNPACK_OBJ(Unknown::Vector, "Vector", args, 0);
+//
+//    switch (functionID) {
+//        case 1:
+//        {
+//            return PY_MAKE_FLOAT(vector->getLength());
+//        }
+//        case 2:
+//        {
+//            UK_LOG_ERROR("Normalisation of vectors not impl");
+//            return PY_GET_OBJ(args, 0);
+//        }
+//        case 3:
+//        {
+//            PyObject* args_ = PyTuple_New(2);
+//            PyTuple_SetItem(args_, 0, PY_MAKE_FLOAT(vector->x));
+//            PyTuple_SetItem(args_, 1, PY_MAKE_FLOAT(vector->y));
+//            return args_;
+//        }
+//    }
 
     Py_RETURN_NONE;
 }
@@ -499,8 +498,27 @@ PyObject* setField(PyObject* self, PyObject* args) {
     Py_RETURN_NONE;
 }
 
+#include "rttr/type.h"
+
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
+//    for(auto& type : rttr::type::get_types()) {
+//        if(type.is_class()) {
+//            PyObject* baseClasses = PyTuple_New(0);
+//            PyObject* methodDict = PyDict_New();
+//
+//           // PyObject* classDefinition = PyObject_CallFunctionObjArgs((PyObject*) &PyType_Type, type.get_name().to_string().c_str(), baseClasses, methodDict);
+//
+//            PyObject *c = PyObject_CallFunctionObjArgs((PyObject*)&PyType_Type, PyBytes_FromString("Test"), PyTuple_New(0), methodDict, NULL);
+//
+//            if(!c)
+//                printf("Failed to generate wrapper for class %s\n", type.get_name().to_string().c_str());
+//
+//            Py_CLEAR(baseClasses);
+//            Py_CLEAR(methodDict);
+//        }
+//    }
+
     MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
     MAKE_FUNC_MAPPING("raw_sprite_interface", "Call a function on a sprite", rawSpriteCall);
     registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
@@ -522,8 +540,38 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 
     UK_LOG_INFO("Loading script", name);
 
+    PyObject* mod = PyModule_New("TestMod");
+    PyImport_AddModuleObject(mod);
+
+
     PyObject *testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);
+
+    //PyObject* originalDict = PyModule_GetDict(testModule);
+    //PyDict_SetItemString(originalDict, "TestMod", mod);
+//
+//
+//    printf("Defining types\n");
+//    PyObject* baseClasses = PyTuple_New(0);
+//    PyObject* methodDict = PyDict_New();
+//
+//    PyRun_SimpleString()
+//
+//    PyObject* c = PyObject_CallFunctionObjArgs(PyMethod_PyImport_Import("types"), )
+////    PyObject *c = PyObject_CallFunctionObjArgs((PyObject*)&PyType_Type, PyUnicode_FromString("Test1"), baseClasses, methodDict, NULL);
+////
+////    if(!c)
+////        printf("Failed to generate wrapper for class\n");
+//
+//    PyModule_Add(testModule, "Test1", c);
+//    PyModule_add
+//
+//    Py_CLEAR(baseClasses);
+//    Py_CLEAR(methodDict);
+
+
+
+
     if (PyObject_HasAttrString(testModule, "init"))
     {
         PyObject *initFunction = PyObject_GetAttrString(testModule, "init");
@@ -533,5 +581,3 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
         }
     }
 }
-
-#endif

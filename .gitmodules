@@ -22,3 +22,6 @@
 [submodule "Libs/libPAK"]
 	path = Libs/libPAK
 	url = https://gogs.cub3d.pw/CUB3D/libPAK
+[submodule "Libs/rttr"]
+	path = Libs/rttr
+	url = https://github.com/rttrorg/rttr

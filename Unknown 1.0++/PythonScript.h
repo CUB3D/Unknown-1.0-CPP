@@ -1,5 +1,3 @@
-#if FALSE
-
 #ifndef PYTHONSCRIPT_H
 #define PYTHONSCRIPT_H
 
@@ -77,4 +75,3 @@ namespace Unknown
 
 #endif
 
-#endif

@@ -79,13 +79,6 @@ void init___() {
     //const char* block = "block.obj";
     auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
 
-
-//TODO: leave fs stuff for now
-//TODO: work on integrating imgui propely
-//    ::Unknown::Filesystem::mount("Test.pak");
-//    std::string s = "/Test.png";
-//    Unknown::getRendererBackend()->loadTexture(s);
-
     p1(scene->mRootNode, scene);
 
     printf("Found %d meshes\n", meshes.size());
@@ -141,7 +134,7 @@ Unknown::KeyBind left2(SDLK_a, "fw");
 Unknown::KeyBind right2(SDLK_d, "fd");
 
 void RenderTestScene::update() {
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 
     if(forward.pressed()) {
         ren.getCamera().forwards();

@@ -16,11 +16,11 @@ class PAKFileStream : public std::streambuf {
 public:
     PAKFileStream(PAKFile* file, PAKFileEntry* entry);
 
-    ~PAKFileStream();
-
-    int underflow();
-
-    pos_type seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode wich = std::ios_base::in);
+  //  ~PAKFileStream();
+//
+    //int underflow();
+    virtual pos_type seekoff(off_type off, std::ios_base::seekdir dir, std::ios_base::openmode wich = std::ios_base::in) override;
+    virtual pos_type seekpos(pos_type sp, std::ios_base::openmode which) override;
 };
 
 

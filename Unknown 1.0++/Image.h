@@ -10,6 +10,7 @@
 #include "GL/GL.h"
 #include "Graphics/RenderingBackend.h"
 #include "Graphics/Shader.h"
+#include "rttr/registration.h"
 
 namespace Unknown
 {
@@ -34,9 +35,13 @@ namespace Unknown
 
 			virtual void init() override;
 			void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;
-
-			//virtual std::unique_ptr<Image> clone() const;
 		};
+
+	    RTTR_REGISTRATION {
+	    	rttr::registration::class_<Image>("Image")
+	    	        .constructor<const std::string&>()
+	    	        .method("render", &Image::render);
+	    };
 	}
 }
 
