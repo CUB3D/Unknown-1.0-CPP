@@ -42,14 +42,18 @@ class RenderingPipeline3D
     Shader s;
     Camera3D camera;
 
-    std::array<struct PointLight, 10> pointLights;
-    std::array<struct DirectionalLight, 10> directionalLights;
+    //std::array<struct PointLight, 10> pointLights;
+    //std::array<struct DirectionalLight, 10> directionalLights;
+
+    std::array<float, ((3+3+3+3)*32 + (3+3+3+3+1+1+1)*32 + (3+3+3+3+3+1)*32) * sizeof(float)> lightBuffer;
 
     Shader fboS;
     GLuint fbo;
     GLuint texBuffer;
     Unknown::VertexInfo fbov;
     GLuint rbo;
+
+    GLuint lightUBO;
 
 public:
     glm::mat4 projectionMatrix;

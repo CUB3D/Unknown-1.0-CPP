@@ -24,30 +24,38 @@ void RenderingPipeline3D::render() {
 
     s.bind(true);
 
+    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
+    memcpy(glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY), lightBuffer.data(), lightBuffer.size());
+    glUnmapBuffer(GL_UNIFORM_BUFFER);
+
+    GLuint lightBlockIndex = glGetUniformBlockIndex(s.prog, "lighting");
+    glBindBufferBase(GL_UNIFORM_BUFFER, 0, lightUBO);
+    glUniformBlockBinding(s.prog, lightBlockIndex, 0);
+
     // TODO: change to uniform blocks for lights
 
-    for(int i = 0; i < directionalLights.size(); i++) {
-        std::string arr = "directionalLights[" + Unknown::intToString(i) + "]";
-
-        s.setVec3((arr + ".ambient").c_str(), 0.1f, 0.1f, 0.1f);
-        s.setVec3((arr + ".diffuse").c_str(), 0.3f, 0.3f, 0.3f);
-        s.setVec3((arr + ".specular").c_str(), 1.0f, 1.0f, 1.0f);
-        s.setVec3((arr + ".direction").c_str(), -0.2f, -1.0f, -0.3f);
-    }
-    // point
-
-    for(int i = 0; i < pointLights.size(); i++) {
-        std::string arr = "pointLights[" + Unknown::intToString(i) + "]";
-
-        s.setVec3((arr + ".ambient").c_str(), 0.2f, 0.2f, 0.2f);
-        s.setVec3((arr + ".diffuse").c_str(), 0.5f, 0.5f, 0.5f);
-        s.setVec3((arr + ".specular").c_str(), 1.0f, 1.0f, 1.0f);
-        s.setVec3((arr + ".position").c_str(), 1.0f, 2.0f, -9.0f);
-
-        s.setFloat((arr + ".constant").c_str(), 1.0f);
-        s.setFloat((arr + ".linear").c_str(), 0.09f);
-        s.setFloat((arr + ".quadratic").c_str(), 0.032f);
-    }
+//    for(int i = 0; i < directionalLights.size(); i++) {
+//        std::string arr = "directionalLights[" + Unknown::intToString(i) + "]";
+//
+//        s.setVec3((arr + ".ambient").c_str(), 0.1f, 0.1f, 0.1f);
+//        s.setVec3((arr + ".diffuse").c_str(), 0.3f, 0.3f, 0.3f);
+//        s.setVec3((arr + ".specular").c_str(), 1.0f, 1.0f, 1.0f);
+//        s.setVec3((arr + ".direction").c_str(), -0.2f, -1.0f, -0.3f);
+//    }
+//    // point
+//
+//    for(int i = 0; i < pointLights.size(); i++) {
+//        std::string arr = "pointLights[" + Unknown::intToString(i) + "]";
+//
+//        s.setVec3((arr + ".ambient").c_str(), 0.2f, 0.2f, 0.2f);
+//        s.setVec3((arr + ".diffuse").c_str(), 0.5f, 0.5f, 0.5f);
+//        s.setVec3((arr + ".specular").c_str(), 1.0f, 1.0f, 1.0f);
+//        s.setVec3((arr + ".position").c_str(), 1.0f, 2.0f, -9.0f);
+//
+//        s.setFloat((arr + ".constant").c_str(), 1.0f);
+//        s.setFloat((arr + ".linear").c_str(), 0.09f);
+//        s.setFloat((arr + ".quadratic").c_str(), 0.032f);
+//    }
 
 //    // spot
 //
@@ -180,6 +188,15 @@ void RenderingPipeline3D::init() {
 
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+
+    glGenBuffers(1, &lightUBO);
+    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(lightBuffer), &lightBuffer, GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+
 
     //this->fbov = Unknown::getRendererBackend()->createRectVerticies(-1, -1, 1, 1);
     //this->fbov = Unknown::getRendererBackend()->createRectVerticies(0, 0, uk.screenSize->width, uk.screenSize->height);
