@@ -5,6 +5,7 @@
 #include "UI.h"
 
 #include <map>
+#include "Model/MeshContainer.h"
 
 namespace Unknown
 {
@@ -20,6 +21,8 @@ namespace Unknown
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);
         std::shared_ptr<::Unknown::Graphics::Image> loadImage(const std::string& name);
         ::Unknown::UIContainer loadUI(const std::string &name);
+
+        std::shared_ptr<MeshContainer> loadModel(const std::string& name);
     }
 }
 

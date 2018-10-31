@@ -14,6 +14,9 @@
 #include "Entity/PhysicsBodyComponent.h"
 #include "Entity/TimerComponent.h"
 #include "Entity/ImageRenderComponent.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
@@ -520,4 +523,79 @@ std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std
 	}
 
 	return container;
+}
+
+std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &name) {
+    std::function<void(aiNode*, const aiScene*, std::vector<aiMesh*>&)> recurseMeshTree = [&recurseMeshTree](aiNode* node, const aiScene* sce, std::vector<aiMesh*>& meshes) {
+        for(int i = 0; i < node->mNumMeshes; i++) {
+            meshes.push_back(sce->mMeshes[node->mMeshes[i]]);
+        }
+
+        for(int i = 0; i < node->mNumChildren; i++) {
+            recurseMeshTree(node->mChildren[i], sce, meshes);
+        }
+    };
+
+    auto loadMaterialTextures = [](aiMaterial* mat, aiTextureType type, const std::string& typeStr, std::vector<TextureInfo>& vec) {
+        for(int i = 0; i < mat->GetTextureCount(type); i++) {
+            aiString str(typeStr);
+            mat->GetTexture(type, i, &str);
+            std::string s = std::string(str.C_Str());
+            vec.push_back(::Unknown::getRendererBackend()->loadTexture(s));
+        }
+    };
+
+
+
+	auto meshContainer = std::make_shared<MeshContainer>();
+
+	Assimp::Importer importer;
+
+	//TODO: use filesystem
+	const aiScene* scene = importer.ReadFile(name, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+
+    std::vector<aiMesh*> meshes;
+    recurseMeshTree(scene->mRootNode, scene, meshes);
+
+	for(auto& mesh : meshes) {
+		Mesh m;
+		printf("Found %d verticies\n", mesh->mNumVertices);
+		for(int i = 0; i < mesh->mNumVertices; i ++) {
+
+			auto& v = mesh->mVertices[i];
+			m.verticies.push_back(glm::vec3(v.x, v.y, v.z));
+
+			if(mesh->HasNormals()) {
+				auto& n = mesh->mNormals[i];
+				m.normals.push_back(glm::vec3(n.x, n.y, n.z));
+			}
+
+			if(mesh->mTextureCoords[0]) {
+				auto& t = mesh->mTextureCoords[0][i];
+				m.uvs.push_back(glm::vec2(t.x, t.y));
+			} else {
+				m.uvs.emplace_back(0.0f, 0.0f);
+			}
+		}
+
+		for(int i = 0; i < mesh->mNumFaces; i++) {
+			aiFace face = mesh->mFaces[i];
+			for(int j = 0; j < face.mNumIndices; j++) {
+				m.indicies.push_back(face.mIndices[j]);
+			}
+		}
+		// Check for materials
+		//TODO: remove
+		if(mesh->mMaterialIndex >= 0) {
+			aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
+            loadMaterialTextures(mat, aiTextureType_DIFFUSE, "texture_diffuse", m.diffuseMaps);
+            loadMaterialTextures(mat, aiTextureType_SPECULAR, "texture_specular", m.specularMaps);
+		}
+
+		printf("Found %d indicies\n", m.indicies.size());
+
+		meshContainer->meshes.push_back(m);
+	}
+
+	return meshContainer;
 }

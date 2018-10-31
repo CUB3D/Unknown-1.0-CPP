@@ -4,7 +4,6 @@
 
 #include "RenderTestScene.h"
 #include "UI2D.h"
-
 #include "GL/GL.h"
 #include "Graphics/FileShader.h"
 #include <glm/ext.hpp>
@@ -18,36 +17,9 @@
 #include "KeyBind.h"
 #include "Input.h"
 #include "Graphics/SkyBox3D.h"
+#include "Loader.h"
 
 Unknown::Graphics::Image img("Player.png");
-
-std::vector<aiMesh*> meshes;
-
-void p1(aiNode* node, const aiScene* sce) {
-    for(int i = 0; i < node->mNumMeshes; i++) {
-        meshes.push_back(sce->mMeshes[node->mMeshes[i]]);
-    }
-
-    for(int i = 0; i < node->mNumChildren; i++) {
-        p1(node->mChildren[i], sce);
-    }
-}
-
-
-std::vector<Unknown::TextureInfo> loadMaterialTexutres(aiMaterial* mat, aiTextureType type, std::string typeName) {
-    std::vector<Unknown::TextureInfo> vec;
-
-
-    for(int i = 0; i < mat->GetTextureCount(type); i++) {
-        aiString str;
-        mat->GetTexture(type, i, &str);
-        std::string s = std::string(str.C_Str());
-        s = "nano/" + s;
-        vec.push_back(Unknown::getRendererBackend()->loadTexture(s));
-    }
-
-    return vec;
-}
 
 RenderingPipeline3D ren;
 
@@ -68,64 +40,16 @@ void init___() {
     ren.skybox = new SkyBox3D(faces);
     ren.skybox->init();
 
-    MeshContainer mc;
+    auto meshContainer = ::Unknown::Loader::loadModel("teapot.obj");
+//    const char* teapot = "teapot.obj";
+//    const char* ns = "nano/nanosuit.obj";
+//    const char* suz = "Suz.obj";
+//    const char* uv = "uv.obj";
+//    const char* stick = "stick.obj";
 
-    Assimp::Importer importer;
-    const char* teapot = "teapot.obj";
-    const char* ns = "nano/nanosuit.obj";
-    const char* suz = "Suz.obj";
-    const char* uv = "uv.obj";
-    const char* stick = "stick.obj";
-    //const char* block = "block.obj";
-    auto scene = importer.ReadFile(teapot, aiProcess_GenSmoothNormals | aiProcess_Triangulate | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes);
+    meshContainer->loadVBO();
 
-    p1(scene->mRootNode, scene);
-
-    printf("Found %d meshes\n", meshes.size());
-
-    for(auto& mesh : meshes) {
-        Mesh m;
-        printf("Found %d verticies\n", mesh->mNumVertices);
-        for(int i = 0; i < mesh->mNumVertices; i ++) {
-
-            auto& v = mesh->mVertices[i];
-            m.verticies.push_back(glm::vec3(v.x, v.y, v.z));
-
-            if(mesh->HasNormals()) {
-                auto& n = mesh->mNormals[i];
-                m.normals.push_back(glm::vec3(n.x, n.y, n.z));
-            }
-
-            if(mesh->mTextureCoords[0]) {
-                auto& t = mesh->mTextureCoords[0][i];
-                m.uvs.push_back(glm::vec2(t.x, t.y));
-            } else {
-                m.uvs.emplace_back(0.0f, 0.0f);
-            }
-        }
-
-        for(int i = 0; i < mesh->mNumFaces; i++) {
-            aiFace face = mesh->mFaces[i];
-            for(int j = 0; j < face.mNumIndices; j++) {
-                m.indicies.push_back(face.mIndices[j]);
-            }
-        }
-        // Check for materials
-        //TODO: remove
-        if(mesh->mMaterialIndex >= 0) {
-            aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
-            m.diffuseMaps = loadMaterialTexutres(mat, aiTextureType_DIFFUSE, "texture_diffuse");
-            m.specularMaps = loadMaterialTexutres(mat, aiTextureType_SPECULAR, "texture_specular");
-        }
-
-        printf("Found %d indicies\n", m.indicies.size());
-
-        mc.meshes.push_back(m);
-    }
-
-    mc.loadVBO();
-
-    ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(mc));
+    ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(*meshContainer));
 }
 
 Unknown::KeyBind forward(SDLK_w, "fw");
@@ -155,31 +79,11 @@ void RenderTestScene::update() {
     ren.getCamera().onMouseMove();
 }
 
-bool tmp = false;
-
-
-#include "Editor/imgui.h"
-#include "Editor/imgui_impl_opengl3.h"
-
 void RenderTestScene::render() const {
 
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
     //glFrontFace(GL_CCW);
-
-
-
-    // Draw skybox
-    // TODO: j
-
-
-
-    // Draw model
-//    glActiveTexture(GL_TEXTURE0);
-//    glBindTexture(GL_TEXTURE_2D, (GLuint)t.pointer);
-
-    //glActiveTexture(GL_TEXTURE1);
-    //glBindTexture(GL_TEXTURE_2D, (GLuint)specular.pointer);
 
     ren.render();
 }
