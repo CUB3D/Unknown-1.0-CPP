@@ -10,6 +10,57 @@
 #include "../Unknown.h"
 #include "../Filesystem/Filesystem.h"
 #include "../Filesystem/FSUtils.h"
+#include "../Log.h"
+#include "../Editor/imgui.h"
+#include "../Editor/imgui_impl_sdl.h"
+#include "../Editor/imgui_impl_opengl3.h"
+
+void Unknown::GLBackend::intialise(const EngineConfig& config) {
+    UK_LOG_INFO("Intialising OpenGL Backend");
+
+    if(config.MSAA) {
+        // Enable MSAA
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    }
+
+    // Vsync
+    SDL_GL_SetSwapInterval(config.vsync);
+}
+
+void Unknown::GLBackend::createContext(SDL_Window* window) {
+    UK_LOG_INFO("Creating OpenGL 3.3 Core context");
+
+    //TODO: abstract out windows from unknown
+    auto& size = getUnknown().screenSize;
+
+    // Enable GL3.3 Core
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
+
+    this->glContext = SDL_GL_CreateContext(window);
+
+    // Load glad, glfw, etc
+    initGL();
+
+    // Setup gl viewport
+    glViewport(0, 0, size->width, size->height);
+
+    // Load Imgui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+
+    ImGui_ImplSDL2_InitForOpenGL(window, glContext);
+    ImGui_ImplOpenGL3_Init("#version 300 es");
+
+    auto& io = ImGui::GetIO();
+    io.DisplaySize = ImVec2(size->width, size->height);
+}
+
+void Unknown::GLBackend::quit() {
+    SDL_GL_DeleteContext(glContext);
+}
 
 void Unknown::GLBackend::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) {
     VertexInfo info = this->createRectVerticies(0, 0, width, height);
@@ -163,7 +214,7 @@ void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius
 //    basicRenderer.unbind();
 }
 
-Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
+Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
     auto find = textureMap.find(path);
     if(find != textureMap.end()) {
         return find->second;
@@ -219,7 +270,7 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(std::string &path) {
     return info;
 }
 
-Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const int x, const int y, const int w, const int h) {
+Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const float y, const float w, const float h) {
     auto& vertexInfo = vertexLookup.emplace_back();
 
     constexpr const int SIZE = 6 * (3 + 4 + 2 + 3);
@@ -232,32 +283,32 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const int x, const i
         0, 0, 0,
         1, 1, 1, 1,
         0, 0,
-        0, 0, 1,
+        0, 0, -1,
 
         (GLfloat)w, 0, 0,
         1, 1, 1, 1,
         1, 0,
-        (GLfloat)w, 0, 1,
+        0, 0, -1,
 
         (GLfloat)w, (GLfloat)h, 0,
         1, 1, 1, 1,
         1, 1,
-        (GLfloat)w, (GLfloat)h, 1,
+        0, 0, -1,
 
         0, 0, 0,
         1, 1, 1, 1,
         0, 0,
-        0, 0, 1,
+        0, 0, -1,
 
         0, (GLfloat)h, 0,
         1, 1, 1, 1,
         0, 1,
-        0, (GLfloat)h, 1,
+        0, 0, -1,
 
         (GLfloat)w, (GLfloat)h, 0,
         1, 1, 1, 1,
         1, 1,
-        (GLfloat)w, (GLfloat)h, 1
+        0, 0, -1
     };
 
     glGenBuffers(1, &vertexInfo.vbo);

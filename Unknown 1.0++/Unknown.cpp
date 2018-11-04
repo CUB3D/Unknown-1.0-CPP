@@ -23,6 +23,8 @@
 
 #include "Graphics/RenderingBackend.h"
 
+#include "Settings/SettingsParser.h"
+
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
@@ -43,38 +45,29 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 {
 	this->currentState = UK_INIT;
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("Error: SDL failed to initialise, %s\n", SDL_GetError());
+    this->screenSize = std::make_shared<Dimension<int>>(width, height);
+
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	    UK_LOG_ERROR("SDL failed to initialise: ", SDL_GetError());
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetSwapInterval(0);
+	getRendererBackend()->intialise(config);
 
 	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-	if (!window)
-	{
-		printf("Error: SDL failed to create a window, %s\n", SDL_GetError());
+	if (!window) {
+	    UK_LOG_ERROR("SDL failed to create window: ", SDL_GetError());
 		quit(ErrorCodes::SDL_WINDOW_CREATION_FAIL);
 	}
 
 	this->windowRenderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-	if (!windowRenderer)
-	{
-		printf("Error: SDL failed to create renderer, %s\n", SDL_GetError());
+	if (!windowRenderer) {
+	    UK_LOG_ERROR("SDL failed to create renderer: ", SDL_GetError());
 		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-
-	this->glContext = SDL_GL_CreateContext(this->window);
-
-	::Unknown::initGL();
+    getRendererBackend()->createContext(window);
 
 //	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
 
@@ -110,8 +103,6 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
-	this->screenSize = std::make_shared<Dimension<int>>(width, height);
-
 
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
@@ -124,66 +115,20 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
     registerHook([=]{globalSceneManager.render();}, RENDER);
     registerHook([=]{globalSceneManager.update();}, UPDATE);
 
-
-    // Imgui init
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-
-	ImGui_ImplSDL2_InitForOpenGL(window, glContext);
-	ImGui_ImplOpenGL3_Init("#version 300 es");
-
-    auto& io = ImGui::GetIO();
-    io.DisplaySize = ImVec2(width, height);
-
 	currentState = UK_POST_INIT;
 }
 
 void Unknown::Unknown::createWindow()
 {
-	int height = 0;
-	int width = 0;
-	std::string title;
-    int ups = 60;
+	UK_LOG_INFO("Starting engine init");
+	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
-	rapidjson::Document doc = readJSONFile("Config.json");
-
-	rapidjson::Value* heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
-
-	if (heightValue) {
-		height = heightValue->GetInt();
-	}
-
-	rapidjson::Value* widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
-
-	if (widthValue) {
-		width = widthValue->GetInt();
-	}
-
-	rapidjson::Value* titleValue = getValue("Title", rapidjson::Type::kStringType, doc);
-
-	if (titleValue) {
-		title = titleValue->GetString();
-	}
-
-    rapidjson::Value* upsValue = getValue("ups", rapidjson::Type::kNumberType, doc);
-
-    if(upsValue) {
-        ups = upsValue->GetInt();
-    }
-    else {
-        printf("[UK] No update speed specified, defaulting to 60tps\n");
-    }
-
-	createWindow(title.c_str(), width, height, ups);
+	createWindow(config.title.c_str(), config.targetWidth, config.targetHeight, config.targetUPS);
 }
 
 void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
-
-	//TODO: move to render backend setup
-    glViewport(0, 0, screenSize->width, screenSize->height);
 
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop(doSingleLoopItterC, 0, 1);
@@ -217,8 +162,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
     this->unprocessed += (time - startTime) / tickSpeed;
     this->startTime = time;
 
-    while (this->unprocessed >= 1)
-    {
+    while (this->unprocessed >= 1) {
         auto renderStartTime = std::chrono::high_resolution_clock::now();
         this->update();
         auto renderFinishTime = std::chrono::high_resolution_clock::now();
@@ -242,8 +186,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
 
     this->updateWindow();
 
-    if (fpsCounter.isTickComplete())
-    {
+    if (fpsCounter.isTickComplete()) {
         std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
         this->fps = this->frames;
 
@@ -258,8 +201,7 @@ void Unknown::Unknown::checkEvents()
     ImGuiIO& io = ImGui::GetIO();
     bool postImguiEvents = io.WantCaptureKeyboard || io.WantCaptureMouse;
 
-	while (SDL_PollEvent(&evnt) != 0)
-	{
+	while (SDL_PollEvent(&evnt) != 0) {
 	    if(postImguiEvents) {
             ImGui_ImplSDL2_ProcessEvent(&evnt);
             continue;
@@ -303,16 +245,12 @@ void Unknown::Unknown::checkEvents()
 	}
 }
 
-void Unknown::Unknown::clearScreen()
-{
-    getRendererBackend()->drawRect(0, 0, this->screenSize->width, this->screenSize->height, 0, Colour::BLACK);
-}
-
-void Unknown::Unknown::quit(const int exitCode)
-{
+void Unknown::Unknown::quit(const int exitCode) {
 	this->currentState = UK_QUIT;
+
     // All Images must have been destroyed or this will cause a sigsev
-    SDL_GL_DeleteContext(this->glContext);
+    getRendererBackend()->quit();
+
 	//SDL_DestroyRenderer(this->windowRenderer);
 	SDL_DestroyWindow(this->window);
 	this->windowRenderer = nullptr;
@@ -325,30 +263,25 @@ void Unknown::Unknown::quit(const int exitCode)
 	exit(exitCode);
 }
 
-void Unknown::Unknown::update()
-{
+void Unknown::Unknown::update() {
 	callHooks(HookType::UPDATE);
 }
 
-void Unknown::Unknown::render()
-{
+void Unknown::Unknown::render() {
 	callHooks(HookType::RENDER);
 }
 
-void Unknown::Unknown::updateWindow()
-{
+void Unknown::Unknown::updateWindow() {
     SDL_GL_SwapWindow(window);
 }
 
-Unknown::Unknown& Unknown::getUnknown()
-{
+Unknown::Unknown& Unknown::getUnknown() {
     static Unknown instance;
 
 	return instance;
 }
 
-void Unknown::registerHook(std::function<void()> hook, HookType type)
-{
+void Unknown::registerHook(std::function<void()> hook, HookType type) {
 	printf("Registering a hook %d\n", (int)type);
 
 	auto& hooks = getUnknown().hooks;
@@ -365,12 +298,8 @@ void Unknown::registerHook(std::function<void()> hook, HookType type)
 	hooks[type] = vec;
 }
 
-void Unknown::callHooks(HookType type)
-{
-    auto& hooks = getUnknown().hooks;
-
-	auto vec = hooks[type];
-
-	for (int i = 0; i < vec.size(); i++)
-		vec[i]();
+void Unknown::callHooks(HookType type) {
+    for(auto& hook : getUnknown().hooks[type]) {
+        hook();
+    }
 }

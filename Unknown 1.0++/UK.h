@@ -24,5 +24,14 @@
 #include "Entity/TimerComponent.h"
 #include "Entity/PhysicsBodyComponent.h"
 
+#include "Graphics/Shader.h"
+#include "Graphics/FileShader.h"
+
+#include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
+#include "Scene/CollisionManager.h"
+
+#include "Editor/imgui.h"
+
 
 #endif //UNKNOWN_DEVELOPMENT_TOOL_UK_H

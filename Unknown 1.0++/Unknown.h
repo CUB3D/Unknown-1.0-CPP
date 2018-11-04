@@ -13,6 +13,7 @@
 #include "Image.h"
 #include "IInitable.h"
 #include "UI.h"
+#include "Engine/EngineConfig.h"
 
 
 namespace Unknown
@@ -57,7 +58,7 @@ namespace Unknown
 		Timer fpsCounter;
 
 	public:
-		SDL_GLContext glContext;
+	    EngineConfig config;
 
 		SDL_Surface* s;
 		SDL_Window* window;
@@ -94,7 +95,6 @@ namespace Unknown
 		void quit(const int exitCode);
 
 		void checkEvents();
-		void clearScreen();
 
 		void update();
 		void render();

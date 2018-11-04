@@ -81,16 +81,22 @@ namespace Unknown
         Shader basicRenderer;
         Shader textureRenderer;
 
+        SDL_GLContext glContext;
+
     public:
         GLBackend();
+
+        virtual void intialise(const EngineConfig& config) override;
+        virtual void createContext(SDL_Window *window) override;
+        virtual void quit() override;
 
         virtual void drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) override;
         virtual void drawPoint(const int x, const int y, const Colour& colour) override;
         virtual void drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) override;
         virtual void drawCircle(const int cx, const int cy, const int radius, const Colour &col) override;
 
-        virtual TextureInfo loadTexture(std::string &path) override;
-        virtual VertexInfo createRectVerticies(const int x, const int y, const int w, const int h) override;
+        virtual TextureInfo loadTexture(const std::string &path) override;
+        virtual VertexInfo createRectVerticies(const float x, const float y, const float w, const float h) override;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies)  override;
         virtual void renderQuad(const int x, const int y, const double angle, const VertexInfo& verts, Shader& shader);
 

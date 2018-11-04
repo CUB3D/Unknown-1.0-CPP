@@ -70,7 +70,7 @@ void Unknown::SDLBackend::drawCircle(const int cx, const int cy, const int radiu
     SDL_RenderDrawLines(uk.windowRenderer, verts, vertexCount);
 }
 
-Unknown::TextureInfo Unknown::SDLBackend::loadTexture(std::string &path) {
+Unknown::TextureInfo Unknown::SDLBackend::loadTexture(const std::string &path) {
     auto find = textureMap.find(path);
     if(find != textureMap.end()) {
         return find->second;
@@ -95,7 +95,7 @@ Unknown::TextureInfo Unknown::SDLBackend::loadTexture(std::string &path) {
     return textureMap[path];
 }
 
-Unknown::VertexInfo Unknown::SDLBackend::createRectVerticies(const int x, const int y, const int w, const int h) {
+Unknown::VertexInfo Unknown::SDLBackend::createRectVerticies(const float x, const float y, const float w, const float h) {
     SDL_Rect r{x, y, w, h};
     auto& vertexInfo = vertexLookup.emplace_back();
     vertexInfo.bounds = r;
@@ -135,4 +135,16 @@ Unknown::TextureInfo Unknown::SDLBackend::createFontTexture(TTF_Font &font, cons
 
 void Unknown::SDLBackend::clearScreen() {
     SDL_RenderClear(getUnknown().windowRenderer);
+}
+
+void Unknown::SDLBackend::intialise(const EngineConfig &config) {
+
+}
+
+void Unknown::SDLBackend::createContext(SDL_Window *window) {
+
+}
+
+void Unknown::SDLBackend::quit() {
+
 }

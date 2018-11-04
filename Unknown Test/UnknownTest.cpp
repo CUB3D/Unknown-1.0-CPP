@@ -34,6 +34,7 @@
 
 #include "PhysicsTestScene.h"
 #include "RenderTestScene.h"
+#include "RenderTest2D.h"
 
 //Unknown::Map map(1, 1);
 //Unknown::Timer timer(0.2f);
@@ -300,7 +301,8 @@ void init()
 //
 //    font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
-    UK_ADD_SCENE(std::make_shared<RenderTestScene>());
+    //UK_ADD_SCENE(std::make_shared<RenderTestScene>());
+    UK_ADD_SCENE(std::make_shared<RenderTest2D>());
     //UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
     //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
@@ -308,7 +310,7 @@ void init()
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
     //UK_LOAD_SCENE("Phys");
-    UK_LOAD_SCENE("RTest");
+    UK_LOAD_SCENE("R2D");
 }
 
 #include "Filesystem/Filesystem.h"
@@ -320,8 +322,7 @@ int _tmain(int argc, _TCHAR* argv[])
 int main(int argc, char* argv[])
 #endif
 {
-	//UK_CREATE_WINDOW();
-	::Unknown::getUnknown().createWindow("Test", 1024, 1024, 60);
+	UK_CREATE_WINDOW();
 //
 //    char *source = NULL;
 //    int bufsize;

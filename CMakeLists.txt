@@ -158,7 +158,7 @@ set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${UK_LIB})
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${UK_LIB})
 add_custom_command(TARGET UK POST_BUILD COMMAND python ${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py ${PROJECT_SOURCE_DIR} ${CMAKE_HOST_SYSTEM_NAME})
 
-FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.cpp")
+FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.c*")
 
 add_executable(${UK_PROJECT_NAME} ${UK_TEST_SRC})
 target_include_directories(${UK_PROJECT_NAME} PUBLIC ${UK_INCLUDE} ${COMBINED_INCLUDE})

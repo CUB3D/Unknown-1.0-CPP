@@ -12,6 +12,7 @@
 #include <vector>
 #include "../GL/GL.h"
 #include <SDL_ttf.h>
+#include "../Engine/EngineConfig.h"
 
 namespace Unknown
 {
@@ -40,6 +41,10 @@ namespace Unknown
         std::vector<TextureInfo> fontLookup;
 
     public:
+        virtual void intialise(const EngineConfig& config) = 0;
+        virtual void createContext(SDL_Window *window) = 0;
+        virtual void quit() = 0;
+
         virtual void drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) = 0;
         virtual void drawPoint(const int x, const int y, const Colour& colour) = 0;
         virtual void drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) = 0;
@@ -47,8 +52,8 @@ namespace Unknown
 
         virtual void clearScreen() = 0;
 
-        virtual TextureInfo loadTexture(std::string &path) = 0;
-        virtual VertexInfo createRectVerticies(const int x, const int y, const int w, const int h) = 0;
+        virtual TextureInfo loadTexture(const std::string &path) = 0;
+        virtual VertexInfo createRectVerticies(const float x, const float y, const float w, const float h) = 0;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) = 0;
 
         virtual TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) = 0;
