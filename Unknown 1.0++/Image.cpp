@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "Image.h"
 
-#include <SDL_image.h>
-#include <iostream>
 #include <string.h>
 
 #include "Unknown.h"

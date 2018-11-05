@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 17)
 
-project("Unknown development tool")
+project(Unknown)
 
 set(UK_DIR ${PROJECT_SOURCE_DIR})
 set(UK_PROJECT_NAME UKTest)
@@ -114,6 +114,11 @@ set(BUILD_STATIC True)
 set(BUILD_EXAMPLES False)
 set(BUILD_WITH_STATIC_RUNTIME_LIBS True)
 set(BUILD_INSTALLER False)
+set(BUILD_DOCUMENTATION False)
+set(BUILD_INSTALLER False)
+set(BUILD_PACKAGE False)
+set(README_FILE README.md)
+set(LICENSE_FILE LICENCE.md)
 add_subdirectory(${UK_DIR}/Libs/rttr)
 set(RTTR_LIBRARIES rttr_core_lib)
 set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src/rttr)
@@ -136,6 +141,16 @@ if(UNIX)
     set(UNIX_LIBS pthread dl util m stdc++fs)
 endif()
 
+if(WIN32)
+    # Avoid __dllexport, etc
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+    # Remove need for MSVC++ redistribuable
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /Zi")
+    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT /Zi")
+endif(WIN32)
+
+set(BOX2D_INCLUDE_DIR ${UK_DIR}/Libs/Box2D)
 
 SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} ${ASSIMP_LIBRARY_DIRS} ${GLM_LIBRARY_DIRS} ${PAK_LIBRARY} ${RTTR_LIBRARIES})
 SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE} ${GLM_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${PAK_INCLUDE_DIR} ${RTTR_INCLUDE_DIR})
@@ -143,23 +158,5 @@ SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${
 message("LIBS: ${COMBINED_LIBS}")
 message("INCLUDE: ${COMBINED_INCLUDE}")
 
-FILE(GLOB_RECURSE UK_ENGINE_SRC "Unknown 1.0++/*.c*")
-if(WIN32)
-	add_library(UK STATIC ${UK_ENGINE_SRC})
-endif()
-if(UNIX)
-	add_library(UK SHARED ${UK_ENGINE_SRC})
-endif()
-
-target_include_directories(UK PUBLIC ${COMBINED_INCLUDE})
-target_link_libraries(UK ${COMBINED_LIBS})
-set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})
-set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${UK_LIB})
-set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${UK_LIB})
-add_custom_command(TARGET UK POST_BUILD COMMAND python ${PROJECT_SOURCE_DIR}/tools/build/exportHeaders.py ${PROJECT_SOURCE_DIR} ${CMAKE_HOST_SYSTEM_NAME})
-
-FILE(GLOB_RECURSE UK_TEST_SRC "Unknown Test/*.c*")
-
-add_executable(${UK_PROJECT_NAME} ${UK_TEST_SRC})
-target_include_directories(${UK_PROJECT_NAME} PUBLIC ${UK_INCLUDE} ${COMBINED_INCLUDE})
-target_link_libraries(${UK_PROJECT_NAME} UK ${COMBINED_LIBS})
+add_subdirectory("Unknown 1.0++")
+add_subdirectory("Unknown Test")

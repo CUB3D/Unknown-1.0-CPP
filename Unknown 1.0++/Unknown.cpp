@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Unknown.h"
 
-#include <SDL.h>
 #include <iostream>
 #include <map>
 

@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "Timer.h"
 
-#include <SDL.h>
-#include <functional>
-
 #include "Unknown.h"
 
 Unknown::Timer::Timer() : Timer((float)1) {}

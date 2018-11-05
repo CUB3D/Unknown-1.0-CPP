@@ -461,15 +461,25 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
 
 //TODO: test and add changes from reflex to repo
 PyObject* makeObject(PyObject* self, PyObject* args) {
-    std::string name = std::string(PY_GET_UTF8(args, 0));
-    auto m1 = Reflex::getInstance().m1;
+    printf("Creating obj\n");
 
-    auto tmp = (*Reflex::getInstance().m1)[name];
-    void* ptr = tmp->newRawInstance();
+    PyObject* clz = PySequence_GetItem(args, 0);
 
-    UK_LOG_INFO("Created capsule of type", name, "with ptr:", Unknown::intToString((long int)ptr));
+    if(!clz)
+        printf("Invalid class\n");
 
-    return PY_MAKE_CAPSULE(ptr, name.c_str(), [](PyObject* p){});
+    PyDict_SetItemString(clz, "Test", PyLong_FromDouble(1.0));
+
+    return clz;
+//    std::string name = std::string(PY_GET_UTF8(args, 0));
+//    auto m1 = Reflex::getInstance().m1;
+//
+//    auto tmp = (*Reflex::getInstance().m1)[name];
+//    void* ptr = tmp->newRawInstance();
+//
+//    UK_LOG_INFO("Created capsule of type", name, "with ptr:", Unknown::intToString((long int)ptr));
+//
+//    return PY_MAKE_CAPSULE(ptr, name.c_str(), [](PyObject* p){});
 }
 
 PyObject* setField(PyObject* self, PyObject* args) {
@@ -538,14 +548,47 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     //TODO: getfield, callfunc
 
 
+
+    PyMethodDef* cback = generatePyMethodDef("A", makeObject, "");
+    PyObject* callable = PyCFunction_NewEx(cback, (PyObject*)NULL, PyUnicode_FromString("Unknown"));
+
     UK_LOG_INFO("Loading script", name);
-
-    PyObject* mod = PyModule_New("TestMod");
-    PyImport_AddModuleObject(mod);
-
 
     PyObject *testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);
+    PyObject *testDict = PyModule_GetDict(testModule);
+
+    // Add the new class to the module
+
+
+    PyObject* typesMod = PyImport_AddModule("types");
+
+    if(!typesMod)
+        printf("Failed to load types module\n");
+
+    PyObject* typesDict = PyModule_GetDict(typesMod);
+
+    if(!typesDict)
+        printf("Typesdict bad\n");
+
+    PyObject* new_classFunc = PyDict_GetItemString(typesDict, "new_class");
+
+    if(!new_classFunc)
+        printf("new_class bad\n");
+
+    for(auto& type : rttr::type::get_types()) {
+        if(type.is_class()) {
+            PyObject* baseClasses = PyTuple_New(0);
+
+
+            PyObject *clz = PyObject_CallFunctionObjArgs(new_classFunc,
+                                                         PyUnicode_FromString(type.get_name().to_string().c_str()),
+                                                         baseClasses, PyDict_New(), callable, NULL);
+
+            PyDict_SetItemString(testDict, type.get_name().to_string().c_str(), clz);
+        }
+    }
+
 
     //PyObject* originalDict = PyModule_GetDict(testModule);
     //PyDict_SetItemString(originalDict, "TestMod", mod);
@@ -577,7 +620,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
         PyObject *initFunction = PyObject_GetAttrString(testModule, "init");
         if (initFunction)
         {
-            PyObject_CallObject(initFunction, NULL);
+            checkError(PyObject_CallObject(initFunction, NULL));
         }
     }
 }

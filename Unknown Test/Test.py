@@ -13,9 +13,8 @@
 #
 # # swap the ongrounds so that one player can only jump while the other is on the ground ????
 def init():
-    #print(__dict__)
-    print(dir())
-
-print(dir())
+    print("Init")
+    #tc = TestClass()
+    print(f"{Image().Test}")
 
 
