@@ -246,6 +246,8 @@ CTestTestfile.cmake
 .idea/modules.xml
 .idea/vcs.xml
 .idea/webResources.xml
+.idea/deployment.xml
+.idea/webServers.xml
 DevLib
 UKTest
 
