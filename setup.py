@@ -26,7 +26,6 @@ commands = {
                 "cp Libs/SDL2_ttf/lib/x64/libfreetype-6.dll:Unknown Test/",
                 "cp Libs/SDL2_ttf/lib/x64/SDL2_ttf.dll:Unknown Test/",
                 "cp Libs/SDL2_mixer/lib/x64/SDL2_mixer.dll:Unknown Test/",
-                "cp Libs/assimp/bin/Debug/assimp-vc140-mt.dll:Unknown Test/",
                 "cp Libs/SDL2_image/lib/x64/zlib1.dll:Unknown Test/"
             ]
         }
@@ -123,6 +122,10 @@ def command_dl(args):
             print(f"- {int(progress)} %")
 
     print(f"Downloading {args[0]}")
+
+    if os.path.exists(args[1]):
+    	print("File already exists, skipping")
+    	return
 
     urllib.request.urlretrieve(args[0], filename=args[1], reporthook=dl_command_callback)
 
