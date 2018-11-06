@@ -223,7 +223,7 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
 
     auto& uk = getUnknown();
 
-    SDL_Surface* imageSurface = IMG_LoadTyped_RW(getRWopsForStream(*Filesystem::readFile(path)), false, "PNG");
+    SDL_Surface* imageSurface = IMG_Load_RW(getRWopsForStream(*Filesystem::readFile(path)), false);
 
     if (!imageSurface) {
         printf("Error: failed to load image, %s\n", IMG_GetError());

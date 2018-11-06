@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_PHYSICSBODYCOMPONENT_H
 
 #include "Component.h"
-#include "Box2D/Box2D.h"
+#include <Box2D/Box2D.h>
 #include "../Scene/Scene.h"
 #include "../Vector.h"
 #include "../IInitable.h"

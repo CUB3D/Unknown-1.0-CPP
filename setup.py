@@ -14,7 +14,7 @@ commands = {
     "platforms": {
         # For all platforms
         "common": {
-            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "SDL2_mixer", "Box2D", "assimp"]
+            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "SDL2_mixer", "Box2D"]
         },
         # Windows specific setup
         "Windows": {
@@ -82,21 +82,6 @@ commands = {
             ],
             "Linux": [
                 "install box2d"
-            ]
-        },
-        "assimp": {
-            "Windows": [
-                "dl https://github.com/assimp/assimp/archive/v4.1.0.zip tools/assimp.zip",
-                "extract tools/assimp.zip Libs/",
-                "rm Libs/assimp",
-                "mv Libs/assimp-4.1.0 Libs/assimp",
-                "dl https://cmake.org/files/v3.12/cmake-3.12.2-win64-x64.zip tools/cmake.zip",
-                "extract tools/cmake.zip tools/build/cmake-dist",
-                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" -G \"Visual Studio 15 2017 Win64\" CMakeLists.txt",
-                "exec cd Libs/assimp && \"../../tools/build/cmake-dist/cmake-3.12.2-win64-x64/bin/cmake.exe\" --build ."
-            ],
-            "Linux": [
-                "install assimp"
             ]
         }
     }

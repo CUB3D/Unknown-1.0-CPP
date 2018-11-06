@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Colour.h"
 
+#include <algorithm>
+
 Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha) : red(red), green(green), blue(blue), alpha(alpha) {}
 
 Unknown::Colour::Colour(const int red, const int green, const int blue) : red(red), green(green), blue(blue), alpha(255) {}

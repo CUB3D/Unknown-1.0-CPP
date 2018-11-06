@@ -69,8 +69,8 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 	}
 
 #ifdef WIN32
-// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
-// What is this, some kind of sick joke
+	// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
+	// What is this, some kind of sick joke
 #define GetObjectA GetObject
 #endif
 

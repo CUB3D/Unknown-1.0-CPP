@@ -10,7 +10,12 @@
 #include "../Filesystem/Filesystem.h"
 #include "document.h"
 #include <rttr/type.h>
-//#include <rttr/property.h>
+
+#ifdef WIN32
+// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
+// What is this, some kind of sick joke
+#define GetObjectA GetObject
+#endif
 
 namespace Unknown {
     class SettingsParser {

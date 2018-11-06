@@ -287,6 +287,7 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 
 PyObject* createRawSprite(PyObject* self, PyObject* args)
 {
+	Py_RETURN_NONE;
 //    int typeValue = PY_GET_LONG(args, 0);
 //
 //    PyObject* data = PY_GET_OBJ(args, 1);

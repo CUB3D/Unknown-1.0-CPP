@@ -11,7 +11,11 @@
     #include "GLES3/gl3.h"
 #else
     // On most platforms, glad is all you need
-    #include "glad/glad.h"
+	#ifdef _WIN32
+		#define APIENTRY __stdcall
+	#endif
+	#define GLAD_GLAPI_EXPORT
+   #include "glad/glad.h"
 #endif
 
 #include <glm/glm.hpp>

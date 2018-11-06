@@ -7,16 +7,31 @@ set(UK_DIR ${PROJECT_SOURCE_DIR})
 set(UK_PROJECT_NAME UKTest)
 
 
+
 set(UK_INCLUDE "${UK_DIR}/Unknown 1.0++")
 set(UK_LIB "${UK_DIR}/Output/lib/${CMAKE_HOST_SYSTEM_NAME}/")
 set(CMAKE_MODULE_PATH "${UK_DIR}/tools/build/cmake-scripts")
-
-set(CMAKE_CXX_FLAGS -fPIC)
 
 # Enable debugging on g++
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -ggdb -pg -O3")
 endif()
+
+if(UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}" -fPIC)
+
+	set(UNIX_LIBS pthread dl util m stdc++fs)
+endif(UNIX)
+
+if(WIN32)
+    # Avoid __dllexport, etc
+    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+	#TODO: Test replacing /MD with /MT to remove need for redist
+
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MD /Zi")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MD /Zi")
+endif(WIN32)
 
 # Emscripten support
 if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
@@ -95,35 +110,44 @@ endif()
 
 # Find assimp
 # Need to build zlib also
-set(ASSIMP_BUILD_ZLIB TRUE)
+set(ASSIMP_BUILD_ZLIB ON)
+set(ASSIMP_BUILD_TESTS OFF)
+# Currently no need for exporting
+set(ASSIMP_NO_EXPORT ON)
+# Make static lib
+set(BUILD_SHARED_LIBS)
 # Currently this importer won't build with emscripten
-set(ASSIMP_BUILD_GLTF_IMPORTER FALSE)
+set(ASSIMP_BUILD_GLTF_IMPORTER OFF)
 add_subdirectory(${UK_DIR}/Libs/assimp)
 set(ASSIMP_LIBRARY_DIRS assimp)
 set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
 
+
 # Find glm
+set(GLM_TEST_ENABLE OFF)
 add_subdirectory(${UK_DIR}/Libs/glm)
 set(GLM_LIBRARY_DIRS glm_static)
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm)
 
 # Find rttr
-set(BUILD_RTTR_DYNAMIC False)
-set(BUILD_UNIT_TESTS False)
-set(BUILD_STATIC True)
-set(BUILD_EXAMPLES False)
-set(BUILD_WITH_STATIC_RUNTIME_LIBS True)
-set(BUILD_INSTALLER False)
-set(BUILD_DOCUMENTATION False)
-set(BUILD_INSTALLER False)
-set(BUILD_PACKAGE False)
+set(CMAKE_BUILD_TYPE None)
+set(BUILD_RTTR_DYNAMIC OFF)
+set(BUILD_UNIT_TESTS OFF)
+set(BUILD_STATIC ON)
+set(BUILD_EXAMPLES OFF)
+set(BUILD_WITH_STATIC_RUNTIME_LIBS OFF)
+set(BUILD_INSTALLER OFF)
+set(BUILD_DOCUMENTATION OFF)
+set(BUILD_INSTALLER OFF)
+set(BUILD_PACKAGE OFF)
+set(USE_PCH OFF)
 set(README_FILE README.md)
 set(LICENSE_FILE LICENCE.md)
 add_subdirectory(${UK_DIR}/Libs/rttr)
 set(RTTR_LIBRARIES rttr_core_lib)
 set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src/rttr)
 
-
+# Find libpak
 add_subdirectory(${UK_DIR}/Libs/libPAK)
 set(PAK_LIBRARY PAK)
 set(PAK_INCLUDE_DIR ${UK_DIR}/Libs/libPAK/include)
@@ -133,24 +157,6 @@ set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
 
 # Find Reflex
 set(Reflex_INCLUDE ${UK_DIR}/Libs/Reflex)
-
-# TODO: This is a mega hack
-link_directories(${UK_LIB})
-
-if(UNIX)
-    set(UNIX_LIBS pthread dl util m stdc++fs)
-endif()
-
-if(WIN32)
-    # Avoid __dllexport, etc
-    set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
-
-    # Remove need for MSVC++ redistribuable
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT /Zi")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT /Zi")
-endif(WIN32)
-
-set(BOX2D_INCLUDE_DIR ${UK_DIR}/Libs/Box2D)
 
 SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${PYTHON_LIBRARIES} ${BOX2D_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} ${ASSIMP_LIBRARY_DIRS} ${GLM_LIBRARY_DIRS} ${PAK_LIBRARY} ${RTTR_LIBRARIES})
 SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${PYTHON_INCLUDE_DIRS} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${BOX2D_INCLUDE_DIR} ${Reflex_INCLUDE} ${GLM_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${PAK_INCLUDE_DIR} ${RTTR_INCLUDE_DIR})

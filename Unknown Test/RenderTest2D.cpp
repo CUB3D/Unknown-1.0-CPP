@@ -64,8 +64,8 @@ float lightBuffer[ubo_size * 2];
 void RenderTest2D::render() const {
 
     if(s.prog == -1) {
-        texture = Unknown::getRendererBackend()->loadTexture("/home/cub3d/Downloads/crate.png");
-        spec = Unknown::getRendererBackend()->loadTexture("/home/cub3d/Downloads/crate_spec.png");
+        texture = Unknown::getRendererBackend()->loadTexture("crate.png");
+        spec = Unknown::getRendererBackend()->loadTexture("crate_spec.png");
         verticies = Unknown::getRendererBackend()->createRectVerticies(0, 0, 1, 1);
         s.compile();
 

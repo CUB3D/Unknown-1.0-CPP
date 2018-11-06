@@ -35,6 +35,7 @@
 #include "PhysicsTestScene.h"
 #include "RenderTestScene.h"
 #include "RenderTest2D.h"
+#include "GL/GL.h"
 
 //Unknown::Map map(1, 1);
 //Unknown::Timer timer(0.2f);

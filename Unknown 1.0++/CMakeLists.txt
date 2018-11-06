@@ -1,4 +1,6 @@
-FILE(GLOB_RECURSE UK_ENGINE_SRC "*.c*")
+FILE(GLOB_RECURSE UK_ENGINE_SRC "*.c*" )
+message("SRC: ${UK_ENGINE_SRC}")
+set(UK_ENGINE_SRC "GL/glad/glad.c;${UK_ENGINE_SRC}")
 
 add_library(UK SHARED ${UK_ENGINE_SRC})
 
