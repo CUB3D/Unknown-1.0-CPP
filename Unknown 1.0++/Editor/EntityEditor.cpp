@@ -3,7 +3,7 @@
 //
 
 #include "EntityEditor.h"
-#include "imgui.h"
+#include "../Imgui/GUI.h"
 
 Unknown::EntityEditor::EntityEditor(std::shared_ptr<::Unknown::Entity>&& ent) : ent(ent) {
     init();

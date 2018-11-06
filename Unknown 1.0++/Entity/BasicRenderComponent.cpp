@@ -4,7 +4,7 @@
 
 #include "BasicRenderComponent.h"
 #include "../UI2D.h"
-#include "../Editor/imgui.h"
+#include "../Imgui/GUI.h"
 
 
 void Unknown::BasicRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {

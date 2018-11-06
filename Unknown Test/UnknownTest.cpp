@@ -37,6 +37,8 @@
 #include "RenderTest2D.h"
 #include "GL/GL.h"
 
+#include "UK.h"
+
 //Unknown::Map map(1, 1);
 //Unknown::Timer timer(0.2f);
 //
@@ -161,8 +163,6 @@
 //        map = newMap;
 //    }
 //}
-
-#include "Editor/imgui.h"
 
 void render() {
     ImGui::Begin("Test");

@@ -1,11 +1,12 @@
 FILE(GLOB_RECURSE UK_ENGINE_SRC "*.c*" )
 
 add_subdirectory(Box2D)
+add_subdirectory(Imgui)
 
 add_library(UK SHARED ${UK_ENGINE_SRC})
 
 target_include_directories(UK PUBLIC ${COMBINED_INCLUDE})
-target_link_libraries(UK Box2D ${COMBINED_LIBS})
+target_link_libraries(UK Box2D ImGUI ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${UK_LIB})
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${UK_LIB})
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${UK_LIB})

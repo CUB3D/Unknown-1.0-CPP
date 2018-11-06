@@ -14,7 +14,7 @@ commands = {
     "platforms": {
         # For all platforms
         "common": {
-            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "SDL2_mixer", "Box2D"]
+            "Libs": ["SDL2", "SDL2_image", "SDL2_ttf", "SDL2_mixer"]
         },
         # Windows specific setup
         "Windows": {
@@ -70,17 +70,6 @@ commands = {
             ],
             "Linux": [
                 "install sdl2_mixer"
-            ]
-        },
-        "Box2D": {
-            "Windows": [
-                "dl https://github.com/premake/premake-core/releases/download/v5.0.0-alpha12/premake-5.0.0-alpha12-windows.zip tools/premake.zip",
-                "extract tools/premake.zip Libs/Box2D/Box2D",
-                "exec cd Libs/Box2D/Box2D && premake5.exe vs2017",
-                "make Libs/Box2D/Box2D/Build/vs2017/Box2D.sln"
-            ],
-            "Linux": [
-                "install box2d"
             ]
         }
     }

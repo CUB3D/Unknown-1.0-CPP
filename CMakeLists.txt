@@ -142,7 +142,7 @@ set(README_FILE README.md)
 set(LICENSE_FILE LICENCE.md)
 add_subdirectory(${UK_DIR}/Libs/rttr)
 set(RTTR_LIBRARIES rttr_core_lib)
-set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src/rttr)
+set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src)
 
 # Find libpak
 add_subdirectory(${UK_DIR}/Libs/libPAK)

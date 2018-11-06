@@ -32,9 +32,7 @@
 #include "Event/EventManager.h"
 #include "Image.h"
 #include "Log.h"
-#include "Editor/imgui.h"
-#include "Editor/imgui_impl_sdl.h"
-#include "Editor/imgui_impl_opengl3.h"
+#include "Imgui/GUI.h"
 
 // unknown class
 

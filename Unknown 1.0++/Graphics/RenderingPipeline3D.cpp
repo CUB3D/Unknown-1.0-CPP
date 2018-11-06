@@ -7,9 +7,7 @@
 #include "../GL/GL.h"
 #include "../Utils.h"
 #include "../Unknown.h"
-
-#include "../Editor/imgui.h"
-#include "../Editor/imgui_impl_opengl3.h"
+#include "../Imgui/GUI.h"
 
 void RenderingPipeline3D::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);

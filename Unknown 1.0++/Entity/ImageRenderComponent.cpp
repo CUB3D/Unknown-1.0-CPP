@@ -4,7 +4,7 @@
 
 #include "ImageRenderComponent.h"
 #include "../Utils.h"
-#include "../Editor/imgui.h"
+#include "../Imgui/GUI.h"
 
 Unknown::ImageRenderComponent::ImageRenderComponent(const std::string &filename, const int renderScale) : img(filename), renderScale(renderScale) {}
 

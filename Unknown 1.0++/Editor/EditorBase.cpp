@@ -3,13 +3,12 @@
 //
 
 #include "EditorBase.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
 #include "../Unknown.h"
 #include "../Entity/Entity.h"
 #include "../Loader.h"
 #include "../Event/Event.h"
 #include "../UI2D.h"
+#include "../Imgui/GUI.h"
 
 Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), under(under), editing(false) {
 

@@ -31,7 +31,7 @@
 #include "Scene/SceneManager.h"
 #include "Scene/CollisionManager.h"
 
-#include "Editor/imgui.h"
+#include "Imgui/GUI.h"
 
 
 #endif //UNKNOWN_DEVELOPMENT_TOOL_UK_H

@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_EDITORBASE_H
 
 #include <SDL.h>
-#include "imgui.h"
+#include "../Imgui/GUI.h"
 #include <deque>
 #include "../Scene/Scene.h"
 #include "EntityEditor.h"

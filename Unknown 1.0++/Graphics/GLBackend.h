@@ -50,7 +50,11 @@ namespace Unknown
                                                    "    float ambientLightStrength = 1.0;\n"
                                                    "    vec3 ambient = ambientLightStrength * lightColour;\n"
                                                    "\n"
-                                                   "    fragColour = texture(texture0, UV) * vec4(ambient, 1.0);\n"
+                                                   "    vec4 outColour = texture(texture0, UV) * vec4(ambient, 1.0);\n"
+                                                   "    if(outColour.a < 0.1) {\n"
+                                                   "        discard;\n"
+                                                   "    }\n"
+                                                   "    fragColour = outColour;\n"
                                                    "}";
 
     const static std::string renderingVertexShader = "#version 300 es\n"

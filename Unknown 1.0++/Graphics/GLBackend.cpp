@@ -11,9 +11,7 @@
 #include "../Filesystem/Filesystem.h"
 #include "../Filesystem/FSUtils.h"
 #include "../Log.h"
-#include "../Editor/imgui.h"
-#include "../Editor/imgui_impl_sdl.h"
-#include "../Editor/imgui_impl_opengl3.h"
+#include "../Imgui/GUI.h"
 
 void Unknown::GLBackend::intialise(const EngineConfig& config) {
     UK_LOG_INFO("Intialising OpenGL Backend");

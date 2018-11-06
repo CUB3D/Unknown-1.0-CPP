@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_ENGINECONFIG_H
 
 #include <string>
-#include <rttr/registration.h>
+#include "rttr/registration.h"
 
 namespace Unknown {
     struct EngineConfig {
