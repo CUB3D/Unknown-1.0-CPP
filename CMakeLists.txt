@@ -25,8 +25,6 @@ if(WIN32)
     # Avoid __dllexport, etc
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-	#TODO: Test replacing /MD with /MT to remove need for redist
-
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MD /Zi")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MD /Zi")
 endif(WIN32)
@@ -68,6 +66,10 @@ if(CMAKE_CXX_COMPILER MATCHES "/em\\+\\+(-[a-zA-Z0-9.])?$") # Emscripten
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --preload-file '/home/cub3d/Development/git/Unknown-1.0-CPP/Unknown Test/nano@nano'")
 endif()
+
+# Always build libs as static
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_BUILD_TYPE MinSizeRel)
 
 
 # Find SDL2
@@ -111,8 +113,6 @@ set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 set(INJECT_DEBUG_POSTFIX OFF)
 # Currently no need for exporting
 set(ASSIMP_NO_EXPORT ON)
-# Make static lib
-set(BUILD_SHARED_LIBS OFF)
 # Currently this importer won't build with emscripten
 set(ASSIMP_BUILD_GLTF_IMPORTER OFF)
 add_subdirectory(${UK_DIR}/Libs/assimp)
@@ -127,7 +127,6 @@ set(GLM_LIBRARY_DIRS glm_static)
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm)
 
 # Find rttr
-set(CMAKE_BUILD_TYPE None)
 set(BUILD_RTTR_DYNAMIC OFF)
 set(BUILD_UNIT_TESTS OFF)
 set(BUILD_STATIC ON)
