@@ -7,9 +7,6 @@
 [submodule "Libs/RapidJson"]
 	path = Libs/RapidJson
 	url = https://github.com/Tencent/rapidjson
-[submodule "Libs/Reflex"]
-	path = Libs/Reflex
-	url = https://gogs.cub3d.pw/CUB3D/Reflex.git
 [submodule "Libs/assimp"]
 	path = Libs/assimp
 	url = https://github.com/assimp/assimp
@@ -21,7 +18,7 @@
     url = https://github.com/ocornut/imgui
 [submodule "Libs/libPAK"]
 	path = Libs/libPAK
-	url = https://gogs.cub3d.pw/CUB3D/libPAK
+	url = https://github.com/CUB3D/libPAK
 [submodule "Libs/rttr"]
 	path = Libs/rttr
 	url = https://github.com/rttrorg/rttr
