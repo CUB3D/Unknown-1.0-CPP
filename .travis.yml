@@ -16,9 +16,7 @@ matrix:
                       - libsdl2-image-dev
                       - libsdl2-mixer-dev
                       - libsdl2-ttf-dev
-                      - libbox2d-dev
                       - python3
-                      - libassimp-dev
           env:
               - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
 
@@ -26,4 +24,4 @@ matrix:
         - eval "${MATRIX_EVAL}"
 
 
-script: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=`which gcc-8` -DCMAKE_CXX_COMPILER=`which g++-8` -DTRAVIS=True .. && make
+script: mkdir build && cd build && cmake -DCMAKE_C_COMPILER=`which gcc-8` -DCMAKE_CXX_COMPILER=`which g++-8` .. && make
