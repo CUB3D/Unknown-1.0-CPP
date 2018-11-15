@@ -115,6 +115,8 @@ set(INJECT_DEBUG_POSTFIX OFF)
 set(ASSIMP_NO_EXPORT ON)
 # Currently this importer won't build with emscripten
 set(ASSIMP_BUILD_GLTF_IMPORTER OFF)
+# Disable CPack, as well as others
+set(ASSIMP_OPT_BUILD_PACKAGES OFF)
 add_subdirectory(${UK_DIR}/Libs/assimp)
 set(ASSIMP_LIBRARY_DIRS assimp)
 set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
