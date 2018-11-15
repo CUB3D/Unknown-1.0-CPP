@@ -1,7 +1,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "Utils.h"
+#include "Types/Dimension.h"
 #include <memory>
 
 namespace Unknown

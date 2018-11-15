@@ -5,11 +5,11 @@
 #include <memory>
 #include <vector>
 #include "IInitable.h"
-#include "Utils.h"
 
 #include "GL/GL.h"
 #include "Graphics/RenderingBackend.h"
 #include "Graphics/Shader.h"
+#include "Types/Dimension.h"
 
 namespace Unknown
 {

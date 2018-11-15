@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Map.h"
 
-#include "Utils.h"
+#include "Types/Dimension.h"
 
 
 Unknown::Map::Map(const int width, const int height)
@@ -49,8 +49,11 @@ const std::unique_ptr<int[]>& Unknown::Map::getData()
 
 Unknown::MapCellProxy Unknown::Map::operator[](int pos)
 {
-	assert(pos >= 0);
-	assert(pos < mapSize.height * mapSize.width);
+	if(pos < 0 || pos > mapSize.width * mapSize.height) {
+		printf("Map::operator[]::Invalid map index %d\n", pos);
+		exit(0);
+	}
+
 	int y = pos / mapSize.height;
 	int x = pos - y * mapSize.height;
 	return MapCellProxy(*this, x, y);

@@ -10,11 +10,6 @@
 #include <algorithm>
 #include <locale>
 
-Unknown::Direction up(0, 1);
-Unknown::Direction down(0, -1);
-Unknown::Direction left(1, 0);
-Unknown::Direction right(-1, 0);
-
 
 rapidjson::Document Unknown::readJSONFile(const char* filename)
 {

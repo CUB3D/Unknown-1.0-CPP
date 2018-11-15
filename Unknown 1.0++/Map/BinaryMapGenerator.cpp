@@ -3,6 +3,7 @@
 //
 
 #include "BinaryMapGenerator.h"
+#include "Utils.h"
 
 Unknown::BinaryMapGenerator::BinaryMapGenerator() : BasicMapGenerator([&](const int x, const int y) {return this->generateTile(x, y);}) {
 

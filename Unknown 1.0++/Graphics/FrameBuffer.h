@@ -8,6 +8,7 @@
 
 #include "../GL/GL.h"
 #include "../Utils.h"
+#include "../Types/Dimension.h"
 
 namespace Unknown
 {

@@ -4,6 +4,7 @@
 
 #include "ImageDirectoryTileMapRenderer.h"
 #include "../Map.h"
+#include "../Utils.h"
 #ifdef __EMSCRIPTEN__
     #include <experimental/filesystem>
     #define FS ::std::experimental::filesystem

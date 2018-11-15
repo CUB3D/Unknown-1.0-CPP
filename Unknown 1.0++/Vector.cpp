@@ -49,10 +49,12 @@ b2Vec2 Unknown::Vector::getBox2DVec() const {
     return b2Vec2(this->x, this->y);
 }
 
-//TODO: finish
 RTTR_REGISTRATION {
 	rttr::registration::class_<Unknown::Vector>("Vector")
 	    .method("getLength", &Unknown::Vector::getLength)
+	    .method("normalize", &Unknown::Vector::normalize)
+	    .method("getAngleTo", &Unknown::Vector::getAngleTo)
+	    .method("getBox2DVec", &Unknown::Vector::getBox2DVec)
 	    .property("x", &Unknown::Vector::x)
 	    .property("y", &Unknown::Vector::y);
 };

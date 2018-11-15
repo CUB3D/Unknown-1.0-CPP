@@ -5,7 +5,7 @@
 #ifndef UNKNOWN_GAME_IRENDERABLE_H
 #define UNKNOWN_GAME_IRENDERABLE_H
 
-#include "../Utils.h"
+#include "../Types/Rect.h"
 
 namespace Unknown
 {

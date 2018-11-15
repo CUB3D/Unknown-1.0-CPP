@@ -6,7 +6,8 @@
 #define UNKNOWN_GAME_CAMERA_H
 
 #include "../Map.h"
-#include "../Utils.h"
+#include "../Types/Direction.h"
+#include "../Types/Rect.h"
 
 namespace Unknown
 {

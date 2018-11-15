@@ -9,9 +9,11 @@
 #include "../Renderer/IRenderable.h"
 #include "../IUpdateable.h"
 #include <vector>
-#include "../Utils.h"
 #include "../ITagable.h"
 #include "../IInitable.h"
+#include "../Types/Dimension.h"
+#include "../Types/Point.h"
+#include <memory>
 
 namespace Unknown
 {
