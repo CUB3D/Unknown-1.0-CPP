@@ -19,12 +19,15 @@ namespace Unknown
 
         Dimension<int> frameSize;
 
+
+
     public:
         FrameBuffer(const Dimension<int> frameSize);
 
         void createFBO();
 
         void bindFBO();
+        void renderFBO() const;
 
     };
 }

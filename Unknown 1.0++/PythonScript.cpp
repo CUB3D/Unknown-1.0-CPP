@@ -458,8 +458,6 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
     Py_RETURN_NONE;
 }
 
-#include "Reflex.h"
-
 //TODO: test and add changes from reflex to repo
 PyObject* makeObject(PyObject* self, PyObject* args) {
     printf("Creating obj\n");
@@ -484,27 +482,27 @@ PyObject* makeObject(PyObject* self, PyObject* args) {
 }
 
 PyObject* setField(PyObject* self, PyObject* args) {
-    std::string classname = std::string(PY_GET_UTF8(args, 0));
-    std::string fieldName = std::string(PY_GET_UTF8(args, 1));
-    void* capsule = PyCapsule_GetPointer(PyTuple_GetItem(args, 2), classname.c_str());
-    PyObject* value = PyTuple_GetItem(args, 3);
-
-    if(!capsule) {
-        UK_LOG_ERROR_VERBOSE("Attempt to access field:", fieldName, "on null reference to", classname);
-        Py_RETURN_NONE;
-    }
-
-    std::shared_ptr<ClassInfoBase> classInfo = getClassInfo(classname);
-
-    auto field = classInfo->fields[fieldName];
-    std::type_index fieldType = field->getType(capsule);
-
-    if(fieldType == typeid(double)) {
-        double d = PyFloat_AsDouble(value);
-        printf("Set %s.%s to %lf\n", classname.c_str(), fieldName.c_str(), d);
-
-        field->setValue<decltype(d)>(capsule, d);
-    }
+//    std::string classname = std::string(PY_GET_UTF8(args, 0));
+//    std::string fieldName = std::string(PY_GET_UTF8(args, 1));
+//    void* capsule = PyCapsule_GetPointer(PyTuple_GetItem(args, 2), classname.c_str());
+//    PyObject* value = PyTuple_GetItem(args, 3);
+//
+//    if(!capsule) {
+//        UK_LOG_ERROR_VERBOSE("Attempt to access field:", fieldName, "on null reference to", classname);
+//        Py_RETURN_NONE;
+//    }
+//
+//    std::shared_ptr<ClassInfoBase> classInfo = getClassInfo(classname);
+//
+//    auto field = classInfo->fields[fieldName];
+//    std::type_index fieldType = field->getType(capsule);
+//
+//    if(fieldType == typeid(double)) {
+//        double d = PyFloat_AsDouble(value);
+//        printf("Set %s.%s to %lf\n", classname.c_str(), fieldName.c_str(), d);
+//
+//        field->setValue<decltype(d)>(capsule, d);
+//    }
 
     Py_RETURN_NONE;
 }

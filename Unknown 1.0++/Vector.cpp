@@ -48,3 +48,11 @@ Unknown::Vector::Vector(const b2Vec2 vec) : Vector(vec.x, vec.y) {}
 b2Vec2 Unknown::Vector::getBox2DVec() const {
     return b2Vec2(this->x, this->y);
 }
+
+//TODO: finish
+RTTR_REGISTRATION {
+	rttr::registration::class_<Unknown::Vector>("Vector")
+	    .method("getLength", &Unknown::Vector::getLength)
+	    .property("x", &Unknown::Vector::x)
+	    .property("y", &Unknown::Vector::y);
+};

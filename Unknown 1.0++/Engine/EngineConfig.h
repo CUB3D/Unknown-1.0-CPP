@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_ENGINECONFIG_H
 
 #include <string>
-#include "rttr/registration.h"
+#include "rttr/registration"
 
 namespace Unknown {
     struct EngineConfig {
@@ -21,17 +21,6 @@ namespace Unknown {
         int vsync;
     };
 }
-
-RTTR_REGISTRATION {
-    rttr::registration::class_<Unknown::EngineConfig>("EngineConfig")
-            .property("TargetHeight", &Unknown::EngineConfig::targetHeight)
-            .property("TargetWidth", &Unknown::EngineConfig::targetWidth)
-            .property("Title", &Unknown::EngineConfig::title)
-            .property("TargetUPS", &Unknown::EngineConfig::targetUPS)
-            .property("MSAA", &Unknown::EngineConfig::MSAA)
-            .property("VSync", &Unknown::EngineConfig::vsync)
-            .property("RendererMode", &Unknown::EngineConfig::rendererMode);
-};
 
 
 #endif //UNKNOWN_DEVELOPMENT_TOOL_ENGINECONFIG_H

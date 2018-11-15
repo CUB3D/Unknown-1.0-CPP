@@ -42,3 +42,9 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 }
 
 Unknown::Graphics::Image::~Image() {}
+
+RTTR_REGISTRATION {
+	rttr::registration::class_<Unknown::Graphics::Image>("Image")
+			.constructor<const std::string&>()
+			.method("render", &Unknown::Graphics::Image::render);
+}

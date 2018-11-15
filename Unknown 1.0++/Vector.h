@@ -3,7 +3,7 @@
 
 #include "Utils.h"
 #include <Box2D/Box2D.h>
-#include "Reflex.h"
+#include <rttr/registration.h>
 
 namespace Unknown
 {
@@ -30,14 +30,6 @@ namespace Unknown
 
         b2Vec2 getBox2DVec() const;
 	};
-
-
-	REFLECT
-	{
-		addClass(Vector)
-		->addProp(x)
-		->addProp(y);
-	}
 }
 
 #endif

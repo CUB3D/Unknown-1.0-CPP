@@ -7,8 +7,8 @@
 
 #include "Component.h"
 #include "../Colour.h"
-#include "Reflex.h"
 #include <array>
+#include <rttr/registration>
 
 namespace Unknown
 {
@@ -32,12 +32,11 @@ namespace Unknown
         virtual Rect<int> getRenderBounds(const Entity& ent);
     };
 
-
-	REFLECT {
-        addClass(BasicRenderComponent)
-        ->addProp(col)
-        ->addProp(renderScale);
-    };
+//    RTTR_REGISTRATION {
+//        rttr::registration::class_<BasicRenderComponent>("BasicRenderComponent")
+//            .property("col", &BasicRenderComponent::col)
+//            .property("renderScale", &BasicRenderComponent::renderScale);
+//    };
 }
 
 

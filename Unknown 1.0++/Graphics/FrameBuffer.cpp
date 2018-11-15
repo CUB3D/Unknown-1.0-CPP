@@ -36,3 +36,14 @@ void Unknown::FrameBuffer::createFBO() {
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
+
+void Unknown::FrameBuffer::renderFBO() const {
+ //   fboRenderShader.bind(true);
+  //  glBindVertexArray();
+    glDisable(GL_DEPTH_TEST);
+//    fboRenderShader.setFloat("fboTexture", 0);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureBufferID);
+    //bind rbo
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+}

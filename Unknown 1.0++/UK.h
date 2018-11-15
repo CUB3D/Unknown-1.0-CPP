@@ -15,6 +15,7 @@
 #include "Utils.h"
 #include "Vector.h"
 #include "Loader.h"
+#include "Input.h"
 
 #include "Entity/Entity.h"
 #include "Entity/Component.h"

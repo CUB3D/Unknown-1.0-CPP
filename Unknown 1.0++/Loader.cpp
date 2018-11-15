@@ -86,31 +86,31 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 		auto typeString = std::string(typeValue->value.GetString());
 
 		// TODO: migrate all loading to this if it works on windows
-		std::shared_ptr<ClassInfoBase> classInfo = (*Reflex::getInstance().m1)[typeString + "Component"];
-		if(classInfo) {
-		    UK_LOG_INFO("Found class info for", typeString);
-			std::shared_ptr<Component> instance((Component*)classInfo->newRawInstance());
-
-			// For all of the attributes of this component
-			for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
-				std::string name = std::string(attr->name.GetString());
-				UK_LOG_INFO("Loading attr for", name);
-
-				// Find the field in the class with that name
-				std::shared_ptr<FieldDataBase> field = classInfo->fields[name];
-				if(field) {
-				    UK_LOG_INFO("Found field", field->name);
-					if(field->getType(instance.get()) == typeid(int)) {
-						field->setValue(instance.get(), attr->value.GetInt());
-					}
-					if(field->getType(instance.get()) == typeid(Colour)) {
-						field->setValue(instance.get(), *getColourFromString(attr->value.GetString()));
-					}
-				}
-			}
-
-			ent->components.push_back(instance);
-		}
+//		std::shared_ptr<ClassInfoBase> classInfo = (*Reflex::getInstance().m1)[typeString + "Component"];
+//		if(classInfo) {
+//		    UK_LOG_INFO("Found class info for", typeString);
+//			std::shared_ptr<Component> instance((Component*)classInfo->newRawInstance());
+//
+//			// For all of the attributes of this component
+//			for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
+//				std::string name = std::string(attr->name.GetString());
+//				UK_LOG_INFO("Loading attr for", name);
+//
+//				// Find the field in the class with that name
+//				std::shared_ptr<FieldDataBase> field = classInfo->fields[name];
+//				if(field) {
+//				    UK_LOG_INFO("Found field", field->name);
+//					if(field->getType(instance.get()) == typeid(int)) {
+//						field->setValue(instance.get(), attr->value.GetInt());
+//					}
+//					if(field->getType(instance.get()) == typeid(Colour)) {
+//						field->setValue(instance.get(), *getColourFromString(attr->value.GetString()));
+//					}
+//				}
+//			}
+//
+//			ent->components.push_back(instance);
+//		}
 
 		// Loading basic renderers
 		if(typeString == "BasicRenderer") {
