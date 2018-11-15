@@ -104,44 +104,39 @@ endif(PYTHONLIBS_FOUND)
 
 # Find assimp
 # Need to build zlib also
-set(ASSIMP_BUILD_ZLIB ON)
+set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "Enable to build zlib")
 # No build tests
-set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "Enable to build tests")
 # No need for tools
-set(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "Enable to build additional tools")
 # Don't add (d) to end of debug libs
-set(INJECT_DEBUG_POSTFIX OFF)
+set(INJECT_DEBUG_POSTFIX OFF CACHE BOOL "Enable to add postfix to debug libraries")
 # Currently no need for exporting
-set(ASSIMP_NO_EXPORT ON)
+set(ASSIMP_NO_EXPORT ON CACHE BOOL "Enable to build exporters")
 # Currently this importer won't build with emscripten
-set(ASSIMP_BUILD_GLTF_IMPORTER OFF)
+set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "Enable to build GLTF importer (not currently working with emscripten)")
 # Disable CPack, as well as others
-set(ASSIMP_OPT_BUILD_PACKAGES OFF)
+set(ASSIMP_OPT_BUILD_PACKAGES OFF CACHE BOOL "Enable to build additional packages")
 add_subdirectory(${UK_DIR}/Libs/assimp)
 set(ASSIMP_LIBRARY_DIRS assimp)
 set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
 
 
 # Find glm
-set(GLM_TEST_ENABLE OFF)
+set(GLM_TEST_ENABLE OFF CACHE BOOL "Enable to build tests")
 add_subdirectory(${UK_DIR}/Libs/glm)
 set(GLM_LIBRARY_DIRS glm_static)
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm)
 
 # Find rttr
-set(BUILD_RTTR_DYNAMIC OFF)
-set(BUILD_UNIT_TESTS OFF)
-set(BUILD_STATIC ON)
-set(BUILD_EXAMPLES OFF)
-set(BUILD_WITH_STATIC_RUNTIME_LIBS OFF)
-set(BUILD_INSTALLER OFF)
-set(BUILD_DOCUMENTATION OFF)
-set(BUILD_DOCUMENTATION False)
-set(BUILD_INSTALLER OFF)
-set(BUILD_PACKAGE OFF)
-set(USE_PCH OFF)
-#set(README_FILE README.md)
-#set(LICENSE_FILE LICENCE.md)
+set(BUILD_RTTR_DYNAMIC OFF CACHE BOOL "Build the dynamic/shared version of RTTR library")
+set(BUILD_UNIT_TESTS OFF CACHE BOOL "Build the unit tests of RTTR")
+set(BUILD_STATIC ON CACHE BOOL "Build RTTR as static library")
+set(BUILD_EXAMPLES OFF CACHE BOOL "Enable this to build the examples")
+set(BUILD_DOCUMENTATION OFF CACHE BOOL "Enable this to build the documentation")
+set(BUILD_INSTALLER OFF CACHE BOOL "Enable this to build the installer")
+set(BUILD_PACKAGE OFF CACHE BOOL "Enable this to build the installer")
+#set(USE_PCH OFF CACHE BOOL "Use precompiled header files for compilation")
 add_subdirectory(${UK_DIR}/Libs/rttr)
 set(RTTR_LIBRARIES rttr_core_lib)
 set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src)
