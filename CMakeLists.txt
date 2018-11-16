@@ -142,6 +142,7 @@ set(RTTR_LIBRARIES rttr_core_lib)
 set(RTTR_INCLUDE_DIR ${UK_DIR}/Libs/rttr/src)
 
 # Find libpak
+set(PAK_BUILD_TEST OFF CACHE BOOL "Build tests" FORCE)
 add_subdirectory(${UK_DIR}/Libs/libPAK)
 set(PAK_LIBRARY PAK)
 set(PAK_INCLUDE_DIR ${UK_DIR}/Libs/libPAK/include)
