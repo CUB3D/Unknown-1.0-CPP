@@ -15,6 +15,8 @@
 def init():
     print("Init")
     #tc = TestClass()
-    print(f"{Image().Test}")
+    print(f"Testing dypy: {dir(Vector)}")
+    print(f"typename: {Vector.__UK_TYPE_NAME}")
+    print(f"Testing: {Vector().x}")
 
 

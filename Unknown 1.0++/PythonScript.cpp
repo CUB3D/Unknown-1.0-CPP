@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "Unknown.h"
 #include <cstdio>
+#include <frameobject.h>
 #include "Loader.h"
 #include "Image.h"
 #include "Event/EventManager.h"
@@ -460,16 +461,29 @@ PyObject* setSharedValue(PyObject* self, PyObject* args) {
 
 //TODO: test and add changes from reflex to repo
 PyObject* makeObject(PyObject* self, PyObject* args) {
-    printf("Creating obj\n");
+    PyObject* obj = PY_GET_OBJ(args, 0);
 
-    PyObject* clz = PySequence_GetItem(args, 0);
+    printf("%s\n", PyUnicode_AsUTF8(PyObject_Str(args)));
+    printf("%s\n", PyUnicode_AsUTF8(PyObject_Str(self)));
 
-    if(!clz)
+   // PyObject* name = PyDict_GetItemString(obj, "__UK_name");
+   // UK_LOG_INFO("Created obj:", PyUnicode_AsUTF8(name));
+
+
+    //auto type = rttr::type::get_by_name(name);
+
+    //UK_LOG_INFO("Creating type", name);
+
+//    if(type.is_valid()) {
+//        UK_LOG_INFO("Valid type");
+//    }
+
+    if(!obj)
         printf("Invalid class\n");
 
-    PyDict_SetItemString(clz, "Test", PyLong_FromDouble(1.0));
+    PyDict_SetItemString(obj, "Test", PyLong_FromDouble(1.0));
 
-    return clz;
+    return obj;
 //    std::string name = std::string(PY_GET_UTF8(args, 0));
 //    auto m1 = Reflex::getInstance().m1;
 //
@@ -507,7 +521,101 @@ PyObject* setField(PyObject* self, PyObject* args) {
     Py_RETURN_NONE;
 }
 
+const rttr::type* currentType = nullptr;
+
 #include "rttr/type.h"
+
+PyObject* cstr(PyObject* self, PyObject* args) {
+    // Self is null, args is empty
+    printf("cstr args - %s\n", PyUnicode_AsUTF8(PyObject_Str(args)));
+
+    UK_LOG_INFO("Creating obj");
+
+
+    // Get the type for this virtual class
+    rttr::type type = rttr::type::get_by_name(PyUnicode_AsUTF8(PyDict_GetItemString(self, "__UK_TYPE_NAME")));
+
+    UK_LOG_INFO("Type:", type.get_name().to_string());
+
+
+    // Create an instance of the class
+    //TODO: handle different args other than empty
+    rttr::variant instance = (*type.get_constructors().begin()).invoke();
+
+    // Store in capsule
+    PyDict_SetItemString(self, "__UK_CAPSULE", PyCapsule_New(instance.get_value<void*>(), type.get_name().to_string().c_str(), [](PyObject* d){
+        printf("Destroying something\n");
+    }));
+
+    //TODO: look in mkobj and change to set/get attr
+    // Update the properties with the ones from the class
+    for(auto& field : type.get_properties()) {
+        UK_LOG_INFO("Adding prop", field.get_name().to_string());
+        PyDict_SetItemString(self, field.get_name().to_string().c_str(), PyLong_FromLong(field.get_value(instance).get_value<int>()));
+    }
+
+    printf("%s\n", PyUnicode_AsUTF8(PyObject_Str(self)));
+
+    Py_RETURN_NONE;
+}
+
+PyObject* new_(PyObject* self, PyObject* args) {
+    auto type = PY_GET_OBJ(args, 0);
+
+    auto obj = PyObject_NEW(PyObject, type->ob_type);
+
+    printf("new self - %s\n", PyUnicode_AsUTF8(PyObject_Str(self)));
+    printf("new args - %s\n", PyUnicode_AsUTF8(PyObject_Str(args)));
+
+    std::cout << std::endl;
+
+    return obj;
+}
+
+PyObject* mkobj(PyObject* self, PyObject* args) {
+    PyObject *obj = PY_GET_OBJ(args, 0);
+
+    if(!currentType) {
+        printf("Err\n");
+        return obj;
+    }
+    UK_LOG_INFO("Creating type", currentType->get_name().to_string());
+
+    // Add dummy fields
+    for(auto& field : (*currentType).get_properties()) {
+        UK_LOG_INFO("Adding prop", field.get_name().to_string());
+        PyDict_SetItemString(obj, field.get_name().to_string().c_str(), Py_None);
+    }
+
+    // Add fake constructor
+    PyMethodDef* cback = generatePyMethodDef("__init__", cstr, "");
+    /**
+     * TODO: this is not a bug, but very important to acknowledge
+     * The constructor of each generated obj is **NOT** a member of the class that it constructs
+     * it is instead a member of a dictionary, not an __ELEMENT__ but a __MEMBER__ of the dictionary instance
+     */
+    // TODO: this is a major hack, not a bug
+    PyObject* callable = PyCFunction_NewEx(cback, obj, PyUnicode_FromString((*currentType).get_name().to_string().c_str()));
+    PyDict_SetItemString(obj, "__init__", callable);
+
+
+    PyMethodDef* newback = generatePyMethodDef("__new__", new_, "");
+    PyObject* newcallable = PyCFunction_NewEx(newback, obj, PyUnicode_FromString((*currentType).get_name().to_string().c_str()));
+    PyDict_SetItemString(obj, "__new__", newcallable);
+
+    // Store enough info to recover type later (typename)
+    PyDict_SetItemString(obj, "__UK_TYPE_NAME", PyUnicode_FromString(currentType->get_name().to_string().c_str()));
+
+    for(auto& method : (*currentType).get_methods()) {
+        UK_LOG_INFO("Adding method", method.get_name().to_string());
+    }
+
+    //tODO: replace the get/set attr func instead of copying state of values
+
+    UK_LOG_INFO("-------");
+
+    return args;
+}
 
 void Unknown::Python::Interpreter::loadScript(std::string name)
 {
@@ -528,28 +636,24 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 //        }
 //    }
 
-    MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
-    MAKE_FUNC_MAPPING("raw_sprite_interface", "Call a function on a sprite", rawSpriteCall);
-    registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
-    registerMethod("Unknown", "create_raw_image", "Create an image capsule", createRawImageHandler);
-    registerMethod("Unknown", "render_raw_image", "Render an image capsule", renderRawImageHandler);
-    registerMethod("Unknown", "create_raw_timer", "Create a timer capsule", createRawTimer);
-    registerMethod("Unknown", "timer_reset", "Resets a timer capsule", resetRawTimer);
-    registerMethod("Unknown", "timer_isTickComplete", "Checks a timer capsule", checkRawTimer);
-    registerMethod("Unknown", "event_register_handler", "Register a key handler", registerRawEventHandler);
-    registerMethod("Unknown", "uk_log", "Print a string to stdout", logMessage);
-    registerMethod("Unknown", "create_raw_sprite", "Create a sprite capsule", createRawSprite);
-    registerMethod("Unknown", "get_mouse_pos", "Get mouse position", getMousePos);
-    registerMethod("Unknown", "raw_get_shared", "Get shared value", getSharedValue);
-    registerMethod("Unknown", "raw_set_shared", "Set shared value", setSharedValue);
-    MAKE_FUNC_MAPPING("uk_make_obj", "Create an instance of a class", makeObject);
-    MAKE_FUNC_MAPPING("uk_set_field", "Set a field in an object", setField);
-    //TODO: getfield, callfunc
+//    MAKE_FUNC_MAPPING("raw_vector_interface", "Call a function on a vector", rawVectorInterface);
+//    MAKE_FUNC_MAPPING("raw_sprite_interface", "Call a function on a sprite", rawSpriteCall);
+//    registerMethod("Unknown", "register_hook", "Add a base hook", registerHookHandler);
+//    registerMethod("Unknown", "create_raw_image", "Create an image capsule", createRawImageHandler);
+//    registerMethod("Unknown", "render_raw_image", "Render an image capsule", renderRawImageHandler);
+//    registerMethod("Unknown", "create_raw_timer", "Create a timer capsule", createRawTimer);
+//    registerMethod("Unknown", "timer_reset", "Resets a timer capsule", resetRawTimer);
+//    registerMethod("Unknown", "timer_isTickComplete", "Checks a timer capsule", checkRawTimer);
+//    registerMethod("Unknown", "event_register_handler", "Register a key handler", registerRawEventHandler);
+//    registerMethod("Unknown", "uk_log", "Print a string to stdout", logMessage);
+//    registerMethod("Unknown", "create_raw_sprite", "Create a sprite capsule", createRawSprite);
+//    registerMethod("Unknown", "get_mouse_pos", "Get mouse position", getMousePos);
+//    registerMethod("Unknown", "raw_get_shared", "Get shared value", getSharedValue);
+//    registerMethod("Unknown", "raw_set_shared", "Set shared value", setSharedValue);
+//    MAKE_FUNC_MAPPING("uk_make_obj", "Create an instance of a class", makeObject);
+//    MAKE_FUNC_MAPPING("uk_set_field", "Set a field in an object", setField);
+//    //TODO: getfield, callfunc
 
-
-
-    PyMethodDef* cback = generatePyMethodDef("A", makeObject, "");
-    PyObject* callable = PyCFunction_NewEx(cback, (PyObject*)NULL, PyUnicode_FromString("Unknown"));
 
     UK_LOG_INFO("Loading script", name);
 
@@ -559,30 +663,42 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 
     // Add the new class to the module
 
+    // The defintion for the mkobj func
+    PyMethodDef* cback = generatePyMethodDef("A", mkobj, "");
+    // The pycfunction for the mkobj func
+    PyObject* callable = PyCFunction_NewEx(cback, (PyObject*)NULL, PyUnicode_FromString("Unknown"));
 
+    // The types module
     PyObject* typesMod = PyImport_AddModule("types");
 
     if(!typesMod)
         printf("Failed to load types module\n");
 
+    // Get dir(typesMod)
     PyObject* typesDict = PyModule_GetDict(typesMod);
 
     if(!typesDict)
         printf("Typesdict bad\n");
 
+    // Get typesMod["new_class"]
     PyObject* new_classFunc = PyDict_GetItemString(typesDict, "new_class");
 
     if(!new_classFunc)
         printf("new_class bad\n");
 
+    // For each of the types
     for(auto& type : rttr::type::get_types()) {
         if(type.is_class()) {
-            PyObject* baseClasses = PyTuple_New(0);
+            UK_LOG_INFO("Adding dypy class", type.get_name().to_string());
 
+            PyObject* baseClasses = PyTuple_New(0);
+            PyObject* internal = PyDict_New();
+
+            currentType = &type;
 
             PyObject *clz = PyObject_CallFunctionObjArgs(new_classFunc,
                                                          PyUnicode_FromString(type.get_name().to_string().c_str()),
-                                                         baseClasses, PyDict_New(), callable, NULL);
+                                                         baseClasses, internal, callable, NULL);
 
             PyDict_SetItemString(testDict, type.get_name().to_string().c_str(), clz);
         }

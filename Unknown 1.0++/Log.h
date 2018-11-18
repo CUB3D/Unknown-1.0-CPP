@@ -12,7 +12,7 @@
 namespace Unknown {
 	extern std::string logStatus[];
 
-    void log(int logLevel, std::initializer_list<std::string> args);
+    void log(int logLevel, std::initializer_list<std::string_view> args);
 }
 
 

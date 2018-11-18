@@ -7,7 +7,7 @@ namespace Unknown
 {
 	std::string logStatus[] = { "INFO", "WARN", "ERR" };
 
-    void log(int logLevel, std::initializer_list<std::string> args) {
+    void log(int logLevel, std::initializer_list<std::string_view> args) {
         std::stringstream ss;
 
         auto arg = args.begin();

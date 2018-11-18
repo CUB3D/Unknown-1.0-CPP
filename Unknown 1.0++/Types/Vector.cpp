@@ -51,6 +51,7 @@ b2Vec2 Unknown::Vector::getBox2DVec() const {
 
 RTTR_REGISTRATION {
 	rttr::registration::class_<Unknown::Vector>("Vector")
+	    .constructor()
 	    .method("getLength", &Unknown::Vector::getLength)
 	    .method("normalize", &Unknown::Vector::normalize)
 	    .method("getAngleTo", &Unknown::Vector::getAngleTo)

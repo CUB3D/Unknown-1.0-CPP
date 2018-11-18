@@ -2,10 +2,12 @@
 #define PYTHONSCRIPT_H
 
 #include "stdafx.h"
+#include "UK.h"
 #include <Python.h>
 #include <string>
 #include <memory>
 #include <functional>
+#include <rttr/type.h>
 
 namespace Unknown
 {
