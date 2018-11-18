@@ -4,6 +4,7 @@
 
 #include "SkyBox3D.h"
 #include "FileShader.h"
+#include <SDL_image.h>
 
 void SkyBox3D::render(RenderingPipeline3D& pipeline) {
     glDepthMask(GL_FALSE);

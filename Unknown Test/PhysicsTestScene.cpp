@@ -8,7 +8,7 @@
 #include <Font/TTFont.h>
 #include "PhysicsTestScene.h"
 #include "UI2D.h"
-#include "KeyBind.h"
+#include "Input/KeyBind.h"
 #include "Timer.h"
 #include "Entity/Entity.h"
 #include "Entity/PhysicsBodyComponent.h"

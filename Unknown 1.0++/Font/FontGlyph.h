@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_FONTGLYPH_H
 
 #include <SDL_ttf.h>
-#include "../Colour.h"
+#include "Types/Colour.h"
 #include "../Utils.h"
 
 #include "../GL/GL.h"

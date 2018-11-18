@@ -4,7 +4,7 @@
 
 #include "DebugScene.h"
 #include "../UI2D.h"
-#include "../Colour.h"
+#include "Types/Colour.h"
 
 Unknown::DebugScene::DebugScene(const std::string name, std::shared_ptr<Graphics::Font> f) : MenuScene(name, "", f), font(f)
 {
@@ -20,7 +20,7 @@ void Unknown::DebugScene::render() const
 {
     auto& uk = getUnknown();
 
-    UK_DRAW_RECT(0, 0, uk.screenSize->width, uk.screenSize->height, Colour::WHITE);
+    UK_DRAW_RECT(0, 0, uk.screenSize->width, uk.screenSize->height, WHITE);
 
     std::string fps = "FPS: ";
     fps += std::to_string(uk.fps);

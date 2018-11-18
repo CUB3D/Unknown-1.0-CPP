@@ -23,7 +23,7 @@ Unknown::BasicRenderComponent::BasicRenderComponent(Colour c, int renderScale) :
     editorColour.fill(0);
 }
 
-Unknown::BasicRenderComponent::BasicRenderComponent() : col(Colour::BLACK) {}
+Unknown::BasicRenderComponent::BasicRenderComponent() : col(BLACK) {}
 
 void Unknown::BasicRenderComponent::populateEditor() {
     editorColour[0] = col.red / 255.0;

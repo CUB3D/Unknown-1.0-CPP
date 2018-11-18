@@ -8,7 +8,7 @@
 #include "Loader.h"
 #include "Image.h"
 #include "Event/EventManager.h"
-#include "Input.h"
+#include "Input/Mouse.h"
 
 std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::instance;
 

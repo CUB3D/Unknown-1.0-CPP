@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Utils.h"
 
-#include "Colour.h"
+#include "Types/Colour.h"
 
 #include <fstream>
 #include <string>

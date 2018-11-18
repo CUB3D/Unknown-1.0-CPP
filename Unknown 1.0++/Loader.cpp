@@ -115,7 +115,7 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 		// Loading basic renderers
 		if(typeString == "BasicRenderer") {
 			auto colourValue = component.FindMember("Colour");
-			Colour col = Colour::BLUE;
+			Colour col = BLUE;
 
 			if(colourValue != component.MemberEnd()) {
 				col = *getColourFromString(colourValue->value.GetString());

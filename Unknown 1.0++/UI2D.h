@@ -1,7 +1,7 @@
 #ifndef UI2D_H
 #define UI2D_H
 
-#include "Colour.h"
+#include "Types/Colour.h"
 #include "Unknown.h"
 
 namespace Unknown

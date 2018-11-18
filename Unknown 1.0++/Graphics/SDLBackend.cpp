@@ -7,6 +7,7 @@
 #include <SDL.h>
 
 #include "../Unknown.h"
+#include <SDL_image.h>
 
 void Unknown::SDLBackend::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) {
     auto& uk = getUnknown();

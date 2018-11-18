@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "Input.h"
+#include "Mouse.h"
 
 #include <SDL.h>
 

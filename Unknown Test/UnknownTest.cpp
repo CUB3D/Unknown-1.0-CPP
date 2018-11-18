@@ -4,10 +4,10 @@
 #include "stdafx.h"
 
 #include <iostream>
-#include "Colour.h"
+#include "Types/Colour.h"
 #include "Map.h"
 #include "Image.h"
-#include "Input.h"
+#include "Input/Mouse.h"
 #include "Loader.h"
 #include "Animation.h"
 #include "Font/Font.h"

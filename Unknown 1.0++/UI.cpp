@@ -4,7 +4,7 @@
 #include "UI2D.h"
 #include "Event/Event.h"
 #include "Event/EventManager.h"
-#include "Input.h"
+#include "Input/Mouse.h"
 
 #include <memory>
 #include <ctime>
@@ -216,7 +216,7 @@ void Unknown::ButtonComponent::render() const
 	int mouseX, mouseY;
 	SDL_GetMouseState(&mouseX, &mouseY);
 
-	Colour col = Colour::GREEN;
+	Colour col = GREEN;
 
 	if(this->colour) {
         col = *this->colour;
@@ -315,7 +315,7 @@ void Unknown::TextBoxComponent::render() const
 
         if((time(NULL) % 1000) % 2 ==0)
         {
-            Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, Colour::BLACK);
+            Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, BLACK);
         }
     }
 }

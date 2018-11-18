@@ -1,10 +1,9 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "Utils.h"
+#include "../Types/Point.h"
 
-namespace Unknown
-{
+namespace Unknown {
 	Point<int> getMouseLocation();
 }
 

@@ -14,8 +14,8 @@
 #include "Model/MeshContainer.h"
 #include "Graphics/RenderingPipeline3D.h"
 #include "Model/TexturedMeshRenderer.h"
-#include "KeyBind.h"
-#include "Input.h"
+#include "Input/KeyBind.h"
+#include "Input/Mouse.h"
 #include "Graphics/SkyBox3D.h"
 #include "Loader.h"
 

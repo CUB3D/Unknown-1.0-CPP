@@ -3,7 +3,7 @@
 
 #define PI 3.141592653589793238462
 
-#include "Colour.h"
+#include "Types/Colour.h"
 #include "document.h"
 #include <vector>
 #include <memory>

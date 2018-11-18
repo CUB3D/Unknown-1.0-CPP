@@ -1,15 +1,18 @@
+#include <utility>
+
 //
 // Created by cub3d on 10/07/2018.
 //
 
 #include "KeyBind.h"
+#include <rttr/registration.h>
 
-Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED) {
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED), name(name) {
     registerEventHandler(ET_KEYPRESS, name, [&] (Event& evt){this->handle(evt);});
 }
 
 Unknown::KeyBind::KeyBind(int keycode, const std::string& name, std::function<void(Event &evt)> event) : KeyBind(keycode, name) {
-    this->callback = event;
+    this->callback = std::move(event);
 }
 
 void Unknown::KeyBind::handle(Event& evt) {
@@ -25,3 +28,12 @@ void Unknown::KeyBind::handle(Event& evt) {
 bool Unknown::KeyBind::pressed() const {
     return this->currentState == InputState::PRESSED;
 }
+
+RTTR_REGISTRATION {
+    using namespace Unknown;
+    rttr::registration::class_<KeyBind>("KeyBind")
+            .constructor<int, const std::string>()
+            .property("Keycode", &KeyBind::keycode)
+            .property("CurrentState", &KeyBind::currentState)
+            .property("Name", &KeyBind::name);
+};

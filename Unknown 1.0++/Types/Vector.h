@@ -5,10 +5,8 @@
 #include <Box2D/Box2D.h>
 #include <rttr/registration.h>
 
-namespace Unknown
-{
-	class Vector
-	{
+namespace Unknown {
+	class Vector {
 	public:
         double x;
         double y;

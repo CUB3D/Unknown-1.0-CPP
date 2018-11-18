@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "Colour.h"
+#include "Types/Colour.h"
 #include "Utils.h"
 #include "Font/Font.h"
 #include "Event/Event.h"

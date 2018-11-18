@@ -4,9 +4,9 @@
 #include <iostream>
 #include <map>
 
-#include "Input.h"
+#include "Input/Mouse.h"
 #include "UI2D.h"
-#include "Colour.h"
+#include "Types/Colour.h"
 
 #include <ios>
 #include <fstream>
@@ -33,6 +33,7 @@
 #include "Image.h"
 #include "Log.h"
 #include "Imgui/GUI.h"
+#include <SDL_image.h>
 
 // unknown class
 

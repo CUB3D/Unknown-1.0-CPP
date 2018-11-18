@@ -5,7 +5,7 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_SDLBACKEND_H
 #define UNKNOWN_DEVELOPMENT_TOOL_SDLBACKEND_H
 
-#include "../Colour.h"
+#include "Types/Colour.h"
 #include "RenderingBackend.h"
 #include "../Unknown.h"
 

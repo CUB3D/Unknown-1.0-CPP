@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_TTFFONT_H
 
 #include "Font.h"
-#include "../Colour.h"
+#include "Types/Colour.h"
 #include "FontGlyph.h"
 #include "../IInitable.h"
 

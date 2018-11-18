@@ -7,8 +7,7 @@ Unknown::Colour::Colour(const int red, const int green, const int blue, const in
 
 Unknown::Colour::Colour(const int red, const int green, const int blue) : red(red), green(green), blue(blue), alpha(255) {}
 
-SDL_Color Unknown::Colour::toSDLColour() const
-{
+SDL_Color Unknown::Colour::toSDLColour() const {
 	return SDL_Color {(uint8_t) this->red, (uint8_t) this->green, (uint8_t) this->blue, (uint8_t) this->alpha};
 }
 
@@ -21,11 +20,11 @@ Unknown::Colour& Unknown::Colour::operator=(const Colour& other) {
 	return *this;
 }
 
-const Unknown::Colour Unknown::Colour::RED = Colour(255, 0, 0);
-const Unknown::Colour Unknown::Colour::GREEN = Colour(0, 255, 0);
-const Unknown::Colour Unknown::Colour::BLUE = Colour(0, 0, 255);
-const Unknown::Colour Unknown::Colour::BLACK = Colour(0, 0, 0);
-const Unknown::Colour Unknown::Colour::WHITE = Colour(255, 255, 255);
+const Unknown::Colour Unknown::RED = Colour(255, 0, 0);
+const Unknown::Colour Unknown::GREEN = Colour(0, 255, 0);
+const Unknown::Colour Unknown::BLUE = Colour(0, 0, 255);
+const Unknown::Colour Unknown::BLACK = Colour(0, 0, 0);
+const Unknown::Colour Unknown::WHITE = Colour(255, 255, 255);
 
 Unknown::Colour Unknown::Colour::darken(const Colour &col, const double amount) {
     int change = 2.25 * amount;

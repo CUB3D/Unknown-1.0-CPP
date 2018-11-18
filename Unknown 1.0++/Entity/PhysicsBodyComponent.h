@@ -8,7 +8,7 @@
 #include "Component.h"
 #include <Box2D/Box2D.h>
 #include "../Scene/Scene.h"
-#include "../Vector.h"
+#include "Types/Vector.h"
 #include "../IInitable.h"
 
 namespace Unknown

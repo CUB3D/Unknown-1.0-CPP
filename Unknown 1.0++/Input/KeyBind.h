@@ -10,16 +10,15 @@
 
 #include "Event/EventManager.h"
 
-namespace Unknown
-{
-
-    class KeyBind
-    {
+namespace Unknown {
+    class KeyBind {
+    private:
+        std::function<void(Event& evt)> callback;
+    public:
         int keycode;
         InputState currentState;
-        std::function<void(Event& evt)> callback;
+        std::string name;
 
-    public:
         KeyBind(int keycode, const std::string& name);
 
         KeyBind(int keycode, const std::string& name, std::function<void(Event& evt)> event);
@@ -28,7 +27,6 @@ namespace Unknown
 
         bool pressed() const;
     };
-
 }
 
 #endif //UNKNOWN_GAME_KEYBIND_H

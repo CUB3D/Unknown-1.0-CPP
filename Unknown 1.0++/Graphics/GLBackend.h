@@ -9,6 +9,7 @@
 #include "FileShader.h"
 #include "../GL/GL.h"
 #include <map>
+#include <SDL_image.h>
 
 namespace Unknown
 {
