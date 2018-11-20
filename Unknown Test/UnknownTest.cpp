@@ -315,7 +315,6 @@ void init()
 }
 
 #include "Filesystem/Filesystem.h"
-#include "PythonScript.h"
 
 #ifdef _WIN32
 int _tmain(int argc, _TCHAR* argv[])
@@ -365,7 +364,9 @@ int main(int argc, char* argv[])
 
 
     ::Unknown::Filesystem::mount("Test.pak");
-    UK_PYTHON_LOAD_SCRIPT("Test");
+    LuaScript().test();
+    //UK_PYTHON_LOAD_SCRIPT("Test");
+
 
 	init();
 	UK_INIT_GAME();

@@ -34,5 +34,7 @@
 
 #include "Imgui/GUI.h"
 
+#include <scripting/Scripting.h>
+
 
 #endif //UNKNOWN_DEVELOPMENT_TOOL_UK_H

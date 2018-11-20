@@ -49,6 +49,10 @@ b2Vec2 Unknown::Vector::getBox2DVec() const {
     return b2Vec2(this->x, this->y);
 }
 
+bool Unknown::Vector::operator==(const Unknown::Vector &vec) const {
+    return vec.x == this->x && vec.y == this->y;
+}
+
 RTTR_REGISTRATION {
 	rttr::registration::class_<Unknown::Vector>("Vector")
 	    .constructor()

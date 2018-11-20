@@ -12,6 +12,7 @@
 #include "../Filesystem/FSUtils.h"
 #include "../Log.h"
 #include "../Imgui/GUI.h"
+#include "PlaceholderTexture.h"
 
 void Unknown::GLBackend::intialise(const EngineConfig& config) {
     UK_LOG_INFO("Intialising OpenGL Backend");
@@ -218,14 +219,26 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
         return find->second;
     }
 
-
     auto& uk = getUnknown();
 
-    SDL_Surface* imageSurface = IMG_Load_RW(getRWopsForStream(*Filesystem::readFile(path)), false);
+    auto fileptr = Filesystem::readFile(path);
+
+    SDL_Surface* imageSurface = nullptr;
+
+    if(fileptr) {
+        imageSurface = IMG_Load_RW(getRWopsForStream(*fileptr), false);
+    }
 
     if (!imageSurface) {
         printf("Error: failed to load image, %s\n", IMG_GetError());
-        uk.quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
+        if(uk.config.textureFallback) {
+            imageSurface = IMG_Load_RW(SDL_RWFromConstMem(placeholder_png, placeholder_png_len), false);
+        }
+
+        // Check again, will quit if either both image and fallback failed or if fallback disabled and load failed
+        if(!imageSurface) {
+            uk.quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
+        }
     }
 
     textureMap.insert(std::pair<std::string, TextureInfo>(path, {imageSurface->w, imageSurface->h, 0}));
@@ -234,13 +247,15 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
     glGenTextures(1, (GLuint*)&info.pointer);
     glBindTexture(GL_TEXTURE_2D, (GLuint)info.pointer);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     //how the texture should wrap in t direction
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     //how the texture lookup should be interpolated when the face is smaller than the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     //how the texture lookup should be interpolated when the face is bigger than the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    //TODO: change to gl_nearest when using fallback texture
 
     int nOfColors = imageSurface->format->BytesPerPixel;
     int mode = GL_RGBA;
