@@ -22,3 +22,6 @@
 [submodule "Libs/rttr"]
 	path = Libs/rttr
 	url = https://github.com/rttrorg/rttr
+[submodule "Libs/lua"]
+	path = Libs/lua
+	url = https://github.com/lua/lua
