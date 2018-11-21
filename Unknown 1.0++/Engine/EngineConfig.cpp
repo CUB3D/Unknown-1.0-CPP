@@ -12,5 +12,10 @@ RTTR_REGISTRATION {
         .property("TargetUPS", &Unknown::EngineConfig::targetUPS)
         .property("MSAA", &Unknown::EngineConfig::MSAA)
         .property("VSync", &Unknown::EngineConfig::vsync)
-        .property("RendererMode", &Unknown::EngineConfig::rendererMode);
+        .property("RendererMode", &Unknown::EngineConfig::rendererMode)
+        .property("TextureFallback", &Unknown::EngineConfig::textureFallback);
 };
+
+Unknown::EngineConfig::EngineConfig() :
+targetHeight(0), targetWidth(0), title(""), targetUPS(60), MSAA(true), vsync(false), rendererMode(0),
+textureFallback(true) {}

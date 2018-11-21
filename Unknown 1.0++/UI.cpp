@@ -10,6 +10,7 @@
 #include <ctime>
 #include <regex>
 #include "Log.h"
+#include "scripting/SharedVariable.h"
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
@@ -153,8 +154,6 @@ Unknown::TextComponent::TextComponent() : UIComponent(UI_TEXT)
 {
     //NOOP
 }
-
-#include "SharedVariable.h"
 
 void Unknown::TextComponent::render() const
 {

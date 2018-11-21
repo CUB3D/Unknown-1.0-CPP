@@ -1,7 +1,6 @@
 
 #include "stdafx.h"
 #include "PythonScript.h"
-#include <Python.h>
 #include "Log.h"
 #include "Unknown.h"
 #include <cstdio>
@@ -10,6 +9,7 @@
 #include "Image.h"
 #include "Event/EventManager.h"
 #include "Input/Mouse.h"
+#include <scripting/SharedVariable.h>
 
 std::shared_ptr<Unknown::Python::Interpreter> Unknown::Python::instance;
 
@@ -403,8 +403,6 @@ PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
 
     Py_RETURN_NONE;
 }
-
-#include "SharedVariable.h"
 
 PyObject* getSharedValue(PyObject* self, PyObject* args) {
     const char* name_c = PY_GET_UTF8(args, 0);

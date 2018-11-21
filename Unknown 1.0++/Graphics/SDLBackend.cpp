@@ -97,7 +97,7 @@ Unknown::TextureInfo Unknown::SDLBackend::loadTexture(const std::string &path) {
 }
 
 Unknown::VertexInfo Unknown::SDLBackend::createRectVerticies(const float x, const float y, const float w, const float h) {
-    SDL_Rect r{x, y, w, h};
+    SDL_Rect r{(int)x, (int)y, (int)w, (int)h};
     auto& vertexInfo = vertexLookup.emplace_back();
     vertexInfo.bounds = r;
 

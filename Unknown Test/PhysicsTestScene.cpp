@@ -3,7 +3,7 @@
 //
 
 #include <Loader.h>
-#include <SharedVariable.h>
+#include <scripting/SharedVariable.h>
 #include <Log.h>
 #include <Font/TTFont.h>
 #include "PhysicsTestScene.h"

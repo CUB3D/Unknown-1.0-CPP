@@ -10,6 +10,9 @@
 
 namespace Unknown {
     struct EngineConfig {
+
+        EngineConfig();
+
         int targetHeight;
         int targetWidth;
         std::string title;
@@ -19,6 +22,7 @@ namespace Unknown {
         int rendererMode;
         bool MSAA;
         int vsync;
+        bool textureFallback;
     };
 }
 

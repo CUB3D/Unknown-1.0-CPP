@@ -23,6 +23,7 @@ namespace Unknown {
 
 		Vector operator+(Vector other) const;
 		Vector operator*(double other) const;
+		bool operator==(const Vector& vec) const;
 
         operator b2Vec2() const;
 

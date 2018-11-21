@@ -47,10 +47,11 @@ std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &p
         // If the file exists
         if(file) {
             printf("Found file in mounts\n");
-            //return std::make_shared<std::istream>(new PAKFileStream(&pak, file));
             return std::make_shared<imemstream>(&pak, file);
         }
     }
 
     printf("Error: file %s not found\n", path.c_str());
+
+    return nullptr;
 }
