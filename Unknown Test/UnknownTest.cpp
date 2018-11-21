@@ -365,7 +365,7 @@ int main(int argc, char* argv[])
 
 
     ::Unknown::Filesystem::mount("Test.pak");
-    UK_PYTHON_LOAD_SCRIPT("Test");
+    //UK_PYTHON_LOAD_SCRIPT("Test");
 
 	init();
 	UK_INIT_GAME();

@@ -20,6 +20,7 @@
 namespace Unknown {
     class SettingsParser {
     public:
+
         template<typename T>
         static T parseSettings(const std::string &file) {
             auto stream = Filesystem::readFile(file);
@@ -43,6 +44,10 @@ namespace Unknown {
                         property.set_value(data, i.value.Get<bool>());
                     if(propertyType == rttr::type::get<std::string>())
                         property.set_value(data, std::string(i.value.GetString()));
+                    // Recursively load objs
+                    if(propertyType.is_class()) {
+
+                    }
                 }
             }
 

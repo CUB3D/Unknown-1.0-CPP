@@ -85,6 +85,34 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 
 		auto typeString = std::string(typeValue->value.GetString());
 
+		// Find the component type
+		auto componentType = rttr::type::get_by_name(typeString);
+		if(componentType.is_valid()) {
+		    UK_LOG_INFO("Found class info for", componentType.get_name().to_string());
+
+		    auto rttrInstance = (*componentType.get_constructors().begin()).invoke();
+		    std::shared_ptr<Component> instance(rttrInstance.get_value<Component*>());
+		    UK_LOG_INFO("Created instance", std::to_string((long long int)instance.get()));
+
+            for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
+				std::string name = std::string(attr->name.GetString());
+				UK_LOG_INFO("Loading attr for", name);
+
+				auto field = componentType.get_property(name);
+
+				if(field.is_valid()) {
+				    UK_LOG_INFO("Found field", name);
+
+				    if(field.get_type().get_id() == rttr::type::get<int>().get_id()) {
+                        field.set_value(rttrInstance, attr->value.Get<int>());
+                        UK_LOG_INFO("Found int");
+				    }
+				}
+			}
+
+			ent->components.push_back(instance);
+		}
+
 		// TODO: migrate all loading to this if it works on windows
 //		std::shared_ptr<ClassInfoBase> classInfo = (*Reflex::getInstance().m1)[typeString + "Component"];
 //		if(classInfo) {

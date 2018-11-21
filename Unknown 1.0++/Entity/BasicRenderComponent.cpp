@@ -48,3 +48,11 @@ Unknown::Rect<int> Unknown::BasicRenderComponent::getRenderBounds(const Entity &
         (ent.size.width) * renderScale,
         (ent.size.height) * renderScale);
 }
+
+RTTR_REGISTRATION {
+    using namespace Unknown;
+    rttr::registration::class_<BasicRenderComponent>("BasicRenderComponent")
+            .property("Colour", &BasicRenderComponent::col)
+            .property("RenderScale", &BasicRenderComponent::renderScale)
+            .constructor<>();
+};
