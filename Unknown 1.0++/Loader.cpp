@@ -29,6 +29,8 @@ Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 
 std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
+    printf("Loading %s\n", name.c_str());
+
 	rapidjson::Document doc = readJSONFile(name.c_str());
 
 
@@ -95,6 +97,7 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 		    UK_LOG_INFO("Created instance", std::to_string((long long int)instance.get()));
 
             for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
+
 				std::string name = std::string(attr->name.GetString());
 				UK_LOG_INFO("Loading attr for", name);
 
@@ -112,6 +115,8 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 
 			ent->components.push_back(instance);
 		}
+
+		printf("Loading done\n");
 
 		// TODO: migrate all loading to this if it works on windows
 //		std::shared_ptr<ClassInfoBase> classInfo = (*Reflex::getInstance().m1)[typeString + "Component"];
@@ -140,147 +145,147 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 //			ent->components.push_back(instance);
 //		}
 
-		// Loading basic renderers
-		if(typeString == "BasicRenderer") {
-			auto colourValue = component.FindMember("Colour");
-			Colour col = BLUE;
+//		// Loading basic renderers
+//		if(typeString == "BasicRenderer") {
+//			auto colourValue = component.FindMember("Colour");
+//			Colour col = BLUE;
+//
+//			if(colourValue != component.MemberEnd()) {
+//				col = *getColourFromString(colourValue->value.GetString());
+//			}
+//
+//			auto renderValue = component.FindMember("RenderScale");
+//			int renderScale = 1;
+//
+//			if (renderValue != component.MemberEnd()) {
+//				renderScale = renderValue->value.GetInt();
+//			}
+//
+//			//printf("rs: %d, col{%d, %d, %d}\n", renderScale, col.red, col.green, col.blue);
+//
+//			ent->components.push_back(std::make_shared<BasicRenderComponent>(col, renderScale));
+//		}
 
-			if(colourValue != component.MemberEnd()) {
-				col = *getColourFromString(colourValue->value.GetString());
-			}
-
-			auto renderValue = component.FindMember("RenderScale");
-			int renderScale = 1;
-
-			if (renderValue != component.MemberEnd()) {
-				renderScale = renderValue->value.GetInt();
-			}
-
-			//printf("rs: %d, col{%d, %d, %d}\n", renderScale, col.red, col.green, col.blue);
-
-			ent->components.push_back(std::make_shared<BasicRenderComponent>(col, renderScale));
-		}
-
-		if(typeString == "ImageRenderer") {
-            auto renderValue = component.FindMember("RenderScale");
-            int renderScale = 1;
-
-            if (renderValue != component.MemberEnd()) {
-                renderScale = renderValue->value.GetInt();
-            }
-
-
-		    auto filenameValue = component.FindMember("File");
-		    if(filenameValue != component.MemberEnd()) {
-		        ent->components.push_back(std::make_shared<ImageRenderComponent>(std::string(filenameValue->value.GetString()), renderScale));
-		    }
-		}
-
-
-		if(typeString == "Collider") {
-			auto phys = std::make_shared<PhysicsBodyComponent>(ent);
-
-		    auto colliderTypeValue = component.FindMember("ColliderType");
-			b2BodyType bodyType = b2_staticBody;
-
-		    if(colliderTypeValue != component.MemberEnd()) {
-		        auto colliderTypeString = std::string(colliderTypeValue->value.GetString());
-
-		        if(colliderTypeString == "Dynamic") {
-		            bodyType = b2_dynamicBody;
-		        }
-
-		        if(colliderTypeString == "Static") {
-		        	bodyType = b2_staticBody;
-		        }
-
-		        if(colliderTypeString == "Kinematic") {
-					bodyType = b2_kinematicBody;
-				}
-		    }
-		    phys->bodyDefinition.type = bodyType;
+//		if(typeString == "ImageRenderer") {
+//            auto renderValue = component.FindMember("RenderScale");
+//            int renderScale = 1;
+//
+//            if (renderValue != component.MemberEnd()) {
+//                renderScale = renderValue->value.GetInt();
+//            }
+//
+//
+//		    auto filenameValue = component.FindMember("File");
+//		    if(filenameValue != component.MemberEnd()) {
+//		        ent->components.push_back(std::make_shared<ImageRenderComponent>(std::string(filenameValue->value.GetString()), renderScale));
+//		    }
+//		}
 
 
-		    auto bulletValue = component.FindMember("Bullet");
-		    bool bullet = false;
-		    if(bulletValue != component.MemberEnd()) {
-		        bullet = bulletValue->value.GetBool();
-		    }
-		    phys->bodyDefinition.bullet = bullet;
+//		if(typeString == "Collider") {
+//			auto phys = std::make_shared<PhysicsBodyComponent>(ent);
+//
+//		    auto colliderTypeValue = component.FindMember("ColliderType");
+//			b2BodyType bodyType = b2_staticBody;
+//
+//		    if(colliderTypeValue != component.MemberEnd()) {
+//		        auto colliderTypeString = std::string(colliderTypeValue->value.GetString());
+//
+//		        if(colliderTypeString == "Dynamic") {
+//		            bodyType = b2_dynamicBody;
+//		        }
+//
+//		        if(colliderTypeString == "Static") {
+//		        	bodyType = b2_staticBody;
+//		        }
+//
+//		        if(colliderTypeString == "Kinematic") {
+//					bodyType = b2_kinematicBody;
+//				}
+//		    }
+//		    phys->bodyDefinition.type = bodyType;
+//
+//
+//		    auto bulletValue = component.FindMember("Bullet");
+//		    bool bullet = false;
+//		    if(bulletValue != component.MemberEnd()) {
+//		        bullet = bulletValue->value.GetBool();
+//		    }
+//		    phys->bodyDefinition.bullet = bullet;
+//
+//		    auto groupIndexValue = component.FindMember("GroupIndex");
+//		    int groupIndex = 0;
+//		    if(groupIndexValue != component.MemberEnd()) {
+//		        groupIndex = groupIndexValue->value.GetInt();
+//		    }
+//		    phys->filter.groupIndex = groupIndex;
+//
+//
+//		    auto maxSpeedValue = component.FindMember("MaxSpeed");
+//		    if(maxSpeedValue != component.MemberEnd()) {
+//		    	double maxSpeed = maxSpeedValue->value.GetDouble();
+//		    	phys->maxSpeed = maxSpeed;
+//		    }
+//
+//		    bool sensor = false;
+//		    auto sensorValue = component.FindMember("Sensor");
+//		    if(sensorValue != component.MemberEnd()) {
+//		        sensor = sensorValue->value.GetBool();
+//		    }
+//            phys->fixtureDefinition.isSensor = sensor;
+//
+//		    bool fixedRotation = true;
+//		    auto frValue = component.FindMember("FixedRotation");
+//		    if(frValue != component.MemberEnd()) {
+//		        fixedRotation = frValue->value.GetBool();
+//		    }
+//		    phys->bodyDefinition.fixedRotation = fixedRotation;
+//
+//		    float density = 1;
+//		    auto dValue = component.FindMember("Density");
+//		    if(dValue != component.MemberEnd()) {
+//		        density = dValue->value.GetFloat();
+//		    }
+//		    phys->fixtureDefinition.density = density;
+//
+//		    double radius = 1;
+//		    auto rValue = component.FindMember("Radius");
+//		    if(rValue != component.MemberEnd()) {
+//		        radius = rValue->value.GetDouble();
+//		    }
+//		    phys->circle.m_radius = radius;
+//
+//		    double restitution = 0;
+//		    auto reValue = component.FindMember("Restitution");
+//		    if(reValue != component.MemberEnd()) {
+//		        restitution = reValue->value.GetDouble();
+//		    }
+//		    phys->fixtureDefinition.restitution = restitution;
+//
+//
+//		    b2Shape* shape = &phys->shape;
+//		    auto shapeValue = component.FindMember("Shape");
+//		    if(shapeValue != component.MemberEnd()) {
+//		        std::string shapeName = std::string(shapeValue->value.GetString());
+//		        if(shapeName == "Circle") {
+//                    shape = &phys->circle;
+//                }
+//		    }
+//		    phys->fixtureDefinition.shape = shape;
+//
+//
+//            ent->components.push_back(phys);
+//		}
 
-		    auto groupIndexValue = component.FindMember("GroupIndex");
-		    int groupIndex = 0;
-		    if(groupIndexValue != component.MemberEnd()) {
-		        groupIndex = groupIndexValue->value.GetInt();
-		    }
-		    phys->filter.groupIndex = groupIndex;
 
-
-		    auto maxSpeedValue = component.FindMember("MaxSpeed");
-		    if(maxSpeedValue != component.MemberEnd()) {
-		    	double maxSpeed = maxSpeedValue->value.GetDouble();
-		    	phys->maxSpeed = maxSpeed;
-		    }
-
-		    bool sensor = false;
-		    auto sensorValue = component.FindMember("Sensor");
-		    if(sensorValue != component.MemberEnd()) {
-		        sensor = sensorValue->value.GetBool();
-		    }
-            phys->fixtureDefinition.isSensor = sensor;
-
-		    bool fixedRotation = true;
-		    auto frValue = component.FindMember("FixedRotation");
-		    if(frValue != component.MemberEnd()) {
-		        fixedRotation = frValue->value.GetBool();
-		    }
-		    phys->bodyDefinition.fixedRotation = fixedRotation;
-
-		    float density = 1;
-		    auto dValue = component.FindMember("Density");
-		    if(dValue != component.MemberEnd()) {
-		        density = dValue->value.GetFloat();
-		    }
-		    phys->fixtureDefinition.density = density;
-
-		    double radius = 1;
-		    auto rValue = component.FindMember("Radius");
-		    if(rValue != component.MemberEnd()) {
-		        radius = rValue->value.GetDouble();
-		    }
-		    phys->circle.m_radius = radius;
-
-		    double restitution = 0;
-		    auto reValue = component.FindMember("Restitution");
-		    if(reValue != component.MemberEnd()) {
-		        restitution = reValue->value.GetDouble();
-		    }
-		    phys->fixtureDefinition.restitution = restitution;
-
-
-		    b2Shape* shape = &phys->shape;
-		    auto shapeValue = component.FindMember("Shape");
-		    if(shapeValue != component.MemberEnd()) {
-		        std::string shapeName = std::string(shapeValue->value.GetString());
-		        if(shapeName == "Circle") {
-                    shape = &phys->circle;
-                }
-		    }
-		    phys->fixtureDefinition.shape = shape;
-
-
-            ent->components.push_back(phys);
-		}
-
-
-		if(typeString == "Timer") {
-			auto delayValue = component.FindMember("Delay");
-			if(delayValue != component.MemberEnd()) {
-				if(delayValue->value.IsInt()) {
-					ent->components.push_back(std::make_shared<TimerComponent>(delayValue->value.GetInt()));
-				}
-			}
-		}
+//		if(typeString == "Timer") {
+//			auto delayValue = component.FindMember("Delay");
+//			if(delayValue != component.MemberEnd()) {
+//				if(delayValue->value.IsInt()) {
+//					ent->components.push_back(std::make_shared<TimerComponent>(delayValue->value.GetInt()));
+//				}
+//			}
+//		}
 	}
 
 	return ent;

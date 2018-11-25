@@ -16,6 +16,7 @@ namespace Unknown
         Graphics::Image img;
         int renderScale = 1;
 
+        ImageRenderComponent();
         ImageRenderComponent(const std::string& filename, const int renderScale);
 
         virtual void render(const Entity &ent, double Xoffset, double Yoffset) const;

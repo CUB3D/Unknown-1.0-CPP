@@ -20,6 +20,39 @@
 namespace Unknown {
     class SettingsParser {
     public:
+        static void parseJSONObject(const rttr::type& objType, rapidjson::GenericMember<rapidjson::UTF8<char>, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>>& obj, rttr::variant& data) {
+            printf("Parsing value %s from type %s\n", obj.name.GetString(),
+                    objType.get_name().to_string().c_str());
+
+            // Get the property that relates to this element
+            auto property = objType.get_property(std::string(obj.name.GetString()));
+            auto type = property.get_type();
+
+            if(type.is_valid()) {
+                if (type == rttr::type::get<int>()) {
+                    bool status = property.set_value(data, obj.value.GetInt());
+                    printf("New value: %d\n", obj.value.GetInt());
+                } else if (type == rttr::type::get<bool>()) {
+                    property.set_value(data, obj.value.GetBool());
+                } else if (type == rttr::type::get<std::string>()) {
+                    property.set_value(data, std::string(obj.value.GetString()));
+                } else if(type.is_class()) {
+
+                    // Retrived the obj from the base
+                    rttr::variant subObj = property.get_value(data);
+
+                    // Loop over all of the entries in this sub json object
+                    for(auto& i : obj.value.GetObject()) {
+                        //printf("Recursing for type %s\n", type.get_name().to_string().c_str());
+                        parseJSONObject(type, i, subObj);
+                    }
+
+                   bool status = property.set_value(data, subObj);
+                }
+            } else {
+                printf("Prop type  not valid\n");
+            }
+        }
 
         template<typename T>
         static T parseSettings(const std::string &file) {
@@ -30,28 +63,14 @@ namespace Unknown {
             d.ParseStream(wrapper);
 
             T data;
+            rttr::variant variantData(&data);
             auto type = rttr::type::get<T>();
 
             for(auto& i : d.GetObject()) {
-                // Find the property that relates to this element, if it exists
-                auto property = type.get_property(std::string(i.name.GetString()));
-                if(property.is_valid()) {
-                    auto propertyType = property.get_type();
-
-                    if(propertyType == rttr::type::get<int>())
-                        property.set_value(data, i.value.Get<int>());
-                    if(propertyType == rttr::type::get<bool>())
-                        property.set_value(data, i.value.Get<bool>());
-                    if(propertyType == rttr::type::get<std::string>())
-                        property.set_value(data, std::string(i.value.GetString()));
-                    // Recursively load objs
-                    if(propertyType.is_class()) {
-
-                    }
-                }
+                parseJSONObject(type, i, variantData);
             }
 
-            return data;
+            return variantData.get_wrapped_value<T>();
         }
     };
 }

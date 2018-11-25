@@ -30,7 +30,10 @@ namespace Unknown
         Vector lastForce;
 
         //public:
+        PhysicsBodyComponent();
         PhysicsBodyComponent(std::shared_ptr<Entity> ent);
+
+        //TODO: attach method
 
         virtual void init(Scene& scene, std::shared_ptr<Entity> ent) override;
 

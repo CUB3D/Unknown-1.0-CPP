@@ -10,6 +10,10 @@ Unknown::PhysicsBodyComponent::PhysicsBodyComponent(std::shared_ptr<Entity> ent)
     this->bodyDefinition.position.Set(ent->position.x, ent->position.y);
 }
 
+Unknown::PhysicsBodyComponent::PhysicsBodyComponent() : body(nullptr), fixture(nullptr) {
+    this->bodyDefinition.position.Set(0, 0);
+}
+
 void Unknown::PhysicsBodyComponent::update(Entity &ent) {
 
     if(maxSpeed >= 0) {
@@ -60,3 +64,17 @@ void Unknown::PhysicsBodyComponent::init(Scene &scene, std::shared_ptr<Entity> e
     this->fixture = this->body->CreateFixture(&this->fixtureDefinition);
 
 }
+
+
+RTTR_REGISTRATION {
+    using namespace Unknown;
+    rttr::registration::class_<PhysicsBodyComponent>("PhysicsBodyComponent")
+            .property("bodyDefinition", &PhysicsBodyComponent::bodyDefinition)
+            .constructor<>();
+
+    // Add bod2d classes
+    rttr::registration::class_<b2BodyDef>("BodyDefinition")
+            //TODO
+            .property("angle", &b2BodyDef::angle)
+            .constructor<>();
+};

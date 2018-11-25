@@ -13,7 +13,8 @@ RTTR_REGISTRATION {
         .property("MSAA", &Unknown::EngineConfig::MSAA)
         .property("VSync", &Unknown::EngineConfig::vsync)
         .property("RendererMode", &Unknown::EngineConfig::rendererMode)
-        .property("TextureFallback", &Unknown::EngineConfig::textureFallback);
+        .property("TextureFallback", &Unknown::EngineConfig::textureFallback)
+        .constructor<>();
 };
 
 Unknown::EngineConfig::EngineConfig() :

@@ -1,0 +1,19 @@
+{
+  "Tag": "Ground",
+  "Size": {
+    "Width": 35,
+    "Height": 10
+  },
+  "Components": [
+    {"BasicRenderComponent":{
+      "Colour": "00FF00",
+      "RenderScale": 32
+    },
+    {"PhysicsBodyComponent": {
+      "BodyDefinition": {
+        "angle": 0,
+        "ColliderType": "Static"
+      }
+    }
+  ]
+}

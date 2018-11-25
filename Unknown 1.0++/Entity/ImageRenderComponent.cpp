@@ -8,6 +8,8 @@
 
 Unknown::ImageRenderComponent::ImageRenderComponent(const std::string &filename, const int renderScale) : img(filename), renderScale(renderScale) {}
 
+Unknown::ImageRenderComponent::ImageRenderComponent() : ImageRenderComponent("", 1) {}
+
 void Unknown::ImageRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {
     img.render((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
                (ent.position.y - ent.size.height / 2) * renderScale - Yoffset, glm::degrees(ent.angle));
@@ -31,3 +33,11 @@ Unknown::Rect<int> Unknown::ImageRenderComponent::getRenderBounds(const Entity &
     return ::Unknown::Rect<int>((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
                               (ent.position.y - ent.size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
 }
+
+RTTR_REGISTRATION {
+    using namespace Unknown;
+    rttr::registration::class_<ImageRenderComponent>("BasicRenderComponent")
+            .property("Image", &ImageRenderComponent::img)
+            .property("RenderScale", &ImageRenderComponent::renderScale)
+            .constructor<>();
+};

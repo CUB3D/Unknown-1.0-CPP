@@ -69,6 +69,8 @@ void RenderTest2D::render() const {
         verticies = Unknown::getRendererBackend()->createRectVerticies(0, 0, 1, 1);
         s.compile();
 
+        UK_LOAD_ENTITY("Ground.json");
+
         for(int i = 0; i < 40; i++) {
             lightBuffer[i] = 0;
         }
