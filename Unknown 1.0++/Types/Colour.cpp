@@ -20,11 +20,11 @@ Unknown::Colour& Unknown::Colour::operator=(const Colour& other) {
 	return *this;
 }
 
-const Unknown::Colour Unknown::RED = Colour(255, 0, 0);
-const Unknown::Colour Unknown::GREEN = Colour(0, 255, 0);
-const Unknown::Colour Unknown::BLUE = Colour(0, 0, 255);
-const Unknown::Colour Unknown::BLACK = Colour(0, 0, 0);
-const Unknown::Colour Unknown::WHITE = Colour(255, 255, 255);
+const Unknown::Colour Unknown::RED = ::Unknown::Colour(255, 0, 0);
+const Unknown::Colour Unknown::GREEN = ::Unknown::Colour(0, 255, 0);
+const Unknown::Colour Unknown::BLUE = ::Unknown::Colour(0, 0, 255);
+const Unknown::Colour Unknown::BLACK = ::Unknown::Colour(0, 0, 0);
+const Unknown::Colour Unknown::WHITE = ::Unknown::Colour(255, 255, 255);
 
 Unknown::Colour Unknown::Colour::darken(const Colour &col, const double amount) {
     int change = 2.25 * amount;

@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include "Log.h"
 #include <initializer_list>
+#include <sstream>
+#include <string_view>
 
 namespace Unknown
 {
@@ -10,7 +12,7 @@ namespace Unknown
     void log(int logLevel, std::initializer_list<std::string_view> args) {
         std::stringstream ss;
 
-        auto arg = args.begin();
+        const std::string_view* arg = args.begin();
 
         while(true) {
             ss << *arg;
