@@ -24,7 +24,7 @@ void Unknown::GLBackend::intialise(const EngineConfig& config) {
     }
 
     // Vsync
-    SDL_GL_SetSwapInterval(config.vsync);
+    SDL_GL_SetSwapInterval(config.vsync ? 1 : 0);
 }
 
 void Unknown::GLBackend::createContext(SDL_Window* window) {
@@ -227,7 +227,9 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
 
     if(fileptr) {
         imageSurface = IMG_Load_RW(getRWopsForStream(*fileptr), false);
-    }
+	} else {
+		printf("File '%s' not found\n", path.c_str());
+	}
 
     if (!imageSurface) {
         printf("Error: failed to load image, %s\n", IMG_GetError());

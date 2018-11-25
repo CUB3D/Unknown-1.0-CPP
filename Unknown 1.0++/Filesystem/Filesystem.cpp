@@ -33,7 +33,7 @@ bool Unknown::Filesystem::exists(const std::string &str) {
 
 std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &path) {
 
-    auto file = std::make_shared<std::ifstream>(path);
+    auto file = std::make_shared<std::ifstream>(path, std::ios::binary);
 
     if(file->good()) {
         return file;

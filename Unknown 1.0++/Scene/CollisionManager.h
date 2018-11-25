@@ -5,7 +5,6 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_COLLISIONMANAGER_H
 #define UNKNOWN_DEVELOPMENT_TOOL_COLLISIONMANAGER_H
 
-
 #include <functional>
 #include <map>
 #include "Box2D/Box2D.h"

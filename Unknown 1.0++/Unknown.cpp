@@ -43,6 +43,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 {
 	this->currentState = UK_INIT;
 
+	printf("Creating window\n");
+
     this->screenSize = std::make_shared<Dimension<int>>(width, height);
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -71,8 +73,11 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 
 #ifndef __EMSCRIPTEN__ // SDL_image isn't linked against libpng in emscripten, it uses browser decoding so init isnt needed
-	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-	{
+	int status = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
+
+	printf("Image support status: %x\n", status);
+
+	if(!status) {
 		printf("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
 		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
 	}

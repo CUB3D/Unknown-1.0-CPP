@@ -4,11 +4,8 @@ set(CMAKE_CXX_STANDARD 17)
 project(Unknown)
 
 set(UK_DIR ${PROJECT_SOURCE_DIR})
-set(UK_PROJECT_NAME UKTest)
 
 
-
-set(UK_INCLUDE "${UK_DIR}/Unknown 1.0++")
 set(UK_LIB "${UK_DIR}/Output/lib/${CMAKE_HOST_SYSTEM_NAME}/")
 set(CMAKE_MODULE_PATH "${UK_DIR}/tools/build/cmake-scripts")
 
