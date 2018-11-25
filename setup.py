@@ -18,16 +18,7 @@ commands = {
         },
         # Windows specific setup
         "Windows": {
-            "commands": [
-                "cp Libs/SDL2/lib/x64/SDL2.dll:Unknown Test/",
-                "cp Libs/SDL2_image/lib/x64/SDL2_image.dll:Unknown Test/",
-                "cp Libs/SDL2_image/lib/x64/libpng16-16.dll:Unknown Test/",
-                "cp Libs/SDL2_image/lib/x64/libjpeg-9.dll:Unknown Test/",
-                "cp Libs/SDL2_ttf/lib/x64/libfreetype-6.dll:Unknown Test/",
-                "cp Libs/SDL2_ttf/lib/x64/SDL2_ttf.dll:Unknown Test/",
-                "cp Libs/SDL2_mixer/lib/x64/SDL2_mixer.dll:Unknown Test/",
-                "cp Libs/SDL2_image/lib/x64/zlib1.dll:Unknown Test/"
-            ]
+            "commands": []
         }
     },
     "libs": {
