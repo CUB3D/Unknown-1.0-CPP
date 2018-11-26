@@ -1,3 +1,5 @@
+project(UKTest VERSION 0.0.1 LANGUAGES CXX)
+
 set(UK_PROJECT_NAME UKTest)
 
 set(UK_TEST_SRC
