@@ -17,9 +17,12 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <Settings/SettingsParser.h>
+#include <Entity/EntityPrototype.h>
 
 std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
+// TODO: make create ent obj, add proto
 std::shared_ptr<Unknown::Entity>
 Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 	auto ent = loadEntity(name);
@@ -27,97 +30,103 @@ Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 	return ent;
 }
 
+//TODO: entity has proto not fields
+//TODO: rename to loadentityproto
 std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
-    printf("Loading %s\n", name.c_str());
+    //TODO: add proto to entity
+    //TODO: Create ent here
+    //TODO: Scene graph loader
+    //TODO: remove massive comment
+    //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
 
-	rapidjson::Document doc = readJSONFile(name.c_str());
-
-
-	auto widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
-	auto heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
-	auto tagValue = getValue("Tag", rapidjson::Type::kStringType, doc);
-
-	std::shared_ptr<Entity> ent;
-	
-	std::string tag = tagValue ? std::string(tagValue->GetString()) : "";
-	ent = std::make_shared<Entity>(tag);
-
-	if(widthValue && heightValue) {
-		double width = widthValue->GetDouble();
-		double height = heightValue->GetDouble();
-		ent->size = Dimension<double>(width, height);
-	} else {
-		printf("[ERR] Entity %s has no size\n", name.c_str());
-		return ent;
-	}
-
-	auto xvalue = getValue("X", rapidjson::Type::kNumberType, doc);
-	auto yvalue = getValue("Y", rapidjson::Type::kNumberType, doc);
-
-	if(xvalue) {
-		ent->position.x = xvalue->GetDouble();
-	}
-
-	if(yvalue) {
-		ent->position.y = yvalue->GetDouble();
-	}
-
-	auto components = getValue("Components", rapidjson::Type::kObjectType, doc);
-
-	if(!components) {
-		printf("[WARN] Entity %s has no components\n", name.c_str());
-		return ent;
-	}
-
-#ifdef WIN32
-	// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
-	// What is this, some kind of sick joke
-#define GetObjectA GetObject
-#endif
-
-	for(auto x = components->GetObject().MemberBegin(); x != components->MemberEnd(); x++) {
-		auto component = x->value.GetObject();
-
-		auto typeValue = component.FindMember("Type");
-		if(typeValue == component.MemberEnd()) {
-			printf("[ERR] Component %s of entity %s has no type\n", x->name.GetString(), name.c_str());
-			return ent;
-		}
-
-		auto typeString = std::string(typeValue->value.GetString());
-
-		// Find the component type
-		auto componentType = rttr::type::get_by_name(typeString);
-		if(componentType.is_valid()) {
-		    UK_LOG_INFO("Found class info for", componentType.get_name().to_string());
-
-		    auto rttrInstance = (*componentType.get_constructors().begin()).invoke();
-		    std::shared_ptr<Component> instance(rttrInstance.get_value<Component*>());
-		    UK_LOG_INFO("Created instance", std::to_string((long long int)instance.get()));
-
-            for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
-
-				std::string name = std::string(attr->name.GetString());
-				UK_LOG_INFO("Loading attr for", name);
-
-				auto field = componentType.get_property(name);
-
-				if(field.is_valid()) {
-				    UK_LOG_INFO("Found field", name);
-
-				    if(field.get_type().get_id() == rttr::type::get<int>().get_id()) {
-                        field.set_value(rttrInstance, attr->value.Get<int>());
-                        UK_LOG_INFO("Found int");
-				    }
-				}
-			}
-
-			ent->components.push_back(instance);
-		}
-
-		printf("Loading done\n");
-
+//	rapidjson::Document doc = readJSONFile(name.c_str());
+//
+//
+//	auto widthValue = getValue("Width", rapidjson::Type::kNumberType, doc);
+//	auto heightValue = getValue("Height", rapidjson::Type::kNumberType, doc);
+//	auto tagValue = getValue("Tag", rapidjson::Type::kStringType, doc);
+//
+//	std::shared_ptr<Entity> ent;
+//
+//	std::string tag = tagValue ? std::string(tagValue->GetString()) : "";
+//	ent = std::make_shared<Entity>(tag);
+//
+//	if(widthValue && heightValue) {
+//		double width = widthValue->GetDouble();
+//		double height = heightValue->GetDouble();
+//		ent->size = Dimension<double>(width, height);
+//	} else {
+//		printf("[ERR] Entity %s has no size\n", name.c_str());
+//		return ent;
+//	}
+//
+//	auto xvalue = getValue("X", rapidjson::Type::kNumberType, doc);
+//	auto yvalue = getValue("Y", rapidjson::Type::kNumberType, doc);
+//
+//	if(xvalue) {
+//		ent->position.x = xvalue->GetDouble();
+//	}
+//
+//	if(yvalue) {
+//		ent->position.y = yvalue->GetDouble();
+//	}
+//
+//	auto components = getValue("Components", rapidjson::Type::kObjectType, doc);
+//
+//	if(!components) {
+//		printf("[WARN] Entity %s has no components\n", name.c_str());
+//		return ent;
+//	}
+//
+//#ifdef WIN32
+//	// I absolutely dispise the individual who decided to put the inverse of this define in windows.h
+//	// What is this, some kind of sick joke
+//#define GetObjectA GetObject
+//#endif
+//
+//	for(auto x = components->GetObject().MemberBegin(); x != components->MemberEnd(); x++) {
+//		auto component = x->value.GetObject();
+//
+//		auto typeValue = component.FindMember("Type");
+//		if(typeValue == component.MemberEnd()) {
+//			printf("[ERR] Component %s of entity %s has no type\n", x->name.GetString(), name.c_str());
+//			return ent;
+//		}
+//
+//		auto typeString = std::string(typeValue->value.GetString());
+//
+//		// Find the component type
+//		auto componentType = rttr::type::get_by_name(typeString);
+//		if(componentType.is_valid()) {
+//		    UK_LOG_INFO("Found class info for", componentType.get_name().to_string());
+//
+//		    auto rttrInstance = (*componentType.get_constructors().begin()).invoke();
+//		    std::shared_ptr<Component> instance(rttrInstance.get_value<Component*>());
+//		    UK_LOG_INFO("Created instance", std::to_string((long long int)instance.get()));
+//
+//            for(auto attr = component.MemberBegin(); attr != component.MemberEnd(); attr++) {
+//
+//				std::string name = std::string(attr->name.GetString());
+//				UK_LOG_INFO("Loading attr for", name);
+//
+//				auto field = componentType.get_property(name);
+//
+//				if(field.is_valid()) {
+//				    UK_LOG_INFO("Found field", name);
+//
+//				    if(field.get_type().get_id() == rttr::type::get<int>().get_id()) {
+//                        field.set_value(rttrInstance, attr->value.Get<int>());
+//                        UK_LOG_INFO("Found int");
+//				    }
+//				}
+//			}
+//
+//			ent->components.push_back(instance);
+//		}
+//
+//		printf("Loading done\n");
+//
 		// TODO: migrate all loading to this if it works on windows
 //		std::shared_ptr<ClassInfoBase> classInfo = (*Reflex::getInstance().m1)[typeString + "Component"];
 //		if(classInfo) {
@@ -286,9 +295,9 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 //				}
 //			}
 //		}
-	}
+	//}
 
-	return ent;
+	///return ent;
 }
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
@@ -631,4 +640,43 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
 	}
 
 	return meshContainer;
+}
+
+Unknown::EntityPrototype &Unknown::Loader::loadEntityPrototype(const std::string &name) {
+    // Load json doc
+    auto document = SettingsParser::loadDocument(name);
+
+    EntityPrototype proto;
+    rttr::variant data(&proto);
+    auto dataType = rttr::type::get<EntityPrototype>();
+
+    // Parse easy fields for proto
+    SettingsParser::parseDocument(data, document, dataType);
+
+    //Parse component list
+    auto componentList = document.FindMember("Components");
+
+    if(componentList != document.MemberEnd()) {
+        for(auto& comp : componentList->value.GetObject()) {
+            // Create instance of the component
+            auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
+            auto componentInstance = componentType.get_constructor({}).invoke();
+
+            // Load its vars from json
+            rttr::variant componentVariant(componentInstance);
+
+            for(auto& property : comp.value.GetObject()) {
+                SettingsParser::parseJSONObject(componentType, property, componentVariant);
+            }
+
+            printf("Comp: %s\n", comp.name.GetString());
+            auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
+            proto.components.push_back(compPtr);
+            printf("S: %d\n", proto.components.size());
+        }
+    } else {
+        UK_LOG_WARN("Entity", name, "has no components");
+    }
+
+    return proto;
 }

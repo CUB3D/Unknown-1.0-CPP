@@ -10,6 +10,8 @@
 #include "../Filesystem/Filesystem.h"
 #include "document.h"
 #include <rttr/type.h>
+#include "../Types/Colour.h"
+#include "../Utils.h"
 
 #ifdef WIN32
 // I absolutely dispise the individual who decided to put the inverse of this define in windows.h
@@ -36,6 +38,8 @@ namespace Unknown {
                     property.set_value(data, obj.value.GetBool());
                 } else if (type == rttr::type::get<std::string>()) {
                     property.set_value(data, std::string(obj.value.GetString()));
+                } else if(type == rttr::type::get<::Unknown::Colour>()) {
+                    property.set_value(data, *::Unknown::getColourFromString(std::string(obj.value.GetString())));
                 } else if(type.is_class()) {
 
                     // Retrived the obj from the base
@@ -54,21 +58,32 @@ namespace Unknown {
             }
         }
 
-        template<typename T>
-        static T parseSettings(const std::string &file) {
-            auto stream = Filesystem::readFile(file);
+        //TODO: remove the one in utils
+        static rapidjson::Document loadDocument(const std::string& fileName) {
+            auto stream = Filesystem::readFile(fileName);
 
             rapidjson::Document d;
             rapidjson::IStreamWrapper wrapper(*stream);
             d.ParseStream(wrapper);
 
+            return d;
+        }
+
+        static void parseDocument(rttr::variant& data, rapidjson::Document& doc, rttr::type& type) {
+            for(auto& i : doc.GetObject()) {
+                parseJSONObject(type, i, data);
+            }
+        }
+
+        template<typename T>
+        static T parseSettings(const std::string &file) {
+            rapidjson::Document d = loadDocument(file);
+
             T data;
             rttr::variant variantData(&data);
             auto type = rttr::type::get<T>();
 
-            for(auto& i : d.GetObject()) {
-                parseJSONObject(type, i, variantData);
-            }
+            parseDocument(variantData, d, type);
 
             return variantData.get_wrapped_value<T>();
         }

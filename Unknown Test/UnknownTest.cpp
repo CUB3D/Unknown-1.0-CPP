@@ -367,6 +367,8 @@ int main(int argc, char* argv[])
     //LuaScript().test();
     //UK_PYTHON_LOAD_SCRIPT("Test");
 
+    UK_LOAD_ENTITY("Ground_proto.json");
+
 	init();
 	UK_INIT_GAME();
 
