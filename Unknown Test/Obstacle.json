@@ -1,23 +1,25 @@
 {
   "Tag": "Obstacle",
-  "X": 15,
-  "Y": 18,
-  "Width": 20,
-  "Height": 1,
+  "Size": {
+    "Width": 20,
+    "Height": 2
+  },
   "Components": {
-    "BRender": {
-      "Type": "BasicRenderer",
+    "BasicRenderComponent": {
       "Colour": "0000FF",
       "RenderScale": 32
     },
-    "Collider": {
-      "Type": "Collider",
-      "ColliderType": "Static",
-      "MaxSpeed": 10,
-      "Density": 1.0,
-      "Friction": 0.9,
-      "Restitution": 0.2,
-      "FixedRotation": true
+    "PhysicsBodyComponent": {
+      "BodyDefinition": {
+        "Type": "StaticBody",
+        "FixedRotation": true
+      },
+      "FixtureDefinition": {
+        "Density": 1.0,
+        "Friction": 0.9,
+        "Restitution": 0.2
+      },
+      "MaxSpeed": 10
     }
   }
 }

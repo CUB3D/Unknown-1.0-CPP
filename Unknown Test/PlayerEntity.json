@@ -1,19 +1,25 @@
 {
-  "Tag": "Player",
-  "Width": 2,
-  "Height": 2,
+  "Tag": "OtherPlayer",
+  "Size": {
+    "Width": 2,
+    "Height": 2
+  },
   "Components": {
-    "IRender": {
-      "Type": "ImageRenderer",
-      "File": "Player.png",
+    "ImageRenderComponent": {
+      "Img": "Player.png",
       "RenderScale": 32
     },
-    "Collider": {
-      "Type": "Collider",
-      "ColliderType": "Dynamic",
-      "GroupIndex": -1,
-      "MaxSpeed": 10,
-      "FixedRotation": false
+    "PhysicsBodyComponent": {
+      "BodyDefinition": {
+        "Type": "DynamicBody",
+        "FixedRotation": false
+      },
+      "FixtureDefinition": {
+        "Filter": {
+          "Group": -1
+        }
+      },
+      "MaxSpeed": 10
     }
   }
 }

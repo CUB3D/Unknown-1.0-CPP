@@ -1,11 +1,10 @@
 //
 // Created by cub3d on 01/06/17.
 //
-#include "../stdafx.h"
 
 #include "SceneManager.h"
 #include "Scene.h"
-#include "../Log.h"
+#include <Log.h>
 
 Unknown::SceneManager::SceneManager() : currentSceneName(""), currentScene(nullptr) {}
 

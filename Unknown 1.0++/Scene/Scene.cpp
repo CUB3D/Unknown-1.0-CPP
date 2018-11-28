@@ -1,10 +1,9 @@
 //
 // Created by cub3d on 01/06/17.
 //
-#include "../stdafx.h"
 #include "Scene.h"
-#include "../Loader.h"
-#include "../Font/Font.h"
+#include <Loader.h>
+#include <Font/Font.h>
 
 Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f)),
 cam(getUnknown().screenSize->width, getUnknown().screenSize->height)

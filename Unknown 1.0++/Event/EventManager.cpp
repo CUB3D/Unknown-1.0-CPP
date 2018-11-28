@@ -1,12 +1,9 @@
-#include "../stdafx.h"
-
 #include "EventManager.h"
 #include <algorithm>
 #include <iostream>
-#include "../Unknown.h"
+#include <Unknown.h>
 
-void Unknown::registerEventHandler(EventType listenerType, std::string name, std::function<void(Event&)> func)
-{
+void Unknown::registerEventHandler(EventType listenerType, std::string name, std::function<void(Event&)> func) {
     auto& eventHandlers = getUnknown().eventHandlers;
 
     auto iter = eventHandlers.find(listenerType);
@@ -25,8 +22,7 @@ void Unknown::registerEventHandler(EventType listenerType, std::string name, std
     }
 }
 
-void Unknown::removeEventHandler(EventType type, std::string name)
-{
+void Unknown::removeEventHandler(EventType type, std::string name) {
     auto& eventHandlers = getUnknown().eventHandlers;
     std::vector<EventHandler>& handlers = eventHandlers[type];
 
@@ -35,8 +31,7 @@ void Unknown::removeEventHandler(EventType type, std::string name)
     }
 }
 
-void Unknown::postEvent(EventType type, Event& event)
-{
+void Unknown::postEvent(EventType type, Event& event) {
     auto& eventHandlers = getUnknown().eventHandlers;
     std::vector<EventHandler>& handlers = eventHandlers[type];
 

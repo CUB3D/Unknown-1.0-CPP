@@ -1,8 +1,6 @@
 // Unknown Test.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
-
 #include <iostream>
 #include "Types/Colour.h"
 #include "Map.h"
@@ -303,15 +301,15 @@ void init()
 //    font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
     //UK_ADD_SCENE(std::make_shared<RenderTestScene>());
-    UK_ADD_SCENE(std::make_shared<RenderTest2D>());
+    //UK_ADD_SCENE(std::make_shared<RenderTest2D>());
     //UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
     //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
-    //UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
+    UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
     //UK_LOAD_SCENE("Phys");
-    UK_LOAD_SCENE("R2D");
+    UK_LOAD_SCENE("Phys");
 }
 
 #include "Filesystem/Filesystem.h"
@@ -366,8 +364,6 @@ int main(int argc, char* argv[])
     ::Unknown::Filesystem::mount("Test.pak");
     //LuaScript().test();
     //UK_PYTHON_LOAD_SCRIPT("Test");
-
-    UK_LOAD_ENTITY("Ground_proto.json");
 
 	init();
 	UK_INIT_GAME();

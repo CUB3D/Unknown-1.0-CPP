@@ -1,16 +1,15 @@
-#include "stdafx.h"
 #include "UI.h"
 
-#include "UI2D.h"
-#include "Event/Event.h"
-#include "Event/EventManager.h"
-#include "Input/Mouse.h"
+#include <UI2D.h>
+#include <Event/Event.h>
+#include <Event/EventManager.h>
+#include <Input/Mouse.h>
 
 #include <memory>
 #include <ctime>
 #include <regex>
-#include "Log.h"
-#include "scripting/SharedVariable.h"
+#include <Log.h>
+#include <scripting/SharedVariable.h>
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {

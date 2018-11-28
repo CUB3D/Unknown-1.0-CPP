@@ -1,18 +1,21 @@
 {
   "Tag": "Ground",
-  "X": 17,
-  "Y": 28,
-  "Width": 35,
-  "Height": 10,
+  "Size": {
+    "Width": 35,
+    "Height": 10
+  },
   "Components": {
-    "BRender": {
-      "Type": "BasicRenderer",
+    "BasicRenderComponent": {
       "Colour": "00FF00",
       "RenderScale": 32
     },
-    "Collider": {
-      "Type": "Collider",
-      "ColliderType": "Static"
+    "PhysicsBodyComponent": {
+      "BodyDefinition": {
+        "Angle": 0,
+        "Type": "StaticBody"
+      }
     }
-  }
+  },
+  "X": 17,
+  "Y": 28
 }

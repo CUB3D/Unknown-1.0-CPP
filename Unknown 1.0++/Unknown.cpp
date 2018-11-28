@@ -1,12 +1,11 @@
-#include "stdafx.h"
 #include "Unknown.h"
 
 #include <iostream>
 #include <map>
 
-#include "Input/Mouse.h"
-#include "UI2D.h"
-#include "Types/Colour.h"
+#include <Input/Mouse.h>
+#include <UI2D.h>
+#include <Types/Colour.h>
 
 #include <ios>
 #include <fstream>
@@ -18,11 +17,11 @@
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include "GL/GL.h"
+#include <GL/GL.h>
 
-#include "Graphics/RenderingBackend.h"
+#include <Graphics/RenderingBackend.h>
 
-#include "Settings/SettingsParser.h"
+#include <Settings/SettingsParser.h>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>

@@ -4,6 +4,7 @@
 
 #include "EntityEditor.h"
 #include "../Imgui/GUI.h"
+#include "../Entity/Component.h"
 
 Unknown::EntityEditor::EntityEditor(std::shared_ptr<::Unknown::Entity>&& ent) : ent(ent) {
     init();
@@ -31,7 +32,7 @@ void Unknown::EntityEditor::populateGui() {
     ImGui::InputDouble("Rotation", &angle, 0.01);
     ImGui::Spacing();
 
-    for(auto& comp : ent->components) {
+    for(auto& comp : ent->prototype.components) {
         comp->populateEditor();
         ImGui::Spacing();
     }
@@ -43,8 +44,8 @@ void Unknown::EntityEditor::populateGui() {
 
 void Unknown::EntityEditor::init() {
     this->tag.fill(0);
-    for(int i = 0; i < ent->tag.size(); i++) {
-        this->tag[i] = ent->tag[i];
+    for(int i = 0; i < ent->prototype.tag.size(); i++) {
+        this->tag[i] = ent->prototype.tag[i];
     }
 
     this->x = ent->position.x;

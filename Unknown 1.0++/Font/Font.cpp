@@ -1,12 +1,10 @@
-#include "../stdafx.h"
 #include "Font.h"
-#include "../GL/GL.h"
+#include <GL/GL.h>
 
 #include <iostream>
 #include <SDL_ttf.h>
 
-void Unknown::Graphics::Font::drawString(const std::string &string, const int x, const int y) const
-{
+void Unknown::Graphics::Font::drawString(const std::string &string, const int x, const int y) const {
     int xPos = x;
 
     for(char c : string) {

@@ -5,8 +5,9 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_IMAGERENDERCOMPONENT_H
 #define UNKNOWN_DEVELOPMENT_TOOL_IMAGERENDERCOMPONENT_H
 
-#include "Component.h"
-#include "../Image.h"
+#include <Entity/Component.h>
+#include <Image.h>
+#include <Types/Rect.h>
 
 namespace Unknown
 {

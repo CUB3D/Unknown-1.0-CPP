@@ -11,10 +11,7 @@
 #include "Types/Point.h"
 
 
-namespace Unknown
-{
-	::rapidjson::Document readJSONFile(const char* filename);
-
+namespace Unknown {
 	::rapidjson::Value* getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc);
 
 	std::shared_ptr<Colour> getColourFromString(std::string str);

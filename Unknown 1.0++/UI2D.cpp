@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "UI2D.h"
 
-#include "Graphics/RenderingBackend.h"
+#include <Graphics/RenderingBackend.h>
 
 void Unknown::Graphics::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour colour)
 {

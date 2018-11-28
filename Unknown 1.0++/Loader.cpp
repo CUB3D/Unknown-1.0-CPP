@@ -1,24 +1,24 @@
-#include "stdafx.h"
 #include "Loader.h"
 
-#include "document.h"
-#include "Utils.h"
-#include "UI.h"
-#include "Log.h"
+#include <document.h>
+#include <Utils.h>
+#include <UI.h>
+#include <Log.h>
 
 #include <map>
 #include <iostream>
 #include <memory>
 #include <sstream>
-#include "Entity/BasicRenderComponent.h"
-#include "Entity/PhysicsBodyComponent.h"
-#include "Entity/TimerComponent.h"
-#include "Entity/ImageRenderComponent.h"
+#include <Entity/BasicRenderComponent.h>
+#include <Entity/PhysicsBodyComponent.h>
+#include <Entity/TimerComponent.h>
+#include <Entity/ImageRenderComponent.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <Settings/SettingsParser.h>
 #include <Entity/EntityPrototype.h>
+#include <Entity/Entity.h>
 
 std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
 
@@ -39,6 +39,8 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
     //TODO: Scene graph loader
     //TODO: remove massive comment
     //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
+
+    return std::make_shared<Entity>(loadEntityPrototype(name));
 
 //	rapidjson::Document doc = readJSONFile(name.c_str());
 //
@@ -302,7 +304,8 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 
 Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 {
-	rapidjson::Document json = readJSONFile(name);
+    UK_LOG_INFO("Load anim", name);
+	rapidjson::Document json = SettingsParser::loadDocument(name);
 
 	std::unique_ptr<::Unknown::Graphics::Animation> animation(new ::Unknown::Graphics::Animation());
 
@@ -364,7 +367,8 @@ std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)
 {
-	rapidjson::Document doc = readJSONFile(name.c_str());
+    UK_LOG_INFO("Loading UI", name);
+	rapidjson::Document doc = SettingsParser::loadDocument(name);
 
 	UIContainer container;
 
@@ -642,7 +646,7 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
 	return meshContainer;
 }
 
-Unknown::EntityPrototype &Unknown::Loader::loadEntityPrototype(const std::string &name) {
+Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string &name) {
     // Load json doc
     auto document = SettingsParser::loadDocument(name);
 
@@ -660,6 +664,12 @@ Unknown::EntityPrototype &Unknown::Loader::loadEntityPrototype(const std::string
         for(auto& comp : componentList->value.GetObject()) {
             // Create instance of the component
             auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
+
+            if(!componentType.is_valid()) {
+                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
+                continue;
+            }
+
             auto componentInstance = componentType.get_constructor({}).invoke();
 
             // Load its vars from json

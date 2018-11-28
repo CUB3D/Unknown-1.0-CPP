@@ -10,6 +10,7 @@
 #include "../Filesystem/Filesystem.h"
 #include "document.h"
 #include <rttr/type.h>
+#include <rttr/enumeration.h>
 #include "../Types/Colour.h"
 #include "../Utils.h"
 
@@ -30,12 +31,18 @@ namespace Unknown {
             auto property = objType.get_property(std::string(obj.name.GetString()));
             auto type = property.get_type();
 
+
             if(type.is_valid()) {
+                // Handle basic types TODO: double, float, char
                 if (type == rttr::type::get<int>()) {
                     bool status = property.set_value(data, obj.value.GetInt());
                     printf("New value: %d\n", obj.value.GetInt());
                 } else if (type == rttr::type::get<bool>()) {
                     property.set_value(data, obj.value.GetBool());
+                } else if(type == rttr::type::get<float>()) {
+                    property.set_value(data, obj.value.GetFloat());
+                } else if(type == rttr::type::get<double>()) {
+                    property.set_value(data, obj.value.GetDouble());
                 } else if (type == rttr::type::get<std::string>()) {
                     property.set_value(data, std::string(obj.value.GetString()));
                 } else if(type == rttr::type::get<::Unknown::Colour>()) {
@@ -52,6 +59,11 @@ namespace Unknown {
                     }
 
                    bool status = property.set_value(data, subObj);
+                } else if(type.is_enumeration()) {
+                    printf("Parsing enum\n");
+                    //TODO: register enum, test this
+                    auto enumName = std::string(obj.value.GetString());
+                    property.set_value(data, type.get_enumeration().name_to_value(enumName));
                 }
             } else {
                 printf("Prop type  not valid\n");

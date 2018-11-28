@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "Map.h"
 
-#include "Types/Dimension.h"
+#include <Types/Dimension.h>
 
 
 Unknown::Map::Map(const int width, const int height)

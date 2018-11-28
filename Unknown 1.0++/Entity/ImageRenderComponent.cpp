@@ -3,16 +3,19 @@
 //
 
 #include "ImageRenderComponent.h"
-#include "../Utils.h"
-#include "../Imgui/GUI.h"
+#include <Types/Rect.h>
+#include <Imgui/GUI.h>
+#include <Entity/Entity.h>
 
 Unknown::ImageRenderComponent::ImageRenderComponent(const std::string &filename, const int renderScale) : img(filename), renderScale(renderScale) {}
 
 Unknown::ImageRenderComponent::ImageRenderComponent() : ImageRenderComponent("", 1) {}
 
 void Unknown::ImageRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {
-    img.render((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
-               (ent.position.y - ent.size.height / 2) * renderScale - Yoffset, glm::degrees(ent.angle));
+    auto& size = ent.prototype.size;
+
+    img.render((ent.position.x - size.width / 2) * renderScale - Xoffset,
+               (ent.position.y - size.height / 2) * renderScale - Yoffset, glm::degrees(ent.angle));
 }
 
 void Unknown::ImageRenderComponent::populateEditor() {
@@ -29,14 +32,15 @@ void Unknown::ImageRenderComponent::populateEditor() {
 Unknown::Rect<int> Unknown::ImageRenderComponent::getRenderBounds(const Entity &ent) {
     int Xoffset = 0;
     int Yoffset = 0;
+    auto& size = ent.prototype.size;
 
-    return ::Unknown::Rect<int>((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
-                              (ent.position.y - ent.size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
+    return ::Unknown::Rect<int>((ent.position.x - size.width / 2) * renderScale - Xoffset,
+                              (ent.position.y - size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
 }
 
 RTTR_REGISTRATION {
     using namespace Unknown;
-    rttr::registration::class_<ImageRenderComponent>("BasicRenderComponent")
+    rttr::registration::class_<ImageRenderComponent>("ImageRenderComponent")
             .property("Image", &ImageRenderComponent::img)
             .property("RenderScale", &ImageRenderComponent::renderScale)
             .constructor<>();

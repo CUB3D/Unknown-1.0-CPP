@@ -1,6 +1,5 @@
 #include <cstdarg>
-#include "stdafx.h"
-#include "Log.h"
+#include <Log.h>
 #include <initializer_list>
 #include <sstream>
 #include <string_view>

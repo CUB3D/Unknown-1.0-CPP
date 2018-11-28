@@ -22,7 +22,7 @@ set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 target_compile_features(UK PUBLIC cxx_std_17)
-target_compile_options(UK PRIVATE -O3)
+target_compile_options(UK PRIVATE -O3 -g -ggdb -pg)
 
 # Create header dir
 INSTALL(DIRECTORY "${UK_DIR}/Unknown 1.0++/"

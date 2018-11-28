@@ -23,7 +23,6 @@ namespace Unknown
         b2CircleShape circle;
         b2FixtureDef fixtureDefinition;
         b2Fixture* fixture;
-        b2Filter filter;
 
         double maxSpeed = -1;
 

@@ -6,7 +6,8 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_BASICRENDERCOMPONENT_H
 
 #include "Component.h"
-#include "Types/Colour.h"
+#include <Types/Colour.h>
+#include <Types/Rect.h>
 #include <array>
 #include <rttr/registration>
 

@@ -1,11 +1,10 @@
-#include "stdafx.h"
 #include "Image.h"
 
 #include <string.h>
 
-#include "Unknown.h"
-#include "GL/GL.h"
-#include "Graphics/RenderingBackend.h"
+#include <Unknown.h>
+#include <GL/GL.h>
+#include <Graphics/RenderingBackend.h>
 
 
 void Unknown::Graphics::Image::init() {

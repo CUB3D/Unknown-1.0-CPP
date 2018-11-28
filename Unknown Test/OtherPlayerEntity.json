@@ -1,20 +1,26 @@
 {
   "Tag": "OtherPlayer",
-  "Width": 2,
-  "Height": 2,
+  "Size": {
+    "Width": 2,
+    "Height": 2
+  },
   "Components": {
-    "BRender": {
-      "Type": "BasicRender",
-      "col": "FF0000",
-      "renderScale": 32
+    "BasicRenderComponent": {
+      "Colour": "FF0000",
+      "RenderScale": 32
     },
-    "Collider": {
-      "Type": "Collider",
-      "ColliderType": "Dynamic",
-      "Friction": 0.3,
-      "MaxSpeed": 10,
-      "GroupIndex": -2,
-      "FixedRotation": false
+    "PhysicsBodyComponent": {
+      "BodyDefinition": {
+        "Type": "DynamicBody",
+        "FixedRotation": false
+      },
+      "FixtureDefinition": {
+        "Friction": 0.3,
+        "Filter": {
+          "Group": -2
+        }
+      },
+      "MaxSpeed": 10
     }
   }
 }

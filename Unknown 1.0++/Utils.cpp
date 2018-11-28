@@ -1,7 +1,6 @@
-#include "stdafx.h"
 #include "Utils.h"
 
-#include "Types/Colour.h"
+#include <Types/Colour.h>
 
 #include <fstream>
 #include <string>
@@ -11,25 +10,6 @@
 #include <locale>
 
 
-rapidjson::Document Unknown::readJSONFile(const char* filename)
-{
-	std::ifstream config(filename);
-
-	if(!config.good()) {
-		printf("Unable to find config file '%s'\n", filename);
-		exit(0);
-	}
-
-	std::ostringstream oss;
-	oss << config.rdbuf();
-	std::string doc = oss.str();
-
-	rapidjson::Document d;
-
-	d.Parse<0>(doc.c_str());
-
-	return d;
-}
 // TODO: optional
 rapidjson::Value* Unknown::getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc)
 {

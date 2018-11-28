@@ -17,7 +17,7 @@ namespace Unknown
 
         std::shared_ptr<::Unknown::Entity> loadEntityAt(const std::string &name, double x, double y);
         std::shared_ptr<::Unknown::Entity> loadEntity(const std::string &name);
-        EntityPrototype& loadEntityPrototype(const std::string& name);
+        EntityPrototype loadEntityPrototype(const std::string &name);
 
 
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);

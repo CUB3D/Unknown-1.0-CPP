@@ -3,15 +3,18 @@
 //
 
 #include "BasicRenderComponent.h"
-#include "../UI2D.h"
-#include "../Imgui/GUI.h"
+#include <UI2D.h>
+#include <Imgui/GUI.h>
+#include <Entity/Entity.h>
 
 
 void Unknown::BasicRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {
-    UK_DRAW_RECT((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
-                 (ent.position.y - ent.size.height / 2) * renderScale - Yoffset,
-                 (ent.size.width) * renderScale,
-                 (ent.size.height) * renderScale,
+    auto& size = ent.prototype.size;
+
+    UK_DRAW_RECT((ent.position.x - size.width / 2) * renderScale - Xoffset,
+                 (ent.position.y - size.height / 2) * renderScale - Yoffset,
+                 (size.width) * renderScale,
+                 (size.height) * renderScale,
                  glm::degrees(ent.angle), this->col);
 }
 
@@ -42,11 +45,12 @@ void Unknown::BasicRenderComponent::populateEditor() {
 
 Unknown::Rect<int> Unknown::BasicRenderComponent::getRenderBounds(const Entity &ent) {
     int Xoffset = 0, Yoffset = 0;
+    auto& size = ent.prototype.size;
 
-    return Rect<int>((ent.position.x - ent.size.width / 2) * renderScale - Xoffset,
-        (ent.position.y - ent.size.height / 2) * renderScale - Yoffset,
-        (ent.size.width) * renderScale,
-        (ent.size.height) * renderScale);
+    return Rect<int>((ent.position.x - size.width / 2) * renderScale - Xoffset,
+        (ent.position.y - size.height / 2) * renderScale - Yoffset,
+        (size.width) * renderScale,
+        (size.height) * renderScale);
 }
 
 RTTR_REGISTRATION {

@@ -1,9 +1,9 @@
-#include "stdafx.h"
+
 #include "Vector.h"
 
 #include <math.h>
 
-#include "Utils.h"
+#include <Utils.h>
 
 
 Unknown::Vector::Vector() : Vector(0, 0) {}

@@ -56,7 +56,7 @@ namespace Unknown
             if(dynamic_cast<Entity*>(obj.get())) {
                 auto ent = std::dynamic_pointer_cast<Entity>(obj);
 
-                for(auto& comp : ent->components) {
+                for(auto& comp : ent->prototype.components) {
                     if(dynamic_cast<IInitable<Scene&, std::shared_ptr<Entity>>*>(comp.get())) {
                         std::dynamic_pointer_cast<IInitable<Scene&, std::shared_ptr<Entity>>>(comp)->init(*this, ent);
                     }

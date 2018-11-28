@@ -6,12 +6,13 @@
 #define UNKNOWN_ENTITYPROTOTYPE_H
 
 #include "../Types/Dimension.h"
-#include "Component.h"
 #include <string>
 #include <vector>
 #include <memory>
 
 namespace Unknown {
+    class Component;
+
     class EntityPrototype {
     public:
         std::string tag;

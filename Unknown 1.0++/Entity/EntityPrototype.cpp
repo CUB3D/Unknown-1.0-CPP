@@ -4,6 +4,7 @@
 
 #include "EntityPrototype.h"
 #include <rttr/registration>
+#include <Entity/Component.h>
 
 RTTR_REGISTRATION {
     using namespace Unknown;

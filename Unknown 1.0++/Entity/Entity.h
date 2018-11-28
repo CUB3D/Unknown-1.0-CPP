@@ -5,34 +5,29 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_ENTITY_H
 #define UNKNOWN_DEVELOPMENT_TOOL_ENTITY_H
 
-#include "Component.h"
 #include "../Renderer/IRenderable.h"
 #include "../IUpdateable.h"
 #include <vector>
 #include "../ITagable.h"
 #include "../IInitable.h"
-#include "../Types/Dimension.h"
 #include "../Types/Point.h"
+#include "EntityPrototype.h"
 #include <memory>
 
-namespace Unknown
-{
-    class Component;
+namespace Unknown {
+    class EntityPrototype;
 
-    class Entity : public IRenderable, public IUpdateable, public ITagable
-    {
+    class Entity : public IRenderable, public IUpdateable, public ITagable {
     public:
-        std::vector<std::shared_ptr<Component>> components;
-
-        Dimension<double> size;
         Point<double> position;
-        const std::string tag;
         double angle;
         bool enabled;
         bool queueDissable;
 
+        EntityPrototype prototype;
 
-        Entity(const std::string& str);
+
+        Entity(EntityPrototype proto);
 
         virtual void update() override;
         virtual void render(double Xoffset, double Yoffset) const override;
@@ -49,7 +44,7 @@ namespace Unknown
 
         template<typename T>
         std::shared_ptr<T> getComponent() {
-            for(auto& component : this->components) {
+            for(auto& component : prototype.components) {
                 auto casted = std::dynamic_pointer_cast<T>(component);
                 if(casted) {
                     return casted;

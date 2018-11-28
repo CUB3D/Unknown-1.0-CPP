@@ -1,9 +1,8 @@
-#include "stdafx.h"
 #include "Animation.h"
 
 #include <vector>
 
-#include "Image.h"
+#include <Image.h>
 
 void Unknown::Graphics::Animation::addFrame(std::shared_ptr<Image> frame, int delayms)
 {

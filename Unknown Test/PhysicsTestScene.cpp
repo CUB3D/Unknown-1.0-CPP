@@ -52,7 +52,6 @@ WAVSound hit("Hit.wav");
 
 
 PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
-    //UK_PYTHON_LOAD_SCRIPT("Test");
     ui = Loader::loadUI("PhysGameGUI.json");
     ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();
@@ -60,22 +59,26 @@ PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
     this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
 
     this->addObject(UK_LOAD_ENTITY("Ground.json"));
+    getObject<Entity>("Ground")->setPosition(17, 28);
 
     this->addObject(UK_LOAD_ENTITY_AT("OtherPlayerEntity.json", 5, 3));
     this->addObject(UK_LOAD_ENTITY_AT("PlayerEntity.json", 16, 3));
 
     this->addObject(UK_LOAD_ENTITY("Obstacle.json"));
+    getObject<Entity>("Obstacle")->setPosition(15, 18);
 
 
-    contactManager.addListener(getObject<Entity>("Player"), getObject<Entity>("Ground"), [](auto objs, bool onGround) {p1onGround = onGround;});
-    contactManager.addListener(getObject<Entity>("Player"), getObject<Entity>("Obstacle"), [](auto bojs, bool onGround) {p1onGround = onGround;});
-    contactManager.addListener(getObject<Entity>("OtherPlayer"), getObject<Entity>("Ground"), [](auto objs, bool onGround) {p2onGround = onGround;});
-    contactManager.addListener(getObject<Entity>("OtherPlayer"), getObject<Entity>("Obstacle"), [](auto objs, bool onGround) {p2onGround = onGround;});
+//    contactManager.addListener(getObject<Entity>("Player"), getObject<Entity>("Ground"), [](auto objs, bool onGround) {p1onGround = onGround;});
+//    contactManager.addListener(getObject<Entity>("Player"), getObject<Entity>("Obstacle"), [](auto bojs, bool onGround) {p1onGround = onGround;});
+//    contactManager.addListener(getObject<Entity>("OtherPlayer"), getObject<Entity>("Ground"), [](auto objs, bool onGround) {p2onGround = onGround;});
+//    contactManager.addListener(getObject<Entity>("OtherPlayer"), getObject<Entity>("Obstacle"), [](auto objs, bool onGround) {p2onGround = onGround;});
 }
 
 
 void PhysicsTestScene::update() {
     Scene::update();
+
+    return;
 
     // Handle player 1 movement
     auto player = getObject<Entity>("Player");
@@ -170,5 +173,4 @@ void PhysicsTestScene::update() {
 void PhysicsTestScene::render() const {
     UK_DRAW_RECT(0, 0, 1024, 1024, UK_COLOUR_RGB(0, 0, 0));
     Scene::render();
-    ::Unknown::Graphics::drawPoint(100, 100, UK_COLOUR_RGB(255, 0, 0));
 }

@@ -7,12 +7,12 @@
 #include "ImageRenderComponent.h"
 #include "BasicRenderComponent.h"
 
-Unknown::Entity::Entity(const std::string& tag) : size(0, 0), position(0, 0), tag(tag), enabled(true), queueDissable(false), angle(0) {}
+Unknown::Entity::Entity(EntityPrototype proto) : position(0, 0), enabled(true), queueDissable(false), angle(0), prototype(proto) {}
 
 void Unknown::Entity::render(double Xoffset, double Yoffset) const {
     if(!enabled)
         return;
-    for(auto& component : this->components) {
+    for(auto& component : prototype.components) {
         component->render(*this, Xoffset, Yoffset);
     }
 }
@@ -25,7 +25,7 @@ void Unknown::Entity::update() {
         this->disable();
         queueDissable = false;
     }
-    for(auto& component : this->components) {
+    for(auto& component : prototype.components) {
         component->update(*this);
     }
 }
@@ -42,7 +42,7 @@ Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
         return ii->getRenderBounds(*this);
     }
 
-    return Rect<int>(position.x, position.y, size.width, size.height);
+    return Rect<int>(position.x, position.y, prototype.size.width, prototype.size.height);
 }
 
 void Unknown::Entity::setPosition(double x, double y, double angle) {
@@ -63,13 +63,13 @@ void Unknown::Entity::setPosition(double x, double y, double angle) {
 }
 
 const std::string Unknown::Entity::getTag() const {
-    return this->tag;
+    return this->prototype.tag;
 }
 
 void Unknown::Entity::disable() {
     this->enabled = false;
 
-    for(auto& component : this->components) {
+    for(auto& component : prototype.components) {
         component->onDisable(*this);
     }
 }
