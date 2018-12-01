@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-set(UK_DIR ${PROJECT_SOURCE_DIR})
+set(UK_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 
 set(UK_LIB "${UK_DIR}/Output/lib/${CMAKE_HOST_SYSTEM_NAME}/")
