@@ -21,7 +21,7 @@ void Unknown::Map::setTileID(const int tileID, const int x, const int y)
 	this->map[mapSize.width * y + x] = tileID;
 }
 
-int Unknown::Map::getTileID(const int x, const int y)
+int Unknown::Map::getTileID(const int x, const int y) const
 {
 	return map[mapSize.width * y + x];
 }
@@ -31,7 +31,7 @@ void Unknown::Map::setData(const int data, const int x, const int y)
 	this->data[(int)(mapSize.width) * y + x] = data;
 }
 
-int Unknown::Map::getData(const int x, const int y)
+int Unknown::Map::getData(const int x, const int y) const
 {
 	return data[(int)(mapSize.width) * y + x];
 }

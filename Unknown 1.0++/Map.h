@@ -36,10 +36,10 @@ namespace Unknown
 		Map(const Map& map);
 
 		void setTileID(const int tileID, const int x, const int y);
-		int getTileID(const int x, const int y);
+		int getTileID(const int x, const int y) const;
 
 		void setData(const int data, const int x, const int y);
-		int getData(const int x, const int y);
+		int getData(const int x, const int y) const;
 
 		bool isOnBoard(const int x, const int y);
 
