@@ -98,7 +98,7 @@ namespace Unknown
     class ImageComponent : public UIComponent
 	{
 	public:
-		std::shared_ptr<Graphics::Image> image;
+		std::shared_ptr<Image> image;
 
 		ImageComponent();
 		virtual void render() const override;

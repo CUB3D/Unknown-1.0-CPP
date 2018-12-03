@@ -12,16 +12,12 @@ namespace Unknown
 {
     namespace Loader
     {
-        extern std::map<std::string, std::shared_ptr<Graphics::Image>> imagePool;
-
-
         std::shared_ptr<::Unknown::Entity> loadEntityAt(const std::string &name, double x, double y);
         std::shared_ptr<::Unknown::Entity> loadEntity(const std::string &name);
         EntityPrototype loadEntityPrototype(const std::string &name);
 
 
         ::Unknown::Graphics::Animation* loadAnimation(const char* name);
-        std::shared_ptr<::Unknown::Graphics::Image> loadImage(const std::string& name);
         ::Unknown::UIContainer loadUI(const std::string &name);
 
         std::shared_ptr<MeshContainer> loadModel(const std::string& name);

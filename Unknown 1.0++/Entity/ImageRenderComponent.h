@@ -14,7 +14,7 @@ namespace Unknown
     class ImageRenderComponent : public Component
     {
     public:
-        Graphics::Image img;
+        Image img;
         int renderScale = 1;
 
         ImageRenderComponent();

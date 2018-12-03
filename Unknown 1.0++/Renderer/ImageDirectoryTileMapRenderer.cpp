@@ -27,7 +27,7 @@ Unknown::ImageDirectoryTileMapRenderer::ImageDirectoryTileMapRenderer(Unknown::M
            printf("Found possible non image '%s', this could cause issues\n", p.path().extension().string().c_str());
        }
        printf("Loading %s\n", p.path().string().c_str());
-       images[id] = std::make_shared<Graphics::Image>(p.path().string().c_str());//UK_LOAD_IMAGE(p.path().string().c_str());
+       images[id] = std::make_shared<Image>(p.path().string().c_str());//UK_LOAD_IMAGE(p.path().string().c_str());
    }
 
    this->renderer = [&](int x, int y, int id, int data) {

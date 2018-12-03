@@ -78,8 +78,6 @@ PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
 void PhysicsTestScene::update() {
     Scene::update();
 
-    return;
-
     // Handle player 1 movement
     auto player = getObject<Entity>("Player");
     auto otherPlayer = getObject<Entity>("OtherPlayer");

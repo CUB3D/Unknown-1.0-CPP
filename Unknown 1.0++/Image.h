@@ -13,29 +13,26 @@
 
 namespace Unknown
 {
-	namespace Graphics
+	class Image : public IInitable<>
 	{
-	    class Image : public IInitable<>
-		{
-		private:
-			std::string filename;
+	private:
+		std::string filename;
 
-			TextureInfo textureInfo;
-			VertexInfo vertexInfo;
-			Shader shader;
+		TextureInfo textureInfo;
+		VertexInfo vertexInfo;
+		Shader shader;
 
 
-		public:
-		    ::Unknown::Dimension<int> imageSize;
+	public:
+		::Unknown::Dimension<int> imageSize;
 
-			explicit Image(const std::string& filename);
-			Image& operator=(const Image& img);
-			virtual ~Image();
+		explicit Image(const std::string& filename);
+		Image& operator=(const Image& img);
+		virtual ~Image();
 
-			virtual void init() override;
-			void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;
-		};
-	}
+		virtual void init() override;
+		void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;
+	};
 }
 
 #endif

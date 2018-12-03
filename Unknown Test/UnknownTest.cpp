@@ -36,51 +36,8 @@
 #include "GL/GL.h"
 
 #include "UK.h"
+#include "BasicGraphicsTest.h"
 
-//Unknown::Map map(1, 1);
-//Unknown::Timer timer(0.2f);
-//
-//std::shared_ptr<Unknown::Graphics::Font> font;
-//
-//int width = 64;
-//int height = 64;
-//int scaleX = 0;
-//int scaleY = 0;
-//
-//#define PIXEL_PER_METER 64
-//
-////Unknown::Graphics::ImageSprite tmp(0, 0, nullptr);
-////std::shared_ptr<Unknown::BasicTileMapRenderer> boardRenderer;
-//
-//void renderTile(int, int, int, int);
-//
-//void createBoard()
-//{
-//    map = Unknown::Map(width, height);
-//
-//    Unknown::BinaryMapGenerator().generate(map);
-//
-//    //boardRenderer = std::make_shared<Unknown::BasicTileMapRenderer>(map, renderTile, false);
-//    //Unknown::getUnknown().globalSceneManager.getScene<Unknown::CustomScene>()->renderables.push_back(static_cast<std::shared_ptr<Unknown::IRenderable>>(boardRenderer));
-//
-//    auto& uk = Unknown::getUnknown();
-//    scaleX = uk.screenSize->width / width;
-//    scaleY = uk.screenSize->height / height;
-//
-//    printf("Board creation complete\n");
-//}
-//
-//Unknown::Colour colours[2] = {Unknown::Colour::WHITE, Unknown::Colour::BLACK};
-//
-//void renderTile(int x, int y, int id, int data) {
-//    UK_DRAW_RECT(x * scaleX, y * scaleY, scaleX, scaleY, colours[id]);
-//}
-//
-//int checkTile(int x, int y, Unknown::Map& map)
-//{
-//    return map.isOnBoard(x,y) ? map(x,y) : 0;
-//}
-//
 //void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 //{
 //    if(evnt->componentName == "ButtonStart")
@@ -121,44 +78,6 @@
 //        if(menu) {
 //            menu->reloadMenu();
 //        }
-//    }
-//}
-//
-//void updateBoardSimulation()
-//{
-//    using namespace Unknown;
-//
-//    Map newMap = Map(width, height);
-//
-//    if (timer.isTickComplete())
-//    {
-//        for (int x = 0; x <  map.mapSize.width; x++)
-//        {
-//            for (int y = 0; y <  map.mapSize.height; y++)
-//            {
-//                int alive = map.getTileID(x, y);
-//                int popcount = 0;
-//                popcount += checkTile(x - 1, y - 1, map);
-//                popcount += checkTile(x - 1, y, map);
-//                popcount += checkTile(x - 1, y + 1, map);
-//
-//                popcount += checkTile(x, y - 1, map);
-//                popcount += checkTile(x, y + 1, map);
-//
-//                popcount += checkTile(x + 1, y - 1, map);
-//                popcount += checkTile(x + 1, y, map);
-//                popcount += checkTile(x + 1, y + 1, map);
-//
-//                if (alive)
-//                {
-//                    newMap(x, y) = !(popcount < 2 || popcount > 3);
-//                } else {
-//                    newMap(x, y) = (popcount == 3);
-//                }
-//            }
-//        }
-//
-//        map = newMap;
 //    }
 //}
 
@@ -306,10 +225,11 @@ void init()
     //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
+    UK_ADD_SCENE(std::make_shared<BasicGraphicsTest>());
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
     //UK_LOAD_SCENE("Phys");
-    UK_LOAD_SCENE("Phys");
+    UK_LOAD_SCENE("BasicGraphics");
 }
 
 #include "Filesystem/Filesystem.h"
