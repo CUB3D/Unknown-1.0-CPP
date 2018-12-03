@@ -39,7 +39,6 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
     //TODO: Scene graph loader
     //TODO: remove massive comment
     //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
-
     return std::make_shared<Entity>(loadEntityPrototype(name));
 
 //	rapidjson::Document doc = readJSONFile(name.c_str());
@@ -679,10 +678,10 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
                 SettingsParser::parseJSONObject(componentType, property, componentVariant);
             }
 
-            printf("Comp: %s\n", comp.name.GetString());
+            //printf("Comp: %s\n", comp.name.GetString());
             auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
             proto.components.push_back(compPtr);
-            printf("S: %d\n", proto.components.size());
+            //printf("S: %d\n", proto.components.size());
         }
     } else {
         UK_LOG_WARN("Entity", name, "has no components");

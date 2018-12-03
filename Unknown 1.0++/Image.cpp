@@ -40,6 +40,16 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 	return *this;
 }
 
+const Unknown::TextureInfo& Unknown::Graphics::Image::getTextureInfo() const {
+    return this->textureInfo;
+}
+
+void Unknown::Graphics::Image::setDimentions(Dimension<int>& dimension) {
+    this->imageSize = dimension;
+    // TODO: destroy old verticies
+    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.width, dimension.height);
+}
+
 Unknown::Graphics::Image::~Image() {}
 
 RTTR_REGISTRATION {

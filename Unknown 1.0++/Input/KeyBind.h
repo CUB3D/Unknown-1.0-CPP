@@ -18,6 +18,7 @@ namespace Unknown {
         int keycode;
         InputState currentState;
         std::string name;
+        bool enabled;
 
         KeyBind(int keycode, const std::string& name);
 
