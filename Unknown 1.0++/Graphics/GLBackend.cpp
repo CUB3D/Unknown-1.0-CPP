@@ -235,7 +235,7 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
 	}
 
     if (!imageSurface) {
-        printf("Error: failed to load image, %s\n", IMG_GetError());
+        printf("Error: failed to load image '%s', %s\n", path.c_str(), IMG_GetError());
         if(uk.config.textureFallback) {
             printf("Loading fallback\n");
             imageSurface = IMG_Load_RW(SDL_RWFromConstMem(placeholder_png, placeholder_png_len), false);
@@ -511,4 +511,8 @@ void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle
 
     // Unbind stuff
     //glBindVertexArray(0);
+}
+
+Shader &Unknown::GLBackend::getTextureRendererShader() {
+    return this->textureRenderer;
 }

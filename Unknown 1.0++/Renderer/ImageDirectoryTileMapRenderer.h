@@ -11,7 +11,7 @@
 
 namespace Unknown {
     class ImageDirectoryTileMapRenderer : public BasicTileMapRenderer {
-        std::map<int, std::shared_ptr<::Unknown::Graphics::Image>> images;
+        std::map<int, std::shared_ptr<::Unknown::Image>> images;
 
     public:
         ImageDirectoryTileMapRenderer(Map &map1, std::string directory);

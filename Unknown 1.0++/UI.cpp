@@ -337,5 +337,5 @@ void Unknown::ImageComponent::render() const {
 }
 
 void Unknown::ImageComponent::init() {
-    this->image = std::make_shared<Graphics::Image>(this->content);
+    this->image = std::make_shared<Image>(this->content);
 }

@@ -6,40 +6,35 @@
 #include "Image.h"
 #include "Timer.h"
 
-namespace Unknown
-{
-	namespace Graphics
-	{
-		struct AnimationFrame
-		{
-			std::shared_ptr<Image> frameImage;
-			int delayms;
-		};
+namespace Unknown {
 
-		class Animation
-		{
-		private:
-			Timer frameTimer;
-			bool hasInit = false;
-			bool done;
+	struct AnimationFrame {
+		std::shared_ptr<Image> frameImage;
+		int delayms;
+	};
 
-		public:
-			std::vector<AnimationFrame> frames;
-			int currentFrameIndex = 0;
-			bool loop;
+	class Animation {
+	private:
+		Timer frameTimer;
+		bool hasInit = false;
+		bool done;
 
-			Animation();
+	public:
+		std::vector<AnimationFrame> frames;
+		int currentFrameIndex = 0;
+		bool loop;
 
-			void addFrame(std::shared_ptr<Image> frame, int delayms);
-			void addFrame(AnimationFrame frame);
+		Animation();
 
-			void draw(const int x, const int y, const double angle);
-			void draw(const int x, const int y);
+		void addFrame(std::shared_ptr<Image> frame, int delayms);
+		void addFrame(AnimationFrame frame);
 
-			void drawNoAdvance(const int x, const int y, const double angle) const;
-			void attemptAdvanceFrame();
-		};
-	}
+		void draw(const int x, const int y, const double angle);
+		void draw(const int x, const int y);
+
+		void drawNoAdvance(const int x, const int y, const double angle) const;
+		void attemptAdvanceFrame();
+	};
 }
 
 #endif

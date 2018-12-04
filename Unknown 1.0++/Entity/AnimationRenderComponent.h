@@ -9,14 +9,12 @@
 #include "Component.h"
 #include "Entity.h"
 
-namespace Unknown
-{
-    class AnimationRenderComponent : public Component
-    {
+namespace Unknown {
+    class AnimationRenderComponent : public Component {
     public:
-        Graphics::Animation animation;
+        Animation animation;
 
-        AnimationRenderComponent(Graphics::Animation animation1);
+        AnimationRenderComponent(Animation animation1);
 
         virtual void render(const Entity& ent, double xoff, double yoff) const override;
         virtual void update(Entity& ent) override;

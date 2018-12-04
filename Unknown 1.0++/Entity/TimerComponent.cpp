@@ -7,8 +7,9 @@
 
 Unknown::TimerComponent::TimerComponent(const long long int time) : t(time) {}
 
+//TODO: figure out this
 RTTR_REGISTRATION {
     using namespace Unknown;
-    rttr::registration::class_<TimerComponent>("TimerComponent")
-        .constructor<>();
+    rttr::registration::class_<TimerComponent>("TimerComponent");
+        //.constructor<>();
 };

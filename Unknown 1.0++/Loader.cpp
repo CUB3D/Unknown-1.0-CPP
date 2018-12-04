@@ -20,8 +20,6 @@
 #include <Entity/EntityPrototype.h>
 #include <Entity/Entity.h>
 
-std::map<std::string, std::shared_ptr<Unknown::Graphics::Image>> Unknown::Loader::imagePool;
-
 // TODO: make create ent obj, add proto
 std::shared_ptr<Unknown::Entity>
 Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
@@ -39,19 +37,19 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
     return std::make_shared<Entity>(loadEntityPrototype(name));
 }
 
-Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
+Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 {
     UK_LOG_INFO("Load anim", name);
 	rapidjson::Document json = SettingsParser::loadDocument(name);
 
-	std::unique_ptr<::Unknown::Graphics::Animation> animation(new ::Unknown::Graphics::Animation());
+	std::unique_ptr<Animation> animation = std::make_unique<Animation>();
 
 	for (rapidjson::Value::MemberIterator member = json.MemberBegin(); member != json.MemberEnd(); member++)
 	{
 		if (member->name == "Frame")
 		{
 			std::string imageLocation = member->value.FindMember("Image")->value.GetString();
-			std::shared_ptr<Graphics::Image> image = loadImage(imageLocation.c_str());
+			auto image = std::make_shared<Image>(imageLocation.c_str());
 			
 			rapidjson::Value::MemberIterator delayMemeber = member->value.FindMember("Delay");
 
@@ -62,7 +60,7 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 				delay = delayMemeber->value.GetInt();
 			}
 
-			::Unknown::Graphics::AnimationFrame animationFrame;
+			AnimationFrame animationFrame;
 
 			animationFrame.delayms = delay;
 			animationFrame.frameImage = image;
@@ -84,22 +82,6 @@ Unknown::Graphics::Animation* Unknown::Loader::loadAnimation(const char* name)
 	}
 
 	return animation.get();
-}
-
-std::shared_ptr<::Unknown::Graphics::Image> Unknown::Loader::loadImage(const std::string &name) {
-	if (imagePool.find(name) != imagePool.end()) {
-		return imagePool.find(name)->second;
-	}
-
-	std::shared_ptr<Graphics::Image> image = std::make_shared<Graphics::Image>(name);
-
-	// copy to map
-	imagePool[name] = image;
-
-	//Again, clone to keep original unmodified
-    // After std::move image.get() -> nullptr therefore clone the one in the pool
-	//return imagePool[name]->clone();
-	return image;
 }
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)

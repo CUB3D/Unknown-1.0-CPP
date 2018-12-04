@@ -4,7 +4,7 @@
 
 #include <Image.h>
 
-void Unknown::Graphics::Animation::addFrame(std::shared_ptr<Image> frame, int delayms)
+void Unknown::Animation::addFrame(std::shared_ptr<Image> frame, int delayms)
 {
 	AnimationFrame animationFrame;
 
@@ -14,17 +14,17 @@ void Unknown::Graphics::Animation::addFrame(std::shared_ptr<Image> frame, int de
 	addFrame(animationFrame);
 }
 
-void Unknown::Graphics::Animation::addFrame(AnimationFrame frame)
+void Unknown::Animation::addFrame(AnimationFrame frame)
 {
 	frames.push_back(frame);
 }
 
-void Unknown::Graphics::Animation::draw(const int x, const int y)
+void Unknown::Animation::draw(const int x, const int y)
 {
 	this->draw(x, y, 0);
 }
 
-void Unknown::Graphics::Animation::draw(const int x, const int y, const double angle)
+void Unknown::Animation::draw(const int x, const int y, const double angle)
 {
 	AnimationFrame currentFrame = frames[currentFrameIndex];
 
@@ -49,18 +49,18 @@ void Unknown::Graphics::Animation::draw(const int x, const int y, const double a
 	}
 }
 
-Unknown::Graphics::Animation::Animation() : currentFrameIndex(0), loop(false), done(false) {
+Unknown::Animation::Animation() : currentFrameIndex(0), loop(false), done(false) {
 
 }
 
-void Unknown::Graphics::Animation::drawNoAdvance(const int x, const int y, const double angle) const {
+void Unknown::Animation::drawNoAdvance(const int x, const int y, const double angle) const {
 	AnimationFrame currentFrame = frames[currentFrameIndex];
 
 	if(currentFrame.frameImage)
 		currentFrame.frameImage->render(x, y, angle);
 }
 
-void Unknown::Graphics::Animation::attemptAdvanceFrame() {
+void Unknown::Animation::attemptAdvanceFrame() {
     if(done)
         return;
 

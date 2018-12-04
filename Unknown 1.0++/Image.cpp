@@ -7,7 +7,7 @@
 #include <Graphics/RenderingBackend.h>
 
 
-void Unknown::Graphics::Image::init() {
+void Unknown::Image::init() {
     this->textureInfo = getRendererBackend()->loadTexture(this->filename);
 
     this->imageSize.width = this->textureInfo.width;
@@ -16,11 +16,11 @@ void Unknown::Graphics::Image::init() {
     this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, this->textureInfo.width, this->textureInfo.height);
 }
 
-void Unknown::Graphics::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
+void Unknown::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
     getRendererBackend()->renderTexture(x, y, angle, this->textureInfo, this->vertexInfo);
 }
 
-Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename) {
+Unknown::Image::Image(const std::string &filename) : filename(filename) {
 	if(getUnknown().currentState < UK_POST_INIT) {
 	    getUnknown().lateInit.push_back(this);
 	} else { // There is a renderer, init now
@@ -28,7 +28,7 @@ Unknown::Graphics::Image::Image(const std::string &filename) : filename(filename
 	}
 }
 
-Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) {
+Unknown::Image &Unknown::Image::operator=(const Image &img) {
 	this->filename = img.filename;
 
     if(getUnknown().currentState < UK_POST_INIT) {
@@ -40,20 +40,22 @@ Unknown::Graphics::Image &Unknown::Graphics::Image::operator=(const Image &img) 
 	return *this;
 }
 
-const Unknown::TextureInfo& Unknown::Graphics::Image::getTextureInfo() const {
+const Unknown::TextureInfo& Unknown::Image::getTextureInfo() const {
     return this->textureInfo;
 }
 
-void Unknown::Graphics::Image::setDimentions(Dimension<int>& dimension) {
+void Unknown::Image::setDimentions(Dimension<int>& dimension) {
     this->imageSize = dimension;
     // TODO: destroy old verticies
     this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.width, dimension.height);
 }
 
-Unknown::Graphics::Image::~Image() {}
+const Unknown::VertexInfo &Unknown::Image::getVertexInfo() const {
+    return this->vertexInfo;
+}
 
 RTTR_REGISTRATION {
-	rttr::registration::class_<Unknown::Graphics::Image>("Image")
+	rttr::registration::class_<Unknown::Image>("Image")
 			.constructor<const std::string&>()
-			.method("render", &Unknown::Graphics::Image::render);
+			.method("render", &Unknown::Image::render);
 }

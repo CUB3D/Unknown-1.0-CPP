@@ -19,7 +19,7 @@
 #include "Graphics/SkyBox3D.h"
 #include "Loader.h"
 
-Unknown::Graphics::Image img("Player.png");
+Unknown::Image img("Player.png");
 
 RenderingPipeline3D ren;
 

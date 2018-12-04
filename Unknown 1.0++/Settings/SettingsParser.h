@@ -47,8 +47,8 @@ namespace Unknown {
                     property.set_value(data, std::string(obj.value.GetString()));
                 } else if(type == rttr::type::get<::Unknown::Colour>()) {
                     property.set_value(data, *::Unknown::getColourFromString(std::string(obj.value.GetString())));
-                } else if(type == rttr::type::get<::Unknown::Graphics::Image>()) {
-                    property.set_value(data, ::Unknown::Graphics::Image(std::string(obj.value.GetString())));
+                } else if(type == rttr::type::get<::Unknown::Image>()) {
+                    property.set_value(data, ::Unknown::Image(std::string(obj.value.GetString())));
                 } else if(type.is_class()) {
 
                     // Retrived the obj from the base
