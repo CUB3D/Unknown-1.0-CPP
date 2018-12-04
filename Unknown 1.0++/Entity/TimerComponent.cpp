@@ -3,5 +3,12 @@
 //
 
 #include "TimerComponent.h"
+#include <rttr/registration>
 
 Unknown::TimerComponent::TimerComponent(const long long int time) : t(time) {}
+
+RTTR_REGISTRATION {
+    using namespace Unknown;
+    rttr::registration::class_<TimerComponent>("TimerComponent")
+        .constructor<>();
+};
