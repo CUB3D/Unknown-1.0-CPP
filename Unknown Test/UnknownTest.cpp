@@ -1,28 +1,12 @@
 // Unknown Test.cpp : Defines the entry point for the console application.
 //
 
+#include <UK.h>
+
 #include <iostream>
-#include "Types/Colour.h"
-#include "Map.h"
-#include "Image.h"
-#include "Input/Mouse.h"
-#include "Loader.h"
-#include "Animation.h"
-#include "Font/Font.h"
-#include "Particle.h"
-#include "UI.h"
-#include "UI2D.h"
-#include "Unknown.h"
-#include "Log.h"
-#include "Timer.h"
 
 #include <cmath>
 #include <memory>
-#include "Scene/DebugScene.h"
-#include "Scene/SceneManager.h"
-#include "Scene/Scene.h"
-#include "Event/Event.h"
-#include "Event/EventManager.h"
 #include <SDL_mixer.h>
 #include <Renderer/BasicTileMapRenderer.h>
 #include <Editor/EditorBase.h>
@@ -33,9 +17,7 @@
 #include "PhysicsTestScene.h"
 #include "RenderTestScene.h"
 #include "RenderTest2D.h"
-#include "GL/GL.h"
-
-#include "UK.h"
+#include "PathfindingTest.h"
 
 //Unknown::Map map(1, 1);
 //Unknown::Timer timer(0.2f);
@@ -306,10 +288,12 @@ void init()
     //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
     UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
+    UK_ADD_SCENE(std::make_shared<PathfindingTest>());
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
     //UK_LOAD_SCENE("Phys");
     UK_LOAD_SCENE("Phys");
+    UK_LOAD_SCENE("Path");
 }
 
 #include "Filesystem/Filesystem.h"
