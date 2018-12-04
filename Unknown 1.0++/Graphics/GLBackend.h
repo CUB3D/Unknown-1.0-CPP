@@ -108,6 +108,8 @@ namespace Unknown
         virtual void clearScreen() override;
 
         TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) override;
+
+        Shader& getTextureRendererShader();
     };
 }
 

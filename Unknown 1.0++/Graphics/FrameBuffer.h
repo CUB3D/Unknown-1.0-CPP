@@ -9,6 +9,8 @@
 #include "../GL/GL.h"
 #include "../Utils.h"
 #include "../Types/Dimension.h"
+#include "RenderingBackend.h"
+#include "Shader.h"
 
 namespace Unknown
 {
@@ -17,18 +19,22 @@ namespace Unknown
         GLuint fboID;
         GLuint textureBufferID;
         GLuint rboID;
+        VertexInfo vaoInfo;
 
         Dimension<int> frameSize;
 
 
 
     public:
+        bool created;
+
         FrameBuffer(const Dimension<int> frameSize);
 
         void createFBO();
 
-        void bindFBO();
-        void renderFBO() const;
+        void bind() const;
+        void unbind() const;
+        void render(const Shader* s) const;
 
     };
 }

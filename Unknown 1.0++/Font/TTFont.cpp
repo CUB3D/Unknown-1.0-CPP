@@ -7,13 +7,7 @@
 
 #include "../GL/GL.h"
 
-Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), colour(colour) {
-    this->font = TTF_OpenFont(name.c_str(), size);
-
-    if(!this->font) {
-        printf("Error [Font]: %s\n", TTF_GetError());
-    }
-
+Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), path(name), fontSize(size), colour(colour) {
     if(getUnknown().currentState < UK_POST_INIT) {
         getUnknown().lateInit.push_back(this);
     } else { // There is a renderer, init now
@@ -51,6 +45,8 @@ void Unknown::Graphics::TTFont::drawChar(const char c, const int x, const int y)
 
     if(glyph != glyphMap.end()) {
         glyph->second.drawGlyph(x, y);
+    } else {
+        printf("Error no glyph %c for font %s\n", c, path.c_str());
     }
 
 }
@@ -63,8 +59,14 @@ int Unknown::Graphics::TTFont::getCharWidth(const char c) const {
 }
 
 void Unknown::Graphics::TTFont::init() {
-    std::string s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890>?./@~'#{}[]:!\"£$%^&*()#\\|`¬ ,";
+    this->font = TTF_OpenFont(path.c_str(), fontSize);
 
+    if(!this->font) {
+        printf("Error [Font]: %s\n", TTF_GetError());
+    }
+
+
+    std::string s = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890>?./@~'#{}[]:!\"£$%^&*()#\\|`¬ ,";
     for(char c : s) {
         glyphMap.insert(std::make_pair(c, FontGlyph(c, this->font, this->colour)));
     }

@@ -24,7 +24,7 @@ namespace Unknown
         b2FixtureDef fixtureDefinition;
         b2Fixture* fixture;
 
-        double maxSpeed = -1;
+        Point<double> maxSpeed;
 
         Vector lastForce;
 

@@ -73,7 +73,10 @@ void Unknown::GLBackend::drawRect(const int x, const int y, const int width, con
 
     this->renderQuad(x, y, angle, info, basicRenderer);
 
-    basicRenderer.unbind();
+    //basicRenderer.unbind();
+
+    glDeleteBuffers(1, &info.vao);
+    glDeleteBuffers(1, &info.vbo);
 }
 
 Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderingFragmentShader), textureRenderer(imageVertexShader, imageFragmentShader) {}
@@ -232,7 +235,7 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
 	}
 
     if (!imageSurface) {
-        printf("Error: failed to load image, %s\n", IMG_GetError());
+        printf("Error: failed to load image '%s', %s\n", path.c_str(), IMG_GetError());
         if(uk.config.textureFallback) {
             printf("Loading fallback\n");
             imageSurface = IMG_Load_RW(SDL_RWFromConstMem(placeholder_png, placeholder_png_len), false);
@@ -397,10 +400,10 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
     //TODO: should store vertex count in vertexinfo
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    // Unbind stuff
-    glBindVertexArray(0);
+    /** //Unbind stuff
+    //glBindVertexArray(0);
 
-    textureRenderer.unbind();
+    //textureRenderer.unbind();*/
 }
 
 Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const char *str,
@@ -411,7 +414,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     SDL_Surface* textSurface = TTF_RenderText_Blended(&font, str, col.toSDLColour());
 
     if(!textSurface) {
-        //TODO:
+        printf("Error: Failed to create surface");
     }
 
     // Convert to known format
@@ -431,6 +434,23 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     SDL_Surface* tmp = SDL_CreateRGBSurface(0, textSurface->w, textSurface->h, 32, rmask, gmask, bmask, amask);
     SDL_BlitSurface(textSurface, NULL, tmp, NULL);
 
+    int nOfColors = tmp->format->BytesPerPixel;
+    int mode = GL_RGBA;
+    if( nOfColors == 4 )     // contains an alpha channel
+    {
+        if(tmp->format->Rmask == 0x000000ff) {
+            mode = GL_RGBA;
+        } else {
+            mode = GL_BGRA;
+        }
+    } else if( nOfColors == 3 ) {
+        if(tmp->format->Rmask == 0x000000ff) {
+            mode = GL_RGB;
+        } else {
+            mode = GL_BGR;
+        }
+    }
+
     // Copy to gpu
     glGenTextures(1, (GLuint*)&tex.pointer);
     glBindTexture(GL_TEXTURE_2D, tex.pointer);
@@ -443,7 +463,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     //how the texture lookup should be interpolated when the face is bigger than the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp->pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, mode, textSurface->w, textSurface->h, 0, mode, GL_UNSIGNED_BYTE, tmp->pixels);
 
     tex.width = textSurface->w;
     tex.height = textSurface->h;
@@ -490,5 +510,9 @@ void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     // Unbind stuff
-    glBindVertexArray(0);
+    //glBindVertexArray(0);
+}
+
+Shader &Unknown::GLBackend::getTextureRendererShader() {
+    return this->textureRenderer;
 }

@@ -40,7 +40,19 @@ Unknown::Image &Unknown::Image::operator=(const Image &img) {
 	return *this;
 }
 
-Unknown::Image::~Image() {}
+const Unknown::TextureInfo& Unknown::Image::getTextureInfo() const {
+    return this->textureInfo;
+}
+
+void Unknown::Image::setDimentions(Dimension<int>& dimension) {
+    this->imageSize = dimension;
+    // TODO: destroy old verticies
+    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.width, dimension.height);
+}
+
+const Unknown::VertexInfo &Unknown::Image::getVertexInfo() const {
+    return this->vertexInfo;
+}
 
 RTTR_REGISTRATION {
 	rttr::registration::class_<Unknown::Image>("Image")

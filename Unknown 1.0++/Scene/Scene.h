@@ -79,6 +79,19 @@ namespace Unknown
             return nullptr;
         }
 
+        template<class T>
+        const std::shared_ptr<T> getObject(const std::string& str) const {
+            for (auto& tagable : this->tagables) {
+                if(tagable->getTag() == str) {
+                    if (dynamic_cast<T *>(tagable.get())) {
+                        return std::dynamic_pointer_cast<T>(tagable);
+                    }
+                }
+            }
+
+            return nullptr;
+        }
+
         template<typename T>
         std::vector<std::shared_ptr<T>> getObjects(const std::string& tag) const {
             std::vector<std::shared_ptr<T>> objs;

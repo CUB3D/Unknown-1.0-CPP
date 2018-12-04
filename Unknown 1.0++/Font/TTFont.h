@@ -19,6 +19,8 @@ namespace Unknown
         private:
             ::Unknown::Colour colour;
             std::map<char, FontGlyph> glyphMap;
+            int fontSize;
+            std::string path;
 
         public:
             TTF_Font* font;
