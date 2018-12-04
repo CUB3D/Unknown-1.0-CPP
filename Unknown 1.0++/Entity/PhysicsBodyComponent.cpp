@@ -16,15 +16,23 @@ Unknown::PhysicsBodyComponent::PhysicsBodyComponent() : body(nullptr), fixture(n
 
 void Unknown::PhysicsBodyComponent::update(Entity &ent) {
 
-    if(maxSpeed >= 0) {
+    if(maxSpeed.x > 0 || maxSpeed.y > 0) {
+        auto lin = body->GetLinearVelocity();
+
         // If the current speed is > maxspeed
-        if (body->GetLinearVelocity().Length() > maxSpeed) {
-            auto noramlised = body->GetLinearVelocity();
+        if (std::abs(lin.x) > maxSpeed.x) {
+            auto normalised = lin;
             // Get direction
-            noramlised.Normalize();
-            // Get vector of max speed in cur direction
-            noramlised *= maxSpeed;
-            body->SetLinearVelocity(noramlised);
+            normalised.Normalize();
+            body->SetLinearVelocity(b2Vec2(normalised.x * maxSpeed.x, lin.y));
+        }
+
+
+        if (std::abs(lin.y) > maxSpeed.y) {
+            auto normalised = lin;
+            // Get direction
+            normalised.Normalize();
+            body->SetLinearVelocity(b2Vec2(lin.x, normalised.y * maxSpeed.y));
         }
     }
 
@@ -60,11 +68,7 @@ void Unknown::PhysicsBodyComponent::init(Scene &scene, std::shared_ptr<Entity> e
     body->SetTransform(b2Vec2(ent->position.x, ent->position.y), ent->angle);
     body->SetAwake(true);
 
-    fixtureDefinition.shape = &shape;//TODO
-
-//    this->fixtureDefinition.friction = 0.9f; //TODO:
-//    this->fixtureDefinition.filter = filter;
-//    this->fixtureDefinition.restitution = 0.3; //TODO:
+    fixtureDefinition.shape = &shape;//TODO:
 
     this->fixture = this->body->CreateFixture(&this->fixtureDefinition);
 
@@ -75,6 +79,8 @@ RTTR_REGISTRATION {
     using namespace Unknown;
     rttr::registration::class_<PhysicsBodyComponent>("PhysicsBodyComponent")
             .property("BodyDefinition", &PhysicsBodyComponent::bodyDefinition)
+            .property("MaxSpeed", &PhysicsBodyComponent::maxSpeed)
+            .property("FixtureDefinition", &PhysicsBodyComponent::fixtureDefinition)
             .constructor<>();
 
     // Add bod2d classes

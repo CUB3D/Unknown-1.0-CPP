@@ -13,6 +13,7 @@
 #include <rttr/enumeration.h>
 #include "../Types/Colour.h"
 #include "../Utils.h"
+#include <Image.h>
 
 #ifdef WIN32
 // I absolutely dispise the individual who decided to put the inverse of this define in windows.h
@@ -24,8 +25,8 @@ namespace Unknown {
     class SettingsParser {
     public:
         static void parseJSONObject(const rttr::type& objType, rapidjson::GenericMember<rapidjson::UTF8<char>, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>>& obj, rttr::variant& data) {
-            printf("Parsing value %s from type %s\n", obj.name.GetString(),
-                    objType.get_name().to_string().c_str());
+            //printf("Parsing value %s from type %s\n", obj.name.GetString(),
+            //        objType.get_name().to_string().c_str());
 
             // Get the property that relates to this element
             auto property = objType.get_property(std::string(obj.name.GetString()));
@@ -36,7 +37,6 @@ namespace Unknown {
                 // Handle basic types TODO: double, float, char
                 if (type == rttr::type::get<int>()) {
                     bool status = property.set_value(data, obj.value.GetInt());
-                    printf("New value: %d\n", obj.value.GetInt());
                 } else if (type == rttr::type::get<bool>()) {
                     property.set_value(data, obj.value.GetBool());
                 } else if(type == rttr::type::get<float>()) {
@@ -47,6 +47,8 @@ namespace Unknown {
                     property.set_value(data, std::string(obj.value.GetString()));
                 } else if(type == rttr::type::get<::Unknown::Colour>()) {
                     property.set_value(data, *::Unknown::getColourFromString(std::string(obj.value.GetString())));
+                } else if(type == rttr::type::get<::Unknown::Graphics::Image>()) {
+                    property.set_value(data, ::Unknown::Graphics::Image(std::string(obj.value.GetString())));
                 } else if(type.is_class()) {
 
                     // Retrived the obj from the base
@@ -60,13 +62,13 @@ namespace Unknown {
 
                    bool status = property.set_value(data, subObj);
                 } else if(type.is_enumeration()) {
-                    printf("Parsing enum\n");
+                    //printf("Parsing enum\n");
                     //TODO: register enum, test this
                     auto enumName = std::string(obj.value.GetString());
                     property.set_value(data, type.get_enumeration().name_to_value(enumName));
                 }
             } else {
-                printf("Prop type  not valid\n");
+                printf("Prop type %s not valid\n", obj.name.GetString());
             }
         }
 
