@@ -32,12 +32,6 @@ namespace Unknown
 
         virtual Rect<int> getRenderBounds(const Entity& ent);
     };
-
-//    RTTR_REGISTRATION {
-//        rttr::registration::class_<BasicRenderComponent>("BasicRenderComponent")
-//            .property("col", &BasicRenderComponent::col)
-//            .property("renderScale", &BasicRenderComponent::renderScale);
-//    };
 }
 
 

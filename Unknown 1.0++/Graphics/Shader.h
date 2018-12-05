@@ -6,6 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_SHADER_H
 
 #include <string>
+#include <Types/Colour.h>
 #include "../GL/GL.h"
 
 class Shader
@@ -27,8 +28,12 @@ public:
 
     virtual std::string getName();
 
-    void setVec3(const char* name, float x, float y, float z);
-    void setFloat(const char* name, float f);
+    //TODO: const
+    void setVec3(const char* name, const float x, const float y, const float z);
+    void setVec4(const char* name, const float w, const float x, const float y, const float z);
+    void setInt(const char* name, const int i);
+    void setFloat(const char* name, const float f);
+    void setColour(const char* name, const Unknown::Colour& colour);
 };
 
 

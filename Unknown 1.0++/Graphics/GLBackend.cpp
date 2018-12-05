@@ -55,6 +55,14 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
 
     auto& io = ImGui::GetIO();
     io.DisplaySize = ImVec2(size->width, size->height);
+
+    basicRenderer.compile();
+    textureRenderer.compile();
+
+    this->projectionMatrix = glm::ortho(0.0f, (float) size->width, (float) size->height, 0.0f, 0.0f, 1.0f);
+    this->viewMatrix = glm::mat4(1.0f);
+
+    //TODO: use ctrp to get view from camera(2D/3D)
 }
 
 void Unknown::GLBackend::quit() {
@@ -64,19 +72,11 @@ void Unknown::GLBackend::quit() {
 void Unknown::GLBackend::drawRect(const int x, const int y, const int width, const int height, const double angle, const Colour &colour) {
     VertexInfo info = this->createRectVerticies(0, 0, width, height);
 
-    if(basicRenderer.prog == -1)
-        basicRenderer.compile();
-
     basicRenderer.bind();
-
-    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
-
+    basicRenderer.setColour("inputColour", colour);
     this->renderQuad(x, y, angle, info, basicRenderer);
 
-    //basicRenderer.unbind();
-
-    glDeleteBuffers(1, &info.vao);
-    glDeleteBuffers(1, &info.vbo);
+    deleteVerticies(info);
 }
 
 Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderingFragmentShader), textureRenderer(imageVertexShader, imageFragmentShader) {}
@@ -84,69 +84,81 @@ Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderin
 void Unknown::GLBackend::drawPoint(const int x, const int y, const Colour &colour) {
     VertexInfo info = this->createRectVerticies(0, 0, 1, 1);
 
-    if(basicRenderer.prog == -1)
-        basicRenderer.compile();
-
     basicRenderer.bind();
-
-    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
+    basicRenderer.setColour("inputColour", colour);
 
     this->renderQuad(x, y, 0, info, basicRenderer);
 
-    basicRenderer.unbind();
+    deleteVerticies(info);
 }
 
 void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &colour) {
-//    if(basicRenderer.prog == -1)
-//        basicRenderer.compile();
-//
-//    basicRenderer.bind();
-//
-//    auto& uk = getUnknown();
-//
-//    // Create the ortagonal projection
-//    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
-//
-//    // Create the view matrix
-//    glm::mat4 view = glm::mat4(1.0f);
-//
-//    // Create the model matrix
-//    glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(sx, sy, 0.0f));
-//
-//    // Projection * view * model
-//    glm::mat4 proj = pr ..
-// ls
-// ojection * view * model;
-//
-//    //TODO: better way of setting uniforms
-//    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
-//
-//    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
-//
-//
-//    constexpr int VERTEX_COUNT = 6;
-//
-//    int w = ex - sx;
-//    int h = ey - sy;
-//
-//    float verticies[VERTEX_COUNT] =  {
-//        0, 0, 0,
-//        (float)w, (float)h, 0
-//    };
-//
-//    glEnableClientState(GL_VERTEX_ARRAY);
-//
-//
-//    //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
-////Also I think that client states are needed for native but not for emscripten
-//
-//    glVertexPointer(3, GL_FLOAT, 0, verticies);
-//    glDrawArrays(GL_LINES, 0, VERTEX_COUNT); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
-//
-//
-//    glDisableClientState(GL_VERTEX_ARRAY);
-//
-//    basicRenderer.unbind();
+    basicRenderer.bind();
+
+    auto& uk = getUnknown();
+
+    // Create the model matrix
+    glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(sx, sy, 0.0f));
+
+    // Projection * view * model
+    glm::mat4 proj = projectionMatrix * viewMatrix * model;
+
+    //TODO: better way of setting uniforms
+    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
+
+    basicRenderer.setColour("inputColour", colour);
+
+    int w = ex - sx;
+    int h = ey - sy;
+
+    auto& vertexInfo = vertexLookup.emplace_back();
+
+    constexpr const int SIZE = 2 * (3 + 4 + 2 + 3);
+
+    GLfloat data[SIZE] {
+        // Format is vertex coord
+        // Then colour
+        // Then texcoord
+        // Then normal
+        0, 0, 0,
+        1, 1, 1, 1,
+        0, 0,
+        0, 0, 0,
+
+        (GLfloat)w, (GLfloat) h, 0,
+        1, 1, 1, 1,
+        0, 0,
+        0, 0, 0
+    };
+
+    glGenBuffers(1, &vertexInfo.vbo);
+
+    // Bind VBO and put data in it
+    glBindBuffer(GL_ARRAY_BUFFER, vertexInfo.vbo);
+    glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat), data, GL_STATIC_DRAW);
+
+    glGenVertexArrays(1, &vertexInfo.vao);
+
+    // Bind the VAO and fill in the locations of each piece of vertex data
+    glBindVertexArray(vertexInfo.vao);
+    constexpr const int stride = (3 + 4 + 2 + 3) * sizeof(GLfloat); // Size of each sub block
+
+    // Verticies
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
+    // Colours
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
+    // Texture coords
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
+    // Normals
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4 + 2) * sizeof(GLfloat)));
+
+    glDrawArrays(GL_LINES, 0, 2); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
+
+    deleteVerticies(vertexInfo);
 }
 
 void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius, const Colour &colour) {
@@ -369,31 +381,20 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
     float centerX = texture.width / 2.0f;
     float centerY = texture.height / 2.0f;
 
-    // Create the ortagonal projection
-    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
-
-    // Create the view matrix
-    glm::mat4 view = glm::mat4(1.0f);
-
     // Create the model matrix
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
     model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
 
     // Projection * view * model
-    glm::mat4 proj = projection * view * model;
-
-    if(textureRenderer.prog == -1) {
-        textureRenderer.compile();
-    }
+    glm::mat4 proj = projectionMatrix * viewMatrix * model;
 
     textureRenderer.bind();
 
     glUniformMatrix4fv(glGetUniformLocation(textureRenderer.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
-    glUniform1i(glGetUniformLocation(textureRenderer.prog, "texture0"), 0);
+    textureRenderer.setInt("texture0", 0);
 
     glBindTexture(GL_TEXTURE_2D, (GLuint)texture.pointer);
-
     glBindVertexArray(verticies.vao);
 
     // Render data
@@ -487,19 +488,13 @@ void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle
     float centerX = verts.bounds.w / 2.0f;
     float centerY = verts.bounds.h / 2.0f;
 
-    // Create the ortagonal projection
-    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
-
-    // Create the view matrix
-    glm::mat4 view = glm::mat4(1.0f);
-
     // Create the model matrix
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
     model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
 
     // Projection * view * model
-    glm::mat4 proj = projection * view * model;
+    glm::mat4 proj = projectionMatrix * viewMatrix * model;
 
     glUniformMatrix4fv(glGetUniformLocation(shader.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
 
@@ -515,4 +510,21 @@ void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle
 
 Shader &Unknown::GLBackend::getTextureRendererShader() {
     return this->textureRenderer;
+}
+
+/**
+ * Delete the vertex info provided, use of paramter after calling is UB
+ * info.VAO/VBO will = 0 after this operation
+ * @param info The vertex info to remove
+ */
+void Unknown::GLBackend::deleteVerticies(VertexInfo& info) {
+    vertexLookup.erase(std::remove_if(vertexLookup.begin(), vertexLookup.end(), [&](VertexInfo& it) {
+        return it.vao == info.vao && it.vbo == info.vbo;
+    }));
+
+    glDeleteBuffers(1, &info.vao);
+    glDeleteBuffers(1, &info.vbo);
+
+    info.vao = 0;
+    info.vbo = 0;
 }

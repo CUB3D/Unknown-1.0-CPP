@@ -19,13 +19,17 @@ namespace Unknown
     public:
         b2BodyDef bodyDefinition;
         b2Body* body;
-        b2PolygonShape shape;
-        b2CircleShape circle;
+
         b2FixtureDef fixtureDefinition;
         b2Fixture* fixture;
 
-        Point<double> maxSpeed;
+        b2PolygonShape polygon;
+        b2CircleShape circle;
 
+        b2Shape::Type bodyShape;
+
+
+        Point<double> maxSpeed;
         Vector lastForce;
 
         //public:

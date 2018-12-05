@@ -88,6 +88,9 @@ namespace Unknown
 
         SDL_GLContext glContext;
 
+        glm::mat4 projectionMatrix;
+        glm::mat4 viewMatrix;
+
     public:
         GLBackend();
 
@@ -106,6 +109,8 @@ namespace Unknown
         virtual void renderQuad(const int x, const int y, const double angle, const VertexInfo& verts, Shader& shader);
 
         virtual void clearScreen() override;
+
+        virtual void deleteVerticies(VertexInfo& info);
 
         TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) override;
 
