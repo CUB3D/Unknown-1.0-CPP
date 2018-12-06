@@ -34,6 +34,10 @@ void Unknown::Scene::render() const {
     }
 }
 
+std::shared_ptr<Unknown::Entity> Unknown::Scene::getEntity(const std::string &name) {
+    return getObject<Entity>(name);
+}
+
 Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::shared_ptr<Graphics::Font> font) : Scene(name), uiFile(uiFile), font(font)
 {
     if(!uiFile.empty()) {
