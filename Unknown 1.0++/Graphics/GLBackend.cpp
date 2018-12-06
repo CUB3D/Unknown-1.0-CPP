@@ -111,22 +111,13 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
 
     auto& vertexInfo = vertexLookup.emplace_back();
 
-    constexpr const int SIZE = 2 * (3 + 4 + 2 + 3);
+    constexpr const int SIZE = 2 * (3);
 
     GLfloat data[SIZE] {
         // Format is vertex coord
-        // Then colour
-        // Then texcoord
-        // Then normal
-        0, 0, 0,
-        1, 1, 1, 1,
-        0, 0,
         0, 0, 0,
 
         (GLfloat)w, (GLfloat) h, 0,
-        1, 1, 1, 1,
-        0, 0,
-        0, 0, 0
     };
 
     glGenBuffers(1, &vertexInfo.vbo);
@@ -139,20 +130,11 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
 
     // Bind the VAO and fill in the locations of each piece of vertex data
     glBindVertexArray(vertexInfo.vao);
-    constexpr const int stride = (3 + 4 + 2 + 3) * sizeof(GLfloat); // Size of each sub block
+    constexpr const int stride = (3) * sizeof(GLfloat); // Size of each sub block
 
     // Verticies
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
-    // Colours
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>(3 * sizeof(GLfloat)));
-    // Texture coords
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4) * sizeof(GLfloat)));
-    // Normals
-    glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, reinterpret_cast<const void *>((3 + 4 + 2) * sizeof(GLfloat)));
 
     glDrawArrays(GL_LINES, 0, 2); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
 
@@ -373,7 +355,9 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const
 //TODO: abstract rendering texture out from rendering quad
 //TODO: should render functions not take radians,
 // Most of the time angle is retrieve from physics which works in radians already
-void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) {
+void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
+                                       const VertexInfo &verticies,
+                                       const Dimension<float> renderSize) {
     auto& uk = getUnknown();
 
     float centerX = texture.width / 2.0f;
@@ -383,6 +367,7 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
     model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
+    model = glm::scale(model, glm::vec3(renderSize.width, renderSize.height, 1.0));
 
     // Projection * view * model
     glm::mat4 proj = projectionMatrix * viewMatrix * model;
@@ -513,7 +498,7 @@ void Unknown::GLBackend::deleteVerticies(VertexInfo& info) {
         return it.vao == info.vao && it.vbo == info.vbo;
     }));
 
-    glDeleteBuffers(1, &info.vao);
+    glDeleteVertexArrays(1, &info.vao);
     glDeleteBuffers(1, &info.vbo);
 
     info.vao = 0;

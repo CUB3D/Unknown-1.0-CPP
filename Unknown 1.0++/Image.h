@@ -23,6 +23,7 @@ namespace Unknown
 
 	public:
 		::Unknown::Dimension<int> imageSize;
+		Dimension<float> renderScale;
 
 
 		explicit Image(const std::string& filename);
