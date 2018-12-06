@@ -16,7 +16,7 @@ namespace Unknown {
     class EntityPrototype {
     public:
         std::string tag;
-        Dimension<int> size;
+        Dimension<double> size;
 
         std::vector<std::shared_ptr<Component>> components;
 

@@ -10,8 +10,9 @@ RTTR_REGISTRATION {
     using namespace Unknown;
 
     rttr::registration::class_<EntityPrototype>("EntityPrototype")
-            .constructor<>()
             .property("Tag", &EntityPrototype::tag)
             .property("Size", &EntityPrototype::size)
-            .property("Components", &EntityPrototype::components);
+            // Removed as currently no support for parsing arrays
+           // .property("Components", &EntityPrototype::components)
+            .constructor<>();
 };

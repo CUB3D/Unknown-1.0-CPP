@@ -17,10 +17,10 @@ void Unknown::Image::init() {
 }
 
 void Unknown::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
-    getRendererBackend()->renderTexture(x, y, angle, this->textureInfo, this->vertexInfo);
+    getRendererBackend()->renderTexture(x, y, angle, this->textureInfo, this->vertexInfo, this->renderScale);
 }
 
-Unknown::Image::Image(const std::string &filename) : filename(filename) {
+Unknown::Image::Image(const std::string &filename) : filename(filename), renderScale(1, 1) {
 	if(getUnknown().currentState < UK_POST_INIT) {
 	    getUnknown().lateInit.push_back(this);
 	} else { // There is a renderer, init now

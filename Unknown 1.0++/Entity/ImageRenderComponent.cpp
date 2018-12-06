@@ -12,6 +12,7 @@ Unknown::ImageRenderComponent::ImageRenderComponent(const std::string &filename,
 Unknown::ImageRenderComponent::ImageRenderComponent() : ImageRenderComponent("", 1) {}
 
 void Unknown::ImageRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {
+
     auto& size = ent.prototype.size;
 
     img.render((ent.position.x - size.width / 2) * renderScale - Xoffset,
@@ -36,6 +37,14 @@ Unknown::Rect<int> Unknown::ImageRenderComponent::getRenderBounds(const Entity &
 
     return ::Unknown::Rect<int>((ent.position.x - size.width / 2) * renderScale - Xoffset,
                               (ent.position.y - size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
+}
+
+void Unknown::ImageRenderComponent::update(Unknown::Entity &ent) {
+    auto& size = ent.prototype.size;
+
+    img.renderScale = Dimension<float>(
+        (float) (renderScale * size.width) / (float) img.imageSize.width,
+        (float) (renderScale * size.height) / (float) img.imageSize.height);
 }
 
 RTTR_REGISTRATION {

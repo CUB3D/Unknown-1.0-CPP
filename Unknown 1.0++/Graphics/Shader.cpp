@@ -120,14 +120,31 @@ void Shader::unbind() const {
     glUseProgram(0);
 }
 
-void Shader::setVec3(const char *name, float x, float y, float z) {
+void Shader::setVec3(const char *name, const float x, const float y, const float z) {
     glUniform3f(glGetUniformLocation(this->prog, name), x, y, z);
 }
 
-void Shader::setFloat(const char *name, float f) {
+void Shader::setFloat(const char *name, const float f) {
     glUniform1f(glGetUniformLocation(this->prog, name), f);
 }
 
 std::string Shader::getName() {
     return "RAM";
+}
+
+void Shader::setColour(const char *name, const Unknown::Colour &colour) {
+    setVec4(name, (float) (colour.red / 255.0), (float) (colour.green / 255.0),
+        (float) (colour.blue / 255.0), (float) (colour.alpha / 255.0));
+}
+
+void Shader::setVec4(const char *name, const float w, const float x, const float y, const float z) {
+    glUniform4f(glGetUniformLocation(this->prog, name), w, x, y, z);
+}
+
+void Shader::setInt(const char *name, const int i) {
+    glUniform1i(glGetUniformLocation(this->prog, name), i);
+}
+
+void Shader::setMat4(const char* name, const glm::mat4& mat) {
+    glUniformMatrix4fv(glGetUniformLocation(this->prog, name), 1, GL_FALSE, &mat[0][0]);
 }
