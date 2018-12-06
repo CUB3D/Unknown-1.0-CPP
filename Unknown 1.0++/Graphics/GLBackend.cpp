@@ -103,9 +103,7 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
     // Projection * view * model
     glm::mat4 proj = projectionMatrix * viewMatrix * model;
 
-    //TODO: better way of setting uniforms
-    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
-
+    basicRenderer.setMat4("projmat", proj);
     basicRenderer.setColour("inputColour", colour);
 
     int w = ex - sx;
@@ -391,7 +389,8 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
 
     textureRenderer.bind();
 
-    glUniformMatrix4fv(glGetUniformLocation(textureRenderer.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
+    //glUniformMatrix4fv(glGetUniformLocation(textureRenderer.prog, "MVP"), 1, GL_FALSE, &proj[0][0]);
+    textureRenderer.setMat4("MVP", proj);
     textureRenderer.setInt("texture0", 0);
 
     glBindTexture(GL_TEXTURE_2D, (GLuint)texture.pointer);
@@ -400,11 +399,6 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
     // Render data
     //TODO: should store vertex count in vertexinfo
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    /** //Unbind stuff
-    //glBindVertexArray(0);
-
-    //textureRenderer.unbind();*/
 }
 
 Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const char *str,
@@ -496,16 +490,13 @@ void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle
     // Projection * view * model
     glm::mat4 proj = projectionMatrix * viewMatrix * model;
 
-    glUniformMatrix4fv(glGetUniformLocation(shader.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
+    shader.setMat4("projmat", proj);
 
     glBindVertexArray(verts.vao);
 
     // Render data
     //TODO: should store vertex count in vertexinfo
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    // Unbind stuff
-    //glBindVertexArray(0);
 }
 
 Shader &Unknown::GLBackend::getTextureRendererShader() {

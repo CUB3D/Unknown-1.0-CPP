@@ -31,6 +31,7 @@ public:
     //TODO: const
     void setVec3(const char* name, const float x, const float y, const float z);
     void setVec4(const char* name, const float w, const float x, const float y, const float z);
+    void setMat4(const char* name, const glm::mat4& mat);
     void setInt(const char* name, const int i);
     void setFloat(const char* name, const float f);
     void setColour(const char* name, const Unknown::Colour& colour);

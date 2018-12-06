@@ -144,3 +144,7 @@ void Shader::setVec4(const char *name, const float w, const float x, const float
 void Shader::setInt(const char *name, const int i) {
     glUniform1i(glGetUniformLocation(this->prog, name), i);
 }
+
+void Shader::setMat4(const char* name, const glm::mat4& mat) {
+    glUniformMatrix4fv(glGetUniformLocation(this->prog, name), 1, GL_FALSE, &mat[0][0]);
+}
