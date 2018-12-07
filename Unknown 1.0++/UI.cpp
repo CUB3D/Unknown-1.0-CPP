@@ -29,7 +29,7 @@ void Unknown::removeUIListener(std::string listenerID)
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
     auto& UIListeners = getUnknown().UIListeners;
-    UK_LOG_INFO("Sending ui event to", intToString(UIListeners.size()), "listeners");
+    UK_LOG_INFO("Sending ui event to", std::to_string(UIListeners.size()), "listeners");
 
     std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
 

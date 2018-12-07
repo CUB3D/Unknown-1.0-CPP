@@ -9,26 +9,6 @@
 #include <algorithm>
 #include <locale>
 
-
-// TODO: optional
-rapidjson::Value* Unknown::getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc)
-{
-	if (doc.HasMember(name))
-	{
-		rapidjson::Value* val = &doc[name];
-
-		if (val->GetType() == type)
-		{
-			return val;
-		}
-		else
-		{
-			return NULL;
-		}
-	}
-	return NULL;
-}
-
 inline int parseHexString(std::stringstream& stream, std::string str) {
 	stream << std::hex << str[0];
 	stream << std::hex << str[1];
@@ -87,12 +67,6 @@ bool Unknown::isStringNumerical(const std::string& str) {
     return !str.empty() && std::find_if(str.begin(), str.end(), [](char c) {
         return !std::isdigit(c, std::locale());
     }) == str.end();
-}
-
-std::string Unknown::intToString(const int x) {
-	std::stringstream ss;
-	ss << x;
-	return ss.str();
 }
 
 std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::string> extTokens)

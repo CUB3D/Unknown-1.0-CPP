@@ -117,7 +117,7 @@ PyObject* PyGetElement(PyObject* sequence, int index, std::string pyFuncName, in
     PyObject* element = PySequence_GetItem(sequence, index);
 
     if(!element) {
-        UK_LOG_ERROR_VERBOSE("Invalid element at", pyFuncName, ":", ::Unknown::intToString(line));
+        UK_LOG_ERROR_VERBOSE("Invalid element at", pyFuncName, ":", std::to_string(line));
         PyErr_PrintEx(1);
         return nullptr;
     }

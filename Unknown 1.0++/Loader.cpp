@@ -279,7 +279,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
         container.components.push_back(comp);
 	}
 
-    UK_LOG_INFO("Loaded UI data, found", intToString(container.components.size()), "components");
+    UK_LOG_INFO("Loaded UI data, found", std::to_string(container.components.size()), "components");
 
 	for (auto& comp : container.components)
 	{

@@ -12,8 +12,6 @@
 
 
 namespace Unknown {
-	::rapidjson::Value* getValue(const char* name, const rapidjson::Type type, rapidjson::Document& doc);
-
 	std::shared_ptr<Colour> getColourFromString(std::string str);
 
 	bool isCharCodeNumber(const char* key);
@@ -24,7 +22,6 @@ namespace Unknown {
 	long long randInt(const int min, const int max);
 
     bool stringToInt(const std::string& str, int& out);
-    std::string intToString(const int x);
 }
 
 #define RANDINT(min, max) ::Unknown::randInt(min, max)

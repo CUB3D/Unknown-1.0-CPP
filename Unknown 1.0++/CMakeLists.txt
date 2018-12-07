@@ -10,6 +10,7 @@ list(FILTER UK_ENGINE_SRC EXCLUDE REGEX "lua")
 # Add sub projects
 add_subdirectory(Box2D)
 add_subdirectory(Imgui)
+add_subdirectory(Map/Tiled)
 #add_subdirectory(scripting/lua)
 #add_subdirectory(scripting/python)
 
