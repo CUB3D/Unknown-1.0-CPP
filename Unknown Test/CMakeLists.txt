@@ -6,7 +6,8 @@ set(UK_TEST_SRC
         UnknownTest.cpp
         PhysicsTestScene.cpp
         RenderTestScene.cpp
-        RenderTest2D.cpp)
+        RenderTest2D.cpp
+        BasicGraphicsTest.cpp)
 
 add_executable(${UK_PROJECT_NAME} ${UK_TEST_SRC})
 target_link_libraries(${UK_PROJECT_NAME} Unknown_Engine)

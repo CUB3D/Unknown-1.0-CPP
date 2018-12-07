@@ -25,3 +25,6 @@
 [submodule "Libs/lua"]
 	path = Libs/lua
 	url = https://github.com/lua/lua
+[submodule "Libs/tmxlite"]
+	path = Libs/tmxlite
+	url = https://github.com/fallahn/tmxlite
