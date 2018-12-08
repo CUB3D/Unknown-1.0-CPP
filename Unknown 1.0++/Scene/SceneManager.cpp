@@ -8,8 +8,6 @@
 
 Unknown::SceneManager::SceneManager() : currentSceneName(""), currentScene(nullptr) {}
 
-Unknown::SceneManager::~SceneManager() {}
-
 void Unknown::SceneManager::add(std::shared_ptr<Scene> scene)
 {
     if(!scene) {

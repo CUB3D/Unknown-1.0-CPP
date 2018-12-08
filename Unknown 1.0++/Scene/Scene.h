@@ -66,6 +66,9 @@ namespace Unknown
             }
         }
 
+        std::shared_ptr<Entity> getEntity(const std::string& name);
+
+
         template<class T>
         std::shared_ptr<T> getObject(const std::string& str) {
             for (auto& tagable : this->tagables) {

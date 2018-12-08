@@ -211,6 +211,7 @@ void init()
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
    // UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
     UK_ADD_SCENE(std::make_shared<BasicGraphicsTest>());
+    //UK_ADD_SCENE(BasicGraphicsTest, "Test");
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
     //UK_LOAD_SCENE("Phys");

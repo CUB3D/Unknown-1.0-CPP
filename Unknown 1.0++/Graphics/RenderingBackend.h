@@ -12,6 +12,7 @@
 #include <vector>
 #include "../GL/GL.h"
 #include <SDL_ttf.h>
+#include <Types/Dimension.h>
 #include "../Engine/EngineConfig.h"
 
 namespace Unknown
@@ -54,7 +55,9 @@ namespace Unknown
 
         virtual TextureInfo loadTexture(const std::string &path) = 0;
         virtual VertexInfo createRectVerticies(const float x, const float y, const float w, const float h) = 0;
-        virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture, const VertexInfo &verticies) = 0;
+        virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
+                                   const VertexInfo &verticies,
+                                   const Dimension<float> renderSize = Dimension<float>(1, 1)) = 0;
 
         virtual TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) = 0;
     };

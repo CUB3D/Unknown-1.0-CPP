@@ -11,22 +11,23 @@
 #include <stack>
 #include <map>
 
-namespace Unknown
-{
+#include <rttr/type>
+
+namespace Unknown {
     class Scene;
 
-    class SceneManager
-    {
+    class SceneManager {
     public:
         std::map<std::string, std::shared_ptr<Scene>> scenes;
+        std::map<std::string, rttr::type> sceneMap;
     public:
         std::string currentSceneName;
         std::shared_ptr<Scene> currentScene;
         std::vector<std::string> sceneHistory;
 
         SceneManager();
-        ~SceneManager();
         void add(std::shared_ptr<Scene> scene);
+        void add(rttr::type t);
         void loadScene(const std::string sceneName);
         void loadLastScene();
 

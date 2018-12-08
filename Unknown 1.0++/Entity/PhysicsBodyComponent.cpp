@@ -2,6 +2,7 @@
 // Created by cub3d on 29/07/2018.
 //
 
+#include <Log.h>
 #include "PhysicsBodyComponent.h"
 
 //TODO: better way of doing this, also dont take pointer
@@ -60,15 +61,28 @@ void Unknown::PhysicsBodyComponent::applyForce(const Vector &vec) {
 void Unknown::PhysicsBodyComponent::init(Scene &scene, std::shared_ptr<Entity> ent) {
     auto& size = ent->prototype.size;
 
-    this->body = scene.world.CreateBody(&this->bodyDefinition);
-    printf("Created rest: %lf\n", this->fixtureDefinition.restitution);
-
-    this->shape.SetAsBox(size.width / 2.0, size.height / 2.0);
-    this->circle.m_p.Set(0, 0);
+    body = scene.world.CreateBody(&this->bodyDefinition);
     body->SetTransform(b2Vec2(ent->position.x, ent->position.y), ent->angle);
     body->SetAwake(true);
 
-    fixtureDefinition.shape = &shape;//TODO:
+    this->polygon.SetAsBox(size.width / 2.0, size.height / 2.0);
+    this->circle.m_p.Set(0, 0);
+
+
+    b2Shape* shape;
+
+    switch(this->bodyShape) {
+        case b2Shape::Type::e_circle:
+            shape = &circle;
+            break;
+        case b2Shape::Type::e_polygon:
+            shape = &polygon;
+            break;
+        default:
+            UK_LOG_ERROR("Unsuported shape type", std::to_string(this->bodyShape));
+    }
+
+    fixtureDefinition.shape = shape;//TODO:
 
     this->fixture = this->body->CreateFixture(&this->fixtureDefinition);
 
@@ -81,6 +95,8 @@ RTTR_REGISTRATION {
             .property("BodyDefinition", &PhysicsBodyComponent::bodyDefinition)
             .property("MaxSpeed", &PhysicsBodyComponent::maxSpeed)
             .property("FixtureDefinition", &PhysicsBodyComponent::fixtureDefinition)
+            .property("Shape", &PhysicsBodyComponent::bodyShape)
+            .property("Circle", &PhysicsBodyComponent::circle)
             .constructor<>();
 
     // Add bod2d classes
@@ -129,4 +145,20 @@ RTTR_REGISTRATION {
         .property("Mask", &b2Filter::maskBits)
         .property("Group", &b2Filter::groupIndex)
         .constructor<>();
+
+    //b2Shape::Type
+    rttr::registration::enumeration<b2Shape::Type>("ShapeType")
+        (
+            rttr::value("Circle", b2Shape::Type::e_circle),
+            rttr::value("Edge", b2Shape::Type::e_edge),
+            rttr::value("Polygon", b2Shape::Type::e_polygon),
+            rttr::value("Chain", b2Shape::Type::e_chain),
+            rttr::value("TypeCount", b2Shape::Type::e_typeCount)
+        );
+
+    //b2CircleShape
+    rttr::registration::class_<b2CircleShape>("Circle")
+        .property("Radius", &b2CircleShape::m_radius)
+        .constructor<>();
+
 };

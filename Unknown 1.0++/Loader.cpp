@@ -374,7 +374,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
     auto dataType = rttr::type::get<EntityPrototype>();
 
     // Parse easy fields for proto
-    SettingsParser::parseDocument(data, document, dataType);
+    SettingsParser::parseJSONObject(data, document, dataType);
 
     //Parse component list
     auto componentList = document.FindMember("Components");
@@ -395,7 +395,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
             rttr::variant componentVariant(componentInstance);
 
             for(auto& property : comp.value.GetObject()) {
-                SettingsParser::parseJSONObject(componentType, property, componentVariant);
+                SettingsParser::parseJSONMember(componentType, property, componentVariant);
             }
 
             //printf("Comp: %s\n", comp.name.GetString());

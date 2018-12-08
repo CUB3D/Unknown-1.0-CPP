@@ -28,7 +28,8 @@ namespace Unknown
         virtual TextureInfo loadTexture(const std::string &path) override;
         virtual VertexInfo createRectVerticies(const float x, const float y, const float w, const float h) override;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
-                                           const VertexInfo &verticies) override;
+                                   const VertexInfo &verticies,
+                                   const Dimension<float> renderSize) override;
 
         virtual void clearScreen() override;
 
