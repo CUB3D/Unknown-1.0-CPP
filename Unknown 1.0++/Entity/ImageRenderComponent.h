@@ -25,6 +25,8 @@ namespace Unknown
         virtual void populateEditor();
 
         virtual Rect<int> getRenderBounds(const Entity& ent);
+
+        virtual const std::string getName() override;
     };
 }
 

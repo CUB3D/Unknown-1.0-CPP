@@ -5,6 +5,8 @@
 #ifndef UNKNOWN_DEVELOPMENT_TOOL_COMPONENT_H
 #define UNKNOWN_DEVELOPMENT_TOOL_COMPONENT_H
 
+#include <string>
+
 namespace Unknown {
     class Entity;
 
@@ -15,6 +17,7 @@ namespace Unknown {
         virtual void onDisable(Entity& ent);
 
         virtual void populateEditor();
+        virtual const std::string getName();
     };
 }
 

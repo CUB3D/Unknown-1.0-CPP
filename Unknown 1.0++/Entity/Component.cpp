@@ -12,3 +12,7 @@ void Unknown::Component::render(const Entity &ent, double Xoffset, double Yoffse
 void Unknown::Component::onDisable(::Unknown::Entity &ent) {}
 
 void Unknown::Component::populateEditor() {}
+
+const std::string Unknown::Component::getName() {
+    return "Component";
+}

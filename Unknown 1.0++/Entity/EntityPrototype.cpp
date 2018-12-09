@@ -13,6 +13,6 @@ RTTR_REGISTRATION {
             .property("Tag", &EntityPrototype::tag)
             .property("Size", &EntityPrototype::size)
             // Removed as currently no support for parsing arrays
-           // .property("Components", &EntityPrototype::components)
+            .property("Components", &EntityPrototype::components)
             .constructor<>();
 };

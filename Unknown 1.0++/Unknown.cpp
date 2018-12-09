@@ -125,7 +125,7 @@ void Unknown::Unknown::createWindow()
 	UK_LOG_INFO("Starting engine init");
 	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
-	createWindow(config.title.c_str(), config.targetWidth, config.targetHeight, config.targetUPS);
+	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
 }
 
 void Unknown::Unknown::initGameLoop()

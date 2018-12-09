@@ -6,8 +6,7 @@
 
 RTTR_REGISTRATION {
     rttr::registration::class_<Unknown::EngineConfig>("EngineConfig")
-        .property("TargetHeight", &Unknown::EngineConfig::targetHeight)
-        .property("TargetWidth", &Unknown::EngineConfig::targetWidth)
+        .property("TargetSize", &Unknown::EngineConfig::targetSize)
         .property("Title", &Unknown::EngineConfig::title)
         .property("TargetUPS", &Unknown::EngineConfig::targetUPS)
         .property("MSAA", &Unknown::EngineConfig::MSAA)
@@ -18,5 +17,5 @@ RTTR_REGISTRATION {
 };
 
 Unknown::EngineConfig::EngineConfig() :
-targetHeight(0), targetWidth(0), title(""), targetUPS(60), MSAA(true), vsync(false), rendererMode(0),
+targetSize(0, 0), title(""), targetUPS(60), MSAA(true), vsync(false), rendererMode(0),
 textureFallback(true) {}

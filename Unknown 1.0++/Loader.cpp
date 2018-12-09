@@ -374,38 +374,40 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
     auto dataType = rttr::type::get<EntityPrototype>();
 
     // Parse easy fields for proto
-    SettingsParser::parseJSONObject(data, document, dataType);
+    SettingsParser::parseJSONDocument(data, dataType, document);
 
-    //Parse component list
-    auto componentList = document.FindMember("Components");
-
-    if(componentList != document.MemberEnd()) {
-        for(auto& comp : componentList->value.GetObject()) {
-            // Create instance of the component
-            auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
-
-            if(!componentType.is_valid()) {
-                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
-                continue;
-            }
-
-            auto componentInstance = componentType.get_constructor({}).invoke();
-
-            // Load its vars from json
-            rttr::variant componentVariant(componentInstance);
-
-            for(auto& property : comp.value.GetObject()) {
-                SettingsParser::parseJSONMember(componentType, property, componentVariant);
-            }
-
-            //printf("Comp: %s\n", comp.name.GetString());
-            auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
-            proto.components.push_back(compPtr);
-            //printf("S: %d\n", proto.components.size());
-        }
-    } else {
-        UK_LOG_WARN("Entity", name, "has no components");
-    }
+//    //Parse component list
+//    auto componentList = document.FindMember("Components");
+//
+//    if(componentList != document.MemberEnd()) {
+//        for(auto& comp : componentList->value.GetObject()) {
+//            // Create instance of the component
+//            auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
+//
+//            if(!componentType.is_valid()) {
+//                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
+//                continue;
+//            }
+//
+//            auto componentInstance = componentType.get_constructor({}).invoke();
+//
+//            // Load its vars from json
+//            rttr::variant componentVariant(componentInstance);
+//
+//            for(auto& property : comp.value.GetObject()) {
+//               // SettingsParser::parseJSONMember(componentType, property, componentVariant);
+//               // SettingsParser::parseProperty(property)
+//               printf("TODO: loader add parse property\n");
+//            }
+//
+//            //printf("Comp: %s\n", comp.name.GetString());
+//            auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
+//            proto.components.push_back(compPtr);
+//            //printf("S: %d\n", proto.components.size());
+//        }
+//    } else {
+//        UK_LOG_WARN("Entity", name, "has no components");
+//    }
 
     return proto;
 }

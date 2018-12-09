@@ -8,13 +8,15 @@
 #include <string>
 #include "rttr/registration"
 
+#include <Types/Dimension.h>
+
 namespace Unknown {
     struct EngineConfig {
 
         EngineConfig();
 
-        int targetHeight;
-        int targetWidth;
+        Dimension<int> targetSize;
+
         std::string title;
         int targetUPS;
 
