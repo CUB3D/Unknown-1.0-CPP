@@ -89,12 +89,6 @@ bool Unknown::isStringNumerical(const std::string& str) {
     }) == str.end();
 }
 
-std::string Unknown::intToString(const int x) {
-	std::stringstream ss;
-	ss << x;
-	return ss.str();
-}
-
 std::vector<std::string> Unknown::tokenise(std::string input, std::vector<std::string> extTokens)
 {
 	const char* temp = input.c_str();

@@ -88,6 +88,6 @@ void RenderTestScene::render() const {
     ren.render();
 }
 
-RenderTestScene::RenderTestScene() : Scene("RTest") {
+RenderTestScene::RenderTestScene() : Scene() {
     init___();
 }

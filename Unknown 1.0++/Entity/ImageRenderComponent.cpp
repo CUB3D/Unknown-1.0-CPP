@@ -47,10 +47,6 @@ void Unknown::ImageRenderComponent::update(Unknown::Entity &ent) {
         (float) (renderScale * size.height) / (float) img.imageSize.height);
 }
 
-const std::string Unknown::ImageRenderComponent::getName() {
-    return "ImageRender";
-}
-
 RTTR_REGISTRATION {
     using namespace Unknown;
     rttr::registration::class_<ImageRenderComponent>("ImageRenderComponent")

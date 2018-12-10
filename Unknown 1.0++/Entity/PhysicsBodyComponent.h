@@ -13,7 +13,7 @@
 
 namespace Unknown
 {
-    class PhysicsBodyComponent : public Component, public IInitable<Scene&, std::shared_ptr<Entity>>
+    class PhysicsBodyComponent : public Component
     {
         //TODO: no
     public:
@@ -38,7 +38,7 @@ namespace Unknown
 
         //TODO: attach method
 
-        virtual void init(Scene& scene, std::shared_ptr<Entity> ent) override;
+        virtual void onEnable(Scene& scene, std::shared_ptr<Entity> ent) override;
 
         virtual void update(Entity &ent) override;
         virtual void onDisable(Entity& ent) override;

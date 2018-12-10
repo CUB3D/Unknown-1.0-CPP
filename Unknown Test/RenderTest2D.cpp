@@ -48,7 +48,7 @@ public:
     }
 };
 
-RenderTest2D::RenderTest2D() : Scene("R2D") {
+RenderTest2D::RenderTest2D() : Scene() {
 
 }
 

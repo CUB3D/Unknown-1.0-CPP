@@ -25,6 +25,8 @@ namespace Unknown {
         bool MSAA;
         int vsync;
         bool textureFallback;
+
+        bool editing;
     };
 }
 

@@ -25,6 +25,7 @@ namespace Unknown
     public:
         void addListener(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b,
                                                     std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>> objs, bool inContact)> callback);
+        void reset();
     };
 }
 

@@ -210,7 +210,7 @@ void init()
     //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
     //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
    // UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
-    UK_ADD_SCENE(std::make_shared<BasicGraphicsTest>());
+    //UK_ADD_SCENE(std::make_shared<BasicGraphicsTest>());
     //UK_ADD_SCENE(BasicGraphicsTest, "Test");
     //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
     //UK_LOAD_SCENE("MainMenu");
@@ -270,6 +270,8 @@ int main(int argc, char* argv[])
     ::Unknown::Filesystem::mount("Test.pak");
     //LuaScript().test();
     //UK_PYTHON_LOAD_SCRIPT("Test");
+
+    // Test the loading of vectors
 
 	init();
 	UK_INIT_GAME();

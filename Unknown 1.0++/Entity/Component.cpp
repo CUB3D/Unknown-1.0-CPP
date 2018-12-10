@@ -13,6 +13,6 @@ void Unknown::Component::onDisable(::Unknown::Entity &ent) {}
 
 void Unknown::Component::populateEditor() {}
 
-const std::string Unknown::Component::getName() {
-    return "Component";
+void Unknown::Component::onEnable(Scene& s, std::shared_ptr<Entity> ent) {
+
 }

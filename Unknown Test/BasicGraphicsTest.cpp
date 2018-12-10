@@ -13,7 +13,7 @@ int height = 64;
 int scaleX = 0;
 int scaleY = 0;
 
-BasicGraphicsTest::BasicGraphicsTest() : Scene("BasicGraphics"), map(32, 32), timer(1.0f) {
+BasicGraphicsTest::BasicGraphicsTest() : Scene(), map(32, 32), timer(1.0f) {
     this->createBoard();
 }
 

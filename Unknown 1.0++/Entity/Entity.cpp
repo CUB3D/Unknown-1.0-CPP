@@ -12,7 +12,7 @@ Unknown::Entity::Entity(EntityPrototype proto) : position(0, 0), enabled(true), 
 void Unknown::Entity::render(double Xoffset, double Yoffset) const {
     if(!enabled)
         return;
-    for(auto& component : prototype.components) {
+    for(auto& component : getComponents()) {
         component->render(*this, Xoffset, Yoffset);
     }
 }
@@ -25,7 +25,7 @@ void Unknown::Entity::update() {
         this->disable();
         queueDissable = false;
     }
-    for(auto& component : prototype.components) {
+    for(auto& component : getComponents()) {
         component->update(*this);
     }
 }
@@ -69,7 +69,7 @@ const std::string Unknown::Entity::getTag() const {
 void Unknown::Entity::disable() {
     this->enabled = false;
 
-    for(auto& component : prototype.components) {
+    for(auto& component : getComponents()) {
         component->onDisable(*this);
     }
 }
@@ -84,4 +84,8 @@ void Unknown::Entity::move(double x, double y) {
 
 void Unknown::Entity::rotate(double delta) {
     setPosition(position.x, position.y, angle + delta);
+}
+
+std::vector<std::shared_ptr<Unknown::Component>> Unknown::Entity::getComponents() const {
+    return this->prototype.components;
 }

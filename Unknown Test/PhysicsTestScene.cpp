@@ -51,7 +51,7 @@ WAVSound hit("Hit.wav");
 
 
 
-PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
+PhysicsTestScene::PhysicsTestScene() : Scene() {
     ui = Loader::loadUI("PhysGameGUI.json");
     ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
     ui.initUI();

@@ -32,7 +32,7 @@ void Unknown::EntityEditor::populateGui() {
     ImGui::InputDouble("Rotation", &angle, 0.01);
     ImGui::Spacing();
 
-    for(auto& comp : ent->prototype.components) {
+    for(auto& comp : ent->getComponents()) {
         comp->populateEditor();
         ImGui::Spacing();
     }

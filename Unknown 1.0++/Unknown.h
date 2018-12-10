@@ -120,7 +120,7 @@ namespace Unknown
 	void callHooks(HookType type);
 }
 
-#define UK_ADD_SCENE(x) ::Unknown::getUnknown().globalSceneManager.add(x)
+#define UK_ADD_SCENE(x, y) ::Unknown::getUnknown().globalSceneManager.registerScene<x>(y)
 #define UK_LOAD_SCENE(x) ::Unknown::getUnknown().globalSceneManager.loadScene(x)
 
 #endif

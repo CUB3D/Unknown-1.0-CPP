@@ -10,7 +10,7 @@
 #include "../UI2D.h"
 #include "../Imgui/GUI.h"
 
-Unknown::EditorBase::EditorBase(const std::string &under) : Scene("Editor"), under(under), editing(false) {
+Unknown::EditorBase::EditorBase(const std::string &under) : Scene(), under(under), editing(false) {
 
     //SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     //SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
@@ -105,7 +105,7 @@ void Unknown::EditorBase::render() const {
 
 std::shared_ptr<::Unknown::Scene> Unknown::EditorBase::getLastScene() const {
     auto& gcm = ::Unknown::getUnknown().globalSceneManager;
-    return gcm.scenes[this->under];
+    return gcm.scenes[gcm.scenes.size() - 2].second;
 }
 
 void Unknown::EditorBase::createMenuBar() {

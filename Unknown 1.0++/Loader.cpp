@@ -279,7 +279,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
         container.components.push_back(comp);
 	}
 
-    UK_LOG_INFO("Loaded UI data, found", intToString(container.components.size()), "components");
+    UK_LOG_INFO("Loaded UI data, found", std::to_string(container.components.size()), "components");
 
 	for (auto& comp : container.components)
 	{
@@ -376,38 +376,44 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
     // Parse easy fields for proto
     SettingsParser::parseJSONDocument(data, dataType, document);
 
-//    //Parse component list
-//    auto componentList = document.FindMember("Components");
+    //Parse component list
+    auto componentList = document.FindMember("Components");
+
+    if(componentList != document.MemberEnd()) {
+        for(auto& comp : componentList->value.GetObject()) {
+            // Create instance of the component
+            auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
+
+            if(!componentType.is_valid()) {
+                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
+                continue;
+            }
+
+            auto componentInstance = componentType.create();
+
+            // Load its vars from json
+            for(auto& property : componentType.get_properties()) {
+                auto jsonProperty = comp.value.GetObject().FindMember(property.get_name().to_string().c_str());
+                if(jsonProperty != comp.value.GetObject().MemberEnd()) {
+                    auto type = property.get_type();
+                    SettingsParser::parseProperty(type, property, componentInstance, (*jsonProperty).value);
+                }
+            }
+
+
+//            for(auto& jsonProperty : comp.value.GetObject()) {
+//                auto property = componentType.get_property(std::string(jsonProperty.name.GetString()));
 //
-//    if(componentList != document.MemberEnd()) {
-//        for(auto& comp : componentList->value.GetObject()) {
-//            // Create instance of the component
-//            auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
-//
-//            if(!componentType.is_valid()) {
-//                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
-//                continue;
+//                SettingsParser::parseProperty(componentType, property, componentInstance, jsonProperty.value);
 //            }
-//
-//            auto componentInstance = componentType.get_constructor({}).invoke();
-//
-//            // Load its vars from json
-//            rttr::variant componentVariant(componentInstance);
-//
-//            for(auto& property : comp.value.GetObject()) {
-//               // SettingsParser::parseJSONMember(componentType, property, componentVariant);
-//               // SettingsParser::parseProperty(property)
-//               printf("TODO: loader add parse property\n");
-//            }
-//
-//            //printf("Comp: %s\n", comp.name.GetString());
-//            auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
-//            proto.components.push_back(compPtr);
-//            //printf("S: %d\n", proto.components.size());
-//        }
-//    } else {
-//        UK_LOG_WARN("Entity", name, "has no components");
-//    }
+
+            //printf("Comp: %s\n", comp.name.GetString());
+            auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
+            proto.components.push_back(compPtr);
+        }
+    } else {
+        UK_LOG_WARN("Entity", name, "has no components");
+    }
 
     return proto;
 }

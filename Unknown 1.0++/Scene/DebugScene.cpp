@@ -6,7 +6,7 @@
 #include "../UI2D.h"
 #include "Types/Colour.h"
 
-Unknown::DebugScene::DebugScene(const std::string name, std::shared_ptr<Graphics::Font> f) : MenuScene(name, "", f), font(f)
+Unknown::DebugScene::DebugScene(std::shared_ptr<Graphics::Font> f) : MenuScene("", f), font(f)
 {
     //this->menu.addComponent(std::make_unique<TextBoxComponent>("maxTicks", this->font, Point<int>(0, 0), Dimension<int>(100, 30)));
 }

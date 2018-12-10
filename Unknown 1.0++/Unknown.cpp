@@ -33,6 +33,7 @@
 #include "Log.h"
 #include "Imgui/GUI.h"
 #include <SDL_image.h>
+#include <Editor/CoreEditor.h>
 
 // unknown class
 
@@ -109,7 +110,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
 	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_LOG_INFO("Performing late init for", intToString(lateInit.size()), " objects");
+	UK_LOG_INFO("Performing late init for", std::to_string(lateInit.size()), " objects");
 	for(auto& initable : lateInit) {
 		initable->init();
 	}
@@ -270,6 +271,11 @@ void Unknown::Unknown::update() {
 }
 
 void Unknown::Unknown::render() {
+
+	if(config.editing) {
+		CoreEditor::getInstance().render();
+	}
+
 	callHooks(HookType::RENDER);
 }
 

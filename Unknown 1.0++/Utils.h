@@ -24,7 +24,6 @@ namespace Unknown {
 	long long randInt(const int min, const int max);
 
     bool stringToInt(const std::string& str, int& out);
-    std::string intToString(const int x);
 }
 
 #define RANDINT(min, max) ::Unknown::randInt(min, max)

@@ -8,7 +8,7 @@
 #define M_SIZE ((1024/128))
 #define M_SCALE  ((1024/M_SIZE))
 
-PathfindingTest::PathfindingTest() : Scene("Path"), m(M_SIZE, M_SIZE) {
+PathfindingTest::PathfindingTest() : Scene(), m(M_SIZE, M_SIZE) {
     // Fill map with walls
     for(int x = 0; x < m.mapSize.width; x++) {
         for(int y = 0; y < m.mapSize.height; y++) {

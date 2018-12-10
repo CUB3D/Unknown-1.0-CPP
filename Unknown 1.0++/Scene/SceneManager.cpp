@@ -6,39 +6,52 @@
 #include "Scene.h"
 #include <Log.h>
 
-Unknown::SceneManager::SceneManager() : currentSceneName(""), currentScene(nullptr) {}
+Unknown::SceneManager::SceneManager() : currentSceneName("") {}
 
-void Unknown::SceneManager::add(std::shared_ptr<Scene> scene)
-{
-    if(!scene) {
-        UK_LOG_ERROR("Attempt to register null scene");
-    }
-
-    scenes[scene->name] = scene;
-}
-
-void Unknown::SceneManager::loadScene(const std::string sceneName)
-{
+void Unknown::SceneManager::loadScene(const std::string& sceneName) {
     UK_LOG_INFO("Loading scene ", sceneName);
 
-    //TODO: error checking
-    this->currentSceneName = sceneName;
-    this->currentScene = scenes[sceneName];
-    this->sceneHistory.push_back(sceneName);
+    auto sceneGenerator = sceneMapping.find(sceneName);
+    if(sceneGenerator != sceneMapping.end()) {
+        scenes.push_back(std::pair<std::string, std::shared_ptr<Scene>>(sceneName, sceneGenerator->second()));
+        this->currentSceneName = sceneName;
+        getCurrentScene()->reset();
+    } else {
+        UK_LOG_ERROR("Unable to load scene:", sceneName);
+    }
 }
 
-const void Unknown::SceneManager::update()
-{
-    if(this->currentScene)
-        this->currentScene->update();
+const void Unknown::SceneManager::update() {
+    if(getCurrentScene())
+        getCurrentScene()->update();
 }
 
 void Unknown::SceneManager::loadLastScene() {
-    this->sceneHistory.pop_back();
-    this->currentScene = scenes[this->sceneHistory[this->sceneHistory.size()]];
+    this->scenes.pop_back();
 }
 
 const void Unknown::SceneManager::render() const {
-    if(this->currentScene)
-        this->currentScene->render();
+    if(getCurrentScene())
+        getCurrentScene()->render();
+}
+
+const void Unknown::SceneManager::reset() {
+    getCurrentScene()->reset();
+}
+
+std::shared_ptr<Unknown::Scene> Unknown::SceneManager::getCurrentScene() const {
+    return scenes.back().second;
+}
+
+const std::unordered_set<std::string> Unknown::SceneManager::getAvailableScenes() const {
+    std::unordered_set<std::string> keys;
+
+    for(auto&& elements : this->sceneMapping)
+        keys.insert(elements.first);
+
+    return keys;
+}
+
+const std::string Unknown::SceneManager::getCurrentSceneName() const {
+    return scenes.back().first;
 }

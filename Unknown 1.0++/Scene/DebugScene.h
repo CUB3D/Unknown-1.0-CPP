@@ -15,7 +15,7 @@ namespace Unknown
     public:
         std::shared_ptr<Graphics::Font> font;
 
-        DebugScene(const std::string name, std::shared_ptr<Graphics::Font> font);
+        DebugScene(std::shared_ptr<Graphics::Font> font);
         virtual void update() override;
         virtual void render() const override;
 

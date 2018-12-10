@@ -58,7 +58,7 @@ void Unknown::PhysicsBodyComponent::applyForce(const Vector &vec) {
     this->lastForce = vec;
 }
 
-void Unknown::PhysicsBodyComponent::init(Scene &scene, std::shared_ptr<Entity> ent) {
+void Unknown::PhysicsBodyComponent::onEnable(Scene& scene, std::shared_ptr<Entity> ent) {
     auto& size = ent->prototype.size;
 
     body = scene.world.CreateBody(&this->bodyDefinition);
