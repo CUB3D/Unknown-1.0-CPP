@@ -68,6 +68,10 @@ namespace Unknown
             }
         }
 
+        void registerEntityCollision(std::shared_ptr<Entity> ent1, std::shared_ptr<Entity> ent2, std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback);
+
+        void registerEntityCollision(const std::string& ent1, const std::string& ent2, std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback);
+
         std::shared_ptr<Entity> getEntity(const std::string& name);
 
         void loadScenegraph(const std::string& name);

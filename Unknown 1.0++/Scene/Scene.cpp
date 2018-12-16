@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include <Loader.h>
 #include <Font/Font.h>
+#include <Log.h>
 
 Unknown::Scene::Scene() : world(b2Vec2(0, 9.8f)),
 cam(getUnknown().screenSize->width, getUnknown().screenSize->height)
@@ -45,6 +46,8 @@ void Unknown::Scene::loadScenegraph(const std::string &name) {
         auto entityInstance = Loader::loadEntityAt(element.name, element.position.x, element.position.y);
         this->addObject(entityInstance);
     }
+
+    UK_LOG_INFO("Loaded", std::to_string(prototype.sceneElements.size()), "scene:", name);
 }
 
 void Unknown::Scene::reset() {
@@ -64,7 +67,20 @@ void Unknown::Scene::reset() {
         b = n;
     }
 
+
     //TODO: reset camera, sometimes crashes
+}
+
+void Unknown::Scene::registerEntityCollision(std::shared_ptr<Entity> ent1,
+                                             std::shared_ptr<Entity> ent2,
+                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback) {
+    this->contactManager.addListener(ent1, ent2, callback);
+}
+
+void Unknown::Scene::registerEntityCollision(const std::string &ent1,
+                                             const std::string &ent2,
+                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback) {
+    registerEntityCollision(getEntity(ent1), getEntity(ent2), callback);
 }
 
 Unknown::MenuScene::MenuScene(std::string uiFile, std::shared_ptr<Graphics::Font> font) : Scene(), uiFile(uiFile), font(font)
