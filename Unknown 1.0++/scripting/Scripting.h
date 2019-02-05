@@ -11,7 +11,6 @@
 #endif
 
 #include <scripting/lua/LuaScript.h>
-
 #include <scripting/SharedVariable.h>
 
 #endif //UNKNOWN_SCRIPTING_H

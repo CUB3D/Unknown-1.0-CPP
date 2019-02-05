@@ -13,23 +13,18 @@
 #include "../Graphics/RenderingBackend.h"
 #include "../Unknown.h"
 
-namespace Unknown
-{
-    namespace Graphics
-    {
-        class FontGlyph
-        {
-        public:
-            TextureInfo texture;
-            VertexInfo verts;
+namespace Unknown {
+    class FontGlyph {
+    public:
+        TextureInfo texture;
+        VertexInfo verts;
 
-            Dimension<int> size;
+        Dimension<int> size;
 
-            FontGlyph(const char c, TTF_Font *font, const Colour &col);
+        FontGlyph(const char c, TTF_Font *font, const Colour &col);
 
-            void drawGlyph(const int x, const int y) const;
-        };
-    }
+        void drawGlyph(const int x, const int y) const;
+    };
 }
 
 

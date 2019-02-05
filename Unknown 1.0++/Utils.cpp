@@ -9,35 +9,13 @@
 #include <algorithm>
 #include <locale>
 
-inline int parseHexString(std::stringstream& stream, std::string str) {
+int Unknown::parseHexString(std::stringstream& stream, const std::string& str) {
 	stream << std::hex << str[0];
 	stream << std::hex << str[1];
 	int x = 0;
 	stream >> x;
 	stream.clear();
 	return x;
-}
-
-std::shared_ptr<Unknown::Colour> Unknown::getColourFromString(std::string str)
-{
-	std::stringstream strstream;
-
-	// A R G B
-	int colourParts[4];
-
-	colourParts[3] = 255;
-
-	if (str.length() >= 8) {
-		colourParts[3] = parseHexString(strstream, str);
-		str = str.erase(0, 2);
-	}
-
-	for(int i = 0; i < 3; i++) {
-	    colourParts[i] = parseHexString(strstream, str);
-	    str = str.erase(0, 2);
-	}
-
-	return std::make_shared<Colour>(colourParts[0], colourParts[1], colourParts[2], colourParts[3]);
 }
 
 bool Unknown::stringToInt(const std::string& str, int& out) {

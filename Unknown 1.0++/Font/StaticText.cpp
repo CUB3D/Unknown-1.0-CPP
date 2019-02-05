@@ -4,7 +4,7 @@
 
 #include "StaticText.h"
 
-Unknown::StaticText::StaticText(Graphics::TTFont &font, const std::string &text, const Colour &col) {
+Unknown::StaticText::StaticText(TTFont &font, const std::string &text, const Colour &col) {
     texture = getRendererBackend()->createFontTexture(*font.font, text.c_str(), col);
     verts = getRendererBackend()->createRectVerticies(0, 0, texture.width, texture.height);
 

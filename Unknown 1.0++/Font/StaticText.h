@@ -16,7 +16,7 @@ namespace Unknown {
         VertexInfo verts;
         Dimension<int> size;
 
-        StaticText(Graphics::TTFont &font, const std::string &text, const Colour &col);
+        StaticText(TTFont &font, const std::string &text, const Colour &col);
 
         void render(const int x, const int y) const;
     };

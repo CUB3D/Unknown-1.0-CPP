@@ -12,3 +12,7 @@ void Unknown::Component::render(const Entity &ent, double Xoffset, double Yoffse
 void Unknown::Component::onDisable(::Unknown::Entity &ent) {}
 
 void Unknown::Component::populateEditor() {}
+
+void Unknown::Component::onEnable(Scene& s, std::shared_ptr<Entity> ent) {
+
+}

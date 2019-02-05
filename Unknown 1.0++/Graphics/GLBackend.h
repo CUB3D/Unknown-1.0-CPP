@@ -7,10 +7,11 @@
 
 #include "RenderingBackend.h"
 #include "FileShader.h"
-#include "../GL/GL.h"
+#include <GL/GL.h>
 #include <map>
 #include <SDL_image.h>
 #include <Types/Dimension.h>
+#include "FrameBuffer.h"
 
 namespace Unknown
 {
@@ -81,16 +82,50 @@ namespace Unknown
                                                        "    fragColour = inputColour;\n"
                                                        "}";
 
+    const static std::string FBOVertexShader = "#version 300 es\n"
+                                               "precision highp float;\n"
+                                               "\n"
+                                               "layout (location = 0) in vec2 vertex;\n"
+                                               "layout (location = 1) in vec2 inUV;\n"
+                                               "\n"
+                                               "out vec2 UV;\n"
+                                               "\n"
+                                               "void main() {\n"
+                                               "    UV = inUV;\n"
+                                               "    gl_Position = vec4(vertex.x, vertex.y, 0.0, 1.0);\n"
+                                               "}";
+
+    const static std::string FBOFragmentShader = "#version 300 es\n"
+                                                 "precision highp float;\n"
+                                                 "\n"
+                                                 "in vec2 UV;\n"
+                                                 "\n"
+                                                 "out vec4 fragColor;\n"
+                                                 "\n"
+                                                 "uniform sampler2D fboTexture;\n"
+                                                 "\n"
+                                                 "void main() {\n"
+                                                 "    vec4 colour = texture(fboTexture, UV);\n"
+                                                 "    fragColor = colour;\n"
+                                                 "}";
+
 
     class GLBackend : public RenderingBackend
     {
         Shader basicRenderer;
         Shader textureRenderer;
+        Shader FBOshader;
+        // embed
+        FileShader* circleShader;
 
         SDL_GLContext glContext;
 
         glm::mat4 projectionMatrix;
         glm::mat4 viewMatrix;
+
+        FrameBuffer FBO;
+
+
 
     public:
         GLBackend();
@@ -117,6 +152,9 @@ namespace Unknown
         TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) override;
 
         Shader& getTextureRendererShader();
+
+        void newFrame() override;
+        void endFrame() override;
     };
 }
 

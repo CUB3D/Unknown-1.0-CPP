@@ -5,8 +5,13 @@
 #include "SkyBox3D.h"
 #include "FileShader.h"
 #include <SDL_image.h>
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 void SkyBox3D::render(RenderingPipeline3D& pipeline) {
+    ZoneScopedN("SkyBox3D::Render");
+    TracyGpuZone("SkyBox3D::Render");
+
     glDepthMask(GL_FALSE);
     glDepthFunc(GL_LEQUAL);
     sky.bind(true);

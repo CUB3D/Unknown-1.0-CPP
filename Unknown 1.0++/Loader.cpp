@@ -1,6 +1,6 @@
 #include "Loader.h"
 
-#include <document.h>
+#include <rapidjson/document.h>
 #include <Utils.h>
 #include <UI.h>
 #include <Log.h>
@@ -31,6 +31,7 @@ Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 //TODO: rename to loadentityproto
 std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
+    UK_LOG_INFO("Load Entity:", name);
     //TODO: Scene graph loader
     //TODO: remove massive comment
     //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
@@ -142,7 +143,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 		if (colour != member->value.MemberEnd())
 		{
 			std::string colourString = colour->value.GetString();
-			comp->colour = getColourFromString(colourString);
+			//comp->colour = getColourFromString(colourString);
 
 			std::cout << "Colour loaded: (" << comp->colour->alpha << ", " << comp->colour->red << ", " << comp->colour->green << ", " << comp->colour->blue << ")" << std::endl;
 		}
@@ -306,6 +307,7 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
             aiString str(typeStr);
             mat->GetTexture(type, i, &str);
             std::string s = std::string(str.C_Str());
+            UK_LOG_INFO("Loading mat texture:", s);
             vec.push_back(::Unknown::getRendererBackend()->loadTexture(s));
         }
     };
@@ -374,7 +376,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
     auto dataType = rttr::type::get<EntityPrototype>();
 
     // Parse easy fields for proto
-    SettingsParser::parseJSONObject(data, document, dataType);
+    SettingsParser::parseJSONDocument(data, dataType, document);
 
     //Parse component list
     auto componentList = document.FindMember("Components");
@@ -389,19 +391,27 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
                 continue;
             }
 
-            auto componentInstance = componentType.get_constructor({}).invoke();
+            auto componentInstance = componentType.create();
 
             // Load its vars from json
-            rttr::variant componentVariant(componentInstance);
-
-            for(auto& property : comp.value.GetObject()) {
-                SettingsParser::parseJSONMember(componentType, property, componentVariant);
+            for(auto& property : componentType.get_properties()) {
+                auto jsonProperty = comp.value.GetObject().FindMember(property.get_name().to_string().c_str());
+                if(jsonProperty != comp.value.GetObject().MemberEnd()) {
+                    auto type = property.get_type();
+                    SettingsParser::parseProperty(type, property, componentInstance, (*jsonProperty).value);
+                }
             }
+
+
+//            for(auto& jsonProperty : comp.value.GetObject()) {
+//                auto property = componentType.get_property(std::string(jsonProperty.name.GetString()));
+//
+//                SettingsParser::parseProperty(componentType, property, componentInstance, jsonProperty.value);
+//            }
 
             //printf("Comp: %s\n", comp.name.GetString());
             auto compPtr = componentInstance.get_value<std::shared_ptr<Component>>();
             proto.components.push_back(compPtr);
-            //printf("S: %d\n", proto.components.size());
         }
     } else {
         UK_LOG_WARN("Entity", name, "has no components");

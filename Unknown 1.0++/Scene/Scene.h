@@ -10,19 +10,23 @@
 #include <functional>
 #include <Box2D/Box2D.h>
 
-#include "../UI.h"
-#include "../Font/Font.h"
-#include "../Renderer/IRenderable.h"
-#include "../IUpdateable.h"
-#include "../ITagable.h"
-#include "../Renderer/Camera.h"
-#include "../Entity/Entity.h"
+#include <UI.h>
+#include <Font/Font.h>
+#include <Renderer/IRenderable.h>
+#include <IUpdateable.h>
+#include <Renderer/Camera.h>
+#include <Entity/Entity.h>
 #include "CollisionManager.h"
+#include <Scene/SceneGraph.h>
+#include <Settings/SettingsParser.h>
+#include <Loader.h>
+#include <Entity/Component.h>
 
 namespace Unknown
 {
     class Entity;
     class CollisionManager;
+    class Component;
 
     class Scene
     {
@@ -36,11 +40,11 @@ namespace Unknown
         Camera cam;
 
 
-        const std::string name;
-        Scene(const std::string name);
+        Scene();
 
         virtual void render() const;
         virtual void update();
+        virtual void reset();
 
         template<class T>
         void addObject(std::shared_ptr<T> obj) {
@@ -56,17 +60,21 @@ namespace Unknown
             if(dynamic_cast<Entity*>(obj.get())) {
                 auto ent = std::dynamic_pointer_cast<Entity>(obj);
 
-                for(auto& comp : ent->prototype.components) {
-                    if(dynamic_cast<IInitable<Scene&, std::shared_ptr<Entity>>*>(comp.get())) {
-                        std::dynamic_pointer_cast<IInitable<Scene&, std::shared_ptr<Entity>>>(comp)->init(*this, ent);
-                    }
+                for(std::shared_ptr<Component>& comp : ent->prototype.components) {
+                    comp->onEnable(*this, ent);
                 }
 
                 entities.push_back(ent);
             }
         }
 
+        void registerEntityCollision(std::shared_ptr<Entity> ent1, std::shared_ptr<Entity> ent2, std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback);
+
+        void registerEntityCollision(const std::string& ent1, const std::string& ent2, std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback);
+
         std::shared_ptr<Entity> getEntity(const std::string& name);
+
+        void loadScenegraph(const std::string& name);
 
 
         template<class T>
@@ -113,12 +121,12 @@ namespace Unknown
     class MenuScene : public Scene
     {
         std::string uiFile;
-        std::shared_ptr<Graphics::Font> font;
+        std::shared_ptr<Font> font;
 
     public:
         UIContainer menu;
 
-        MenuScene(const std::string name, std::string uiFile, std::shared_ptr<Graphics::Font> font);
+        MenuScene(std::string uiFile, std::shared_ptr<Font> font);
 
         virtual void render() const override;
         virtual void update() override;
@@ -132,13 +140,11 @@ namespace Unknown
         const std::function<void(void)> updater;
 
     public:
-        CustomScene(const std::string name, std::function<void(void)> renderer, std::function<void(void)> updater);
+        CustomScene(std::function<void(void)> renderer, std::function<void(void)> updater);
         virtual void render() const override;
         virtual void update() override;
     };
 }
-
-#define UK_LOAD_ENTITY_AT(name, x, y) ::Unknown::Loader::loadEntityAt(name, x, y)
 
 
 #endif //UNKNOWN_1_0_CPP_SCENE_H

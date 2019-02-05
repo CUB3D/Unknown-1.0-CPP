@@ -5,10 +5,15 @@
 #include <cstdio>
 #include "TexturedMeshRenderer.h"
 #include "../Graphics/FileShader.h"
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 TexturedMeshRenderer::TexturedMeshRenderer(MeshContainer &container) : MeshRenderer(container) {}
 
 void TexturedMeshRenderer::render(Shader &s, RenderingPipeline3D &renderPipeline) {
+    ZoneScopedN("TexturedMeshRenderer::Render");
+    TracyGpuZone("TexturedMeshRenderer::Render");
+
     static float angle = 12;
     angle += 0.01;
 

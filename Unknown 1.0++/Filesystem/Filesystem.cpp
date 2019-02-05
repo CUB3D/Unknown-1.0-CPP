@@ -31,12 +31,12 @@ bool Unknown::Filesystem::exists(const std::string &str) {
     return false;
 }
 
-std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &path) {
+Unknown::File Unknown::Filesystem::readFile(const std::string &path) {
 
     auto file = std::make_shared<std::ifstream>(path, std::ios::binary);
 
     if(file->good()) {
-        return file;
+        return File(file);
     } else {
         printf("File not on system, looking in mounts\n");
     }
@@ -47,11 +47,11 @@ std::shared_ptr<std::istream> Unknown::Filesystem::readFile(const std::string &p
         // If the file exists
         if(file) {
             printf("Found file in mounts\n");
-            return std::make_shared<imemstream>(&pak, file);
+            return File(std::make_shared<imemstream>(&pak, file));
         }
     }
 
     printf("Error: file %s not found\n", path.c_str());
 
-    return nullptr;
+    return File(nullptr);
 }

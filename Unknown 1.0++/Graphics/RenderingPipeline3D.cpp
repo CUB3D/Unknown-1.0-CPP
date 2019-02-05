@@ -8,17 +8,18 @@
 #include "../Utils.h"
 #include "../Unknown.h"
 #include "../Imgui/GUI.h"
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 void RenderingPipeline3D::render() {
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    ZoneScopedN("RP3D::Render");
+    TracyGpuZone("RP3D::Render");
     glClearColor(0, 0, 0, 1.0f);
     glClearDepth(1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_MULTISAMPLE);
 
     skybox->render(*this);
-
 
     s.bind(true);
 
@@ -31,6 +32,10 @@ void RenderingPipeline3D::render() {
     glUniformBlockBinding(s.prog, lightBlockIndex, 0);
 
     // TODO: change to uniform blocks for lights
+
+    s.setFloat("mat.diffuse", 0);
+    s.setFloat("mat.specular", 1);
+    s.setFloat("mat.shine", 32.0f);
 
 //    for(int i = 0; i < directionalLights.size(); i++) {
 //        std::string arr = "directionalLights[" + Unknown::intToString(i) + "]";
@@ -77,35 +82,25 @@ void RenderingPipeline3D::render() {
     ImGui::Checkbox("Edit", &edit);
     ::ImGui::End();
 
-    // Get rid of framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(1, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    if(edit) {
-        ImGui::SetNextWindowSize(ImVec2(512 + 10, 512 + 10),
-                                 ImGuiSetCond_FirstUseEver);
-        ImGui::Begin("Game rendering");
-        int w = 512;
-        int h = 512;
-
-        ImVec2 pos = ImGui::GetCursorScreenPos();
-
-        ImGui::GetWindowDrawList()->AddImage(
-            (void *)texBuffer, ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y),
-            ImVec2(pos.x + w, pos.y + h), ImVec2(0, 1), ImVec2(1, 0));
-        ImGui::End();
-    } else {
-        // Render the framebuffer
-        fboS.bind(true);
-        glBindVertexArray(fbov.vao);
-        glDisable(GL_DEPTH_TEST);
-        fboS.setFloat("fboTexture", 0);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texBuffer);
-        //glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-    }
+//    glClearColor(1, 0, 0, 1);
+//    glClear(GL_COLOR_BUFFER_BIT);
+//
+//    //////TODO: Remove FBO (now done by backend) add this PIP to fbo debugger
+//    //////TODO: Add RBO's to Framebuffer
+//    if(edit) {
+//        ImGui::SetNextWindowSize(ImVec2(512 + 10, 512 + 10),
+//                                 ImGuiSetCond_FirstUseEver);
+//        ImGui::Begin("Game rendering");
+//        int w = 512;
+//        int h = 512;
+//
+//        ImVec2 pos = ImGui::GetCursorScreenPos();
+//
+//        ImGui::GetWindowDrawList()->AddImage(
+//            (void *)texBuffer, ImVec2(ImGui::GetItemRectMin().x, ImGui::GetItemRectMin().y),
+//            ImVec2(pos.x + w, pos.y + h), ImVec2(0, 1), ImVec2(1, 0));
+//        ImGui::End();
+//    }
 }
 
 RenderingPipeline3D::RenderingPipeline3D() : s(FileShader("Test.glsl", "TestFrag.glsl")), fboS(FileShader("FBO_vert.glsl", "FBO_Frag.glsl")) {

@@ -60,6 +60,10 @@ namespace Unknown
                                    const Dimension<float> renderSize = Dimension<float>(1, 1)) = 0;
 
         virtual TextureInfo createFontTexture(TTF_Font &font, const char *str, const Colour &col) = 0;
+
+        // called when a new frame is started
+        virtual void newFrame() = 0;
+        virtual void endFrame() = 0;
     };
 
     std::shared_ptr<RenderingBackend> getRendererBackend();

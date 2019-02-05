@@ -52,13 +52,13 @@ in vec2 UV;
 
 out vec4 fragColour;
 
-#define LIGHT_COUNT 1
-
-layout (std140) uniform lighting {
-    DirectionalLight directionalLights[LIGHT_COUNT];
-    PointLight pointLights[LIGHT_COUNT];
-    SpotLight spotlights[LIGHT_COUNT];
-} lightingData;
+//#define LIGHT_COUNT 1
+//
+//layout (std140) uniform lighting {
+//    DirectionalLight directionalLights[LIGHT_COUNT];
+//    PointLight pointLights[LIGHT_COUNT];
+//    SpotLight spotlights[LIGHT_COUNT];
+//} lightingData;
 
 // Calculate the affect on the colour that is from a particular directional light
 vec3 calculateDirectionalLight(DirectionalLight light) {
@@ -187,11 +187,19 @@ vec3 calculateSpotLight(SpotLight light) {
 void main() {
     vec3 outCol = vec3(0);
 
-    for(int i = 0; i < LIGHT_COUNT; i++) {
-        outCol += calculateDirectionalLight(lightingData.directionalLights[i]);
-        outCol += calculatePointLight(lightingData.pointLights[i]);
-        outCol += calculateSpotLight(lightingData.spotlights[i]);
-    }
+    DirectionalLight d;
+    d.ambient = vec3(1, 1, 1);
+    d.specular = vec3(1, 1, 1);
+    d.diffuse = vec3(1, 1, 1);
+    d.direction = vec3(1, 1, 1);
+
+    outCol = calculateDirectionalLight(d);
+
+//    for(int i = 0; i < LIGHT_COUNT; i++) {
+//        outCol += calculateDirectionalLight(lightingData.directionalLights[i]);
+//        outCol += calculatePointLight(lightingData.pointLights[i]);
+//        outCol += calculateSpotLight(lightingData.spotlights[i]);
+//    }
 
     //outCol = vec3(1.0, 0, 0);
     fragColour = vec4(outCol, 1.0);

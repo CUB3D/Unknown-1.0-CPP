@@ -3,17 +3,16 @@
 
 #define PI 3.141592653589793238462
 
-#include "Types/Colour.h"
-#include "document.h"
+#include <Types/Colour.h>
+#include <rapidjson/document.h>
 #include <vector>
 #include <memory>
 #include <random>
-#include "Types/Point.h"
+#include <Types/Point.h>
 
 
 namespace Unknown {
-	std::shared_ptr<Colour> getColourFromString(std::string str);
-
+	int parseHexString(std::stringstream& stream, const std::string& str);
 	bool isCharCodeNumber(const char* key);
 	bool isStringNumerical(const std::string& str);
 

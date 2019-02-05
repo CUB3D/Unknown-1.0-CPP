@@ -4,6 +4,8 @@
 
 #include <cstdio>
 #include "Shader.h"
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 Shader::Shader() : prog(-1) {}
 
@@ -113,10 +115,14 @@ void Shader::bind(bool compile) {
 }
 
 void Shader::bind() const {
+    ZoneScopedN("Shader::Bind");
+    TracyGpuZone("Shader::Bind");
     glUseProgram(prog);
 }
 
 void Shader::unbind() const {
+    ZoneScopedN("Shader::Unbind");
+    TracyGpuZone("Shader::Unbind");
     glUseProgram(0);
 }
 
@@ -147,4 +153,8 @@ void Shader::setInt(const char *name, const int i) {
 
 void Shader::setMat4(const char* name, const glm::mat4& mat) {
     glUniformMatrix4fv(glGetUniformLocation(this->prog, name), 1, GL_FALSE, &mat[0][0]);
+}
+
+void Shader::setVec2(const char *name, const float x, const float y) {
+    glUniform2f(glGetUniformLocation(prog, name), x, y);
 }

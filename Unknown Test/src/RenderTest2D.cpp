@@ -3,6 +3,8 @@
 //
 
 #include "RenderTest2D.h"
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 class PointLight {
 public:
@@ -18,6 +20,7 @@ public:
     float enabled;
 
     void toBuffer(float* flt) {
+        ZoneScopedN("PL::ToBuffer");
         int i = 0;
 
         flt[i++] = position.x;
@@ -48,7 +51,7 @@ public:
     }
 };
 
-RenderTest2D::RenderTest2D() : Scene("R2D") {
+RenderTest2D::RenderTest2D() : Scene() {
 
 }
 
@@ -62,8 +65,12 @@ constexpr int ubo_size = 20;//4+ 4+4+4 + 1+1+1;
 float lightBuffer[ubo_size * 2];
 
 void RenderTest2D::render() const {
-
+    ZoneScopedN("R2D::render");
+    TracyGpuZone("Render");
     if(s.prog == -1) {
+        ZoneNamedN(level2, "R2D::Setup", true);
+        TracyGpuZone("Setup");
+
         texture = Unknown::getRendererBackend()->loadTexture("crate.png");
         spec = Unknown::getRendererBackend()->loadTexture("crate_spec.png");
         verticies = Unknown::getRendererBackend()->createRectVerticies(0, 0, 1, 1);
@@ -71,8 +78,8 @@ void RenderTest2D::render() const {
 
         UK_LOAD_ENTITY("Ground.json");
 
-        for(int i = 0; i < 40; i++) {
-            lightBuffer[i] = 0;
+        for (float &i : lightBuffer) {
+            i = 0;
         }
 
         glGenBuffers(1, &lightUBO);

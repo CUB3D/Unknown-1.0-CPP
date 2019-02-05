@@ -41,6 +41,11 @@
 
 #include <scripting/Scripting.h>
 
+#include <Filesystem/Filesystem.h>
+#include <Filesystem/File.h>
+
+#include <UI/HTMLGL.h>
+
 
 namespace UK = ::Unknown;
 

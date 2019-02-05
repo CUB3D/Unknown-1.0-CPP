@@ -13,6 +13,8 @@
 #include "../Log.h"
 #include "../Imgui/GUI.h"
 #include "PlaceholderTexture.h"
+#include <Tracy.hpp>
+#include <TracyOpenGL.hpp>
 
 void Unknown::GLBackend::intialise(const EngineConfig& config) {
     UK_LOG_INFO("Intialising OpenGL Backend");
@@ -25,9 +27,11 @@ void Unknown::GLBackend::intialise(const EngineConfig& config) {
 
     // Vsync
     SDL_GL_SetSwapInterval(config.vsync ? 1 : 0);
+    UK_LOG_INFO(config.vsync ? "Enabled vsync" : "Disabled vsync");
 }
 
 void Unknown::GLBackend::createContext(SDL_Window* window) {
+    ZoneScopedN("GL::CreateContext");
     UK_LOG_INFO("Creating OpenGL 3.3 Core context");
 
     //TODO: abstract out windows from unknown
@@ -42,6 +46,7 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
 
     // Load glad, glfw, etc
     initGL();
+    TracyGpuContext;
 
     // Setup gl viewport
     glViewport(0, 0, size->width, size->height);
@@ -58,11 +63,18 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
 
     basicRenderer.compile();
     textureRenderer.compile();
+    FBOshader.compile();
+
+    circleShader = new FileShader("Circle_vert.glsl", "Circle_frag.glsl");
+    circleShader->compile();
 
     this->projectionMatrix = glm::ortho(0.0f, (float) size->width, (float) size->height, 0.0f, 0.0f, 1.0f);
     this->viewMatrix = glm::mat4(1.0f);
 
     //TODO: use ctrp to get view from camera(2D/3D)
+
+    // Create FBO
+    FBO.createFBO();
 }
 
 void Unknown::GLBackend::quit() {
@@ -79,7 +91,11 @@ void Unknown::GLBackend::drawRect(const int x, const int y, const int width, con
     deleteVerticies(info);
 }
 
-Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderingFragmentShader), textureRenderer(imageVertexShader, imageFragmentShader) {}
+Unknown::GLBackend::GLBackend() :  basicRenderer(renderingVertexShader, renderingFragmentShader),
+                                   textureRenderer(imageVertexShader, imageFragmentShader),
+                                   FBO(getUnknown().config.targetSize),
+                                   FBOshader(FBOVertexShader, FBOFragmentShader) {
+}
 
 void Unknown::GLBackend::drawPoint(const int x, const int y, const Colour &colour) {
     VertexInfo info = this->createRectVerticies(0, 0, 1, 1);
@@ -142,73 +158,41 @@ void Unknown::GLBackend::drawLine(const int sx, const int sy, const int ex, cons
 }
 
 void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius, const Colour &colour) {
-//    if(basicRenderer.prog == -1)
-//        basicRenderer.compile();
-//
-//    basicRenderer.bind();
-//
-//    auto& uk = getUnknown();
-//
-//    // Create the ortagonal projection
-//    glm::mat4 projection = glm::ortho(0.0f, (float) uk.screenSize->width, (float) uk.screenSize->height, 0.0f, 0.0f, 1.0f);
-//
-//    // Create the view matrix
-//    glm::mat4 view = glm::mat4(1.0f);
-//
-//    // Create the model matrix
-//    glm::mat4 model = glm::translate(glm::mat4(1), glm::vec3(cx - radius, cy - radius, 0.0f));
-//
-//    // Projection * view * model
-//    glm::mat4 proj = projection * view * model;
-//
-//    //TODO: better way of setting uniforms
-//    glUniformMatrix4fv(glGetUniformLocation(basicRenderer.prog, "projmat"), 1, GL_FALSE, &proj[0][0]);
-//
-//    glUniform4f(glGetUniformLocation(basicRenderer.prog, "inputColour"), colour.red / 255.0, colour.green/255.0, colour.blue / 255.0, colour.alpha / 255.0);
-//
-//
-//    constexpr int segments = 100;
-//
-//    constexpr int VERTEX_COUNT = 3 * segments;
-//
-//    float verticies[VERTEX_COUNT];
-//
-//    float theta = 2 * 3.1415926 / float(segments);
-//    float c = cosf(theta);//precalculate the sine and cosine
-//    float s = sinf(theta);
-//    float t;
-//
-//    float x = radius;
-//    float y = 0;
-//
-//    for(int ii = 0; ii < segments; ii++)
-//    {
-//        verticies[3 * ii + 0] = cx + x;
-//        verticies[3 * ii + 1] = cy + y;
-//        verticies[3 * ii + 2] = 0;
-//
-//        //apply the rotation matrix
-//        t = x;
-//        x = c * x - s * y;
-//        y = s * t + c * y;
-//    }
-//
-//    glEnableClientState(GL_VERTEX_ARRAY);
-//
-//
-//    //TODO: first find some replacement for glVertexPointer, its not supported by webgl and it can't be emulated
-////Also I think that client states are needed for native but not for emscripten
-//
-//    glVertexPointer(3, GL_FLOAT, 0, verticies);
-//    glDrawArrays(GL_LINES, 0, VERTEX_COUNT); // <- VERTEX count here hmmm, should it not be number of verticies (VERTEX_COUNT/3)
-//
-//
-//    glDisableClientState(GL_VERTEX_ARRAY);
-//
-//    basicRenderer.unbind();
+    ZoneScopedN("GL::drawCircle");
+    auto& uk = getUnknown();
+
+
+    circleShader->bind();
+    circleShader->setColour("inputColour", colour);
+    circleShader->setInt("radius", radius);
+    circleShader->setVec2("centre", cx, uk.config.targetSize.height - cy);
+
+    //TODO:
+    VertexInfo info = this->createRectVerticies(0, 0, 1000, 1000);
+
+
+
+    // Create the model matrix
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(cx, cy, 0.0f));
+    model = glm::rotate(model, (float) glm::radians(0.0f), glm::vec3(0, 0, 1.0f));
+    model = glm::translate(model, glm::vec3(-cx, -cy, 0.0f));
+
+    // Projection * view * model
+    glm::mat4 proj = projectionMatrix * viewMatrix * model;
+
+    circleShader->setMat4("projmat", proj);
+
+    glBindVertexArray(info.vao);
+
+    // Render data
+    //TODO: should store vertex count in vertexinfo
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    deleteVerticies(info);
 }
 
 Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
+    ZoneScopedN("GL::loadTexture");
     auto find = textureMap.find(path);
     if(find != textureMap.end()) {
         return find->second;
@@ -216,12 +200,12 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
 
     auto& uk = getUnknown();
 
-    auto fileptr = Filesystem::readFile(path);
+    auto file = Filesystem::readFile(path);
 
     SDL_Surface* imageSurface = nullptr;
 
-    if(fileptr) {
-        imageSurface = IMG_Load_RW(getRWopsForStream(*fileptr), false);
+    if(file) {
+        imageSurface = IMG_Load_RW(getRWopsForStream(*file.getStream()), false);
 	} else {
 		printf("File '%s' not found\n", path.c_str());
 	}
@@ -272,16 +256,17 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
         }
     }
 
-    printf("Mode: %x\n", mode);
-
     info.pixelData = (unsigned char*)imageSurface->pixels;
 
     glTexImage2D(GL_TEXTURE_2D, 0, mode, imageSurface->w, imageSurface->h, 0, mode, GL_UNSIGNED_BYTE, imageSurface->pixels);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
 
     return info;
 }
 
 Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const float y, const float w, const float h) {
+    ZoneScopedN("GL::CreateRectVerticies");
     auto& vertexInfo = vertexLookup.emplace_back();
 
     constexpr const int SIZE = 6 * (3 + 4 + 2 + 3);
@@ -358,6 +343,8 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const
 void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                        const VertexInfo &verticies,
                                        const Dimension<float> renderSize) {
+    ZoneScopedN("GL::RenderTexture");
+    TracyGpuZone("RenderTexture");
     auto& uk = getUnknown();
 
     float centerX = texture.width / 2.0f;
@@ -395,6 +382,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
 
     if(!textSurface) {
         printf("Error: Failed to create surface");
+        return tex;
     }
 
     // Convert to known format
@@ -411,6 +399,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     amask = 0xff000000;
 #endif
 
+//TODO: this causes the outline on the image, removing fixes it but would break compat with some archatectures
     SDL_Surface* tmp = SDL_CreateRGBSurface(0, textSurface->w, textSurface->h, 32, rmask, gmask, bmask, amask);
     SDL_BlitSurface(textSurface, NULL, tmp, NULL);
 
@@ -443,8 +432,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     //how the texture lookup should be interpolated when the face is bigger than the texture
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, mode, textSurface->w, textSurface->h, 0, mode, GL_UNSIGNED_BYTE, tmp->pixels);
-
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textSurface->w, textSurface->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, tmp->pixels);
     tex.width = textSurface->w;
     tex.height = textSurface->h;
 
@@ -503,4 +491,22 @@ void Unknown::GLBackend::deleteVerticies(VertexInfo& info) {
 
     info.vao = 0;
     info.vbo = 0;
+}
+
+void Unknown::GLBackend::newFrame() {
+    ZoneScopedN("GL::newFrame");
+    TracyGpuZone("GL::newFrame");
+    FBO.bind();
+}
+
+void Unknown::GLBackend::endFrame() {
+    ZoneScopedN("GL::endFrame");
+    TracyGpuZone("GL::endFrame");
+    FBO.unbind();
+
+    FBOshader.setFloat("fboTexture", 0);
+    FBO.render(FBOshader);
+
+    SDL_GL_SwapWindow(getUnknown().window);
+    TracyGpuCollect;
 }

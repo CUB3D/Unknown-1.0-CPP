@@ -6,7 +6,7 @@
 #define UNKNOWN_DEVELOPMENT_TOOL_PHYSICSTESTSCENE_H
 
 #include "Scene/Scene.h"
-#include "../Unknown 1.0++/Scene/Scene.h"
+#include "Scene/Scene.h"
 
 class PhysicsTestScene : public ::Unknown::Scene
 {

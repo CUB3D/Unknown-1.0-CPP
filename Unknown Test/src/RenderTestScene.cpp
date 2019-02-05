@@ -11,6 +11,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <Graphics/RenderingBackend.h>
 #include "Model/MeshContainer.h"
 #include "Graphics/RenderingPipeline3D.h"
 #include "Model/TexturedMeshRenderer.h"
@@ -18,6 +19,7 @@
 #include "Input/Mouse.h"
 #include "Graphics/SkyBox3D.h"
 #include "Loader.h"
+#include <UK.h>
 
 Unknown::Image img("Player.png");
 
@@ -40,7 +42,7 @@ void init___() {
     ren.skybox = new SkyBox3D(faces);
     ren.skybox->init();
 
-    auto meshContainer = ::Unknown::Loader::loadModel("teapot.obj");
+    auto meshContainer = ::Unknown::Loader::loadModel("teapot2.obj");
 //    const char* teapot = "teapot.obj";
 //    const char* ns = "nano/nanosuit.obj";
 //    const char* suz = "Suz.obj";
@@ -58,7 +60,7 @@ Unknown::KeyBind left2(SDLK_a, "fw");
 Unknown::KeyBind right2(SDLK_d, "fd");
 
 void RenderTestScene::update() {
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    //SDL_SetRelativeMouseMode(SDL_TRUE);
 
     if(forward.pressed()) {
         ren.getCamera().forwards();
@@ -88,6 +90,6 @@ void RenderTestScene::render() const {
     ren.render();
 }
 
-RenderTestScene::RenderTestScene() : Scene("RTest") {
+RenderTestScene::RenderTestScene() : Scene() {
     init___();
 }

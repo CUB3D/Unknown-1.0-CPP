@@ -8,12 +8,11 @@
 #include <string>
 #include <memory>
 #include <vector>
-#include "LibPAK.h"
+#include <LibPAK.h>
+#include "File.h"
 
-namespace Unknown
-{
-    class Filesystem
-    {
+namespace Unknown {
+    class Filesystem {
     private:
         Filesystem() = default;
 
@@ -25,7 +24,8 @@ namespace Unknown
 
         bool exists(const std::string& str);
 
-        static std::shared_ptr<std::istream> readFile(const std::string &path);
+        static File readFile(const std::string& name);
+
         static Filesystem& getFS();
     };
 }

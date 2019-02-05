@@ -2,23 +2,18 @@
 #define UI_H
 
 #include <string>
-
-#include "Types/Colour.h"
-#include "Utils.h"
-#include "Font/Font.h"
-#include "Event/Event.h"
-#include "Renderer/IRenderable.h"
-
+#include <Types/Colour.h>
+#include <Utils.h>
+#include <Font/Font.h>
+#include <Event/Event.h>
+#include <Renderer/IRenderable.h>
 #include <vector>
 #include <memory>
 
 namespace Unknown
 {
 	class Colour;
-
-	namespace Graphics {
-		class Font;
-	}
+	class Font;
 
     enum UIComponent_Type
     {
@@ -33,7 +28,7 @@ namespace Unknown
     class UIComponent
     {
         public:
-			std::shared_ptr<::Unknown::Graphics::Font> font;
+			std::shared_ptr<Font> font;
             std::string name;
             UIComponent_Type type;
             Dimension<int> size;
@@ -44,7 +39,7 @@ namespace Unknown
 
 			UIComponent();
 			UIComponent(const UIComponent_Type type);
-			UIComponent(std::shared_ptr<::Unknown::Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
+			UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
 
             virtual void render() const;
             virtual void init();
@@ -88,7 +83,7 @@ namespace Unknown
         bool isNumerical = false;
 
         TextBoxComponent();
-        TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
+        TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
         void onKeyTyped(Event& evnt);
         void onMouseClick(Event &evnt);
         virtual void render() const override;
@@ -126,7 +121,7 @@ namespace Unknown
         UIContainer();
 		std::vector<std::shared_ptr<UIComponent>> components;
 
-		void setGlobalFont(std::shared_ptr<Graphics::Font> font);
+		void setGlobalFont(std::shared_ptr<Font> font);
 		std::shared_ptr<UIComponent> getComponentByName(const std::string name);
 		std::string getComponentValue(const std::string& name);
 

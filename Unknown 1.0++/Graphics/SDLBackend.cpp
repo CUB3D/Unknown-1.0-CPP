@@ -140,14 +140,14 @@ void Unknown::SDLBackend::clearScreen() {
     SDL_RenderClear(getUnknown().windowRenderer);
 }
 
-void Unknown::SDLBackend::intialise(const EngineConfig &config) {
+void Unknown::SDLBackend::intialise(const EngineConfig &config) {}
 
-}
+void Unknown::SDLBackend::createContext(SDL_Window *window) {}
 
-void Unknown::SDLBackend::createContext(SDL_Window *window) {
+void Unknown::SDLBackend::quit() {}
 
-}
+void Unknown::SDLBackend::newFrame() {}
 
-void Unknown::SDLBackend::quit() {
-
+void Unknown::SDLBackend::endFrame() {
+    SDL_RenderPresent(getUnknown().windowRenderer);
 }

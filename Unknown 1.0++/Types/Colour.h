@@ -2,6 +2,7 @@
 #define COLOUR_H
 
 #include <SDL.h>
+#include <string>
 
 namespace Unknown {
 	class Colour {
@@ -18,6 +19,8 @@ namespace Unknown {
 
 		SDL_Color toSDLColour() const;
 		static Colour darken(const Colour &col, const double amount);
+
+		static Colour fromString(const std::string& value);
 	};
 
 	const extern Colour RED;

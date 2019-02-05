@@ -13,7 +13,8 @@
       "BodyDefinition": {
         "Angle": 0,
         "Type": "StaticBody"
-      }
+      },
+      "Shape": "Polygon"
     }
   },
   "X": 17,

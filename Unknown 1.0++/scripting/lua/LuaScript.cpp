@@ -3,6 +3,7 @@
 //
 
 #include "LuaScript.h"
+#include "../../../Libs/rttr/src/rttr/type"
 
 extern "C" {
 #include <lua.h>
@@ -10,12 +11,17 @@ extern "C" {
 #include <lauxlib.h>
 };
 
-void LuaScript::test() {
-    constexpr static const char* script = "print 'Hi from lua'";
+#include <LuaBridge/LuaBridge.h>
+#include <rttr/type>
 
+void LuaScript::test() {
+    constexpr static const char* script = ""
+                                          "print 'Hi from lua'";
 
     lua_State* L = luaL_newstate();
     luaL_openlibs(L);
+
+
     luaL_dostring(L, script);
     lua_close(L);
 }

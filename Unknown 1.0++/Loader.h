@@ -25,6 +25,7 @@ namespace Unknown
 }
 
 #define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x)
+#define UK_LOAD_ENTITY_AT(name, x, y) ::Unknown::Loader::loadEntityAt(name, x, y)
 #define UK_LOAD_ANIMATION(x) ::Unknown::Loader::loadAnimation(x)
 #define UK_LOAD_IMAGE(name) ::Unknown::Loader::loadImage(name)
 

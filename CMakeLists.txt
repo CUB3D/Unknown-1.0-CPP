@@ -104,14 +104,12 @@ set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "Enable to build GLTF importer (no
 # Disable CPack, as well as others
 set(ASSIMP_OPT_BUILD_PACKAGES OFF CACHE BOOL "Enable to build additional packages")
 add_subdirectory(${UK_DIR}/Libs/assimp)
-set(ASSIMP_LIBRARY_DIRS assimp)
 set(ASSIMP_INCLUDE_DIRS ${UK_DIR}/Libs/assimp/include)
 
 
 # Find glm
 set(GLM_TEST_ENABLE OFF CACHE BOOL "Enable to build tests")
 add_subdirectory(${UK_DIR}/Libs/glm)
-set(GLM_LIBRARY_DIRS glm_static)
 set(GLM_INCLUDE_DIR ${UK_DIR}/Libs/glm)
 
 # Find rttr
@@ -132,13 +130,19 @@ add_subdirectory(${UK_DIR}/Libs/libPAK)
 set(PAK_INCLUDE_DIR ${UK_DIR}/Libs/libPAK/include)
 
 # Find rapidjson
-set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include/rapidjson)
+set(RJ_INCLUDE ${UK_DIR}/Libs/RapidJson/include)
 
+# Find tiled
 set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build static libs")
 add_subdirectory(${UK_DIR}/Libs/tmxlite/tmxlite)
 set(TMXLITE_INCLUDE ${UK_DIR}/Libs/tmxlite/tmxlite/include)
 
-SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} ${ASSIMP_LIBRARY_DIRS} ${GLM_LIBRARY_DIRS} PAK rttr_core_lib tmxlite)
+
+# find litehtml
+add_subdirectory(${UK_DIR}/Libs/litehtml)
+target_compile_options(gumbo PUBLIC -fpic)
+
+SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${SDL2_MIXER_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} assimp glm_static PAK rttr_core_lib tmxlite litehtml)
 SET(COMBINED_INCLUDE ${RJ_INCLUDE} ${SDL2_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR} ${SDL2_MIXER_INCLUDE_DIR} ${GLM_INCLUDE_DIR} ${ASSIMP_INCLUDE_DIRS} ${PAK_INCLUDE_DIR} ${RTTR_INCLUDE_DIR} ${TMXLITE_INCLUDE})
 
 message("LIBS: ${COMBINED_LIBS}")

@@ -58,3 +58,7 @@ void Unknown::CollisionManager::EndContact(b2Contact *contact) {
         }
     }
 }
+
+void Unknown::CollisionManager::reset() {
+    this->listeners.clear();
+}

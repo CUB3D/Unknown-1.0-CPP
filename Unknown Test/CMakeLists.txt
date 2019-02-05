@@ -2,13 +2,15 @@ project(UKTest VERSION 0.0.1)
 
 set(UK_PROJECT_NAME UKTest)
 
+add_definitions(-DTRACY_ENABLE)
+
 set(UK_TEST_SRC
-        UnknownTest.cpp
-        PhysicsTestScene.cpp
-        RenderTestScene.cpp
-        PathfindingTest.cpp
-        RenderTest2D.cpp
-        BasicGraphicsTest.cpp)
+        src/UnknownTest.cpp
+        src/PhysicsTestScene.cpp
+        src/RenderTestScene.cpp
+        src/PathfindingTest.cpp
+        src/RenderTest2D.cpp
+        src/BasicGraphicsTest.cpp)
 
 add_executable(${UK_PROJECT_NAME} ${UK_TEST_SRC})
 target_link_libraries(${UK_PROJECT_NAME} Unknown_Engine)

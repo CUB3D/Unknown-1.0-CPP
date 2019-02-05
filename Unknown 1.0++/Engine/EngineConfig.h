@@ -8,13 +8,15 @@
 #include <string>
 #include "rttr/registration"
 
+#include <Types/Dimension.h>
+
 namespace Unknown {
     struct EngineConfig {
 
         EngineConfig();
 
-        int targetHeight;
-        int targetWidth;
+        Dimension<int> targetSize;
+
         std::string title;
         int targetUPS;
 
@@ -23,6 +25,8 @@ namespace Unknown {
         bool MSAA;
         int vsync;
         bool textureFallback;
+
+        bool editing;
     };
 }
 

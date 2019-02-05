@@ -10,35 +10,31 @@
 #include "FontGlyph.h"
 #include "../IInitable.h"
 
-namespace Unknown
-{
-    namespace Graphics
+namespace Unknown {
+    class TTFont : public Font, public IInitable<>
     {
-        class TTFont : public Font, public IInitable<>
-        {
-        private:
-            ::Unknown::Colour colour;
-            std::map<char, FontGlyph> glyphMap;
-            int fontSize;
-            std::string path;
+    private:
+        ::Unknown::Colour colour;
+        std::map<char, FontGlyph> glyphMap;
+        int fontSize;
+        std::string path;
 
-        public:
-            TTF_Font* font;
+    public:
+        TTF_Font* font;
 
-            TTFont(const std::string& name, const int size, const Colour& colour);
+        TTFont(const std::string& name, const int size, const Colour& colour);
 
-            virtual void drawString(const std::string& string, const int x, const int y) const override;
-            virtual void drawChar(const char c, const int x, const int y) const override;
+        virtual void drawString(const std::string& string, const int x, const int y) const override;
+        virtual void drawChar(const char c, const int x, const int y) const override;
 
-            virtual int getStringWidth(const std::string &str) const override;
-            virtual int getCharWidth(const char c) const override;
-            virtual int getStringHeight(const std::string &str) const override;
+        virtual int getStringWidth(const std::string &str) const override;
+        virtual int getCharWidth(const char c) const override;
+        virtual int getStringHeight(const std::string &str) const override;
 
-            virtual void init() override;
+        virtual void init() override;
 
-            FontGlyph getGlyph(const char c) const;
-        };
-    }
+        FontGlyph getGlyph(const char c) const;
+    };
 }
 
 

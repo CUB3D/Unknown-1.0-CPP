@@ -21,12 +21,13 @@ namespace Unknown
         GLuint rboID;
         VertexInfo vaoInfo;
 
-        Dimension<int> frameSize;
+        GLuint fbo2ID;
+        GLuint texBuffer2;
 
-
-
-    public:
         bool created;
+    public:
+
+        Dimension<int> frameSize;
 
         FrameBuffer(const Dimension<int> frameSize);
 
@@ -34,7 +35,7 @@ namespace Unknown
 
         void bind() const;
         void unbind() const;
-        void render(const Shader* s) const;
+        void render(const Shader& s) const;
 
     };
 }

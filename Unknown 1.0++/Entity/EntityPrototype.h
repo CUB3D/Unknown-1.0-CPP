@@ -9,9 +9,11 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "BasePrototype.h"
 
 namespace Unknown {
     class Component;
+    class Entity;
 
     class EntityPrototype {
     public:

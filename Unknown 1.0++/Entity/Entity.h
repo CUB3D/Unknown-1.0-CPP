@@ -39,12 +39,14 @@ namespace Unknown {
         void move(double x, double y);
         void rotate(double delta);
 
+        std::vector<std::shared_ptr<Component>> getComponents() const;
+
 
         virtual Rect<int> getRenderBounds() override;
 
         template<typename T>
         std::shared_ptr<T> getComponent() {
-            for(auto& component : prototype.components) {
+            for(auto& component : getComponents()) {
                 auto casted = std::dynamic_pointer_cast<T>(component);
                 if(casted) {
                     return casted;

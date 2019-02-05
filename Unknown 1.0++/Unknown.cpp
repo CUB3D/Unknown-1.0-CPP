@@ -10,8 +10,7 @@
 #include <ios>
 #include <fstream>
 #include <string>
-#include "document.h"
-#include "Utils.h"
+#include <Utils.h>
 
 #include <chrono>
 #include <SDL_ttf.h>
@@ -22,17 +21,19 @@
 #include <Graphics/RenderingBackend.h>
 
 #include <Settings/SettingsParser.h>
+#include <Tracy.hpp>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
 #endif
 
-#include "Event/Event.h"
-#include "Event/EventManager.h"
-#include "Image.h"
-#include "Log.h"
-#include "Imgui/GUI.h"
+#include <Event/Event.h>
+#include <Event/EventManager.h>
+#include <Image.h>
+#include <Log.h>
+#include <Imgui/GUI.h>
 #include <SDL_image.h>
+#include <Editor/CoreEditor.h>
 
 // unknown class
 
@@ -40,6 +41,7 @@ Unknown::Unknown::Unknown() {}
 
 void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
 {
+	ZoneScopedN("UK::CreateWindow");
 	this->currentState = UK_INIT;
 
 	printf("Creating window\n");
@@ -67,8 +69,6 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	}
 
     getRendererBackend()->createContext(window);
-
-//	SDL_SetRenderDrawColor(this->windowRenderer, 0, 0, 0, 0); // Black
 
 
 #ifndef __EMSCRIPTEN__ // SDL_image isn't linked against libpng in emscripten, it uses browser decoding so init isnt needed
@@ -125,7 +125,7 @@ void Unknown::Unknown::createWindow()
 	UK_LOG_INFO("Starting engine init");
 	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
-	createWindow(config.title.c_str(), config.targetWidth, config.targetHeight, config.targetUPS);
+	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
 }
 
 void Unknown::Unknown::initGameLoop()
@@ -146,6 +146,7 @@ void ::Unknown::doSingleLoopItterC() {
 }
 
 void Unknown::Unknown::doSingleLoopIttr() {
+    ZoneScopedN("UK::doSingleLoopIttr");
     const char* err = SDL_GetError();
     if (strlen(err) > 0) {
         //TODO: move to imgui
@@ -174,8 +175,9 @@ void Unknown::Unknown::doSingleLoopIttr() {
         this->unprocessed--;
     }
 
+    getRendererBackend()->newFrame();
+
     auto renderStartTime = std::chrono::high_resolution_clock::now();
-    getRendererBackend()->clearScreen();
     this->render();
     auto renderFinishTime = std::chrono::high_resolution_clock::now();
     this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
@@ -186,7 +188,8 @@ void Unknown::Unknown::doSingleLoopIttr() {
 
     this->frames++;
 
-    this->updateWindow();
+    getRendererBackend()->endFrame();
+    FrameMark;
 
     if (fpsCounter.isTickComplete()) {
         std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
@@ -197,8 +200,9 @@ void Unknown::Unknown::doSingleLoopIttr() {
     }
 }
 
-void Unknown::Unknown::checkEvents()
-{
+void Unknown::Unknown::checkEvents() {
+
+    ZoneScopedN("UK::EventCheck");
 	SDL_Event evnt;
     ImGuiIO& io = ImGui::GetIO();
     bool postImguiEvents = io.WantCaptureKeyboard || io.WantCaptureMouse;
@@ -266,15 +270,18 @@ void Unknown::Unknown::quit(const int exitCode) {
 }
 
 void Unknown::Unknown::update() {
+    ZoneScopedN("UK::update");
 	callHooks(HookType::UPDATE);
 }
 
 void Unknown::Unknown::render() {
-	callHooks(HookType::RENDER);
-}
+    ZoneScopedN("UK::render");
 
-void Unknown::Unknown::updateWindow() {
-    SDL_GL_SwapWindow(window);
+	if(config.editing) {
+		CoreEditor::getInstance().render();
+	}
+
+	callHooks(HookType::RENDER);
 }
 
 Unknown::Unknown& Unknown::getUnknown() {

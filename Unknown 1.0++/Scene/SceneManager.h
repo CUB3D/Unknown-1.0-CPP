@@ -8,37 +8,45 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include <stack>
+#include <memory>
+#include <functional>
 #include <map>
-
-#include <rttr/type>
+#include <unordered_set>
 
 namespace Unknown {
     class Scene;
 
     class SceneManager {
     public:
-        std::map<std::string, std::shared_ptr<Scene>> scenes;
-        std::map<std::string, rttr::type> sceneMap;
+        //name : generator
+        std::map<std::string, std::function<std::shared_ptr<Scene>(void)>> sceneMapping;
+        std::vector<std::pair<std::string, std::shared_ptr<Scene>>> scenes;
     public:
         std::string currentSceneName;
-        std::shared_ptr<Scene> currentScene;
-        std::vector<std::string> sceneHistory;
 
         SceneManager();
-        void add(std::shared_ptr<Scene> scene);
-        void add(rttr::type t);
-        void loadScene(const std::string sceneName);
+        void loadScene(const std::string& sceneName);
         void loadLastScene();
+
+        template<class T>
+        void registerScene(const std::string name) {
+            sceneMapping[name] = []() {
+                return std::make_shared<T>();
+            };
+        }
 
         const void update();
         const void render() const;
+        const void reset();
+
+        const std::unordered_set<std::string> getAvailableScenes() const;
 
         template<class T>
-        std::shared_ptr<T> getScene()
-        {
-            return std::dynamic_pointer_cast<T>(this->currentScene);
+        std::shared_ptr<T> getScene() {
+            return std::dynamic_pointer_cast<T>(getCurrentScene());
         }
+        std::shared_ptr<Scene> getCurrentScene() const;
+        const std::string getCurrentSceneName() const;
 
         SceneManager(const SceneManager& sm) = delete;
         SceneManager& operator=(const SceneManager& sm) = delete;

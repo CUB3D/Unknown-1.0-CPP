@@ -20,7 +20,8 @@
           "Group": -2
         }
       },
-      "MaxSpeed": 10
+      "MaxSpeed": 10,
+      "Shape": "Polygon"
     }
   }
 }

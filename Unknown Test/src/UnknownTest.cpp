@@ -179,8 +179,6 @@ void render() {
 
 void init()
 {
-    //UK_RENDER(render);
-    //return;
 
 
 
@@ -204,18 +202,13 @@ void init()
 //
 //    font = std::make_shared<Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 14, Unknown::Colour::BLACK);
 
-    //UK_ADD_SCENE(std::make_shared<RenderTestScene>());
-    //UK_ADD_SCENE(std::make_shared<RenderTest2D>());
     //UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
-    //UK_ADD_SCENE(std::make_shared<Unknown::CustomScene>("Simulator", nullptr, updateBoardSimulation));
-    //UK_ADD_SCENE(std::make_shared<Unknown::DebugScene>("debug", font));
-   // UK_ADD_SCENE(std::make_shared<PhysicsTestScene>());
-    UK_ADD_SCENE(std::make_shared<BasicGraphicsTest>());
-    //UK_ADD_SCENE(BasicGraphicsTest, "Test");
-    //UK_ADD_SCENE(std::make_shared<Unknown::EditorBase>("RTest"));
-    //UK_LOAD_SCENE("MainMenu");
-    //UK_LOAD_SCENE("Phys");
-    UK_LOAD_SCENE("BasicGraphics");
+
+    UK_ADD_SCENE(RenderTestScene, "RTest");
+    UK_ADD_SCENE(RenderTest2D, "R2D");
+    UK_ADD_SCENE(PhysicsTestScene, "Phys");
+    UK_ADD_SCENE(BasicGraphicsTest, "BasicGraphics");
+    UK_LOAD_SCENE("RTest");
 }
 
 #include "Filesystem/Filesystem.h"
@@ -268,8 +261,10 @@ int main(int argc, char* argv[])
 
 
     ::Unknown::Filesystem::mount("Test.pak");
-    //LuaScript().test();
+    LuaScript().test();
     //UK_PYTHON_LOAD_SCRIPT("Test");
+
+    // Test the loading of vectors
 
 	init();
 	UK_INIT_GAME();

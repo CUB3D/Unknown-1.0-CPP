@@ -7,7 +7,7 @@
 
 #include "../GL/GL.h"
 
-Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), path(name), fontSize(size), colour(colour) {
+Unknown::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), path(name), fontSize(size), colour(colour) {
     if(getUnknown().currentState < UK_POST_INIT) {
         getUnknown().lateInit.push_back(this);
     } else { // There is a renderer, init now
@@ -15,7 +15,7 @@ Unknown::Graphics::TTFont::TTFont(const std::string &name, const int size, const
     }
 }
 
-void Unknown::Graphics::TTFont::drawString(const std::string &string, const int x, const int y) const
+void Unknown::TTFont::drawString(const std::string &string, const int x, const int y) const
 {
     int xPos = x;
 
@@ -26,21 +26,21 @@ void Unknown::Graphics::TTFont::drawString(const std::string &string, const int 
     }
 }
 
-int Unknown::Graphics::TTFont::getStringWidth(const std::string &str) const
+int Unknown::TTFont::getStringWidth(const std::string &str) const
 {
     int width = 0;
     TTF_SizeText(this->font, str.c_str(), &width, NULL);
     return width;
 }
 
-int Unknown::Graphics::TTFont::getStringHeight(const std::string &str) const
+int Unknown::TTFont::getStringHeight(const std::string &str) const
 {
     int height = 0;
     TTF_SizeText(this->font, str.c_str(), NULL, &height);
     return height;
 }
 
-void Unknown::Graphics::TTFont::drawChar(const char c, const int x, const int y) const {
+void Unknown::TTFont::drawChar(const char c, const int x, const int y) const {
     auto glyph = glyphMap.find(c);
 
     if(glyph != glyphMap.end()) {
@@ -51,14 +51,14 @@ void Unknown::Graphics::TTFont::drawChar(const char c, const int x, const int y)
 
 }
 
-int Unknown::Graphics::TTFont::getCharWidth(const char c) const {
+int Unknown::TTFont::getCharWidth(const char c) const {
     int w;
     char fnt[2] = {c, '\0'};
     TTF_SizeText(this->font, fnt, &w, nullptr);
     return w;
 }
 
-void Unknown::Graphics::TTFont::init() {
+void Unknown::TTFont::init() {
     this->font = TTF_OpenFont(path.c_str(), fontSize);
 
     if(!this->font) {
@@ -72,7 +72,7 @@ void Unknown::Graphics::TTFont::init() {
     }
 }
 
-Unknown::Graphics::FontGlyph Unknown::Graphics::TTFont::getGlyph(const char c) const {
+Unknown::FontGlyph Unknown::TTFont::getGlyph(const char c) const {
     auto glyph = glyphMap.find(c);
     if(glyph != glyphMap.end())
         return glyph->second;

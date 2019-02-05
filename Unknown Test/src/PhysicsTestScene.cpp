@@ -51,13 +51,13 @@ WAVSound hit("Hit.wav");
 
 
 
-PhysicsTestScene::PhysicsTestScene() : Scene("Phys") {
-    ui = Loader::loadUI("PhysGameGUI.json");
-    ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
-    ui.initUI();
-
-    this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
-
+PhysicsTestScene::PhysicsTestScene() : Scene() {
+//    ui = Loader::loadUI("PhysGameGUI.json");
+//    ui.setGlobalFont(std::make_shared<::Unknown::Graphics::TTFont>("Fonts/Arimo-Regular.ttf", 15, UK_COLOUR_RGB(255, 255, 0)));
+//    ui.initUI();
+//
+//    this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
+//
     this->addObject(UK_LOAD_ENTITY("Ground.json"));
     getObject<Entity>("Ground")->setPosition(17, 28);
 

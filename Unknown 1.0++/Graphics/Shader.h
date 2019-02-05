@@ -29,6 +29,7 @@ public:
     virtual std::string getName();
 
     //TODO: const
+    void setVec2(const char* name, const float x, const float y);
     void setVec3(const char* name, const float x, const float y, const float z);
     void setVec4(const char* name, const float w, const float x, const float y, const float z);
     void setMat4(const char* name, const glm::mat4& mat);

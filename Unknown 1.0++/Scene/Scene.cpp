@@ -4,8 +4,9 @@
 #include "Scene.h"
 #include <Loader.h>
 #include <Font/Font.h>
+#include <Log.h>
 
-Unknown::Scene::Scene(const std::string name) : name(name), world(b2Vec2(0, 9.8f)),
+Unknown::Scene::Scene() : world(b2Vec2(0, 9.8f)),
 cam(getUnknown().screenSize->width, getUnknown().screenSize->height)
 {
     world.SetContactListener(&contactManager);
@@ -38,7 +39,51 @@ std::shared_ptr<Unknown::Entity> Unknown::Scene::getEntity(const std::string &na
     return getObject<Entity>(name);
 }
 
-Unknown::MenuScene::MenuScene(const std::string name, std::string uiFile, std::shared_ptr<Graphics::Font> font) : Scene(name), uiFile(uiFile), font(font)
+void Unknown::Scene::loadScenegraph(const std::string &name) {
+    auto prototype = SettingsParser::parseSettings<SceneGraph>(name);
+
+    for(auto&& element : prototype.sceneElements) {
+        auto entityInstance = Loader::loadEntityAt(element.name, element.position.x, element.position.y);
+        this->addObject(entityInstance);
+    }
+
+    UK_LOG_INFO("Loaded", std::to_string(prototype.sceneElements.size()), "scene:", name);
+}
+
+void Unknown::Scene::reset() {
+    auto& ss = getUnknown().screenSize;
+
+    this->updatables.clear();
+    this->tagables.clear();
+    this->renderables.clear();
+    this->entities.clear();
+    this->contactManager.reset();
+
+    printf("%d\n", world.IsLocked());
+
+    for(auto b = world.GetBodyList(); b;) {// b->GetNext()) {
+        auto n = b->GetNext();
+        world.DestroyBody(b);
+        b = n;
+    }
+
+
+    //TODO: reset camera, sometimes crashes
+}
+
+void Unknown::Scene::registerEntityCollision(std::shared_ptr<Entity> ent1,
+                                             std::shared_ptr<Entity> ent2,
+                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback) {
+    this->contactManager.addListener(ent1, ent2, callback);
+}
+
+void Unknown::Scene::registerEntityCollision(const std::string &ent1,
+                                             const std::string &ent2,
+                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>>, bool)> callback) {
+    registerEntityCollision(getEntity(ent1), getEntity(ent2), callback);
+}
+
+Unknown::MenuScene::MenuScene(std::string uiFile, std::shared_ptr<Font> font) : Scene(), uiFile(uiFile), font(font)
 {
     if(!uiFile.empty()) {
         this->menu = Loader::loadUI(uiFile);
@@ -67,7 +112,7 @@ void Unknown::MenuScene::reloadMenu() {
     this->menu.initUI();
 }
 
-Unknown::CustomScene::CustomScene(const std::string name, std::function<void(void)> renderer, std::function<void(void)> updater) : Scene(name), renderer(renderer), updater(updater)
+Unknown::CustomScene::CustomScene(std::function<void(void)> renderer, std::function<void(void)> updater) : Scene(), renderer(renderer), updater(updater)
 {
 }
 

@@ -53,7 +53,7 @@ void Unknown::UIContainer::render(double Xoffset, double Yoffset) const
     }
 }
 
-void Unknown::UIContainer::setGlobalFont(std::shared_ptr<Graphics::Font> font)
+void Unknown::UIContainer::setGlobalFont(std::shared_ptr<Font> font)
 {
 	for (auto& comp : components)
 	{
@@ -118,7 +118,7 @@ void Unknown::UIComponent::init()
     //NOOP
 }
 
-Unknown::UIComponent::UIComponent(std::shared_ptr<Graphics::Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size) : font(font), name(name), location(location), size(size), type(type)
+Unknown::UIComponent::UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size) : font(font), name(name), location(location), size(size), type(type)
 {
 
 }
@@ -326,7 +326,7 @@ void Unknown::TextBoxComponent::init()
     UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }
 
-Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Graphics::Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
+Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
 {
 }
 

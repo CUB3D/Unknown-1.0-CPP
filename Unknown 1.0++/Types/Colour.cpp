@@ -1,6 +1,8 @@
 #include "Colour.h"
 
 #include <algorithm>
+#include <sstream>
+#include <Utils.h>
 
 Unknown::Colour::Colour(const int red, const int green, const int blue, const int alpha) : red(red), green(green), blue(blue), alpha(alpha) {}
 
@@ -31,4 +33,26 @@ Unknown::Colour Unknown::Colour::darken(const Colour &col, const double amount) 
     int g = std::max(col.green - change, 0);
     int b = std::max(col.blue - change, 0);
 	return Colour(r, g, b, col.alpha);
+}
+
+Unknown::Colour Unknown::Colour::fromString(const std::string& value) {
+	std::stringstream strstream;
+	// A R G B
+	int colourParts[4];
+
+	colourParts[3] = 255;
+
+	std::string str = value;
+
+	if (str.length() >= 8) {
+		colourParts[3] = parseHexString(strstream, str);
+		str = str.erase(0, 2);
+	}
+
+	for(int i = 0; i < 3; i++) {
+		colourParts[i] = parseHexString(strstream, str);
+		str = str.erase(0, 2);
+	}
+
+	return Colour(colourParts[0], colourParts[1], colourParts[2], colourParts[3]);
 }
