@@ -187,14 +187,13 @@ add_definitions(-DTRACY_ENABLE)
 # Add sub projects
 add_subdirectory(libs)
 add_subdirectory(src/Imgui)
-add_subdirectory(src/Tracy)
 add_subdirectory(src/scripting/lua)
 #add_subdirectory(scripting/python)
 
 set(UK_INCLUDE "${UK_CORE}/src")
 
 add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_ENGINE_INCLUDES})
-target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE} ${UK_CORE}/libs/third_party/Tracy/tracy)
+target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE})
 target_link_libraries(UK Box2D ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)

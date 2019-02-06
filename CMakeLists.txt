@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH "${UK_DIR}/tools/build/cmake-scripts")
 
 # Enable debugging on g++
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -ggdb -pg")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -pg")
 endif()
 
 if(UNIX)
