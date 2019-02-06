@@ -1,0 +1,10 @@
+# Find rttr
+set(BUILD_RTTR_DYNAMIC OFF CACHE BOOL "Build the dynamic/shared version of RTTR library" FORCE)
+set(BUILD_UNIT_TESTS OFF CACHE BOOL "Build the unit tests of RTTR" FORCE)
+set(BUILD_STATIC ON CACHE BOOL "Build RTTR as static library" FORCE)
+set(BUILD_EXAMPLES OFF CACHE BOOL "Enable this to build the examples" FORCE)
+set(BUILD_DOCUMENTATION OFF CACHE BOOL "Enable this to build the documentation")
+set(BUILD_INSTALLER OFF CACHE BOOL "Enable this to build the installer")
+set(BUILD_PACKAGE OFF CACHE BOOL "Enable this to build the installer")
+#set(USE_PCH OFF CACHE BOOL "Use precompiled header files for compilation")
+add_subdirectory(rttr)

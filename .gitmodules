@@ -3,7 +3,7 @@
     url = https://github.com/ocornut/imgui
 [submodule "Libs/lua"]
 	path = Libs/lua
-	url = https://github.com/lua/lua
+	url = https://github.com/lua/lua/
 [submodule "Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
 	path = Unknown 1.0++/libs/first_party/LibPAK/libPAK
 	url = https://github.com/CUB3D/LibPAK
@@ -31,3 +31,6 @@
 [submodule "Libs/LuaBridge"]
 	path = Libs/LuaBridge
 	url = https://github.com/vinniefalco/LuaBridge
+[submodule "Unknown 1.0++/libs/third_party/Tiled/tmxlite"]
+	path = Unknown 1.0++/libs/third_party/Tiled/tmxlite
+	url = https://github.com/fallahn/tmxlite

@@ -1,4 +1,5 @@
-#FILE(GLOB_RECURSE TILED_SRC "${UK_DIR}/Libs/tiled/src/libtiled/*.c*")
-#
-#add_library(Tiled STATIC ${TILED_SRC})
-#target_include_directories(Tiled PUBLIC "${UK_DIR}/Libs/Tiled")
+# Find tiled
+set(TMXLITE_STATIC_LIB ON CACHE BOOL "Build static libs")
+add_subdirectory(tmxlite/tmxlite)
+#set(TMXLITE_INCLUDE ${UK_DIR}/Libs/tmxlite/tmxlite/include)
+

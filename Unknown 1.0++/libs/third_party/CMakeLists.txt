@@ -1,0 +1,9 @@
+set(THIRD_PARTY "${UK_CORE}/libs/third_party")
+
+add_subdirectory(Box2D)
+add_subdirectory(Tiled)
+add_subdirectory(Assimp)
+add_subdirectory(Glm)
+add_subdirectory(Rttr)
+add_subdirectory(Litehtml)
+add_subdirectory(Rapidjson)

@@ -1,4 +1,4 @@
-FILE(GLOB_RECURSE BOX2D_SRC "${UK_DIR}/Libs/Box2D/Box2D/*.c*")
+FILE(GLOB_RECURSE BOX2D_SRC "${THIRD_PARTY}/Box2D/Box2D/Box2D/*.c*")
 
 add_library(Box2D STATIC ${BOX2D_SRC})
-target_include_directories(Box2D PUBLIC ${UK_DIR}/Libs/Box2D)
+target_include_directories(Box2D PUBLIC ${THIRD_PARTY}/Box2D/Box2D)
