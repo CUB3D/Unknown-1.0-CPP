@@ -7,3 +7,24 @@
 [submodule "Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
 	path = Unknown 1.0++/libs/first_party/LibPAK/libPAK
 	url = https://github.com/CUB3D/LibPAK
+[submodule "Unknown 1.0++/libs/third_party/Assimp/assimp"]
+	path = Unknown 1.0++/libs/third_party/Assimp/assimp
+	url = https://github.com/assimp/assimp
+[submodule "Unknown 1.0++/libs/third_party/Box2D/Box2D"]
+	path = Unknown 1.0++/libs/third_party/Box2D/Box2D
+	url = https://github.com/erincatto/Box2D
+[submodule "Unknown 1.0++/libs/third_party/Glm/glm"]
+	path = Unknown 1.0++/libs/third_party/Glm/glm
+	url = https://github.com/g-truc/glm
+[submodule "Unknown 1.0++/libs/third_party/Rapidjson/rapidjson"]
+	path = Unknown 1.0++/libs/third_party/Rapidjson/rapidjson
+	url = https://github.com/Tencent/rapidjson
+[submodule "Unknown 1.0++/libs/third_party/Rttr/rttr"]
+	path = Unknown 1.0++/libs/third_party/Rttr/rttr
+	url = https://github.com/rttrorg/rttr
+[submodule "Unknown 1.0++/libs/third_party/Litehtml/litehtml"]
+	path = Unknown 1.0++/libs/third_party/Litehtml/litehtml
+	url = https://github.com/litehtml/litehtml
+[submodule "Unknown 1.0++/libs/third_party/Tracy/tracy"]
+	path = Unknown 1.0++/libs/third_party/Tracy/tracy
+	url = https://bitbucket.org/wolfpld/tracy
