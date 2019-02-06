@@ -34,3 +34,6 @@
 [submodule "Unknown 1.0++/libs/third_party/Tiled/tmxlite"]
 	path = Unknown 1.0++/libs/third_party/Tiled/tmxlite
 	url = https://github.com/fallahn/tmxlite
+[submodule "Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
+	path = Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK
+	url = https://github.com/CUB3D/libPAK
