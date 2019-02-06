@@ -42,7 +42,7 @@ void init___() {
     ren.skybox = new SkyBox3D(faces);
     ren.skybox->init();
 
-    auto meshContainer = ::Unknown::Loader::loadModel("teapot2.obj");
+    auto meshContainer = ::Unknown::Loader::loadModel("models/stick.obj");
 //    const char* teapot = "teapot.obj";
 //    const char* ns = "nano/nanosuit.obj";
 //    const char* suz = "Suz.obj";
