@@ -1,33 +1,9 @@
-[submodule "Libs/Box2D"]
-	path = Libs/Box2D
-	url = https://github.com/erincatto/Box2D
-[submodule "Libs/rapidjson"]
-	path = Libs/rapidjson
-	url = https://github.com/Tencent/rapidjson
-[submodule "Libs/RapidJson"]
-	path = Libs/RapidJson
-	url = https://github.com/Tencent/rapidjson
-[submodule "Libs/assimp"]
-	path = Libs/assimp
-	url = https://github.com/assimp/assimp
-[submodule "Libs/glm"]
-	path = Libs/glm
-	url = https://github.com/g-truc/glm
 [submodule "Libs/imgui"]
     path = Libs/imgui
     url = https://github.com/ocornut/imgui
-[submodule "Libs/libPAK"]
-	path = Libs/libPAK
-	url = https://github.com/CUB3D/libPAK
-[submodule "Libs/rttr"]
-	path = Libs/rttr
-	url = https://github.com/rttrorg/rttr
 [submodule "Libs/lua"]
 	path = Libs/lua
 	url = https://github.com/lua/lua
-[submodule "Libs/tmxlite"]
-	path = Libs/tmxlite
-	url = https://github.com/fallahn/tmxlite
-[submodule "Unknown 1.0++/libs/third_party/Tiled/tmxlite"]
-	path = Unknown 1.0++/libs/third_party/Tiled/tmxlite
-	url = https://github.com/fallahn/tmxlite
+[submodule "Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
+	path = Unknown 1.0++/libs/first_party/LibPAK/libPAK
+	url = https://github.com/CUB3D/LibPAK
