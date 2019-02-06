@@ -28,3 +28,6 @@
 [submodule "Unknown 1.0++/libs/third_party/Tracy/tracy"]
 	path = Unknown 1.0++/libs/third_party/Tracy/tracy
 	url = https://bitbucket.org/wolfpld/tracy
+[submodule "Libs/LuaBridge"]
+	path = Libs/LuaBridge
+	url = https://github.com/vinniefalco/LuaBridge

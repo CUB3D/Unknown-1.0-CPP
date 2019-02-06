@@ -1,225 +1,203 @@
-project(Unknown VERSION 0.0.1)
-
 set(UK_ENGINE_INCLUDES
 
-	Animation.h
-	Audio/Sound.h
-	Audio/WAVSound.h
-	Editor/CoreEditor.h
-	Editor/EditorBase.h
-	Editor/EntityEditor.h
-	Editor/FileSystemViewer.h
-	Editor/LogViewer.h
-	Editor/SceneViewer.h
-	Editor/ViewerBase.h
-	Engine/EngineConfig.h
-	Entity/AnimationRenderComponent.h
-	Entity/BasePrototype.h
-	Entity/BasicRenderComponent.h
-	Entity/Component.h
-	Entity/Entity.h
-	Entity/EntityPrototype.h
-	Entity/ImageRenderComponent.h
-	Entity/PhysicsBodyComponent.h
-	Entity/TimerComponent.h
-	Event/Event.h
-	Event/EventManager.h
-	Event/ItterativeEventHandler.h
-	Filesystem/FSUtils.h
-	Filesystem/File.h
-	Filesystem/Filesystem.h
-	Filesystem/Imemstream.h
-	Filesystem/PAKFileStream.h
-	Font/BitmapFont.h
-	Font/Font.h
-	Font/FontGlyph.h
-	Font/StaticText.h
-	Font/TTFont.h
-	GL/GL.h
-	GL/glad/glad.h
-	GL/glad/khrplatform.h
-	Graphics/Camera3D.h
-	Graphics/FileShader.h
-	Graphics/FrameBuffer.h
-	Graphics/GLBackend.h
-	Graphics/PlaceholderTexture.h
-	Graphics/RenderingBackend.h
-	Graphics/RenderingPipeline3D.h
-	Graphics/SDLBackend.h
-	Graphics/Shader.h
-	Graphics/SkyBox3D.h
-	IInitable.h
-	ITagable.h
-	IUpdateable.h
-	Image.h
-	Imgui/GUI.h
-	Imgui/imconfig.h
-	Imgui/imgui.h
-	Imgui/imgui_impl_opengl3.h
-	Imgui/imgui_impl_sdl.h
-	Imgui/imgui_internal.h
-	Imgui/imstb_rectpack.h
-	Imgui/imstb_textedit.h
-	Imgui/imstb_truetype.h
-	Input/KeyBind.h
-	Input/Mouse.h
-	Loader.h
-	Log.h
-	Map.h
-	Map/BasicMapGenerator.h
-	Map/BinaryMapGenerator.h
-	Model/Mesh.h
-	Model/MeshContainer.h
-	Model/MeshRenderer.h
-	Model/TexturedMeshRenderer.h
-	Particle.h
-	Renderer/BasicTileMapRenderer.h
-	Renderer/Camera.h
-	Renderer/IRenderable.h
-	Renderer/ImageDirectoryTileMapRenderer.h
-	Resource/ResourceManager.h
-	Scene/CollisionManager.h
-	Scene/Scene.h
-	Scene/SceneElementPrototype.h
-	Scene/SceneGraph.h
-	Scene/SceneManager.h
-	Settings/SettingsParser.h
-	Singleton.h
-	Timer.h
-	Types/Colour.h
-	Types/Dimension.h
-	Types/Direction.h
-	Types/Point.h
-	Types/Rect.h
-	Types/Vector.h
-	UI.h
-	UI/GLDocumentContainer.h
-	UI/HTMLGL.h
-	UI2D.h
-	UK.h
-	Unknown.h
-	Utils.h
-	scripting/Scripting.h
-	scripting/SharedVariable.h
-	scripting/lua/LuaScript.h
-	scripting/python/PythonScript.h
+		src/Animation.h
+		src/Audio/Sound.h
+		src/Audio/WAVSound.h
+		src/Editor/CoreEditor.h
+		src/Editor/EditorBase.h
+		src/Editor/EntityEditor.h
+		src/Editor/FileSystemViewer.h
+		src/Editor/LogViewer.h
+		src/Editor/SceneViewer.h
+		src/Editor/ViewerBase.h
+		src/Engine/EngineConfig.h
+		src/Entity/AnimationRenderComponent.h
+		src/Entity/BasePrototype.h
+		src/Entity/BasicRenderComponent.h
+		src/Entity/Component.h
+		src/Entity/Entity.h
+		src/Entity/EntityPrototype.h
+		src/Entity/ImageRenderComponent.h
+		src/Entity/PhysicsBodyComponent.h
+		src/Entity/TimerComponent.h
+		src/Event/Event.h
+		src/Event/EventManager.h
+		src/Event/ItterativeEventHandler.h
+		src/Filesystem/FSUtils.h
+		src/Filesystem/File.h
+		src/Filesystem/Filesystem.h
+		src/Filesystem/Imemstream.h
+		src/Filesystem/PAKFileStream.h
+		src/Font/BitmapFont.h
+		src/Font/Font.h
+		src/Font/FontGlyph.h
+		src/Font/StaticText.h
+		src/Font/TTFont.h
+		src/GL/GL.h
+		src/GL/glad/glad.h
+		src/GL/glad/khrplatform.h
+		src/Graphics/Camera3D.h
+		src/Graphics/FileShader.h
+		src/Graphics/FrameBuffer.h
+		src/Graphics/GLBackend.h
+		src/Graphics/PlaceholderTexture.h
+		src/Graphics/RenderingBackend.h
+		src/Graphics/RenderingPipeline3D.h
+		src/Graphics/SDLBackend.h
+		src/Graphics/Shader.h
+		src/Graphics/SkyBox3D.h
+		src/IInitable.h
+		src/ITagable.h
+		src/IUpdateable.h
+		src/Image.h
+		src/Input/KeyBind.h
+		src/Input/Mouse.h
+		src/Loader.h
+		src/Log.h
+		src/Map.h
+		src/Map/BasicMapGenerator.h
+		src/Map/BinaryMapGenerator.h
+		src/Model/Mesh.h
+		src/Model/MeshContainer.h
+		src/Model/MeshRenderer.h
+		src/Model/TexturedMeshRenderer.h
+		src/Particle.h
+		src/Renderer/BasicTileMapRenderer.h
+		src/Renderer/Camera.h
+		src/Renderer/IRenderable.h
+		src/Renderer/ImageDirectoryTileMapRenderer.h
+		src/Resource/ResourceManager.h
+		src/Scene/CollisionManager.h
+		src/Scene/Scene.h
+		src/Scene/SceneElementPrototype.h
+		src/Scene/SceneGraph.h
+		src/Scene/SceneManager.h
+		src/Settings/SettingsParser.h
+		src/Singleton.h
+		src/Timer.h
+		src/Types/Colour.h
+		src/Types/Dimension.h
+		src/Types/Direction.h
+		src/Types/Point.h
+		src/Types/Rect.h
+		src/Types/Vector.h
+		src/UI.h
+		src/UI/GLDocumentContainer.h
+		src/UI/HTMLGL.h
+		src/UI2D.h
+		src/UK.h
+		src/Unknown.h
+		src/Utils.h
+		src/scripting/Scripting.h
+		src/scripting/SharedVariable.h
 )
 
 set(UK_ENGINE_SRC
-
-	Animation.cpp
-	Audio/Sound.cpp
-	Audio/WAVSound.cpp
-	Editor/CoreEditor.cpp
-	Editor/EditorBase.cpp
-	Editor/EntityEditor.cpp
-	Editor/FileSystemViewer.cpp
-	Editor/LogViewer.cpp
-	Editor/SceneViewer.cpp
-	Editor/ViewerBase.cpp
-	Engine/EngineConfig.cpp
-	Entity/AnimationRenderComponent.cpp
-	Entity/BasePrototype.cpp
-	Entity/BasicRenderComponent.cpp
-	Entity/Component.cpp
-	Entity/Entity.cpp
-	Entity/EntityPrototype.cpp
-	Entity/ImageRenderComponent.cpp
-	Entity/PhysicsBodyComponent.cpp
-	Entity/TimerComponent.cpp
-	Event/Event.cpp
-	Event/EventManager.cpp
-	Event/ItterativeEventHandler.cpp
-	Filesystem/FSUtils.cpp
-	Filesystem/File.cpp
-	Filesystem/Filesystem.cpp
-	Filesystem/Imemstream.cpp
-	Filesystem/PAKFileStream.cpp
-	Font/BitmapFont.cpp
-	Font/Font.cpp
-	Font/FontGlyph.cpp
-	Font/StaticText.cpp
-	Font/TTFont.cpp
-	GL/GL.cpp
-	GL/glad/glad.c
-	Graphics/Camera3D.cpp
-	Graphics/FileShader.cpp
-	Graphics/FrameBuffer.cpp
-	Graphics/GLBackend.cpp
-	Graphics/RenderingBackend.cpp
-	Graphics/RenderingPipeline3D.cpp
-	Graphics/SDLBackend.cpp
-	Graphics/Shader.cpp
-	Graphics/SkyBox3D.cpp
-	IInitable.cpp
-	ITagable.cpp
-	IUpdateable.cpp
-	Image.cpp
-	Imgui/imgui.cpp
-	Imgui/imgui_demo.cpp
-	Imgui/imgui_draw.cpp
-	Imgui/imgui_impl_opengl3.cpp
-	Imgui/imgui_impl_sdl.cpp
-	Imgui/imgui_widgets.cpp
-	Input/KeyBind.cpp
-	Input/Mouse.cpp
-	Loader.cpp
-	Log.cpp
-	Map.cpp
-	Map/BasicMapGenerator.cpp
-	Map/BinaryMapGenerator.cpp
-	Model/Mesh.cpp
-	Model/MeshContainer.cpp
-	Model/MeshRenderer.cpp
-	Model/TexturedMeshRenderer.cpp
-	Particle.cpp
-	Renderer/BasicTileMapRenderer.cpp
-	Renderer/Camera.cpp
-	Renderer/ImageDirectoryTileMapRenderer.cpp
-	Resource/ResourceManager.cpp
-	Scene/CollisionManager.cpp
-	Scene/Scene.cpp
-	Scene/SceneElementPrototype.cpp
-	Scene/SceneGraph.cpp
-	Scene/SceneManager.cpp
-	Settings/SettingsParser.cpp
-	Timer.cpp
-	Types/Colour.cpp
-	Types/Dimension.cpp
-	Types/Direction.cpp
-	Types/Point.cpp
-	Types/Rect.cpp
-	Types/Vector.cpp
-	UI.cpp
-	UI/GlDocumentContainer.cpp
-	UI/HTMLGL.cpp
-	UI2D.cpp
-	Unknown.cpp
-	Utils.cpp
-	scripting/SharedVariable.cpp
-	scripting/lua/LuaScript.cpp
-	scripting/python/PythonScript.cpp
+		src/Animation.cpp
+		src/IInitable.cpp
+		src/ITagable.cpp
+		src/IUpdateable.cpp
+		src/Image.cpp
+		src/Loader.cpp
+		src/Log.cpp
+		src/Map.cpp
+		src/Particle.cpp
+		src/Timer.cpp
+		src/UI.cpp
+		src/UI2D.cpp
+		src/Unknown.cpp
+		src/Utils.cpp
+		src/Audio/Sound.cpp
+		src/Audio/WAVSound.cpp
+		src/Editor/CoreEditor.cpp
+		src/Editor/EditorBase.cpp
+		src/Editor/EntityEditor.cpp
+		src/Editor/FileSystemViewer.cpp
+		src/Editor/LogViewer.cpp
+		src/Editor/SceneViewer.cpp
+		src/Editor/ViewerBase.cpp
+		src/Engine/EngineConfig.cpp
+		src/Entity/AnimationRenderComponent.cpp
+		src/Entity/BasePrototype.cpp
+		src/Entity/BasicRenderComponent.cpp
+		src/Entity/Component.cpp
+		src/Entity/Entity.cpp
+		src/Entity/EntityPrototype.cpp
+		src/Entity/ImageRenderComponent.cpp
+		src/Entity/PhysicsBodyComponent.cpp
+		src/Entity/TimerComponent.cpp
+		src/Event/Event.cpp
+		src/Event/EventManager.cpp
+		src/Event/ItterativeEventHandler.cpp
+		src/Filesystem/FSUtils.cpp
+		src/Filesystem/File.cpp
+		src/Filesystem/Filesystem.cpp
+		src/Filesystem/Imemstream.cpp
+		src/Filesystem/PAKFileStream.cpp
+		src/Font/BitmapFont.cpp
+		src/Font/Font.cpp
+		src/Font/FontGlyph.cpp
+		src/Font/StaticText.cpp
+		src/Font/TTFont.cpp
+		src/GL/GL.cpp
+		src/GL/glad/glad.c
+		src/Graphics/Camera3D.cpp
+		src/Graphics/FileShader.cpp
+		src/Graphics/FrameBuffer.cpp
+		src/Graphics/GLBackend.cpp
+		src/Graphics/RenderingBackend.cpp
+		src/Graphics/RenderingPipeline3D.cpp
+		src/Graphics/SDLBackend.cpp
+		src/Graphics/Shader.cpp
+		src/Graphics/SkyBox3D.cpp
+		src/Input/KeyBind.cpp
+		src/Input/Mouse.cpp
+		src/Map/BasicMapGenerator.cpp
+		src/Map/BinaryMapGenerator.cpp
+		src/Model/Mesh.cpp
+		src/Model/MeshContainer.cpp
+		src/Model/MeshRenderer.cpp
+		src/Model/TexturedMeshRenderer.cpp
+		src/Renderer/BasicTileMapRenderer.cpp
+		src/Renderer/Camera.cpp
+		src/Renderer/ImageDirectoryTileMapRenderer.cpp
+		src/Resource/ResourceManager.cpp
+		src/Scene/CollisionManager.cpp
+		src/Scene/Scene.cpp
+		src/Scene/SceneElementPrototype.cpp
+		src/Scene/SceneGraph.cpp
+		src/Scene/SceneManager.cpp
+		src/Settings/SettingsParser.cpp
+		src/Types/Colour.cpp
+		src/Types/Dimension.cpp
+		src/Types/Direction.cpp
+		src/Types/Point.cpp
+		src/Types/Rect.cpp
+		src/Types/Vector.cpp
+		src/UI/GlDocumentContainer.cpp
+		src/UI/HTMLGL.cpp
+		src/scripting/SharedVariable.cpp
 )
 
-# Remove seperate modules
-list(FILTER UK_ENGINE_SRC EXCLUDE REGEX "python")
-list(FILTER UK_ENGINE_SRC EXCLUDE REGEX "lua")
-
-# Add sub projects
-add_subdirectory(Box2D)
-add_subdirectory(Imgui)
-add_subdirectory(Tracy)
-add_subdirectory(Map/Tiled)
-add_subdirectory(scripting/lua)
-#add_subdirectory(scripting/python)
-
-set(UK_INCLUDE "${UK_DIR}/Unknown 1.0++")
+# The location of the actual engine files and deps
+set(UK_CORE "${UK_DIR}/Unknown 1.0++")
 
 add_definitions(-DTRACY_ENABLE)
 
-add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_DIR}/Libs/tracy/TracyClient.cpp ${UK_ENGINE_INCLUDES} )
-target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE} ${UK_DIR}/Libs/tracy)
-target_link_libraries(UK Box2D ImGUI LUASCRIPT ${COMBINED_LIBS})
+# Add sub projects
+add_subdirectory(libs)
+add_subdirectory(src/Imgui)
+add_subdirectory(src/Tracy)
+add_subdirectory(src/scripting/lua)
+#add_subdirectory(scripting/python)
+
+add_definitions(-DTRACY_ENABLE)
+
+set(UK_INCLUDE "${UK_CORE}/src")
+
+add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_ENGINE_INCLUDES})
+target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE} ${UK_CORE}/libs/third_party/Tracy/tracy)
+target_link_libraries(UK Box2D ImGUI LUASCRIPT TRACY tmxlite assimp glm_static rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
