@@ -28,3 +28,6 @@
 [submodule "Libs/tmxlite"]
 	path = Libs/tmxlite
 	url = https://github.com/fallahn/tmxlite
+[submodule "Unknown 1.0++/libs/third_party/Tiled/tmxlite"]
+	path = Unknown 1.0++/libs/third_party/Tiled/tmxlite
+	url = https://github.com/fallahn/tmxlite
