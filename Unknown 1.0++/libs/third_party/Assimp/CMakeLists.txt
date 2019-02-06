@@ -14,4 +14,3 @@ set(ASSIMP_BUILD_GLTF_IMPORTER OFF CACHE BOOL "Enable to build GLTF importer (no
 # Disable CPack, as well as others
 set(ASSIMP_OPT_BUILD_PACKAGES OFF CACHE BOOL "Enable to build additional packages")
 add_subdirectory(assimp)
-#set(ASSIMP_INCLUDE_DIRS ${THIRD_PA}/Libs/assimp/include)
