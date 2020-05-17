@@ -42,6 +42,7 @@ void init___() {
     ren.skybox = new SkyBox3D(faces);
     ren.skybox->init();
 
+    printf("Loading teapot\n");
     auto meshContainer = ::Unknown::Loader::loadModel("models/teapot.obj");
 //    const char* teapot = "teapot.obj";
 //    const char* ns = "nano/nanosuit.obj";
@@ -49,8 +50,10 @@ void init___() {
 //    const char* uv = "uv.obj";
 //    const char* stick = "stick.obj";
 
+    printf("Loading vbos\n");
     meshContainer->loadVBO();
 
+    printf("mesh loading\n");
     ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(*meshContainer));
 }
 

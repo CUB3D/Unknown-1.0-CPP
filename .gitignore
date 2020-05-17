@@ -252,3 +252,5 @@ DevLib
 UKTest
 
 *.cbp
+
+.idea/

@@ -1,6 +1,7 @@
 #include "Map.h"
 
 #include <Types/Dimension.h>
+#include <cstdio>
 
 
 Unknown::Map::Map(const int width, const int height)
@@ -50,7 +51,7 @@ Unknown::MapCellProxy Unknown::Map::operator[](int pos)
 {
 	if(pos < 0 || pos > mapSize.width * mapSize.height) {
 		printf("Map::operator[]::Invalid map index %d\n", pos);
-		exit(0);
+//		exit(0);
 	}
 
 	int y = pos / mapSize.height;

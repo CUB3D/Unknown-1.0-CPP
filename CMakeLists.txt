@@ -1,3 +1,7 @@
+cmake_policy(SET CMP0048 NEW)
+
+project(Unknown VERSION 1.0)
+
 cmake_minimum_required(VERSION 3.9)
 
 set(UK_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -72,19 +76,19 @@ endif()
 
 # Find SDL2_image
 find_package(SDL2_image REQUIRED)
-if(SDL2_IMAGE_FOUND)
+if(SDL2_image_FOUND)
     message("SDL2_image Found: ${SDL2_IMAGE_INCLUDE_DIR}:${SDL2_IMAGE_LIBRARY}")
 endif()
 
 # Find SDL2_ttf
 find_package(SDL2_ttf REQUIRED)
-if(SDL2_TTF_FOUND)
+if(SDL2_ttf_FOUND)
     message("SDL2_ttf Found: ${SDL2_TTF_INCLUDE_DIR}:${SDL2_TTF_LIBRARY}")
 endif()
 
 # Find SDL2_mixer
 find_package(SDL2_mixer REQUIRED)
-if(SDL_MXIXER_FOUND)
+if(SDL_mixer_FOUND)
     message("SDL2_mixer: ${SDL2_MIXER_INCLUDE_DIR}:${SDL2_MIXER_LIBRARY}")
 endif()
 
