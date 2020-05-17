@@ -15,7 +15,7 @@ void Unknown::initGL() {
 
 glm::mat4 Unknown::glmhPerspectivef2(float fovyInDegrees, float aspectRatio, float znear, float zfar) {
     float ymax, xmax;
-    ymax = znear * tanf(fovyInDegrees * PI / 360.0);
+    ymax = znear * tanf(fovyInDegrees * UK_PI / 360.0);
     xmax = ymax * aspectRatio;
     return glm::frustum(-xmax, xmax, -ymax, ymax, znear, zfar);
 }

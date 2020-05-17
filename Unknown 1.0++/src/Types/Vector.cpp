@@ -26,7 +26,7 @@ Unknown::Vector Unknown::Vector::normalize() const
 
 double Unknown::Vector::getAngleTo(Vector vec) const
 {
-	return -(atan2(y - vec.y, x - vec.x) * 180 / PI) + 90;
+	return -(atan2(y - vec.y, x - vec.x) * 180 / UK_PI) + 90;
 }
 
 Unknown::Vector Unknown::Vector::operator+(Unknown::Vector other) const
