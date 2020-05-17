@@ -1,4 +1,4 @@
-FILE(GLOB_RECURSE BOX2D_SRC "${THIRD_PARTY}/Box2D/Box2D/Box2D/*.c*")
+set(BOX2D_BUILD_UNIT_TESTS OFF CACHE BOOL "Build the Box2D unit tests")
+set(BOX2D_BUILD_TESTBED OFF CACHE BOOL "Build the Box2D testbed")
 
-add_library(Box2D STATIC ${BOX2D_SRC})
-target_include_directories(Box2D PUBLIC ${THIRD_PARTY}/Box2D/Box2D)
+add_subdirectory(Box2D)
