@@ -20,7 +20,7 @@ litehtml::uint_ptr litehtml::glDocumentContainer::create_font(const tchar_t *fac
     fm->descent = TTF_FontDescent(fnt->font);
     fm->draw_spaces = false;
 
-    return fnt;
+    return (uint_ptr)fnt;
 }
 
 void litehtml::glDocumentContainer::delete_font(litehtml::uint_ptr hFont) {
