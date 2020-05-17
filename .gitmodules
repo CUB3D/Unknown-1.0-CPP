@@ -37,3 +37,6 @@
 [submodule "Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
 	path = Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK
 	url = https://github.com/CUB3D/libPAK
+[submodule "Unknown 1.0++/libs/third_party/imgui/imgui"]
+	path = Unknown 1.0++/libs/third_party/imgui/imgui
+	url = https://github.com/ocornut/imgui

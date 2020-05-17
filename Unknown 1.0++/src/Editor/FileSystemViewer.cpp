@@ -18,5 +18,5 @@ void FileSystemViewer::render() {
 
     ImGui::End();
 
-    ImGui::ShowTestWindow();
+    ImGui::ShowDemoWindow();
 }
