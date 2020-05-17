@@ -64,10 +64,6 @@ set(ASSIMP_BUILD_X3D_IMPORTER OFF CACHE BOOL "")
 set(ASSIMP_BUILD_3MF_IMPORTER OFF CACHE BOOL "")
 set(ASSIMP_BUILD_MMD_IMPORTER OFF CACHE BOOL "")
 set(ASSIMP_BUILD_STEP_IMPORTER OFF CACHE BOOL "")
+set(ASSIMP_BUILD_M3D_IMPORTER OFF CACHE BOOL "")
 
-
-
-#TODO: set to new when assimp uses project(version) syntax
-cmake_policy(SET CMP0048 OLD)
 add_subdirectory(assimp)
-cmake_policy(SET CMP0048 NEW)
