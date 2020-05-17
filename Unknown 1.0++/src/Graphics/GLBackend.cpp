@@ -335,6 +335,8 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    vertexInfo.vertexCount = 6;
+
     return vertexInfo;
 }
 //TODO: abstract rendering texture out from rendering quad

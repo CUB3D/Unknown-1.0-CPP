@@ -30,6 +30,7 @@ namespace Unknown
         GLuint vbo;
         GLuint vao;
         SDL_Rect bounds;
+        int vertexCount;
 
         VertexInfo();
     };

@@ -3,25 +3,19 @@
 #include <iostream>
 #include <map>
 
-#include <Input/Mouse.h>
-#include <UI2D.h>
-#include <Types/Colour.h>
-
-#include <ios>
-#include <fstream>
 #include <string>
-#include <Utils.h>
 
 #include <chrono>
 #include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
-#include <GL/GL.h>
-
 #include <Graphics/RenderingBackend.h>
 
 #include <Settings/SettingsParser.h>
 #include <Tracy.hpp>
+
+#include "core/gameloop/GameLoop.h"
+
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -29,7 +23,6 @@
 
 #include <Event/Event.h>
 #include <Event/EventManager.h>
-#include <Image.h>
 #include <Log.h>
 #include <Imgui/GUI.h>
 #include <SDL_image.h>
@@ -90,17 +83,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
         quit(ErrorCodes::SDL_WINDOW_TTF_INIT_FAIL);
     }
 
-    if(SDL_Init(SDL_INIT_AUDIO) == -1) {
-		printf("Error: SDL failed to initialise audio handling, %s\n", Mix_GetError());
-		quit(ErrorCodes::SDL_MIXER_INIT_FAIL);
-	}
-
-    if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1) {
-        printf("Failed to setup audio mixer %s\n", Mix_GetError());
-        quit(ErrorCodes::SDL_MIXER_OPEN_AUDIO_FAIL);
-    }
-
-    Mix_AllocateChannels(64);
+    this->audioEngine.init();
 
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
@@ -128,21 +111,12 @@ void Unknown::Unknown::createWindow()
 	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
 }
 
+
 void Unknown::Unknown::initGameLoop()
 {
 	this->currentState = UK_LOOP;
 
-#ifdef __EMSCRIPTEN__
-	emscripten_set_main_loop(doSingleLoopItterC, 0, 1);
-#else
-	while (running) {
-        doSingleLoopIttr();
-	}
-#endif
-}
-
-void ::Unknown::doSingleLoopItterC() {
-	::Unknown::getUnknown().doSingleLoopIttr();
+	getGameLoop()->init();
 }
 
 void Unknown::Unknown::doSingleLoopIttr() {
@@ -262,7 +236,7 @@ void Unknown::Unknown::quit(const int exitCode) {
 	this->windowRenderer = nullptr;
 	this->window = nullptr;
 
-	Mix_CloseAudio();
+	this->audioEngine.shutdown();
 
 	SDL_Quit();
 
@@ -290,7 +264,7 @@ Unknown::Unknown& Unknown::getUnknown() {
 	return instance;
 }
 
-void Unknown::registerHook(std::function<void()> hook, HookType type) {
+void Unknown::registerHook(const std::function<void()>& hook, HookType type) {
 	printf("Registering a hook %d\n", (int)type);
 
 	auto& hooks = getUnknown().hooks;

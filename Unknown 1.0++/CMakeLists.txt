@@ -1,5 +1,4 @@
 set(UK_ENGINE_INCLUDES
-
 		src/Animation.h
 		src/Audio/Sound.h
 		src/Audio/WAVSound.h
@@ -90,7 +89,11 @@ set(UK_ENGINE_INCLUDES
 		src/Utils.h
 		src/scripting/Scripting.h
 		src/scripting/SharedVariable.h
-)
+		src/core/gameloop/GameLoop.h
+		src/core/gameloop/PCGameLoop.h
+		src/core/gameloop/EmscriptenGameLoop.h
+		src/Audio/SDLAudioEngine.h
+		)
 
 set(UK_ENGINE_SRC
 		src/Animation.cpp
@@ -177,6 +180,10 @@ set(UK_ENGINE_SRC
 		src/UI/GlDocumentContainer.cpp
 		src/UI/HTMLGL.cpp
 		src/scripting/SharedVariable.cpp
+		src/core/gameloop/GameLoop.cpp
+		src/core/gameloop/PCGameLoop.cpp
+		src/core/gameloop/EmscriptenGameLoop.cpp
+		src/Audio/SDLAudioEngine.cpp
 )
 
 # The location of the actual engine files and deps

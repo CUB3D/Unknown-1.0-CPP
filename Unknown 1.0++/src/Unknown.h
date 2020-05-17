@@ -14,6 +14,7 @@
 #include "IInitable.h"
 #include "UI.h"
 #include "Engine/EngineConfig.h"
+#include "Audio/SDLAudioEngine.h"
 
 
 namespace Unknown
@@ -74,8 +75,9 @@ namespace Unknown
 		std::vector<::Unknown::IInitable<>*> lateInit;
         std::map<std::string, std::function<void(std::shared_ptr<::Unknown::UIEvent>)> > UIListeners;
 
+        ::SDLAudioEngine audioEngine;
 
-		bool running = true;
+
 		double tickSpeed = 0;
 
 		int frames = 0;
@@ -91,7 +93,7 @@ namespace Unknown
 		void createWindow();
 
 		void initGameLoop();
-		inline void doSingleLoopIttr();
+		void doSingleLoopIttr();
 
 		void quit(const int exitCode);
 
@@ -103,15 +105,13 @@ namespace Unknown
 
 	Unknown& getUnknown();
 
-	void doSingleLoopItterC();
-	
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown().createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown().initGameLoop()
 
 	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
 
 
-	void registerHook(std::function<void()> hook, HookType type);
+	void registerHook(const std::function<void()>& hook, HookType type);
 
 	#define UK_RENDER(x) Unknown::registerHook(x, Unknown::HookType::RENDER);
 	#define UK_UPDATE(x) Unknown::registerHook(x, Unknown::HookType::UPDATE);

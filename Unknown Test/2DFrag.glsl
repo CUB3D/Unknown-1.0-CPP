@@ -85,17 +85,8 @@ vec3 calculatePointLight(PointLight light) {
 }
 
 void main() {
-//    PointLight p;
-//    p.ambient = lightCol;
-//    p.diffuse = lightCol;
-//    p.specular = lightCol;
-//    p.position = lightPos;
-//    p.linear = 0.2;
-//    p.quadratic = 0.4;
-//    p.constant = 0.1;
 
     vec3 colour = vec3(0);
-    //colour = calculatePointLight(lightingData.pointLights[1]);
 
     for(int i = 0; i < LIGHT_COUNT; i++) {
         colour += calculatePointLight(lightingData.pointLights[i]);

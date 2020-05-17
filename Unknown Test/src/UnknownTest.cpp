@@ -179,21 +179,6 @@ void render() {
 
 void init()
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //    UK_ADD_UI_LISTENER_EXTERNAL(UICallback, "mainmenu");
 //
 //    Unknown::registerEventHandler(Unknown::ET_WINDOW_RESIZE, "onResize", onResize);
@@ -204,11 +189,11 @@ void init()
 
     //UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
 
-    UK_ADD_SCENE(RenderTestScene, "RTest");
+//    UK_ADD_SCENE(RenderTestScene, "RTest");
     UK_ADD_SCENE(RenderTest2D, "R2D");
-    UK_ADD_SCENE(PhysicsTestScene, "Phys");
-    UK_ADD_SCENE(BasicGraphicsTest, "BasicGraphics");
-    UK_LOAD_SCENE("RTest");
+//    UK_ADD_SCENE(PhysicsTestScene, "Phys");
+//    UK_ADD_SCENE(BasicGraphicsTest, "BasicGraphics");
+    UK_LOAD_SCENE("R2D");
 }
 
 #include "Filesystem/Filesystem.h"

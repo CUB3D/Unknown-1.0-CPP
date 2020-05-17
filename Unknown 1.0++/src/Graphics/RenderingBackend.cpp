@@ -33,4 +33,4 @@ std::shared_ptr<Unknown::RenderingBackend> Unknown::getRendererBackend() {
 //    return backend;
 }
 
-Unknown::VertexInfo::VertexInfo() : vao(0), vbo(0), bounds({0, 0, 0, 0}) {}
+Unknown::VertexInfo::VertexInfo() : vao(0), vbo(0), bounds({0, 0, 0, 0}), vertexCount(0) {}
