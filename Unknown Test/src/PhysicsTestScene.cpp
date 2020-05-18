@@ -4,7 +4,7 @@
 
 #include <Loader.h>
 #include <scripting/SharedVariable.h>
-#include <Log.h>
+#include <core/log/Log.h>
 #include <Font/TTFont.h>
 #include "PhysicsTestScene.h"
 #include "UI2D.h"

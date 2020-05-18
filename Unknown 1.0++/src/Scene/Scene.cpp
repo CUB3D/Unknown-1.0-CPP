@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include <Loader.h>
 #include <Font/Font.h>
-#include <Log.h>
+#include <core/log/Log.h>
 
 Unknown::Scene::Scene() : world(b2Vec2(0, 9.8f)),
 cam(getUnknown().screenSize->width, getUnknown().screenSize->height)

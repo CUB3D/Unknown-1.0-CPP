@@ -23,7 +23,7 @@
 
 #include <Event/Event.h>
 #include <Event/EventManager.h>
-#include <Log.h>
+#include <core/log/Log.h>
 #include <Imgui/GUI.h>
 #include <SDL_image.h>
 #include <Editor/CoreEditor.h>

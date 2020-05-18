@@ -4,7 +4,7 @@
 
 #include "SceneManager.h"
 #include "Scene.h"
-#include <Log.h>
+#include <core/log/Log.h>
 
 Unknown::SceneManager::SceneManager() : currentSceneName("") {}
 

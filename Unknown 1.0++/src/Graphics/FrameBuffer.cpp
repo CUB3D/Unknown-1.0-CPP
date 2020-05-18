@@ -5,7 +5,7 @@
 #include "FrameBuffer.h"
 #include <Tracy.hpp>
 #include <TracyOpenGL.hpp>
-#include "Log.h"
+#include "core/log/Log.h"
 
 Unknown::FrameBuffer::FrameBuffer(const Unknown::Dimension<int> frameSize) : frameSize(frameSize) {}
 

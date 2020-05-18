@@ -8,7 +8,7 @@
 #include <memory>
 #include <ctime>
 #include <regex>
-#include <Log.h>
+#include <core/log/Log.h>
 #include <scripting/SharedVariable.h>
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)

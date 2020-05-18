@@ -5,7 +5,7 @@
 #include <functional>
 #include "CollisionManager.h"
 #include <Entity/PhysicsBodyComponent.h>
-#include <Log.h>
+#include <core/log/Log.h>
 
 void Unknown::CollisionManager::addListener(std::shared_ptr<Entity> a, std::shared_ptr<Entity> b,
                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>> objs, bool inContact)> callback) {

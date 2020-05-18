@@ -2,7 +2,7 @@
 // Created by cub3d on 29/07/2018.
 //
 
-#include <Log.h>
+#include <core/log/Log.h>
 #include "PhysicsBodyComponent.h"
 
 //TODO: better way of doing this, also dont take pointer

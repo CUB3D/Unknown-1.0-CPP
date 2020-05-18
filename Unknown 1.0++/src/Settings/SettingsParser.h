@@ -14,7 +14,7 @@
 #include <Types/Colour.h>
 #include <Utils.h>
 #include <Image.h>
-#include <Log.h>
+#include <core/log/Log.h>
 
 #ifdef WIN32
 // I absolutely dispise the individual who decided to put the inverse of this define in windows.h

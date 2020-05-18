@@ -10,7 +10,7 @@
 #include "Types/Colour.h"
 #include "Image.h"
 #include "Input/KeyBind.h"
-#include "Log.h"
+#include "core/log/Log.h"
 #include "Timer.h"
 #include "Utils.h"
 #include "Types/Vector.h"

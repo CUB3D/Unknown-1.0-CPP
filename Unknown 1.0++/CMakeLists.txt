@@ -52,7 +52,7 @@ set(UK_ENGINE_INCLUDES
 		src/Input/KeyBind.h
 		src/Input/Mouse.h
 		src/Loader.h
-		src/Log.h
+        src/core/log/Log.h
 		src/Map.h
 		src/Map/BasicMapGenerator.h
 		src/Map/BinaryMapGenerator.h
@@ -104,7 +104,7 @@ set(UK_ENGINE_SRC
 		src/IUpdateable.cpp
 		src/Image.cpp
 		src/Loader.cpp
-		src/Log.cpp
+        src/core/log/Log.cpp
 		src/Map.cpp
 		src/Particle.cpp
 		src/Timer.cpp

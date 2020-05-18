@@ -3,7 +3,7 @@
 #include <rapidjson/document.h>
 #include <Utils.h>
 #include <UI.h>
-#include <Log.h>
+#include <core/log/Log.h>
 
 #include <map>
 #include <iostream>

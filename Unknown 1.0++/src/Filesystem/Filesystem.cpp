@@ -10,7 +10,7 @@
 
 #include "PAKFileStream.h"
 #include "Imemstream.h"
-#include "Log.h"
+#include "core/log/Log.h"
 
 Unknown::Filesystem &Unknown::Filesystem::getFS() {
     static Filesystem fs;
