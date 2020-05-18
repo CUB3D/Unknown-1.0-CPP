@@ -1,6 +1,8 @@
 #include "Timer.h"
 
 #include <Unknown.h>
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
 
 Unknown::Timer::Timer() : Timer((float)1) {}
 
@@ -34,11 +36,11 @@ void Unknown::Timer::resetTimer()
 
 Unknown::Timer::Timer(const long long speed,
 					  std::function<void(void)> callback) : timerSpeed(speed), callback(callback) {
-	registerHook([&] {this->isTickComplete();}, HookType::UPDATE);
 
+    HookRegistry<UpdateEvent>::getInstance().add([=]{this->isTickComplete();});
 }
 
 Unknown::Timer::Timer(const float speed,
 					  std::function<void(void)> callback) : timerSpeed(speed * 1000), callback(callback){
-	registerHook([&] {this->isTickComplete();}, HookType::UPDATE);
+    HookRegistry<UpdateEvent>::getInstance().add([=]{this->isTickComplete();});
 }

@@ -246,8 +246,6 @@ int main(int argc, char* argv[])
 
 
     ::Unknown::Filesystem::mount("Test.pak");
-    LuaScript().test();
-    //UK_PYTHON_LOAD_SCRIPT("Test");
 
     // Test the loading of vectors
 

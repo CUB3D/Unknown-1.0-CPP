@@ -6,6 +6,7 @@
 #define UNKNOWN_LIGHTINGMANAGER2D_H
 
 #include "PointLight.h"
+#include "DirectionalLight.h"
 #include "GL/GL.h"
 
 #include <Tracy.hpp>
@@ -17,12 +18,16 @@
 
 class LightingManager2D {
 public:
-    static constexpr int BUFFER_CAPACITY = 2;
+    static constexpr int BUFFER_CAPACITY = 32;
     static constexpr int POINT_SIZE = BUFFER_CAPACITY * PointLight::BUFFER_SIZE;
+    static constexpr int DIRECTION_SIZE = BUFFER_CAPACITY * DirectionalLight::BUFFER_SIZE;
 
+    static constexpr int LIGHT_BUFFER_SIZE = POINT_SIZE + DIRECTION_SIZE;
     float* lightBuffer;
 
-    std::vector<std::shared_ptr<PointLight>> lights;
+    std::vector<std::shared_ptr<PointLight>> pointLights;
+    std::vector<std::shared_ptr<DirectionalLight>> directionalLights;
+
 
     GLuint lightUBO {0};
 

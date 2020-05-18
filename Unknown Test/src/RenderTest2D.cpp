@@ -126,11 +126,13 @@ void RenderTest2D::render() const {
     TracyGpuZone("Render");
 
     static auto p1 = std::make_shared<PointLight>(glm::vec3(0.5, 0.5, 0), 0.2, 0.1, 0.4, glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 1.0f), true);
+//    static auto d1 = std::make_shared<DirectionalLight>();
 
     static RenderPipeline2D pipe;
 
     if(pipe.s.prog == -1) {
-        pipe.lm.lights.push_back(p1);
+        pipe.lm.pointLights.push_back(p1);
+//        pipe.lm.directionalLights.push_back(d1);
         pipe.renderables.emplace_back("crate.png", "crate_spec.png");
 
         pipe.init();

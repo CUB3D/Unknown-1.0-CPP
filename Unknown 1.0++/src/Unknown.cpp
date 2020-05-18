@@ -1,8 +1,5 @@
 #include "Unknown.h"
 
-#include <iostream>
-#include <map>
-
 #include <string>
 
 #include <chrono>
@@ -27,6 +24,9 @@
 #include <Imgui/GUI.h>
 #include <SDL_image.h>
 #include <Editor/CoreEditor.h>
+
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
 
 // unknown class
 
@@ -99,8 +99,8 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 		initable->init();
 	}
 
-    registerHook([=]{globalSceneManager.render();}, RENDER);
-    registerHook([=]{globalSceneManager.update();}, UPDATE);
+    HookRegistry<RenderEvent>::getInstance().add([=]{globalSceneManager.render();});
+    HookRegistry<UpdateEvent>::getInstance().add([=]{globalSceneManager.update();});
 
 	currentState = UK_POST_INIT;
 }
@@ -145,7 +145,12 @@ void Unknown::Unknown::doSingleLoopIttr() {
 
     while (this->unprocessed >= 1) {
         auto renderStartTime = std::chrono::high_resolution_clock::now();
-        this->update();
+
+        {
+            ZoneScopedN("UK::update");
+            HookRegistry<UpdateEvent>::getInstance().invoke();
+        }
+
         auto renderFinishTime = std::chrono::high_resolution_clock::now();
         this->lastUpdateTimeMS = this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
 
@@ -156,7 +161,15 @@ void Unknown::Unknown::doSingleLoopIttr() {
     getRendererBackend()->newFrame();
 
     auto renderStartTime = std::chrono::high_resolution_clock::now();
-    this->render();
+    {
+        ZoneScopedN("UK::render");
+
+        if(config.editing) {
+            CoreEditor::getInstance().render();
+        }
+
+        HookRegistry<RenderEvent>::getInstance().invoke();
+    }
     auto renderFinishTime = std::chrono::high_resolution_clock::now();
     this->lastFrameTimeMS = std::chrono::duration_cast<std::chrono::nanoseconds>(renderFinishTime-renderStartTime).count() / 1000000.0;
 
@@ -248,50 +261,9 @@ void Unknown::Unknown::quit(const int exitCode) {
 	exit(exitCode);
 }
 
-void Unknown::Unknown::update() {
-    ZoneScopedN("UK::update");
-	callHooks(HookType::UPDATE);
-}
-
-void Unknown::Unknown::render() {
-    ZoneScopedN("UK::render");
-
-	if(config.editing) {
-		CoreEditor::getInstance().render();
-	}
-
-	callHooks(HookType::RENDER);
-}
-
 Unknown::Unknown& Unknown::getUnknown() {
     ZoneScopedN("UK::getUnknown");
     static Unknown instance;
 
 	return instance;
-}
-
-void Unknown::registerHook(const std::function<void()>& hook, HookType type) {
-    ZoneScopedN("UK::registerHook");
-
-    UK_INFO("Registering a hook %d\n", (int)type);
-
-	auto& hooks = getUnknown().hooks;
-
-	if(hooks.find(type) == hooks.end()) {
-//	    // If there is no hooks
-        hooks[type] = std::vector<std::function<void()>>();
-	}
-
-	auto vec = hooks[type];
-
-	vec.push_back(hook);
-
-	hooks[type] = vec;
-}
-
-void Unknown::callHooks(HookType type) {
-    ZoneScopedN("UK::callHooks");
-    for(auto& hook : getUnknown().hooks[type]) {
-        hook();
-    }
 }

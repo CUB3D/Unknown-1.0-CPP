@@ -21,7 +21,6 @@ set(UK_ENGINE_INCLUDES
 		src/Entity/TimerComponent.h
 		src/Event/Event.h
 		src/Event/EventManager.h
-		src/Event/ItterativeEventHandler.h
 		src/Filesystem/FSUtils.h
 		src/Filesystem/File.h
 		src/Filesystem/Filesystem.h
@@ -94,7 +93,10 @@ set(UK_ENGINE_INCLUDES
 		src/core/gameloop/EmscriptenGameLoop.h
 		src/Audio/SDLAudioEngine.h
 		src/light/PointLight.h
+		src/light/DirectionalLight.h
 		src/light/LightingManager2D.h
+		src/core/hook/HookRegistry.h
+		src/core/hook/Event.h
 		)
 
 set(UK_ENGINE_SRC
@@ -133,7 +135,6 @@ set(UK_ENGINE_SRC
 		src/Entity/TimerComponent.cpp
 		src/Event/Event.cpp
 		src/Event/EventManager.cpp
-		src/Event/ItterativeEventHandler.cpp
 		src/Filesystem/FSUtils.cpp
 		src/Filesystem/File.cpp
 		src/Filesystem/Filesystem.cpp
@@ -187,6 +188,7 @@ set(UK_ENGINE_SRC
 		src/core/gameloop/EmscriptenGameLoop.cpp
 		src/Audio/SDLAudioEngine.cpp
 		src/light/PointLight.cpp
+		src/light/DirectionalLight.cpp
 		src/light/LightingManager2D.cpp
 )
 

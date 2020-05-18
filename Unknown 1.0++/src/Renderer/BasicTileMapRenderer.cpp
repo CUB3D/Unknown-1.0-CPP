@@ -5,11 +5,13 @@
 #include "BasicTileMapRenderer.h"
 #include <utility>
 #include <Unknown.h>
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
 
 Unknown::BasicTileMapRenderer::BasicTileMapRenderer(Map &map1, std::function<void(int, int, int, int)> renderer1,
                                                     bool isGlobal) : map(map1), renderer(std::move(renderer1)), camera(map.mapSize.width, map.mapSize.height) {
     if(isGlobal) {
-        registerHook([&] { this->render(0, 0); }, HookType::RENDER);
+        HookRegistry<RenderEvent>::getInstance().add([&] { this->render(0, 0); });
     }
 }
 

@@ -45,12 +45,6 @@ namespace Unknown
 		UK_QUIT // Game loop finished
 	};
 
-    enum HookType
-    {
-        RENDER = 0,
-        UPDATE = 1
-    };
-
 	class Unknown
 	{
 	private:
@@ -69,7 +63,6 @@ namespace Unknown
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
 
-        std::map<HookType, std::vector<std::function<void()>>> hooks;
         std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
 		std::vector<::Unknown::IInitable<>*> lateInit;
@@ -98,9 +91,6 @@ namespace Unknown
 		void quit(const int exitCode);
 
 		void checkEvents();
-
-		void update();
-		void render();
 	};
 
 	Unknown& getUnknown();
@@ -109,14 +99,6 @@ namespace Unknown
 	#define UK_INIT_GAME() ::Unknown::getUnknown().initGameLoop()
 
 	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
-
-
-	void registerHook(const std::function<void()>& hook, HookType type);
-
-	#define UK_RENDER(x) Unknown::registerHook(x, Unknown::HookType::RENDER);
-	#define UK_UPDATE(x) Unknown::registerHook(x, Unknown::HookType::UPDATE);
-
-	void callHooks(HookType type);
 }
 
 #define UK_ADD_SCENE(x, y) ::Unknown::getUnknown().globalSceneManager.registerScene<x>(y)
