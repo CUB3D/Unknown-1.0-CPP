@@ -5,8 +5,10 @@
 #include "RenderingBackend.h"
 #include "SDLBackend.h"
 #include "GLBackend.h"
+#include <Tracy.hpp>
 
 std::shared_ptr<Unknown::RenderingBackend> Unknown::getRendererBackend() {
+    ZoneScopedN("UK::getRendererBackend");
 
     switch(getUnknown().config.rendererMode) {
         case 0: {

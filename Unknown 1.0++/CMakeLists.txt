@@ -93,6 +93,7 @@ set(UK_ENGINE_INCLUDES
 		src/core/gameloop/PCGameLoop.h
 		src/core/gameloop/EmscriptenGameLoop.h
 		src/Audio/SDLAudioEngine.h
+		src/light/PointLight.h
 		)
 
 set(UK_ENGINE_SRC
@@ -184,6 +185,7 @@ set(UK_ENGINE_SRC
 		src/core/gameloop/PCGameLoop.cpp
 		src/core/gameloop/EmscriptenGameLoop.cpp
 		src/Audio/SDLAudioEngine.cpp
+		src/light/PointLight.cpp
 )
 
 # The location of the actual engine files and deps

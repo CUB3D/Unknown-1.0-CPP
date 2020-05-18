@@ -12,6 +12,8 @@ Shader::Shader() : prog(-1) {}
 Shader::Shader(const std::string &vertex, const std::string &fragment) : prog(-1), vertexSrc(vertex), fragmentSrc(fragment) {}
 
 void Shader::compile() {
+    ZoneScopedN("Shader::compile");
+
     // Create shaders
     int vertShader = glCreateShader(GL_VERTEX_SHADER);
     int fragShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -109,6 +111,7 @@ void Shader::compile() {
 }
 
 void Shader::bind(bool compile) {
+    ZoneScopedN("Shader::bind(bool)");
     if(compile && this->prog == -1)
         this->compile();
     glUseProgram(prog);
@@ -131,6 +134,9 @@ void Shader::setVec3(const char *name, const float x, const float y, const float
 }
 
 void Shader::setFloat(const char *name, const float f) {
+    ZoneScopedN("Shader::setFloat");
+    TracyGpuZone("Shader::setFloat");
+
     glUniform1f(glGetUniformLocation(this->prog, name), f);
 }
 

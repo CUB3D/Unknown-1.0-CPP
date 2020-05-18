@@ -105,16 +105,18 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 void Unknown::Unknown::createWindow()
 {
-	UK_LOG_INFO("Starting engine init");
+    ZoneScopedN("UK::createWindow");
+    UK_LOG_INFO("Starting engine init");
 	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
 	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
 }
 
 
-void Unknown::Unknown::initGameLoop()
-{
-	this->currentState = UK_LOOP;
+void Unknown::Unknown::initGameLoop() {
+    ZoneScopedN("UK::initGameLoop");
+
+    this->currentState = UK_LOOP;
 
 	getGameLoop()->init();
 }
@@ -175,7 +177,6 @@ void Unknown::Unknown::doSingleLoopIttr() {
 }
 
 void Unknown::Unknown::checkEvents() {
-
     ZoneScopedN("UK::EventCheck");
 	SDL_Event evnt;
     ImGuiIO& io = ImGui::GetIO();
@@ -226,7 +227,9 @@ void Unknown::Unknown::checkEvents() {
 }
 
 void Unknown::Unknown::quit(const int exitCode) {
-	this->currentState = UK_QUIT;
+    ZoneScopedN("UK::quit");
+
+    this->currentState = UK_QUIT;
 
     // All Images must have been destroyed or this will cause a sigsev
     getRendererBackend()->quit();
@@ -259,13 +262,16 @@ void Unknown::Unknown::render() {
 }
 
 Unknown::Unknown& Unknown::getUnknown() {
+    ZoneScopedN("UK::getUnknown");
     static Unknown instance;
 
 	return instance;
 }
 
 void Unknown::registerHook(const std::function<void()>& hook, HookType type) {
-	printf("Registering a hook %d\n", (int)type);
+    ZoneScopedN("UK::registerHook");
+
+    printf("Registering a hook %d\n", (int)type);
 
 	auto& hooks = getUnknown().hooks;
 
@@ -282,6 +288,7 @@ void Unknown::registerHook(const std::function<void()>& hook, HookType type) {
 }
 
 void Unknown::callHooks(HookType type) {
+    ZoneScopedN("UK::callHooks");
     for(auto& hook : getUnknown().hooks[type]) {
         hook();
     }

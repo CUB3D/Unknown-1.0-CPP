@@ -377,6 +377,9 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
 
 Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const char *str,
                                                            const Colour &col) {
+    ZoneScopedN("GL::createFontTexture");
+    TracyGpuZone("GL::createFontTexture");
+
     TextureInfo& tex = fontLookup.emplace_back();
 
     // Draw char
@@ -445,6 +448,8 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
 }
 
 void Unknown::GLBackend::clearScreen() {
+    ZoneScopedN("GL::clearScreen");
+    TracyGpuZone("GL::clearScreen");
     // TODO: need a setup function for the backends, also put glv
     glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -452,6 +457,9 @@ void Unknown::GLBackend::clearScreen() {
 
 //TODO: some bug here to do with positioning, or in basicrendercomponent
 void Unknown::GLBackend::renderQuad(const int x, const int y, const double angle, const VertexInfo &verts, Shader& shader) {
+    ZoneScopedN("GL::renderQuad");
+    TracyGpuZone("GL::renderQuad");
+
     auto& uk = getUnknown();
 
     float centerX = verts.bounds.w / 2.0f;
@@ -484,6 +492,9 @@ Shader &Unknown::GLBackend::getTextureRendererShader() {
  * @param info The vertex info to remove
  */
 void Unknown::GLBackend::deleteVerticies(VertexInfo& info) {
+    ZoneScopedN("GL::deleteVerticies");
+    TracyGpuZone("GL::deleteVerticies");
+
     vertexLookup.erase(std::remove_if(vertexLookup.begin(), vertexLookup.end(), [&](VertexInfo& it) {
         return it.vao == info.vao && it.vbo == info.vbo;
     }));
@@ -509,6 +520,9 @@ void Unknown::GLBackend::endFrame() {
     FBOshader.setFloat("fboTexture", 0);
     FBO.render(FBOshader);
 
-    SDL_GL_SwapWindow(getUnknown().window);
+    {
+        ZoneScopedN("GL::SwapWindow");
+        SDL_GL_SwapWindow(getUnknown().window);
+    }
     TracyGpuCollect;
 }
