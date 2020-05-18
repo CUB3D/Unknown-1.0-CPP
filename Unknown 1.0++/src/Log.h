@@ -1,25 +1,19 @@
-#pragma once
+//
+// Created by cub3d on 18/05/2020.
+//
 
-#include <string>
-#include <vector>
-#include <iostream>
-#include <sstream>
+#ifndef UNKNOWN_LOG_H
+#define UNKNOWN_LOG_H
 
-#define UK_LOG_LEVEL_INFO 0
-#define UK_LOG_LEVEL_WARNING 1
-#define UK_LOG_LEVEL_ERROR 2
+#include "spdlog/spdlog.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 namespace Unknown {
-	extern std::string logStatus[];
+    void log_init();
+};
 
-    void log(int logLevel, std::initializer_list<std::string_view> args);
-}
+#define UK_INFO SPDLOG_INFO
+#define UK_WARN SPDLOG_WARN
+#define UK_ERROR SPDLOG_ERROR
 
-
-#define UK_LOG_INFO(msg, ...) ::Unknown::log(UK_LOG_LEVEL_INFO, {msg, ##__VA_ARGS__})
-#define UK_LOG_WARN(msg, ...) ::Unknown::log(UK_LOG_LEVEL_WARNING, {msg, ##__VA_ARGS__})
-#define UK_LOG_ERROR(msg, ...) ::Unknown::log(UK_LOG_LEVEL_ERROR, {msg, ##__VA_ARGS__})
-// __FUNCTION__
-#define UK_LOG_INFO_VERBOSE(msg, ...) ::Unknown::log(UK_LOG_LEVEL_INFO, {msg, ##__VA_ARGS__, "@ [", __FILE__, ":",  ::Unknown::intToString(__LINE__), "]"})
-#define UK_LOG_ERROR_VERBOSE(msg, ...) ::Unknown::log(UK_LOG_LEVEL_ERROR, {msg, ##__VA_ARGS__, "@ [", __FILE__, ":", ::Unknown::intToString(__LINE__), "]"})
-#define UK_LOG_WARN_VERBOSE(msg, ...) ::Unknown::log(UK_LOG_LEVEL_WARN, {msg, ##__VA_ARGS__, "@ [", __FILE__, ":", ::Unknown::intToString(__LINE__), "]"})
+#endif

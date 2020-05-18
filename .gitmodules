@@ -40,3 +40,6 @@
 [submodule "Unknown 1.0++/libs/third_party/imgui/imgui"]
 	path = Unknown 1.0++/libs/third_party/imgui/imgui
 	url = https://github.com/ocornut/imgui
+[submodule "Unknown 1.0++/libs/third_party/spdlog/spdlog"]
+	path = Unknown 1.0++/libs/third_party/spdlog/spdlog
+	url = https://github.com/gabime/spdlog

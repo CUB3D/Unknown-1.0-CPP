@@ -79,7 +79,7 @@ void Unknown::PhysicsBodyComponent::onEnable(Scene& scene, std::shared_ptr<Entit
             shape = &polygon;
             break;
         default:
-            UK_LOG_ERROR("Unsuported shape type", std::to_string(this->bodyShape));
+            UK_ERROR("Unsuported shape type", std::to_string(this->bodyShape));
     }
 
     fixtureDefinition.shape = shape;//TODO:

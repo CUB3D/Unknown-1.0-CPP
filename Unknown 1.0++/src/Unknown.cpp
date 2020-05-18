@@ -30,19 +30,21 @@
 
 // unknown class
 
-Unknown::Unknown::Unknown() {}
+Unknown::Unknown::Unknown() {
+    ::Unknown::log_init();
+}
 
 void Unknown::Unknown::createWindow(const char* title, const int width, const int height, const int ups)
 {
 	ZoneScopedN("UK::CreateWindow");
 	this->currentState = UK_INIT;
 
-	printf("Creating window\n");
+	UK_INFO("Creating window\n");
 
     this->screenSize = std::make_shared<Dimension<int>>(width, height);
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-	    UK_LOG_ERROR("SDL failed to initialise: ", SDL_GetError());
+	    UK_ERROR("SDL failed to initialise: ", SDL_GetError());
 		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
 	}
 
@@ -51,13 +53,13 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 	if (!window) {
-	    UK_LOG_ERROR("SDL failed to create window: ", SDL_GetError());
+	    UK_ERROR("SDL failed to create window: ", SDL_GetError());
 		quit(ErrorCodes::SDL_WINDOW_CREATION_FAIL);
 	}
 
 	this->windowRenderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
 	if (!windowRenderer) {
-	    UK_LOG_ERROR("SDL failed to create renderer: ", SDL_GetError());
+	    UK_ERROR("SDL failed to create renderer: ", SDL_GetError());
 		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
 	}
 
@@ -67,19 +69,19 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 #ifndef __EMSCRIPTEN__ // SDL_image isn't linked against libpng in emscripten, it uses browser decoding so init isnt needed
 	int status = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
 
-	printf("Image support status: %x\n", status);
+	UK_INFO("Image support status: %x\n", status);
 
 	if(!status) {
-		printf("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
+		UK_INFO("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
 		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
 	}
 #else
-	printf("Using emscripten, not initialsing SDL_image\n");
+	UK_INFO("Using emscripten, not initialsing SDL_image\n");
 #endif
 
     if(TTF_Init() == -1)
     {
-        printf("Error: SDL failed to initialise TTF handling, %s\n", TTF_GetError());
+        UK_INFO("Error: SDL failed to initialise TTF handling, %s\n", TTF_GetError());
         quit(ErrorCodes::SDL_WINDOW_TTF_INIT_FAIL);
     }
 
@@ -92,7 +94,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	// All of the images that were created early (i.e. given as args to sprites in constructor)
 	// Need to have init called as a render context is needed to make texture from image
 	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_LOG_INFO("Performing late init for", std::to_string(lateInit.size()), " objects");
+	UK_INFO("Performing late init for", std::to_string(lateInit.size()), " objects");
 	for(auto& initable : lateInit) {
 		initable->init();
 	}
@@ -106,7 +108,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 void Unknown::Unknown::createWindow()
 {
     ZoneScopedN("UK::createWindow");
-    UK_LOG_INFO("Starting engine init");
+    UK_INFO("Starting engine init");
 	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
 	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
@@ -126,7 +128,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
     const char* err = SDL_GetError();
     if (strlen(err) > 0) {
         //TODO: move to imgui
-        // printf("Error: %s\n", err);
+        // UK_INFO("Error: %s\n", err);
         SDL_ClearError();
     }
 
@@ -168,7 +170,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
     FrameMark;
 
     if (fpsCounter.isTickComplete()) {
-        std::cout << "Frames: " << this->frames << ", Ticks: " << this->ticks << std::endl;
+        UK_INFO("Frames: {}, Ticks: {}", this->frames, this->ticks);
         this->fps = this->frames;
 
         this->frames = 0;
@@ -271,7 +273,7 @@ Unknown::Unknown& Unknown::getUnknown() {
 void Unknown::registerHook(const std::function<void()>& hook, HookType type) {
     ZoneScopedN("UK::registerHook");
 
-    printf("Registering a hook %d\n", (int)type);
+    UK_INFO("Registering a hook %d\n", (int)type);
 
 	auto& hooks = getUnknown().hooks;
 

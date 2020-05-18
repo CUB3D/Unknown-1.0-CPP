@@ -11,7 +11,7 @@ void Unknown::CollisionManager::addListener(std::shared_ptr<Entity> a, std::shar
                                             std::function<void(std::pair<std::shared_ptr<Entity>, std::shared_ptr<Entity>> objs, bool inContact)> callback) {
 
     if(!a || !b) {
-        UK_LOG_ERROR("Attempted to register collision listener between null entities");
+        UK_ERROR("Attempted to register collision listener between null entities");
         return;
     }
 
@@ -19,7 +19,7 @@ void Unknown::CollisionManager::addListener(std::shared_ptr<Entity> a, std::shar
     auto physB = b->getComponent<PhysicsBodyComponent>();
 
     if(!(physA && physB)) {
-        UK_LOG_ERROR("Denied, attempt to register a collision listener between non physics components");
+        UK_ERROR("Denied, attempt to register a collision listener between non physics components");
         return;
     }
 

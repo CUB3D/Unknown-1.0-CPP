@@ -17,7 +17,7 @@
 #include <TracyOpenGL.hpp>
 
 void Unknown::GLBackend::intialise(const EngineConfig& config) {
-    UK_LOG_INFO("Intialising OpenGL Backend");
+    UK_INFO("Intialising OpenGL Backend");
 
     if(config.MSAA) {
         // Enable MSAA
@@ -27,12 +27,12 @@ void Unknown::GLBackend::intialise(const EngineConfig& config) {
 
     // Vsync
     SDL_GL_SetSwapInterval(config.vsync ? 1 : 0);
-    UK_LOG_INFO(config.vsync ? "Enabled vsync" : "Disabled vsync");
+    UK_INFO(config.vsync ? "Enabled vsync" : "Disabled vsync");
 }
 
 void Unknown::GLBackend::createContext(SDL_Window* window) {
     ZoneScopedN("GL::CreateContext");
-    UK_LOG_INFO("Creating OpenGL 3.3 Core context");
+    UK_INFO("Creating OpenGL 3.3 Core context");
 
     //TODO: abstract out windows from unknown
     auto& size = getUnknown().screenSize;
@@ -207,13 +207,13 @@ Unknown::TextureInfo Unknown::GLBackend::loadTexture(const std::string &path) {
     if(file) {
         imageSurface = IMG_Load_RW(getRWopsForStream(*file.getStream()), false);
 	} else {
-		printf("File '%s' not found\n", path.c_str());
+		UK_INFO("File '{}' not found", path.c_str());
 	}
 
     if (!imageSurface) {
-        printf("Error: failed to load image '%s', %s\n", path.c_str(), IMG_GetError());
+        UK_ERROR("failed to load image '{}': {}", path.c_str(), IMG_GetError());
         if(uk.config.textureFallback) {
-            printf("Loading fallback\n");
+            UK_INFO("Loading fallback");
             imageSurface = IMG_Load_RW(SDL_RWFromConstMem(placeholder_png, placeholder_png_len), false);
         }
 
@@ -386,7 +386,7 @@ Unknown::TextureInfo Unknown::GLBackend::createFontTexture(TTF_Font &font, const
     SDL_Surface* textSurface = TTF_RenderText_Blended(&font, str, col.toSDLColour());
 
     if(!textSurface) {
-        printf("Error: Failed to create surface");
+        UK_INFO("Error: Failed to create surface");
         return tex;
     }
 

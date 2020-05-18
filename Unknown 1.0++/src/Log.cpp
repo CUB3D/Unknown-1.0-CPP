@@ -1,26 +1,11 @@
-#include <cstdarg>
-#include <Log.h>
-#include <initializer_list>
-#include <sstream>
-#include <string_view>
+//
+// Created by cub3d on 18/05/2020.
+//
 
-namespace Unknown
-{
-	std::string logStatus[] = { "INFO", "WARN", "ERR" };
+#include "Log.h"
 
-    void log(int logLevel, std::initializer_list<std::string_view> args) {
-        std::stringstream ss;
-
-        const std::string_view* arg = args.begin();
-
-        while(true) {
-            ss << *arg;
-            arg++;
-            if(arg == args.end()) {
-                break;
-            }
-            ss << " ";
-        }
-        printf("[%s]: %s\n", logStatus[logLevel].c_str(), ss.str().c_str());
-    }
+void Unknown::log_init() {
+    auto out = spdlog::stdout_color_mt("console");
+    auto err = spdlog::stderr_color_mt("stderr");
+    out->info("Logging started");
 }

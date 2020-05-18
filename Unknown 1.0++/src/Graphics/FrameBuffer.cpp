@@ -5,6 +5,7 @@
 #include "FrameBuffer.h"
 #include <Tracy.hpp>
 #include <TracyOpenGL.hpp>
+#include "Log.h"
 
 Unknown::FrameBuffer::FrameBuffer(const Unknown::Dimension<int> frameSize) : frameSize(frameSize) {}
 
@@ -45,9 +46,9 @@ void Unknown::FrameBuffer::createFBO() {
     glBindBuffer(GL_RENDERBUFFER, 0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        printf("Invalid framebuffer\n");
+        UK_INFO("Invalid framebuffer\n");
     } else {
-        printf("Framebuffer valid\n");
+        UK_INFO("Framebuffer valid\n");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -67,9 +68,9 @@ void Unknown::FrameBuffer::createFBO() {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        printf("Invalid framebuffer2\n");
+        UK_INFO("Invalid framebuffer2\n");
     } else {
-        printf("Framebuffer2 valid\n");
+        UK_INFO("Framebuffer2 valid\n");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

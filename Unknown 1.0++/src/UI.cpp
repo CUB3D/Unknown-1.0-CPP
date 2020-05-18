@@ -13,7 +13,7 @@
 
 void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> listener, std::string listenerID)
 {
-    UK_LOG_INFO("Registering listener", listenerID);
+    UK_INFO("Registering listener", listenerID);
 
     auto& UIListeners = getUnknown().UIListeners;
     UIListeners[listenerID] = std::move(listener);
@@ -21,7 +21,7 @@ void Unknown::registerUIListener(std::function<void(std::shared_ptr<UIEvent>)> l
 
 void Unknown::removeUIListener(std::string listenerID)
 {
-    UK_LOG_INFO("Removing listener:", listenerID);
+    UK_INFO("Removing listener:", listenerID);
     auto& UIListeners = getUnknown().UIListeners;
     UIListeners.erase(UIListeners.find(listenerID));
 }
@@ -29,7 +29,7 @@ void Unknown::removeUIListener(std::string listenerID)
 void Unknown::callUIListeners(std::shared_ptr<UIEvent> evnt)
 {
     auto& UIListeners = getUnknown().UIListeners;
-    UK_LOG_INFO("Sending ui event to", std::to_string(UIListeners.size()), "listeners");
+    UK_INFO("Sending ui event to", std::to_string(UIListeners.size()), "listeners");
 
     std::map <std::string, std::function<void(std::shared_ptr<UIEvent>)> >::iterator listeners;
 

@@ -31,7 +31,7 @@ Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 //TODO: rename to loadentityproto
 std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
-    UK_LOG_INFO("Load Entity:", name);
+    UK_INFO("Load Entity:", name);
     //TODO: Scene graph loader
     //TODO: remove massive comment
     //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
@@ -40,7 +40,7 @@ std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &
 
 Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 {
-    UK_LOG_INFO("Load anim", name);
+    UK_INFO("Load anim", name);
 	rapidjson::Document json = SettingsParser::loadDocument(name);
 
 	std::unique_ptr<Animation> animation = std::make_unique<Animation>();
@@ -87,7 +87,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 
 ::Unknown::UIContainer Unknown::Loader::loadUI(const std::string &name)
 {
-    UK_LOG_INFO("Loading UI", name);
+    UK_INFO("Loading UI", name);
 	rapidjson::Document doc = SettingsParser::loadDocument(name);
 
 	UIContainer container;
@@ -280,7 +280,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
         container.components.push_back(comp);
 	}
 
-    UK_LOG_INFO("Loaded UI data, found", std::to_string(container.components.size()), "components");
+    UK_INFO("Loaded UI data, found", std::to_string(container.components.size()), "components");
 
 	for (auto& comp : container.components)
 	{
@@ -307,7 +307,7 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
             aiString str(typeStr);
             mat->GetTexture(type, i, &str);
             std::string s = std::string(str.C_Str());
-            UK_LOG_INFO("Loading mat texture:", s);
+            UK_INFO("Loading mat texture:", s);
             vec.push_back(::Unknown::getRendererBackend()->loadTexture(s));
         }
     };
@@ -387,7 +387,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
             auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
 
             if(!componentType.is_valid()) {
-                UK_LOG_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
+                UK_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
                 continue;
             }
 
@@ -414,7 +414,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
             proto.components.push_back(compPtr);
         }
     } else {
-        UK_LOG_WARN("Entity", name, "has no components");
+        UK_WARN("Entity", name, "has no components");
     }
 
     return proto;

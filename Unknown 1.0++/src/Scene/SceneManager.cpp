@@ -9,7 +9,7 @@
 Unknown::SceneManager::SceneManager() : currentSceneName("") {}
 
 void Unknown::SceneManager::loadScene(const std::string& sceneName) {
-    UK_LOG_INFO("Loading scene ", sceneName);
+    UK_INFO("Loading scene ", sceneName);
 
     auto sceneGenerator = sceneMapping.find(sceneName);
     if(sceneGenerator != sceneMapping.end()) {
@@ -17,7 +17,7 @@ void Unknown::SceneManager::loadScene(const std::string& sceneName) {
         this->currentSceneName = sceneName;
         getCurrentScene()->reset();
     } else {
-        UK_LOG_ERROR("Unable to load scene:", sceneName);
+        UK_ERROR("Unable to load scene:", sceneName);
     }
 }
 

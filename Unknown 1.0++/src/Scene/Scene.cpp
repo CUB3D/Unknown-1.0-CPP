@@ -47,7 +47,7 @@ void Unknown::Scene::loadScenegraph(const std::string &name) {
         this->addObject(entityInstance);
     }
 
-    UK_LOG_INFO("Loaded", std::to_string(prototype.sceneElements.size()), "scene:", name);
+    UK_INFO("Loaded", std::to_string(prototype.sceneElements.size()), "scene:", name);
 }
 
 void Unknown::Scene::reset() {

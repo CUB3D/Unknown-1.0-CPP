@@ -84,7 +84,7 @@ void createMethod(std::string moduleName, PyObject* callable, std::string functi
 }
 
 PyObject* Unknown::Python::Interpreter::getMethod(const std::string& method) {
-    UK_LOG_INFO("Locating", method);
+    UK_INFO("Locating", method);
     auto moduleName = method.substr(0, method.find("."));
     auto methodName = method.substr(method.find(".") + 1, method.size());
 
@@ -98,7 +98,7 @@ void Unknown::Python::Interpreter::callMethod(const std::string& methodName, PyO
     PyObject* callable = getMethod(methodName);
 
     if(!callable) {
-        UK_LOG_ERROR("Attempted to call invalid python method", methodName);
+        UK_ERROR("Attempted to call invalid python method", methodName);
         return;
     }
 
@@ -116,7 +116,7 @@ PyObject* PyGetElement(PyObject* sequence, int index, std::string pyFuncName, in
     PyObject* element = PySequence_GetItem(sequence, index);
 
     if(!element) {
-        UK_LOG_ERROR_VERBOSE("Invalid element at", pyFuncName, ":", std::to_string(line));
+        UK_ERROR_VERBOSE("Invalid element at", pyFuncName, ":", std::to_string(line));
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -149,7 +149,7 @@ PyObject* registerHookHandler(PyObject* self, PyObject* args)
     PyObject* callback = PY_GET_OBJ(args, 1);
     ::Unknown::registerHook([=]() {
         if(!PyObject_CallObject(callback, NULL)) {
-            UK_LOG_ERROR("Unable to call func");
+            UK_ERROR("Unable to call func");
             PyObject_Print(callback, stdout, Py_PRINT_RAW);
             PyErr_PrintEx(1);
         }
@@ -159,7 +159,7 @@ PyObject* registerHookHandler(PyObject* self, PyObject* args)
 
 void rawImageDestructor(PyObject* imageCapsule)
 {
-    UK_LOG_INFO("Destroying image");
+    UK_INFO("Destroying image");
 }
 
 PyObject* createRawImageHandler(PyObject* self, PyObject* args)
@@ -171,7 +171,7 @@ PyObject* createRawImageHandler(PyObject* self, PyObject* args)
     PyObject* capsule = PY_MAKE_CAPSULE(image.release(), "Image", [](PyObject* a){});
 
     if(!capsule) {
-        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
+        UK_ERROR_VERBOSE("Unable to form capsule");
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -216,7 +216,7 @@ PyObject* createRawTimer(PyObject* self, PyObject* args)
     PyObject* capsule = PY_MAKE_CAPSULE(timer, "Timer", [](PyObject* a){});
 
     if(!capsule) {
-        UK_LOG_ERROR("Unable to form capsule");
+        UK_ERROR("Unable to form capsule");
         PyErr_PrintEx(1);
         return nullptr;
     }
@@ -265,7 +265,7 @@ PyObject* registerRawEventHandler(PyObject* self, PyObject* args)
         PyTuple_SetItem(args, 2, PyLong_FromLong(evnt.key.keyState));
 
         if(!PyObject_CallObject(callback, args)) {
-            UK_LOG_ERROR("Unable to call func");
+            UK_ERROR("Unable to call func");
             PyObject_Print(callback, stdout, Py_PRINT_RAW);
             PyErr_PrintEx(1);
         }
@@ -280,7 +280,7 @@ PyObject* logMessage(PyObject* self, PyObject* args)
 
     const char* message_cStr = PY_GET_UTF8(args, 1);
 
-    Unknown::log(loglevelValue, {message_cStr});
+    UK_INFO(message_cStr);
 
     Py_RETURN_NONE;
 }
@@ -326,7 +326,7 @@ PyObject* createRawSprite(PyObject* self, PyObject* args)
 //    }
 //
 //    if(!capsule) {
-//        UK_LOG_ERROR_VERBOSE("Unable to form capsule");
+//        UK_ERROR_VERBOSE("Unable to form capsule");
 //        PyErr_PrintEx(1);
 //        return nullptr;
 //    }
@@ -355,7 +355,7 @@ PyObject* rawSpriteCall(PyObject* self, PyObject* args) {
 //            return PY_MAKE_CAPSULE(spr->clone(), "Sprite", [](PyObject* sprite) {
 //                Unknown::Sprite* s = getObjectCapsule<Unknown::Sprite>(sprite, "Sprite");
 //                // TODO:
-//                UK_LOG_INFO("Cleaned up sprite");
+//                UK_INFO("Cleaned up sprite");
 //            });
 //        case 4:
 //            return PY_MAKE_LONG(spr->getAngle());
@@ -388,7 +388,7 @@ PyObject* rawVectorInterface(PyObject* self, PyObject* args) {
 //        }
 //        case 2:
 //        {
-//            UK_LOG_ERROR("Normalisation of vectors not impl");
+//            UK_ERROR("Normalisation of vectors not impl");
 //            return PY_GET_OBJ(args, 0);
 //        }
 //        case 3:
@@ -464,15 +464,15 @@ PyObject* makeObject(PyObject* self, PyObject* args) {
     printf("%s\n", PyUnicode_AsUTF8(PyObject_Str(self)));
 
    // PyObject* name = PyDict_GetItemString(obj, "__UK_name");
-   // UK_LOG_INFO("Created obj:", PyUnicode_AsUTF8(name));
+   // UK_INFO("Created obj:", PyUnicode_AsUTF8(name));
 
 
     //auto type = rttr::type::get_by_name(name);
 
-    //UK_LOG_INFO("Creating type", name);
+    //UK_INFO("Creating type", name);
 
 //    if(type.is_valid()) {
-//        UK_LOG_INFO("Valid type");
+//        UK_INFO("Valid type");
 //    }
 
     if(!obj)
@@ -487,7 +487,7 @@ PyObject* makeObject(PyObject* self, PyObject* args) {
 //    auto tmp = (*Reflex::getInstance().m1)[name];
 //    void* ptr = tmp->newRawInstance();
 //
-//    UK_LOG_INFO("Created capsule of type", name, "with ptr:", Unknown::intToString((long int)ptr));
+//    UK_INFO("Created capsule of type", name, "with ptr:", Unknown::intToString((long int)ptr));
 //
 //    return PY_MAKE_CAPSULE(ptr, name.c_str(), [](PyObject* p){});
 }
@@ -499,7 +499,7 @@ PyObject* setField(PyObject* self, PyObject* args) {
 //    PyObject* value = PyTuple_GetItem(args, 3);
 //
 //    if(!capsule) {
-//        UK_LOG_ERROR_VERBOSE("Attempt to access field:", fieldName, "on null reference to", classname);
+//        UK_ERROR_VERBOSE("Attempt to access field:", fieldName, "on null reference to", classname);
 //        Py_RETURN_NONE;
 //    }
 //
@@ -526,13 +526,13 @@ PyObject* cstr(PyObject* self, PyObject* args) {
     // Self is null, args is empty
     printf("cstr args - %s\n", PyUnicode_AsUTF8(PyObject_Str(args)));
 
-    UK_LOG_INFO("Creating obj");
+    UK_INFO("Creating obj");
 
 
     // Get the type for this virtual class
     rttr::type type = rttr::type::get_by_name(PyUnicode_AsUTF8(PyDict_GetItemString(self, "__UK_TYPE_NAME")));
 
-    UK_LOG_INFO("Type:", type.get_name().to_string());
+    UK_INFO("Type:", type.get_name().to_string());
 
 
     // Create an instance of the class
@@ -547,7 +547,7 @@ PyObject* cstr(PyObject* self, PyObject* args) {
     //TODO: look in mkobj and change to set/get attr
     // Update the properties with the ones from the class
     for(auto& field : type.get_properties()) {
-        UK_LOG_INFO("Adding prop", field.get_name().to_string());
+        UK_INFO("Adding prop", field.get_name().to_string());
         PyDict_SetItemString(self, field.get_name().to_string().c_str(), PyLong_FromLong(field.get_value(instance).get_value<int>()));
     }
 
@@ -576,11 +576,11 @@ PyObject* mkobj(PyObject* self, PyObject* args) {
         printf("Err\n");
         return obj;
     }
-    UK_LOG_INFO("Creating type", currentType->get_name().to_string());
+    UK_INFO("Creating type", currentType->get_name().to_string());
 
     // Add dummy fields
     for(auto& field : (*currentType).get_properties()) {
-        UK_LOG_INFO("Adding prop", field.get_name().to_string());
+        UK_INFO("Adding prop", field.get_name().to_string());
         PyDict_SetItemString(obj, field.get_name().to_string().c_str(), Py_None);
     }
 
@@ -604,12 +604,12 @@ PyObject* mkobj(PyObject* self, PyObject* args) {
     PyDict_SetItemString(obj, "__UK_TYPE_NAME", PyUnicode_FromString(currentType->get_name().to_string().c_str()));
 
     for(auto& method : (*currentType).get_methods()) {
-        UK_LOG_INFO("Adding method", method.get_name().to_string());
+        UK_INFO("Adding method", method.get_name().to_string());
     }
 
     //tODO: replace the get/set attr func instead of copying state of values
 
-    UK_LOG_INFO("-------");
+    UK_INFO("-------");
 
     return args;
 }
@@ -652,7 +652,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
 //    //TODO: getfield, callfunc
 
 
-    UK_LOG_INFO("Loading script", name);
+    UK_INFO("Loading script", name);
 
     PyObject *testModule = PyImport_ImportModule(name.c_str());
     checkError(testModule);
@@ -686,7 +686,7 @@ void Unknown::Python::Interpreter::loadScript(std::string name)
     // For each of the types
     for(auto& type : rttr::type::get_types()) {
         if(type.is_class()) {
-            UK_LOG_INFO("Adding dypy class", type.get_name().to_string());
+            UK_INFO("Adding dypy class", type.get_name().to_string());
 
             PyObject* baseClasses = PyTuple_New(0);
             PyObject* internal = PyDict_New();

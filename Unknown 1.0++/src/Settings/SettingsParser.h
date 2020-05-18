@@ -32,7 +32,7 @@ namespace Unknown {
             rapidjson::Document d;
 
             if(!file) {
-                UK_LOG_ERROR("Failed to load JSON @", fileName);
+                UK_ERROR("Failed to load JSON @", fileName);
                 return d;
             }
 
