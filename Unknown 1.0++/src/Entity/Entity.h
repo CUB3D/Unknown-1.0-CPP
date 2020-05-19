@@ -9,7 +9,6 @@
 #include <IUpdateable.h>
 #include <vector>
 #include <ITagable.h>
-#include <IInitable.h>
 #include <Types/Point.h>
 #include "EntityPrototype.h"
 #include <memory>

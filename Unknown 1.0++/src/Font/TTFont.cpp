@@ -6,10 +6,13 @@
 #include "Font.h"
 
 #include "GL/GL.h"
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
+
 
 Unknown::TTFont::TTFont(const std::string &name, const int size, const Colour &colour) : Font(size), path(name), fontSize(size), colour(colour) {
     if(getUnknown().currentState < UK_POST_INIT) {
-        getUnknown().lateInit.push_back(this);
+        HookRegistry<EngineInitEvent>::getInstance().add([&] {this->init();});
     } else { // There is a renderer, init now
         this->init();
     }

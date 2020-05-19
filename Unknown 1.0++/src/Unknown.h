@@ -11,10 +11,12 @@
 #include "Scene/SceneManager.h"
 #include "Event/EventManager.h"
 #include "Image.h"
-#include "IInitable.h"
 #include "UI.h"
 #include "Engine/EngineConfig.h"
 #include "Audio/SDLAudioEngine.h"
+#include "Font/FontManager.h"
+#include "core/SDL/SDLImageManager.h"
+#include "core/window/SdlWindowManager.h"
 
 
 namespace Unknown
@@ -55,20 +57,18 @@ namespace Unknown
 	public:
 	    EngineConfig config;
 
-		SDL_Surface* s;
-		SDL_Window* window;
-		//TODO: move to render backend
-		SDL_Renderer* windowRenderer;
 		std::shared_ptr<Dimension<int>> screenSize;
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
 
         std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
-		std::vector<::Unknown::IInitable<>*> lateInit;
         std::map<std::string, std::function<void(std::shared_ptr<::Unknown::UIEvent>)> > UIListeners;
 
         ::SDLAudioEngine audioEngine;
+        ::FontManager fontManager;
+        ::SDLImageManager imageManager;
+        ::SDLWindowManager windowManager;
 
 
 		double tickSpeed = 0;
@@ -97,8 +97,6 @@ namespace Unknown
 
 	#define UK_CREATE_WINDOW() ::Unknown::getUnknown().createWindow();
 	#define UK_INIT_GAME() ::Unknown::getUnknown().initGameLoop()
-
-	#define UK_GET_SCREEN_SIZE() ::Unknown::getUnknown()->screenSize
 }
 
 #define UK_ADD_SCENE(x, y) ::Unknown::getUnknown().globalSceneManager.registerScene<x>(y)

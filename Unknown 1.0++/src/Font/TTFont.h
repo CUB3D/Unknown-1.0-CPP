@@ -8,10 +8,9 @@
 #include "Font.h"
 #include <Types/Colour.h>
 #include "FontGlyph.h"
-#include <IInitable.h>
 
 namespace Unknown {
-    class TTFont : public Font, public IInitable<>
+    class TTFont : public Font
     {
     private:
         ::Unknown::Colour colour;
@@ -31,7 +30,7 @@ namespace Unknown {
         virtual int getCharWidth(const char c) const override;
         virtual int getStringHeight(const std::string &str) const override;
 
-        virtual void init() override;
+        virtual void init();
 
         FontGlyph getGlyph(const char c) const;
     };

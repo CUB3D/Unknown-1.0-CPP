@@ -57,7 +57,7 @@ void Unknown::EditorBase::update() {
 
     // Start the Dear ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(uk.window);
+    ImGui_ImplSDL2_NewFrame(uk.windowManager.window);
     ImGui::NewFrame();
 
     ImGui::BeginMainMenuBar();

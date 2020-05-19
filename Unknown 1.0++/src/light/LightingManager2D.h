@@ -22,7 +22,7 @@ public:
     static constexpr int POINT_SIZE = BUFFER_CAPACITY * PointLight::BUFFER_SIZE;
     static constexpr int DIRECTION_SIZE = BUFFER_CAPACITY * DirectionalLight::BUFFER_SIZE;
 
-    static constexpr int LIGHT_BUFFER_SIZE = POINT_SIZE + DIRECTION_SIZE;
+    static constexpr int LIGHT_BUFFER_SIZE = POINT_SIZE;// + DIRECTION_SIZE;
     float* lightBuffer;
 
     std::vector<std::shared_ptr<PointLight>> pointLights;

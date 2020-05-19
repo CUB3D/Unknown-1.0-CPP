@@ -17,7 +17,7 @@ void Unknown::SDLBackend::drawRect(const int x, const int y, const int width, co
     SDL_Rect rect{x, y, width, height};
 
     //TODO: err handling
-    SDL_RenderFillRect(uk.windowRenderer, &rect);
+    SDL_RenderFillRect(uk.windowManager.windowRenderer, &rect);
 }
 
 void Unknown::SDLBackend::drawPoint(const int x, const int y, const Colour &colour) {
@@ -25,11 +25,11 @@ void Unknown::SDLBackend::drawPoint(const int x, const int y, const Colour &colo
 
     setColour(uk, colour);
 
-    SDL_RenderDrawPoint(uk.windowRenderer, x, y);
+    SDL_RenderDrawPoint(uk.windowManager.windowRenderer, x, y);
 }
 
 void Unknown::SDLBackend::setColour(Unknown &uk, const Colour &colour) {
-    SDL_SetRenderDrawColor(uk.windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
+    SDL_SetRenderDrawColor(uk.windowManager.windowRenderer, colour.red, colour.green, colour.blue, colour.alpha);
 }
 
 void Unknown::SDLBackend::drawLine(const int sx, const int sy, const int ex, const int ey, const Colour &col) {
@@ -37,7 +37,7 @@ void Unknown::SDLBackend::drawLine(const int sx, const int sy, const int ex, con
 
     setColour(uk, col);
 
-    SDL_RenderDrawLine(uk.windowRenderer, sx, sy, ex, ey);
+    SDL_RenderDrawLine(uk.windowManager.windowRenderer, sx, sy, ex, ey);
 }
 
 void Unknown::SDLBackend::drawCircle(const int cx, const int cy, const int radius, const Colour &col) {
@@ -68,7 +68,7 @@ void Unknown::SDLBackend::drawCircle(const int cx, const int cy, const int radiu
     }
 
 
-    SDL_RenderDrawLines(uk.windowRenderer, verts, vertexCount);
+    SDL_RenderDrawLines(uk.windowManager.windowRenderer, verts, vertexCount);
 }
 
 Unknown::TextureInfo Unknown::SDLBackend::loadTexture(const std::string &path) {
@@ -86,7 +86,7 @@ Unknown::TextureInfo Unknown::SDLBackend::loadTexture(const std::string &path) {
         uk.quit(ErrorCodes::SDL_IMAGE_LOAD_FAIL);
     }
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(uk.windowRenderer, image);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(uk.windowManager.windowRenderer, image);
 
     TextureInfo info = {image->w, image->h, nullptr, (unsigned long long int) texture};
     textureMap.insert(std::pair<std::string, TextureInfo>(path, info));
@@ -111,7 +111,7 @@ void Unknown::SDLBackend::renderTexture(const int x, const int y, const double a
     SDL_Rect vert = verticies.bounds;
     vert.x = x;
     vert.y = y;
-    SDL_RenderCopyEx(uk.windowRenderer, (SDL_Texture*)texture.pointer, NULL, &vert, angle, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(uk.windowManager.windowRenderer, (SDL_Texture*)texture.pointer, NULL, &vert, angle, NULL, SDL_FLIP_NONE);
 }
 
 Unknown::TextureInfo Unknown::SDLBackend::createFontTexture(TTF_Font &font, const char *character,
@@ -125,7 +125,7 @@ Unknown::TextureInfo Unknown::SDLBackend::createFontTexture(TTF_Font &font, cons
         printf("Unable to create texture for character '%c'\n", character);
     }
 
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(::Unknown::getUnknown().windowRenderer, textSurface);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(::Unknown::getUnknown().windowManager.windowRenderer, textSurface);
 
     tex.width = textSurface->w;
     tex.height = textSurface->h;
@@ -137,7 +137,7 @@ Unknown::TextureInfo Unknown::SDLBackend::createFontTexture(TTF_Font &font, cons
 }
 
 void Unknown::SDLBackend::clearScreen() {
-    SDL_RenderClear(getUnknown().windowRenderer);
+    SDL_RenderClear(getUnknown().windowManager.windowRenderer);
 }
 
 void Unknown::SDLBackend::intialise(const EngineConfig &config) {}
@@ -149,5 +149,5 @@ void Unknown::SDLBackend::quit() {}
 void Unknown::SDLBackend::newFrame() {}
 
 void Unknown::SDLBackend::endFrame() {
-    SDL_RenderPresent(getUnknown().windowRenderer);
+    SDL_RenderPresent(getUnknown().windowManager.windowRenderer);
 }

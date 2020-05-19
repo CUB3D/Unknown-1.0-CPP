@@ -43,3 +43,6 @@
 [submodule "Unknown 1.0++/libs/third_party/spdlog/spdlog"]
 	path = Unknown 1.0++/libs/third_party/spdlog/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Unknown 1.0++/libs/third_party/Entt/entt"]
+	path = Unknown 1.0++/libs/third_party/Entt/entt
+	url = https://github.com/skypjack/entt

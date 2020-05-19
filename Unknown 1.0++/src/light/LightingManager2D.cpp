@@ -23,7 +23,7 @@ void LightingManager2D::init() {
 }
 
 void LightingManager2D::updateBuffer() {
-    ZoneScopedN("R2D::buffer bind");
+    ZoneScopedN("LM::buffer bind");
     glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
     void* map = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
     memcpy(map, &lightBuffer[0], LIGHT_BUFFER_SIZE * sizeof(float));
@@ -31,7 +31,7 @@ void LightingManager2D::updateBuffer() {
 }
 
 void LightingManager2D::updateLightBuffer() {
-    ZoneScopedN("R2D::light to buffer");
+    ZoneScopedN("LM::light to buffer");
     for (int i = 0; i < pointLights.size(); i++) {
         pointLights[i]->show_edit(i);
         pointLights[i]->toBuffer(&lightBuffer[i * PointLight::BUFFER_SIZE]);

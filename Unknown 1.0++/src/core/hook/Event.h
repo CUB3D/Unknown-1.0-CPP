@@ -7,5 +7,6 @@
 
 struct UpdateEvent {};
 struct RenderEvent {};
+struct EngineInitEvent {};
 
 #endif //UNKNOWN_EVENT_H

@@ -4,7 +4,6 @@
 #include <SDL.h>
 #include <memory>
 #include <vector>
-#include "IInitable.h"
 
 #include "GL/GL.h"
 #include "Graphics/RenderingBackend.h"
@@ -12,7 +11,7 @@
 
 namespace Unknown
 {
-	class Image : public IInitable<>
+	class Image
 	{
 	private:
 		std::string filename;
@@ -33,7 +32,7 @@ namespace Unknown
 		virtual const VertexInfo& getVertexInfo() const;
 		virtual void setDimentions(Unknown::Dimension<int>& dimension);
 
-		virtual void init() override;
+		virtual void init();
 		void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;
 	};
 }

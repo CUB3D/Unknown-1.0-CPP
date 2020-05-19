@@ -18,16 +18,6 @@
 
 void Unknown::GLBackend::intialise(const EngineConfig& config) {
     UK_INFO("Intialising OpenGL Backend");
-
-    if(config.MSAA) {
-        // Enable MSAA
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    }
-
-    // Vsync
-    SDL_GL_SetSwapInterval(config.vsync ? 1 : 0);
-    UK_INFO(config.vsync ? "Enabled vsync" : "Disabled vsync");
 }
 
 void Unknown::GLBackend::createContext(SDL_Window* window) {
@@ -522,7 +512,7 @@ void Unknown::GLBackend::endFrame() {
 
     {
         ZoneScopedN("GL::SwapWindow");
-        SDL_GL_SwapWindow(getUnknown().window);
+        SDL_GL_SwapWindow(getUnknown().windowManager.window);
     }
     TracyGpuCollect;
 }

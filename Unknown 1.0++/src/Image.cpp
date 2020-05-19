@@ -5,6 +5,8 @@
 #include <Unknown.h>
 #include <GL/GL.h>
 #include <Graphics/RenderingBackend.h>
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
 
 
 void Unknown::Image::init() {
@@ -22,7 +24,7 @@ void Unknown::Image::render(const int x, const int y, const double angle, SDL_Re
 
 Unknown::Image::Image(const std::string &filename) : filename(filename), renderScale(1, 1) {
 	if(getUnknown().currentState < UK_POST_INIT) {
-	    getUnknown().lateInit.push_back(this);
+        HookRegistry<EngineInitEvent>::getInstance().add([&] {this->init();});
 	} else { // There is a renderer, init now
 		this->init();
 	}
@@ -32,7 +34,7 @@ Unknown::Image &Unknown::Image::operator=(const Image &img) {
 	this->filename = img.filename;
 
     if(getUnknown().currentState < UK_POST_INIT) {
-        getUnknown().lateInit.push_back(this);
+        HookRegistry<EngineInitEvent>::getInstance().add([&] {this->init();});
     } else { // There is a renderer, init now
         this->init();
     }

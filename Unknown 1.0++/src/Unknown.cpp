@@ -1,9 +1,6 @@
 #include "Unknown.h"
 
-#include <string>
-
 #include <chrono>
-#include <SDL_ttf.h>
 #include <SDL_mixer.h>
 
 #include <Graphics/RenderingBackend.h>
@@ -41,64 +38,24 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 
 	UK_INFO("Creating window\n");
 
-    this->screenSize = std::make_shared<Dimension<int>>(width, height);
+	windowManager.init(width, height);
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-	    UK_ERROR("SDL failed to initialise: ", SDL_GetError());
-		quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
-	}
+	//TODO: remove
+    this->screenSize = std::make_shared<Dimension<int>>(width, height);
 
 	getRendererBackend()->intialise(config);
 
-	this->window = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
-
-	if (!window) {
-	    UK_ERROR("SDL failed to create window: ", SDL_GetError());
-		quit(ErrorCodes::SDL_WINDOW_CREATION_FAIL);
-	}
-
-	this->windowRenderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-	if (!windowRenderer) {
-	    UK_ERROR("SDL failed to create renderer: ", SDL_GetError());
-		quit(ErrorCodes::SDL_WINDOW_RENDERER_CREATION_FAIL);
-	}
-
-    getRendererBackend()->createContext(window);
+    getRendererBackend()->createContext(windowManager.window);
 
 
-#ifndef __EMSCRIPTEN__ // SDL_image isn't linked against libpng in emscripten, it uses browser decoding so init isnt needed
-	int status = IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP);
-
-	UK_INFO("Image support status: %x\n", status);
-
-	if(!status) {
-		UK_INFO("Error: SDL failed to initialise PNG loading, %s\n", IMG_GetError());
-		quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
-	}
-#else
-	UK_INFO("Using emscripten, not initialsing SDL_image\n");
-#endif
-
-    if(TTF_Init() == -1)
-    {
-        UK_INFO("Error: SDL failed to initialise TTF handling, %s\n", TTF_GetError());
-        quit(ErrorCodes::SDL_WINDOW_TTF_INIT_FAIL);
-    }
-
+	this->imageManager.init();
+    this->fontManager.init();
     this->audioEngine.init();
 
 	this->tickSpeed = 1000.0 / ups;
 	this->startTime = SDL_GetTicks();
 
-
-	// All of the images that were created early (i.e. given as args to sprites in constructor)
-	// Need to have init called as a render context is needed to make texture from image
-	// This specifically needs to be done before any images are rendered but after windowRenderer creation
-	UK_INFO("Performing late init for", std::to_string(lateInit.size()), " objects");
-	for(auto& initable : lateInit) {
-		initable->init();
-	}
-
+	HookRegistry<EngineInitEvent>::getInstance().invoke();
     HookRegistry<RenderEvent>::getInstance().add([=]{globalSceneManager.render();});
     HookRegistry<UpdateEvent>::getInstance().add([=]{globalSceneManager.update();});
 
@@ -135,7 +92,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
     this->checkEvents();
 
     ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame(window);
+    ImGui_ImplSDL2_NewFrame(windowManager.window);
     ImGui::NewFrame();
 
     long time = SDL_GetTicks();
@@ -249,10 +206,7 @@ void Unknown::Unknown::quit(const int exitCode) {
     // All Images must have been destroyed or this will cause a sigsev
     getRendererBackend()->quit();
 
-	//SDL_DestroyRenderer(this->windowRenderer);
-	SDL_DestroyWindow(this->window);
-	this->windowRenderer = nullptr;
-	this->window = nullptr;
+	SDL_DestroyWindow(this->windowManager.window);
 
 	this->audioEngine.shutdown();
 

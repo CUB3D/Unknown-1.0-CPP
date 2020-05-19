@@ -44,7 +44,6 @@ set(UK_ENGINE_INCLUDES
 		src/Graphics/SDLBackend.h
 		src/Graphics/Shader.h
 		src/Graphics/SkyBox3D.h
-		src/IInitable.h
 		src/ITagable.h
 		src/IUpdateable.h
 		src/Image.h
@@ -97,11 +96,13 @@ set(UK_ENGINE_INCLUDES
 		src/light/LightingManager2D.h
 		src/core/hook/HookRegistry.h
 		src/core/hook/Event.h
+		src/Font/FontManager.h
+		src/core/SDL/SDLImageManager.h
+		src/core/window/SdlWindowManager.h
 		)
 
 set(UK_ENGINE_SRC
 		src/Animation.cpp
-		src/IInitable.cpp
 		src/ITagable.cpp
 		src/IUpdateable.cpp
 		src/Image.cpp
@@ -190,6 +191,9 @@ set(UK_ENGINE_SRC
 		src/light/PointLight.cpp
 		src/light/DirectionalLight.cpp
 		src/light/LightingManager2D.cpp
+		src/Font/FontManager.cpp
+		src/core/SDL/SDLImageManager.cpp
+		src/core/window/SdlWindowManager.cpp
 )
 
 # The location of the actual engine files and deps
@@ -207,12 +211,21 @@ set(UK_INCLUDE "${UK_CORE}/src")
 
 add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_ENGINE_INCLUDES})
 target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE})
-target_link_libraries(UK spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
+target_link_libraries(UK EnTT spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 target_compile_features(UK PUBLIC cxx_std_17)
-target_compile_options(UK PRIVATE -O3 -g)
+
+if (CMAKE_BUILD_TYPE EQUAL "RELEASE")
+	message("release mode")
+	target_compile_options(UK PRIVATE -O3)
+endif (CMAKE_BUILD_TYPE EQUAL "RELEASE")
+
+if (CMAKE_BUILD_TYPE EQUAL "DEBUG")
+	message("release mode")
+	target_compile_options(UK PRIVATE -O1 -g)
+endif (CMAKE_BUILD_TYPE EQUAL "DEBUG")
 
 # Create header dir
 INSTALL(DIRECTORY "${UK_DIR}/Unknown 1.0++/"
