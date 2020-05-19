@@ -36,10 +36,14 @@ void LightingManager2D::updateLightBuffer() {
         pointLights[i]->show_edit(i);
         pointLights[i]->toBuffer(&lightBuffer[i * PointLight::BUFFER_SIZE]);
     }
-//    for (int i = 0; i < directionalLights.size(); i++) {
-//        directionalLights[i]->show_edit(i);
-//        directionalLights[i]->toBuffer(&lightBuffer[POINT_SIZE + i * DirectionalLight::BUFFER_SIZE]);
-//    }
+    for (int i = 0; i < directionalLights.size(); i++) {
+        directionalLights[i]->show_edit(i);
+        directionalLights[i]->toBuffer(&lightBuffer[POINT_SIZE + i * DirectionalLight::BUFFER_SIZE]);
+    }
+    for (int i = 0; i < spotLights.size(); i++) {
+        spotLights[i]->show_edit(i);
+        spotLights[i]->toBuffer(&lightBuffer[POINT_SIZE + DIRECTION_SIZE + i * PointLight::BUFFER_SIZE]);
+    }
 
     if(ImGui::Begin("Light buffer")) {
         ImGui::Columns(8, "Buffer", true);

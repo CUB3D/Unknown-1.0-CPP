@@ -1,18 +1,24 @@
 //
-// Created by cub3d on 18/05/2020.
+// Created by cub3d on 19/05/2020.
 //
 
-#include "PointLight.h"
+#include "SpotLight.h"
+
 #include <Tracy.hpp>
 #include <Imgui/GUI.h>
 
-void PointLight::toBuffer(float *flt) const {
-    ZoneScopedN("PL::ToBuffer");
+void SpotLight::toBuffer(float *flt) const {
+    ZoneScopedN("SL::ToBuffer");
     int i = 0;
 
     flt[i++] = position.x;
     flt[i++] = position.y;
     flt[i++] = position.z;
+    flt[i++] = 0;
+
+    flt[i++] = direction.x;
+    flt[i++] = direction.y;
+    flt[i++] = direction.z;
     flt[i++] = 0;
 
 
@@ -31,44 +37,45 @@ void PointLight::toBuffer(float *flt) const {
     flt[i++] = specular.z;
     flt[i++] = 0;
 
-    flt[i++] = constant;
-    flt[i++] = linear;
-    flt[i++] = quadratic;
-    flt[i++] = enabled;
+    flt[i++] = cutOff;
+    flt[i++] = 0;
+    flt[i++] = 0;
+    flt[i++] = 0;
 }
 
-void PointLight::show_edit(int pos) {
-    ZoneScopedN("PL::lightedit");
+void SpotLight::show_edit(int pos) {
+    ZoneScopedN("SL::lightedit");
 
     char buff[100];
-    snprintf(buff, sizeof(buff), "LightEdit_%i", pos);
+    snprintf(buff, sizeof(buff), "SpotLight_%i", pos);
 
     if(ImGui::Begin(buff)) {
         float ambient[3] = {this->ambient.x, this->ambient.y, this->ambient.z};
         float diffuse[3] = {this->diffuse.x, this->diffuse.y, this->diffuse.z};
         float specular[3] = {this->specular.x, this->specular.y, this->specular.z};
-        bool enabled = this->enabled == 1.0f;
 
-        ImGui::SliderFloat("X", &this->position.x, -1, 1);
-        ImGui::SliderFloat("Y", &this->position.y, -1, 1);
-        ImGui::SliderFloat("Z", &this->position.z, 0.01, 1);
+        ImGui::Text("Position");
+        ImGui::SliderFloat("Pos X", &this->position.x, -1, 1);
+        ImGui::SliderFloat("Pos Y", &this->position.y, -1, 1);
+        ImGui::SliderFloat("Pos Z", &this->position.z, 0.01, 1);
 
+        ImGui::Text("Direction");
+        ImGui::SliderFloat("Dir X", &this->direction.x, -1, 1);
+        ImGui::SliderFloat("Dir Y", &this->direction.y, -1, 1);
+        ImGui::SliderFloat("Dir Z", &this->direction.z, 0.01, 1);
 
         ImGui::ColorEdit3("Ambient", ambient, ImGuiColorEditFlags_RGB);
         ImGui::ColorEdit3("Diffuse", diffuse, ImGuiColorEditFlags_RGB);
         ImGui::ColorEdit3("Specular", specular, ImGuiColorEditFlags_RGB);
-        ImGui::SliderFloat("Linear", &this->linear, 0.1, 1);
-        ImGui::SliderFloat("Constant", &this->constant, 0.1, 1);
-        ImGui::SliderFloat("Quadratic", &this->quadratic, 0.1, 1);
-        ImGui::Checkbox("Enabled", &enabled);
+
+        ImGui::SliderFloat("CutOff", &this->cutOff, 0.01, 1);
 
         this->ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);
         this->diffuse = glm::vec3(diffuse[0], diffuse[1], diffuse[2]);
         this->specular = glm::vec3(specular[0], specular[1], specular[2]);
-
-        this->enabled = enabled ? 1.0f : 0.0f;
     }
 
     ImGui::End();
 }
+
 

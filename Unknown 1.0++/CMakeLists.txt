@@ -93,6 +93,7 @@ set(UK_ENGINE_INCLUDES
 		src/Audio/SDLAudioEngine.h
 		src/light/PointLight.h
 		src/light/DirectionalLight.h
+		src/light/SpotLight.h
 		src/light/LightingManager2D.h
 		src/core/hook/HookRegistry.h
 		src/core/hook/Event.h
@@ -190,6 +191,7 @@ set(UK_ENGINE_SRC
 		src/Audio/SDLAudioEngine.cpp
 		src/light/PointLight.cpp
 		src/light/DirectionalLight.cpp
+		src/light/SpotLight.cpp
 		src/light/LightingManager2D.cpp
 		src/Font/FontManager.cpp
 		src/core/SDL/SDLImageManager.cpp

@@ -51,6 +51,7 @@ void DirectionalLight::show_edit(int pos) {
 
         ImGui::SliderFloat("X", &this->direction.x, -1, 1);
         ImGui::SliderFloat("Y", &this->direction.y, -1, 1);
+        ImGui::SliderFloat("Z", &this->direction.z, 0.01, 1);
 
         ImGui::ColorEdit3("Ambient", ambient, ImGuiColorEditFlags_RGB);
         ImGui::ColorEdit3("Diffuse", diffuse, ImGuiColorEditFlags_RGB);
