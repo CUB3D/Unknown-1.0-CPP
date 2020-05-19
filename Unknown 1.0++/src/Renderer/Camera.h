@@ -5,7 +5,6 @@
 #ifndef UNKNOWN_GAME_CAMERA_H
 #define UNKNOWN_GAME_CAMERA_H
 
-#include <Map.h>
 #include <Types/Direction.h>
 #include <Types/Rect.h>
 

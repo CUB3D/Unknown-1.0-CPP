@@ -10,7 +10,7 @@ set(UK_TEST_SRC
         src/RenderTestScene.cpp
         src/PathfindingTest.cpp
         src/RenderTest2D.cpp
-        src/BasicGraphicsTest.cpp)
+        )
 
 add_executable(${UK_PROJECT_NAME} ${UK_TEST_SRC})
 target_link_libraries(${UK_PROJECT_NAME} Unknown_Engine)

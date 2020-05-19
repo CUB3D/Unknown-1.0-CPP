@@ -51,18 +51,13 @@ set(UK_ENGINE_INCLUDES
 		src/Input/Mouse.h
 		src/Loader.h
         src/core/log/Log.h
-		src/Map.h
-		src/Map/BasicMapGenerator.h
-		src/Map/BinaryMapGenerator.h
 		src/Model/Mesh.h
 		src/Model/MeshContainer.h
 		src/Model/MeshRenderer.h
 		src/Model/TexturedMeshRenderer.h
 		src/Particle.h
-		src/Renderer/BasicTileMapRenderer.h
 		src/Renderer/Camera.h
 		src/Renderer/IRenderable.h
-		src/Renderer/ImageDirectoryTileMapRenderer.h
 		src/Resource/ResourceManager.h
 		src/Scene/CollisionManager.h
 		src/Scene/Scene.h
@@ -109,7 +104,6 @@ set(UK_ENGINE_SRC
 		src/Image.cpp
 		src/Loader.cpp
         src/core/log/Log.cpp
-		src/Map.cpp
 		src/Particle.cpp
 		src/Timer.cpp
 		src/UI.cpp
@@ -160,15 +154,11 @@ set(UK_ENGINE_SRC
 		src/Graphics/SkyBox3D.cpp
 		src/Input/KeyBind.cpp
 		src/Input/Mouse.cpp
-		src/Map/BasicMapGenerator.cpp
-		src/Map/BinaryMapGenerator.cpp
 		src/Model/Mesh.cpp
 		src/Model/MeshContainer.cpp
 		src/Model/MeshRenderer.cpp
 		src/Model/TexturedMeshRenderer.cpp
-		src/Renderer/BasicTileMapRenderer.cpp
 		src/Renderer/Camera.cpp
-		src/Renderer/ImageDirectoryTileMapRenderer.cpp
 		src/Resource/ResourceManager.cpp
 		src/Scene/CollisionManager.cpp
 		src/Scene/Scene.cpp

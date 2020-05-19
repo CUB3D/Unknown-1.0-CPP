@@ -8,11 +8,9 @@
 #include <cmath>
 #include <memory>
 #include <SDL_mixer.h>
-#include <Renderer/BasicTileMapRenderer.h>
 #include <Editor/EditorBase.h>
 #include <SDL_rwops.h>
 #include <LibPAK.h>
-#include "Map/BinaryMapGenerator.h"
 
 #include "PhysicsTestScene.h"
 #include "RenderTestScene.h"
@@ -21,7 +19,6 @@
 #include "GL/GL.h"
 
 #include "UK.h"
-#include "BasicGraphicsTest.h"
 
 //void UICallback(std::shared_ptr<Unknown::UIEvent> evnt)
 //{

@@ -17,9 +17,6 @@
 #include "Loader.h"
 #include "Input/Mouse.h"
 
-#include "Map/BasicMapGenerator.h"
-#include "Map/BinaryMapGenerator.h"
-
 #include "Entity/Entity.h"
 #include "Entity/Component.h"
 #include "Entity/BasicRenderComponent.h"

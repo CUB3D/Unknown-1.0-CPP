@@ -9,7 +9,7 @@
 
 class PathfindingTest : public UK::Scene {
 public:
-    UK::Map m;
+//    UK::Map m;
 
     PathfindingTest();
 

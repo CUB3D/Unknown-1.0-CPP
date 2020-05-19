@@ -2,23 +2,22 @@
 // Created by cub3d on 28/11/18.
 //
 
-#include <Renderer/BasicTileMapRenderer.h>
 #include "PathfindingTest.h"
 
 #define M_SIZE ((1024/128))
 #define M_SCALE  ((1024/M_SIZE))
 
-PathfindingTest::PathfindingTest() : Scene(), m(M_SIZE, M_SIZE) {
+PathfindingTest::PathfindingTest() : Scene() {
     // Fill map with walls
-    for(int x = 0; x < m.mapSize.width; x++) {
-        for(int y = 0; y < m.mapSize.height; y++) {
-            m(x, y) = 1;
-        }
-    }
+//    for(int x = 0; x < m.mapSize.width; x++) {
+//        for(int y = 0; y < m.mapSize.height; y++) {
+//            m(x, y) = 1;
+//        }
+//    }
 
     UK_ADD_MOUSE_LISTENER_EXTERNAL([&](UK::Event& evt) {
         auto pos = evt.mouse.location;
-        m(pos.x/M_SCALE, pos.y/M_SCALE) = 0;
+//        m(pos.x/M_SCALE, pos.y/M_SCALE) = 0;
     }, "Test");
 
 //    //------Gen maze------
@@ -76,25 +75,25 @@ PathfindingTest::PathfindingTest() : Scene(), m(M_SIZE, M_SIZE) {
 }
 
 void PathfindingTest::render() const {
-    Scene::render();
+//    Scene::render();
 
-    for(int x = 0; x < m.mapSize.width; x++) {
-        for(int y = 0; y < m.mapSize.height; y++) {
-            switch(m.getTileID(x, y)) {
-                case 1: // Wall
-                    UK_DRAW_SQUARE(x * M_SCALE, y * M_SCALE, M_SCALE, UK::BLACK);
-                    break;
-                case 0: // Path
-                    UK_DRAW_SQUARE(x * M_SCALE, y * M_SCALE, M_SCALE, UK::WHITE);
-                    break;
-            }
-        }
-    }
+//    for(int x = 0; x < m.mapSize.width; x++) {
+//        for(int y = 0; y < m.mapSize.height; y++) {
+//            switch(m.getTileID(x, y)) {
+//                case 1: // Wall
+//                    UK_DRAW_SQUARE(x * M_SCALE, y * M_SCALE, M_SCALE, UK::BLACK);
+//                    break;
+//                case 0: // Path
+//                    UK_DRAW_SQUARE(x * M_SCALE, y * M_SCALE, M_SCALE, UK::WHITE);
+//                    break;
+//            }
+//        }
+//    }
 
     auto pos = UK::getMouseLocation();
     UK_DRAW_SQUARE((pos.x/M_SCALE)*M_SCALE, (pos.y/M_SCALE)*M_SCALE, M_SCALE, UK::RED);
 }
 
 void PathfindingTest::update() {
-    Scene::update();
+//    Scene::update();
 }
