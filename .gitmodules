@@ -1,9 +1,6 @@
 [submodule "Engine/libs/third_party/lua/lua"]
 	path = Engine/libs/third_party/lua/lua
 	url = https://github.com/lua/lua/
-[submodule "Engine/libs/first_party/LibPAK/libPAK"]
-	path = Engine/libs/first_party/LibPAK/libPAK
-	url = https://github.com/CUB3D/LibPAK
 [submodule "Engine/libs/third_party/Assimp/assimp"]
 	path = Engine/libs/third_party/Assimp/assimp
 	url = https://github.com/assimp/assimp
@@ -52,3 +49,6 @@
 [submodule "Engine/libs/third_party/SDL/SDL"]
 	path = Engine/libs/third_party/SDL/SDL
 	url = https://github.com/SDL-mirror/SDL
+[submodule "Engine/libs/first_party/LibPAK/LibPAK"]
+	path = Engine/libs/first_party/LibPAK/LibPAK
+	url = https://github.com/CUB3D/LibPAK

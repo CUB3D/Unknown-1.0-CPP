@@ -95,5 +95,5 @@ set(CMAKE_BUILD_TYPE MinSizeRel)
 #SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} )
 #SET(COMBINED_INCLUDE ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
 
-add_subdirectory("Unknown 1.0++")
+add_subdirectory(Engine)
 add_subdirectory("Unknown Test")
