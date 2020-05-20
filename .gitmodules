@@ -1,8 +1,5 @@
-[submodule "Libs/imgui"]
-    path = Libs/imgui
-    url = https://github.com/ocornut/imgui
 [submodule "Libs/lua"]
-	path = Libs/lua
+	path = Unknown 1.0++/libs/third_party/lua/lua
 	url = https://github.com/lua/lua/
 [submodule "Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
 	path = Unknown 1.0++/libs/first_party/LibPAK/libPAK
@@ -46,3 +43,12 @@
 [submodule "Unknown 1.0++/libs/third_party/Entt/entt"]
 	path = Unknown 1.0++/libs/third_party/Entt/entt
 	url = https://github.com/skypjack/entt
+[submodule "Unknown 1.0++/libs/third_party/SDL_mixer/SDL_mixer"]
+	path = Unknown 1.0++/libs/third_party/SDL_mixer/SDL_mixer
+	url = https://github.com/SDL-mirror/SDL_mixer
+[submodule "Unknown 1.0++/libs/third_party/SDL_image/SDL_image"]
+	path = Unknown 1.0++/libs/third_party/SDL_image/SDL_image
+	url = https://github.com/SDL-mirror/SDL_image
+[submodule "Unknown 1.0++/libs/third_party/SDL/SDL"]
+	path = Unknown 1.0++/libs/third_party/SDL/SDL
+	url = https://github.com/SDL-mirror/SDL

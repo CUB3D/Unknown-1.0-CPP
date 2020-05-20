@@ -185,7 +185,7 @@ set(UK_ENGINE_SRC
 )
 
 # The location of the actual engine files and deps
-set(UK_CORE "${UK_DIR}/Unknown 1.0++")
+set(UK_CORE "${UK_DIR}/Engine")
 
 add_definitions(-DTRACY_ENABLE)
 
@@ -199,7 +199,7 @@ set(UK_INCLUDE "${UK_CORE}/src")
 
 add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_ENGINE_INCLUDES})
 target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE})
-target_link_libraries(UK EnTT spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
+target_link_libraries(UK EnTT spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK)
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
