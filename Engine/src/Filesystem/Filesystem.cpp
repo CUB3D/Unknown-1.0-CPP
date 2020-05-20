@@ -19,7 +19,7 @@ Unknown::Filesystem &Unknown::Filesystem::getFS() {
 
 void Unknown::Filesystem::mount(const std::string &path) {
     PAKFile pak;
-    readPak(&pak, path.c_str());
+    PAKreadf(&pak, path.c_str());
     getFS().mounts.push_back(pak);
     UK_INFO("Mounting '{}'", path.c_str());
 }

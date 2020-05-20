@@ -74,26 +74,26 @@ set(CMAKE_BUILD_TYPE MinSizeRel)
 #    message("SDL2 Found: ${SDL2_INCLUDE_DIR}:${SDL2_LIBRARY}")
 #endif()
 
-## Find SDL2_image
-#find_package(SDL2_image REQUIRED)
-#if(SDL2_image_FOUND)
-#    message("SDL2_image Found: ${SDL2_IMAGE_INCLUDE_DIR}:${SDL2_IMAGE_LIBRARY}")
-#endif()
+# Find SDL2_image
+find_package(SDL2_image REQUIRED)
+if(SDL2_image_FOUND)
+    message("SDL2_image Found: ${SDL2_IMAGE_INCLUDE_DIR}:${SDL2_IMAGE_LIBRARY}")
+endif()
 
-## Find SDL2_ttf
-#find_package(SDL2_ttf REQUIRED)
-#if(SDL2_ttf_FOUND)
-#    message("SDL2_ttf Found: ${SDL2_TTF_INCLUDE_DIR}:${SDL2_TTF_LIBRARY}")
-#endif()
+# Find SDL2_ttf
+find_package(SDL2_ttf REQUIRED)
+if(SDL2_ttf_FOUND)
+    message("SDL2_ttf Found: ${SDL2_TTF_INCLUDE_DIR}:${SDL2_TTF_LIBRARY}")
+endif()
 
-# Find SDL2_mixer
+## Find SDL2_mixer
 #find_package(SDL2_mixer REQUIRED)
 #if(SDL_mixer_FOUND)
 #    message("SDL2_mixer: ${SDL2_MIXER_INCLUDE_DIR}:${SDL2_MIXER_LIBRARY}")
 #endif()
 
-#SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_LIBRARY} ${UNIX_LIBS} ${SDL2MAIN_LIBRARY} )
-#SET(COMBINED_INCLUDE ${SDL2_INCLUDE_DIR} ${SDL2_TTF_INCLUDE_DIR})
+SET(COMBINED_LIBS ${SDL2_TTF_LIBRARY} ${SDL2_IMAGE_LIBRARY})
+SET(COMBINED_INCLUDE  ${SDL2_TTF_INCLUDE_DIR} ${SDL2_IMAGE_INCLUDE_DIR})
 
 add_subdirectory(Engine)
 add_subdirectory("Unknown Test")

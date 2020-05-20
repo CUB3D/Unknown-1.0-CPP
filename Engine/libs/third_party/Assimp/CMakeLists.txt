@@ -67,5 +67,6 @@ set(ASSIMP_BUILD_STEP_IMPORTER OFF CACHE BOOL "")
 set(ASSIMP_BUILD_M3D_IMPORTER OFF CACHE BOOL "")
 
 # TODO: need to remove -Wall as SignedMagnitude in SpacialSort will fail on gcc10
+# Engine/libs/third_party/Assimp/assimp/code/CMakeLists.txt
 
 add_subdirectory(assimp)

@@ -52,3 +52,6 @@
 [submodule "Engine/libs/first_party/LibPAK/LibPAK"]
 	path = Engine/libs/first_party/LibPAK/LibPAK
 	url = https://github.com/CUB3D/LibPAK
+[submodule "Engine/libs/third_party/SDL_TTF/SDL_ttf"]
+	path = Engine/libs/third_party/SDL_TTF/SDL_ttf
+	url = https://github.com/SDL-mirror/SDL_ttf

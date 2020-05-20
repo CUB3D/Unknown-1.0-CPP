@@ -11,5 +11,9 @@ add_subdirectory(Tracy)
 add_subdirectory(spdlog)
 add_subdirectory(Entt)
 add_subdirectory(SDL)
+
+add_library(SDL2::SDL2 ALIAS SDL2-static)
+
 add_subdirectory(SDL_mixer)
-#add_subdirectory(SDL_image)
+add_subdirectory(SDL_TTF)
+add_subdirectory(SDL_image)

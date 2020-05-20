@@ -11,7 +11,7 @@ void SDLWindowManager::init(int width, int height) {
     this->screenSize = Unknown::Dimension<int>(width, height);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        UK_ERROR("SDL failed to initialise: ", SDL_GetError());
+        UK_ERROR("SDL failed to initialise: {}", SDL_GetError());
 //        quit(ErrorCodes::SDL_INITIALIZATION_FAIL);
     }
 
@@ -30,7 +30,7 @@ void SDLWindowManager::init(int width, int height) {
     this->window = SDL_CreateWindow("Unknown", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
     if (!window) {
-        UK_ERROR("SDL failed to create window: ", SDL_GetError());
+        UK_ERROR("SDL failed to create window: {}", SDL_GetError());
 //        quit(ErrorCodes::SDL_WINDOW_CREATION_FAIL);
     }
 
