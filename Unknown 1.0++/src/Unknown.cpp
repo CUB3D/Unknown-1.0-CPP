@@ -15,8 +15,6 @@
 #include <emscripten.h>
 #endif
 
-#include <Event/Event.h>
-#include <Event/EventManager.h>
 #include <core/log/Log.h>
 #include <Imgui/GUI.h>
 #include <SDL_image.h>
@@ -166,33 +164,31 @@ void Unknown::Unknown::checkEvents() {
 			this->quit(0);
 		}
 
-		Event evt;
-		evt.original = &evnt;
-
 		if (eventType == SDL_KEYDOWN || eventType == SDL_KEYUP) {
-			evt.key.SDLCode = evnt.key.keysym.sym;
-			evt.key.keyState = (eventType == SDL_KEYDOWN) ? InputState::PRESSED : InputState::RELEASED;
 
-            postEvent(ET_KEYPRESS, evt);
+			HookRegistry<KeyPressEvent>::getInstance().invoke(KeyPressEvent {
+                    evnt.key.keysym.sym,
+                eventType == SDL_KEYDOWN
+			});
 		}
 
 		if (eventType == SDL_MOUSEBUTTONDOWN || eventType == SDL_MOUSEBUTTONUP) {
-			evt.mouse.SDLButtonCode = evnt.button.button;
-			evt.mouse.buttonState = (eventType == SDL_MOUSEBUTTONDOWN) ? InputState::PRESSED : InputState::RELEASED;
-			evt.mouse.location.x = evnt.button.x;
-			evt.mouse.location.y = evnt.button.y;
-
-			postEvent(ET_MOUSEBUTTON, evt);
+			HookRegistry<MouseEvent>::getInstance().invoke(MouseEvent {
+                    evnt.button.button,
+                    eventType == SDL_MOUSEBUTTONDOWN,
+                    glm::vec2(evnt.button.x, evnt.button.y)
+			});
 		}
 
 		if(eventType == SDL_WINDOWEVENT) {
             if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
                 this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
 
-                evt.resize.newWidth = this->screenSize->width;
-                evt.resize.newHeight = this->screenSize->height;
-
-                postEvent(ET_WINDOW_RESIZE, evt);
+                auto evt = ResizeEvent {
+                        this->screenSize->width,
+                        this->screenSize->height
+                };
+                HookRegistry<ResizeEvent>::getInstance().invoke(evt);
             }
         }
 	}

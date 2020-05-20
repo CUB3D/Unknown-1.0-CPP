@@ -9,7 +9,6 @@
 #include "Timer.h"
 #include "Utils.h"
 #include "Scene/SceneManager.h"
-#include "Event/EventManager.h"
 #include "Image.h"
 #include "UI.h"
 #include "Engine/EngineConfig.h"
@@ -61,7 +60,6 @@ namespace Unknown
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
 
-        std::map<EventType, std::vector<EventHandler>> eventHandlers;
         std::map<std::string, SharedVariable*> variablelookup;
         std::map<std::string, std::function<void(std::shared_ptr<::Unknown::UIEvent>)> > UIListeners;
 

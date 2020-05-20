@@ -5,7 +5,6 @@
 #include <Types/Colour.h>
 #include <Utils.h>
 #include <Font/Font.h>
-#include <Event/Event.h>
 #include <Renderer/IRenderable.h>
 #include <vector>
 #include <memory>
@@ -71,7 +70,7 @@ namespace Unknown
 	{
 	public:
 		ButtonComponent();
-		void mouseListener(Event &evnt);
+//		void mouseListener(Event &evnt);
 		virtual void render() const override;
 		virtual void init() override;
 	};
@@ -84,8 +83,8 @@ namespace Unknown
 
         TextBoxComponent();
         TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
-        void onKeyTyped(Event& evnt);
-        void onMouseClick(Event &evnt);
+//        void onKeyTyped(Event& evnt);
+//        void onMouseClick(Event &evnt);
         virtual void render() const override;
         virtual void init() override;
     };

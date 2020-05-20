@@ -1,8 +1,6 @@
 #include "UI.h"
 
 #include <UI2D.h>
-#include <Event/Event.h>
-#include <Event/EventManager.h>
 #include <Input/Mouse.h>
 
 #include <memory>
@@ -192,21 +190,21 @@ void Unknown::TextComponent::render() const
 
 Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 
-void Unknown::ButtonComponent::mouseListener(Event &evnt) {
-	if(evnt.mouse.SDLButtonCode == SDL_BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED) {
-	    auto& location = evnt.mouse.location;
-
-        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width) {
-            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height) {
-                // If the button has been clicked
-                std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
-                evnt->componentName = this->name;
-                evnt->action = "buttonClicked";
-                callUIListeners(evnt);
-            }
-        }
-	}
-}
+//void Unknown::ButtonComponent::mouseListener(Event &evnt) {
+//	if(evnt.mouse.SDLButtonCode == SDL_BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED) {
+//	    auto& location = evnt.mouse.location;
+//
+//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width) {
+//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height) {
+//                // If the button has been clicked
+//                std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
+//                evnt->componentName = this->name;
+//                evnt->action = "buttonClicked";
+//                callUIListeners(evnt);
+//            }
+//        }
+//	}
+//}
 
 
 void Unknown::ButtonComponent::render() const
@@ -237,7 +235,7 @@ void Unknown::ButtonComponent::render() const
 }
 
 void Unknown::ButtonComponent::init() {
-    UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
+//    UK_ADD_MOUSE_LISTENER_INTERNAL(mouseListener, this->name);
 }
 
 //TextBoxComponent
@@ -246,59 +244,59 @@ Unknown::TextBoxComponent::TextBoxComponent() : UIComponent(UI_TEXTBOX)
     //NOOP
 }
 
-void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
-{
-    if(this->isEditing)
-    {
-        if (evnt.key.keyState == InputState::PRESSED)
-        {
-            std::string key = std::string(SDL_GetKeyName(evnt.key.SDLCode));
+//void Unknown::TextBoxComponent::onKeyTyped(Event& evnt)
+//{
+//    if(this->isEditing)
+//    {
+////        if (evnt.key.keyState == InputState::PRESSED)
+////        {
+////            std::string key = std::string(SDL_GetKeyName(evnt.key.SDLCode));
+////
+////            if(this->isNumerical) {
+////                if(!isStringNumerical(key)) {
+////                    printf("%s isn't numerical\n", key.c_str());
+////                    key="";
+////                }
+////            }
+////
+////            std::shared_ptr<UIEvent> evnt_ = std::make_shared<UIEvent>();
+////            evnt_->componentName = this->name;
+////            evnt_->action = "keyTyped";
+////            evnt_->relatedKey = key;
+////            callUIListeners(evnt_);
+////
+////            if (evnt.key.SDLCode == SDLK_BACKSPACE)
+////            {
+////                if (this->content.size() > 0)
+////                {
+////                    this->content.pop_back();
+////                }
+////            } else
+////            {
+////                this->content += evnt_->relatedKey;
+////            }
+////        }
+//    }
+//}
 
-            if(this->isNumerical) {
-                if(!isStringNumerical(key)) {
-                    printf("%s isn't numerical\n", key.c_str());
-                    key="";
-                }
-            }
-
-            std::shared_ptr<UIEvent> evnt_ = std::make_shared<UIEvent>();
-            evnt_->componentName = this->name;
-            evnt_->action = "keyTyped";
-            evnt_->relatedKey = key;
-            callUIListeners(evnt_);
-
-            if (evnt.key.SDLCode == SDLK_BACKSPACE)
-            {
-                if (this->content.size() > 0)
-                {
-                    this->content.pop_back();
-                }
-            } else
-            {
-                this->content += evnt_->relatedKey;
-            }
-        }
-    }
-}
-
-void Unknown::TextBoxComponent::onMouseClick(Event &evnt)
-{
-    if(evnt.mouse.buttonState == InputState::PRESSED)
-    {
-        auto& location = evnt.mouse.location;
-        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
-        {
-            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
-            {
-                // If the button has been clicked
-                this->isEditing = true;
-                return;
-            }
-        }
-
-        this->isEditing = false;
-    }
-}
+//void Unknown::TextBoxComponent::onMouseClick(Event &evnt)
+//{
+//    if(evnt.mouse.buttonState == InputState::PRESSED)
+//    {
+//        auto& location = evnt.mouse.location;
+//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
+//        {
+//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
+//            {
+//                // If the button has been clicked
+//                this->isEditing = true;
+//                return;
+//            }
+//        }
+//
+//        this->isEditing = false;
+//    }
+//}
 
 void Unknown::TextBoxComponent::render() const
 {
@@ -322,8 +320,8 @@ void Unknown::TextBoxComponent::render() const
 
 void Unknown::TextBoxComponent::init()
 {
-    registerEventHandler(ET_KEYPRESS, this->name, [this](Event& evnt) {onKeyTyped(evnt);});
-    UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
+//    registerEventHandler(ET_KEYPRESS, this->name, [this](Event& evnt) {onKeyTyped(evnt);});
+//    UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }
 
 Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)

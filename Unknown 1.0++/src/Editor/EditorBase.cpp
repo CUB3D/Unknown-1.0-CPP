@@ -6,7 +6,6 @@
 #include <Unknown.h>
 #include <Entity/Entity.h>
 #include <Loader.h>
-#include <Event/Event.h>
 #include <UI2D.h>
 #include <Imgui/GUI.h>
 
@@ -24,19 +23,19 @@ Unknown::EditorBase::EditorBase(const std::string &under) : Scene(), under(under
 
     //TODO: profiler
 
-    registerEventHandler(ET_MOUSEBUTTON, "editSelect", [this](Event& evt){
-        if(evt.mouse.buttonState == PRESSED) {
-            auto lc = getLastScene();
-            if(!lc)
-                return;
-            for(auto& e : lc->entities) {
-                if(e->getRenderBounds().contains(evt.mouse.location)) {
-                    this->selected = e;
-                    this->entityEditors.emplace_back(e);
-                }
-            }
-        }
-    });
+//    registerEventHandler(ET_MOUSEBUTTON, "editSelect", [this](Event& evt){
+//        if(evt.mouse.buttonState == PRESSED) {
+//            auto lc = getLastScene();
+//            if(!lc)
+//                return;
+//            for(auto& e : lc->entities) {
+//                if(e->getRenderBounds().contains(evt.mouse.location)) {
+//                    this->selected = e;
+//                    this->entityEditors.emplace_back(e);
+//                }
+//            }
+//        }
+//    });
 }
 
 Unknown::EditorBase::~EditorBase() {

@@ -19,8 +19,6 @@ set(UK_ENGINE_INCLUDES
 		src/Entity/ImageRenderComponent.h
 		src/Entity/PhysicsBodyComponent.h
 		src/Entity/TimerComponent.h
-		src/Event/Event.h
-		src/Event/EventManager.h
 		src/Filesystem/FSUtils.h
 		src/Filesystem/File.h
 		src/Filesystem/Filesystem.h
@@ -129,8 +127,6 @@ set(UK_ENGINE_SRC
 		src/Entity/ImageRenderComponent.cpp
 		src/Entity/PhysicsBodyComponent.cpp
 		src/Entity/TimerComponent.cpp
-		src/Event/Event.cpp
-		src/Event/EventManager.cpp
 		src/Filesystem/FSUtils.cpp
 		src/Filesystem/File.cpp
 		src/Filesystem/Filesystem.cpp

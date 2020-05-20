@@ -6,27 +6,21 @@
 
 #include "KeyBind.h"
 #include <rttr/registration.h>
+#include "core/hook/HookRegistry.h"
+#include "core/hook/Event.h"
 
-Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(InputState::RELEASED), name(name), enabled(true) {
-    registerEventHandler(ET_KEYPRESS, name, [&] (Event& evt){this->handle(evt);});
+Unknown::KeyBind::KeyBind(int keycode, const std::string& name) : keycode(keycode), currentState(false), name(name), enabled(true) {
+    HookRegistry<KeyPressEvent>::getInstance().add([&] (KeyPressEvent evt){this->handle(evt);});
 }
 
-Unknown::KeyBind::KeyBind(int keycode, const std::string& name, std::function<void(Event &evt)> event) : KeyBind(keycode, name) {
-    this->callback = std::move(event);
-}
-
-void Unknown::KeyBind::handle(Event& evt) {
-    if(evt.key.SDLCode == this->keycode) {
-        this->currentState = evt.key.keyState;
-
-        if(this->callback) {
-            callback(evt);
-        }
+void Unknown::KeyBind::handle(KeyPressEvent& evt) {
+    if(evt.SDLCode == this->keycode) {
+        this->currentState = evt.pressed;
     }
 }
 
 bool Unknown::KeyBind::pressed() const {
-    return this->currentState == InputState::PRESSED && enabled;
+    return this->currentState;
 }
 
 RTTR_REGISTRATION {

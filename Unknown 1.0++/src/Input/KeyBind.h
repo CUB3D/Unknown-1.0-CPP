@@ -7,24 +7,20 @@
 
 
 #include <string>
+#include <core/hook/Event.h>
 
-#include "Event/EventManager.h"
 
 namespace Unknown {
     class KeyBind {
-    private:
-        std::function<void(Event& evt)> callback;
     public:
         int keycode;
-        InputState currentState;
+        bool currentState;
         std::string name;
         bool enabled;
 
         KeyBind(int keycode, const std::string& name);
 
-        KeyBind(int keycode, const std::string& name, std::function<void(Event& evt)> event);
-
-        void handle(Event& evt);
+        void handle(KeyPressEvent& evt);
 
         bool pressed() const;
     };

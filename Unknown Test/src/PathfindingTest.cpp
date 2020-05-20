@@ -15,10 +15,10 @@ PathfindingTest::PathfindingTest() : Scene() {
 //        }
 //    }
 
-    UK_ADD_MOUSE_LISTENER_EXTERNAL([&](UK::Event& evt) {
-        auto pos = evt.mouse.location;
-//        m(pos.x/M_SCALE, pos.y/M_SCALE) = 0;
-    }, "Test");
+//    UK_ADD_MOUSE_LISTENER_EXTERNAL([&](UK::Event& evt) {
+//        auto pos = evt.mouse.location;
+////        m(pos.x/M_SCALE, pos.y/M_SCALE) = 0;
+//    }, "Test");
 
 //    //------Gen maze------
 //    // Pick rand cell, add walls to list
