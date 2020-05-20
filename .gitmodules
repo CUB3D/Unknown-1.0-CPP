@@ -1,54 +1,54 @@
-[submodule "Libs/lua"]
-	path = Unknown 1.0++/libs/third_party/lua/lua
+[submodule "Engine/libs/third_party/lua/lua"]
+	path = Engine/libs/third_party/lua/lua
 	url = https://github.com/lua/lua/
-[submodule "Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
-	path = Unknown 1.0++/libs/first_party/LibPAK/libPAK
+[submodule "Engine/libs/first_party/LibPAK/libPAK"]
+	path = Engine/libs/first_party/LibPAK/libPAK
 	url = https://github.com/CUB3D/LibPAK
-[submodule "Unknown 1.0++/libs/third_party/Assimp/assimp"]
-	path = Unknown 1.0++/libs/third_party/Assimp/assimp
+[submodule "Engine/libs/third_party/Assimp/assimp"]
+	path = Engine/libs/third_party/Assimp/assimp
 	url = https://github.com/assimp/assimp
-[submodule "Unknown 1.0++/libs/third_party/Box2D/Box2D"]
-	path = Unknown 1.0++/libs/third_party/Box2D/Box2D
+[submodule "Engine/libs/third_party/Box2D/Box2D"]
+	path = Engine/libs/third_party/Box2D/Box2D
 	url = https://github.com/erincatto/Box2D
-[submodule "Unknown 1.0++/libs/third_party/Glm/glm"]
-	path = Unknown 1.0++/libs/third_party/Glm/glm
+[submodule "Engine/libs/third_party/Glm/glm"]
+	path = Engine/libs/third_party/Glm/glm
 	url = https://github.com/g-truc/glm
-[submodule "Unknown 1.0++/libs/third_party/Rapidjson/rapidjson"]
-	path = Unknown 1.0++/libs/third_party/Rapidjson/rapidjson
+[submodule "Engine/libs/third_party/Rapidjson/rapidjson"]
+	path = Engine/libs/third_party/Rapidjson/rapidjson
 	url = https://github.com/Tencent/rapidjson
-[submodule "Unknown 1.0++/libs/third_party/Rttr/rttr"]
-	path = Unknown 1.0++/libs/third_party/Rttr/rttr
+[submodule "Engine/libs/third_party/Rttr/rttr"]
+	path = Engine/libs/third_party/Rttr/rttr
 	url = https://github.com/rttrorg/rttr
-[submodule "Unknown 1.0++/libs/third_party/Litehtml/litehtml"]
-	path = Unknown 1.0++/libs/third_party/Litehtml/litehtml
+[submodule "Engine/libs/third_party/Litehtml/litehtml"]
+	path = Engine/libs/third_party/Litehtml/litehtml
 	url = https://github.com/litehtml/litehtml
-[submodule "Unknown 1.0++/libs/third_party/Tracy/tracy"]
-	path = Unknown 1.0++/libs/third_party/Tracy/tracy
+[submodule "Engine/libs/third_party/Tracy/tracy"]
+	path = Engine/libs/third_party/Tracy/tracy
 	url = https://bitbucket.org/wolfpld/tracy
-[submodule "Libs/LuaBridge"]
-	path = Libs/LuaBridge
+[submodule "Engine/libs/third_party/LuaBridge/LuaBridge"]
+	path = Engine/libs/third_party/LuaBridge/LuaBridge
 	url = https://github.com/vinniefalco/LuaBridge
-[submodule "Unknown 1.0++/libs/third_party/Tiled/tmxlite"]
-	path = Unknown 1.0++/libs/third_party/Tiled/tmxlite
+[submodule "Engine/libs/third_party/Tiled/tmxlite"]
+	path = Engine/libs/third_party/Tiled/tmxlite
 	url = https://github.com/fallahn/tmxlite
-[submodule "Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK"]
-	path = Unknown 1.0++/libs/first_party/LibPAK/Unknown 1.0++/libs/first_party/LibPAK/libPAK
+[submodule "Engine/libs/first_party/LibPAK/libPAK"]
+	path = Engine/libs/first_party/LibPAK/libPAK
 	url = https://github.com/CUB3D/libPAK
-[submodule "Unknown 1.0++/libs/third_party/imgui/imgui"]
-	path = Unknown 1.0++/libs/third_party/imgui/imgui
+[submodule "Engine/libs/third_party/imgui/imgui"]
+	path = Engine/libs/third_party/imgui/imgui
 	url = https://github.com/ocornut/imgui
-[submodule "Unknown 1.0++/libs/third_party/spdlog/spdlog"]
-	path = Unknown 1.0++/libs/third_party/spdlog/spdlog
+[submodule "Engine/libs/third_party/spdlog/spdlog"]
+	path = Engine/libs/third_party/spdlog/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Unknown 1.0++/libs/third_party/Entt/entt"]
-	path = Unknown 1.0++/libs/third_party/Entt/entt
+[submodule "Engine/libs/third_party/Entt/entt"]
+	path = Engine/libs/third_party/Entt/entt
 	url = https://github.com/skypjack/entt
-[submodule "Unknown 1.0++/libs/third_party/SDL_mixer/SDL_mixer"]
-	path = Unknown 1.0++/libs/third_party/SDL_mixer/SDL_mixer
+[submodule "Engine/libs/third_party/SDL_mixer/SDL_mixer"]
+	path = Engine/libs/third_party/SDL_mixer/SDL_mixer
 	url = https://github.com/SDL-mirror/SDL_mixer
-[submodule "Unknown 1.0++/libs/third_party/SDL_image/SDL_image"]
-	path = Unknown 1.0++/libs/third_party/SDL_image/SDL_image
+[submodule "Engine/libs/third_party/SDL_image/SDL_image"]
+	path = Engine/libs/third_party/SDL_image/SDL_image
 	url = https://github.com/SDL-mirror/SDL_image
-[submodule "Unknown 1.0++/libs/third_party/SDL/SDL"]
-	path = Unknown 1.0++/libs/third_party/SDL/SDL
+[submodule "Engine/libs/third_party/SDL/SDL"]
+	path = Engine/libs/third_party/SDL/SDL
 	url = https://github.com/SDL-mirror/SDL
