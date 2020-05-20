@@ -16,11 +16,12 @@ class Camera3D {
     float yaw;
     float pitch;
 
-    float cameraSpeed;
 
     glm::mat4 viewMatrix;
 
 public:
+    float cameraSpeed;
+
     Camera3D();
 
     void updateViewMatrix();

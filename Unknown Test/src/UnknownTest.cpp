@@ -186,11 +186,11 @@ void init()
 
     //UK_ADD_SCENE(std::make_shared<Unknown::MenuScene>("MainMenu", "MainMenuUI.json", font));
 
-//    UK_ADD_SCENE(RenderTestScene, "RTest");
-    UK_ADD_SCENE(RenderTest2D, "R2D");
+    UK_ADD_SCENE(RenderTestScene, "RTest");
+//    UK_ADD_SCENE(RenderTest2D, "R2D");
 //    UK_ADD_SCENE(PhysicsTestScene, "Phys");
 //    UK_ADD_SCENE(BasicGraphicsTest, "BasicGraphics");
-    UK_LOAD_SCENE("R2D");
+    UK_LOAD_SCENE("RTest");
 }
 
 #include "Filesystem/Filesystem.h"

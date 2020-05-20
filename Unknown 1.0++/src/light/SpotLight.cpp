@@ -38,7 +38,7 @@ void SpotLight::toBuffer(float *flt) const {
     flt[i++] = 0;
 
     flt[i++] = cutOff;
-    flt[i++] = 0;
+    flt[i++] = enabled;
     flt[i++] = 0;
     flt[i++] = 0;
 }
@@ -53,6 +53,7 @@ void SpotLight::show_edit(int pos) {
         float ambient[3] = {this->ambient.x, this->ambient.y, this->ambient.z};
         float diffuse[3] = {this->diffuse.x, this->diffuse.y, this->diffuse.z};
         float specular[3] = {this->specular.x, this->specular.y, this->specular.z};
+        bool enabled = this->enabled == 1.0f;
 
         ImGui::Text("Position");
         ImGui::SliderFloat("Pos X", &this->position.x, -1, 1);
@@ -70,9 +71,12 @@ void SpotLight::show_edit(int pos) {
 
         ImGui::SliderFloat("CutOff", &this->cutOff, 0.01, 1);
 
+        ImGui::Checkbox("Enabled", &enabled);
+
         this->ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);
         this->diffuse = glm::vec3(diffuse[0], diffuse[1], diffuse[2]);
         this->specular = glm::vec3(specular[0], specular[1], specular[2]);
+        this->enabled = enabled ? 1.0f : 0.0f;
     }
 
     ImGui::End();

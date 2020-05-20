@@ -27,9 +27,11 @@ public:
 
     float cutOff {0};
 
+    float enabled {0};
+
     void toBuffer(float* flt) const;
 
-    SpotLight(glm::vec3 pos, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float cutoff): direction(pos), ambient(ambient), diffuse(diffuse), specular(specular), cutOff(cutoff) {}
+    SpotLight(glm::vec3 pos, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, float cutoff): direction(pos), ambient(ambient), diffuse(diffuse), specular(specular), cutOff(cutoff), enabled(0) {}
 
     SpotLight() = default;
 

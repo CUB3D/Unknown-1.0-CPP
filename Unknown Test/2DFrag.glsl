@@ -52,13 +52,22 @@ struct DirectionalLight {
 // Spotlights
 struct SpotLight {
     vec3 position;
+    float padding0;
+
     vec3 direction;
+    float padding1;
 
     vec3 ambient;
+    float padding2;
     vec3 diffuse;
+    float padding3;
     vec3 specular;
+    float padding4;
 
     float cutOff;
+    float enabled;
+    float padding6;
+    float padding7;
 };
 
 
@@ -148,6 +157,9 @@ vec3 calculateDirectionalLight(DirectionalLight light) {
 
 // Calculate the part of the light that is caused by a given spotlight
 vec3 calculateSpotLight(SpotLight light) {
+    if(light.enabled == 0.0f) {
+        return vec3(0.0f, 0.0f, 0.0f);
+    }
 
     vec3 diffuseColour = vec3(texture(mat.diffuse, UV));
     // Use specular texture for spcular hilights

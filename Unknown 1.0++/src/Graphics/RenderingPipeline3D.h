@@ -12,26 +12,7 @@
 #include <array>
 #include "RenderingBackend.h"
 #include "SkyBox3D.h"
-
-struct DirectionalLight {
-    glm::vec3 direction;
-
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-};
-
-struct PointLight {
-    glm::vec3 position;
-
-    glm::vec3 ambient;
-    glm::vec3 diffuse;
-    glm::vec3 specular;
-
-    float constant;
-    float linear;
-    float quadratic;
-};
+#include "light/LightingManager2D.h"
 
 
 class MeshRenderer;
@@ -45,7 +26,9 @@ class RenderingPipeline3D
     //std::array<struct PointLight, 10> pointLights;
     //std::array<struct DirectionalLight, 10> directionalLights;
 
-    std::array<float, ((3+3+3+3)*32 + (3+3+3+3+1+1+1)*32 + (3+3+3+3+3+1)*32) * sizeof(float)> lightBuffer;
+//    std::array<float, ((3+3+3+3)*32 + (3+3+3+3+1+1+1)*32 + (3+3+3+3+3+1)*32) * sizeof(float)> lightBuffer;
+
+    LightingManager2D lm;
 
     Shader fboS;
     GLuint fbo;

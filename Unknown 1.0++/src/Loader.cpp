@@ -307,8 +307,10 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
             aiString str(typeStr);
             mat->GetTexture(type, i, &str);
             std::string s = std::string(str.C_Str());
-            UK_INFO("Loading mat texture:", s);
-            vec.push_back(::Unknown::getRendererBackend()->loadTexture(s));
+            auto ss = fmt::format("Assets/model/backpack/backpack/{}", s);
+            UK_INFO("Loading mat texture: {}", ss);
+            vec.push_back(::Unknown::getRendererBackend()->loadTexture(ss));
+
         }
     };
 

@@ -8,9 +8,7 @@
 #include <Entity/EntityPrototype.h>
 #include <Model/MeshContainer.h>
 
-namespace Unknown
-{
-    namespace Loader
+namespace Unknown::Loader
     {
         std::shared_ptr<::Unknown::Entity> loadEntityAt(const std::string &name, double x, double y);
         std::shared_ptr<::Unknown::Entity> loadEntity(const std::string &name);
@@ -22,11 +20,8 @@ namespace Unknown
 
         std::shared_ptr<MeshContainer> loadModel(const std::string& name);
     }
-}
 
 #define UK_LOAD_ENTITY(x) ::Unknown::Loader::loadEntity(x)
 #define UK_LOAD_ENTITY_AT(name, x, y) ::Unknown::Loader::loadEntityAt(name, x, y)
-#define UK_LOAD_ANIMATION(x) ::Unknown::Loader::loadAnimation(x)
-#define UK_LOAD_IMAGE(name) ::Unknown::Loader::loadImage(name)
 
 #endif

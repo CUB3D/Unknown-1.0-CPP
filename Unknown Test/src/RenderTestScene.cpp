@@ -21,7 +21,7 @@
 #include "Loader.h"
 #include <UK.h>
 
-Unknown::Image img("Player.png");
+//Unknown::Image img("Player.png");
 
 RenderingPipeline3D ren;
 
@@ -29,12 +29,12 @@ RenderingPipeline3D ren;
 
 void init___() {
     std::vector<std::string> faces {
-        "skybox/right.jpg.png",
-        "skybox/left.jpg.png",
-        "skybox/top.jpg.png",
-        "skybox/bottom.jpg.png",
-        "skybox/front.jpg.png",
-        "skybox/back.jpg.png"
+        "Assets/skybox/right.jpg",
+        "Assets/skybox/left.jpg",
+        "Assets/skybox/top.jpg",
+        "Assets/skybox/bottom.jpg",
+        "Assets/skybox/front.jpg",
+        "Assets/skybox/back.jpg"
     };
 
     ren.init();
@@ -43,16 +43,9 @@ void init___() {
     ren.skybox->init();
 
     printf("Loading teapot\n");
-    auto meshContainer = ::Unknown::Loader::loadModel("models/teapot.obj");
-//    const char* teapot = "teapot.obj";
-//    const char* ns = "nano/nanosuit.obj";
-//    const char* suz = "Suz.obj";
-//    const char* uv = "uv.obj";
-//    const char* stick = "stick.obj";
-
+    auto meshContainer = ::Unknown::Loader::loadModel("Assets/model/backpack/backpack/backpack.obj");
     printf("Loading vbos\n");
     meshContainer->loadVBO();
-
     printf("mesh loading\n");
     ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(*meshContainer));
 }
@@ -63,7 +56,7 @@ Unknown::KeyBind left2(SDLK_a, "fw");
 Unknown::KeyBind right2(SDLK_d, "fd");
 
 void RenderTestScene::update() {
-    //SDL_SetRelativeMouseMode(SDL_TRUE);
+//    SDL_SetRelativeMouseMode(SDL_TRUE);
 
     if(forward.pressed()) {
         ren.getCamera().forwards();
@@ -85,6 +78,12 @@ void RenderTestScene::update() {
 }
 
 void RenderTestScene::render() const {
+
+    //TODO: no better place to put the debugger
+    if(ImGui::Begin("Camera3D")) {
+        ImGui::SliderFloat("Speed", &ren.getCamera().cameraSpeed, 0.01, 1.0);
+    }
+    ImGui::End();
 
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);

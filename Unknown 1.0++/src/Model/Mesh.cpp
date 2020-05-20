@@ -2,7 +2,6 @@
 // Created by cub3d on 02/10/18.
 //
 
-#include <cstdio>
 #include "Mesh.h"
 
 void Mesh::loadVBO() {
@@ -18,10 +17,10 @@ void Mesh::loadVBO() {
 
     int tmp = 3;
 
-    if(normals.size() > 0)
+    if(!normals.empty())
         tmp += 3;
 
-    if(uvs.size() > 0)
+    if(!uvs.empty())
         tmp += 2;
 
     int SIZE = verticies.size() * (tmp);
@@ -37,14 +36,14 @@ void Mesh::loadVBO() {
         data[x++] = v.y;
         data[x++] = v.z;
 
-        if(normals.size() > 0) {
+        if(!normals.empty()) {
             auto& n = normals[i];
             data[x++] = n.x;
             data[x++] = n.y;
             data[x++] = n.z;
         }
 
-        if(uvs.size() > 0) {
+        if(!uvs.empty()) {
             auto& uv = uvs[i];
             data[x++] = uv.x;
             data[x++] = uv.y;
@@ -61,7 +60,7 @@ void Mesh::loadVBO() {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, 0);
 
-    if(normals.size() > 0) {
+    if(!normals.empty()) {
         // Normals
         glEnableVertexAttribArray(1);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride,
@@ -69,7 +68,7 @@ void Mesh::loadVBO() {
         tmp2 += 3;
     }
 
-    if(uvs.size() > 0) {
+    if(!uvs.empty()) {
         // UV's
         glEnableVertexAttribArray(2);
         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
@@ -86,14 +85,14 @@ void Mesh::render() {
 
     // Diffuse map
     glActiveTexture(GL_TEXTURE0);
-    if(diffuseMaps.size() > 0) {
+    if(!diffuseMaps.empty()) {
         glBindTexture(GL_TEXTURE_2D, (GLuint) diffuseMaps[0].pointer);
     } else {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     glActiveTexture(GL_TEXTURE1);
-    if(specularMaps.size() > 0) {
+    if(!specularMaps.empty()) {
         // Specular map
         glBindTexture(GL_TEXTURE_2D, (GLuint) specularMaps[0].pointer);
     } else {

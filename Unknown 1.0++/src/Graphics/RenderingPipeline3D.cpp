@@ -23,17 +23,21 @@ void RenderingPipeline3D::render() {
 
     s.bind(true);
 
-    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
-    memcpy(glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY), lightBuffer.data(), lightBuffer.size());
-    glUnmapBuffer(GL_UNIFORM_BUFFER);
+//    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
+//    memcpy(glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY), lightBuffer.data(), lightBuffer.size());
+//    glUnmapBuffer(GL_UNIFORM_BUFFER);
+
+    lm.updateLightBuffer();
+    lm.updateBuffer();
 
     GLuint lightBlockIndex = glGetUniformBlockIndex(s.prog, "lighting");
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, lightUBO);
+    lm.bindBuffer(0);
+//    glBindBufferBase(GL_UNIFORM_BUFFER, 0, lightUBO);
     glUniformBlockBinding(s.prog, lightBlockIndex, 0);
 
     // TODO: change to uniform blocks for lights
-
     s.setFloat("mat.diffuse", 0);
+
     s.setFloat("mat.specular", 1);
     s.setFloat("mat.shine", 32.0f);
 
@@ -132,9 +136,9 @@ void RenderingPipeline3D::init() {
     glBindBuffer(GL_RENDERBUFFER, 0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        printf("Invalid framebuffer\n");
+        UK_INFO("Invalid framebuffer");
     } else {
-        printf("Framebuffer valid\n");
+        UK_INFO("Framebuffer valid");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -184,10 +188,12 @@ void RenderingPipeline3D::init() {
 
 
 
-    glGenBuffers(1, &lightUBO);
-    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(lightBuffer), &lightBuffer, GL_DYNAMIC_DRAW);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+//    glGenBuffers(1, &lightUBO);
+//    glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
+//    glBufferData(GL_UNIFORM_BUFFER, sizeof(lightBuffer), &lightBuffer, GL_DYNAMIC_DRAW);
+//    glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+    lm.init();
 
 
 

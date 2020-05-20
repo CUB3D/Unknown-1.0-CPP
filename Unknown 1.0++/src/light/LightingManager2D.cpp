@@ -11,15 +11,19 @@ LightingManager2D::LightingManager2D()  {
         lightBuffer[i] = 0;
     }
 }
+#include "core/log/Log.h"
 
 void LightingManager2D::init() {
+    ZoneScopedN("LM::init");
+    UK_INFO("Init lm");
+
     glGenBuffers(1, &lightUBO);
     glBindBuffer(GL_UNIFORM_BUFFER, lightUBO);
     glBufferData(GL_UNIFORM_BUFFER, LIGHT_BUFFER_SIZE, &lightBuffer[0], GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
-    updateLightBuffer();
-    updateBuffer();
+//    updateLightBuffer();
+//    updateBuffer();
 }
 
 void LightingManager2D::updateBuffer() {
@@ -53,7 +57,20 @@ void LightingManager2D::updateLightBuffer() {
             }
             ImGui::NextColumn();
         }
-        ImGui::NextColumn();
+
+        ImGui::Text("Add lights");
+
+        if(ImGui::Button("Add point light")) {
+            pointLights.push_back(std::make_shared<PointLight>());
+        }
+
+        if(ImGui::Button("Add spot light")) {
+            spotLights.push_back(std::make_shared<SpotLight>());
+        }
+
+        if(ImGui::Button("Add directional light")) {
+            directionalLights.push_back(std::make_shared<DirectionalLight>());
+        }
     }
     ImGui::End();
 }

@@ -12,12 +12,14 @@ void SkyBox3D::render(RenderingPipeline3D& pipeline) {
     ZoneScopedN("SkyBox3D::Render");
     TracyGpuZone("SkyBox3D::Render");
 
+    auto viewMatrix = pipeline.getCamera().getViewMatrix();
+
     glDepthMask(GL_FALSE);
     glDepthFunc(GL_LEQUAL);
     sky.bind(true);
     sky.setFloat("skybox", 0);
     glUniformMatrix4fv(glGetUniformLocation(sky.prog, "proj"), 1, GL_FALSE, &pipeline.projectionMatrix[0][0]);
-    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "view"), 1, GL_FALSE, &glm::mat4(glm::mat3(pipeline.getCamera().getViewMatrix()))[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(sky.prog, "view"), 1, GL_FALSE, &glm::mat4(glm::mat3(viewMatrix))[0][0]);
     glBindVertexArray(vao);
     glBindTexture(GL_TEXTURE_CUBE_MAP, (GLuint)skyboxTexture);
     glDrawArrays(GL_TRIANGLES, 0, 36);
