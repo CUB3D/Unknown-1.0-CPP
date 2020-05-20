@@ -48,15 +48,37 @@ void init___() {
     meshContainer->loadVBO();
     printf("mesh loading\n");
     ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(*meshContainer));
+
+
+    auto mc = std::make_shared<MeshContainer>();
+    auto m = Mesh {};
+    m.verticies.push_back(glm::vec3(0, 0, 0));
+    m.verticies.push_back(glm::vec3(0, 1, 0));
+    m.verticies.push_back(glm::vec3(1, 0, 0));
+
+    m.verticies.push_back(glm::vec3(0, 1, 0));
+    m.verticies.push_back(glm::vec3(1, 1, 0));
+    m.verticies.push_back(glm::vec3(1, 0, 0));
+
+    mc->meshes.push_back(m);
+    ren.meshes.push_back(std::make_shared<TexturedMeshRenderer>(*mc));
 }
 
 Unknown::KeyBind forward(SDLK_w, "fw");
 Unknown::KeyBind back(SDLK_s, "fs");
 Unknown::KeyBind left2(SDLK_a, "fw");
 Unknown::KeyBind right2(SDLK_d, "fd");
+Unknown::KeyBind f1(SDLK_F1, "f1");
+Unknown::KeyBind f2(SDLK_F2, "f2");
 
 void RenderTestScene::update() {
-//    SDL_SetRelativeMouseMode(SDL_TRUE);
+
+    if(f1.pressed()) {
+        ren.getCamera().lockMouse = true;
+    }
+    if(f2.pressed()) {
+        ren.getCamera().lockMouse = false;
+    }
 
     if(forward.pressed()) {
         ren.getCamera().forwards();
@@ -95,3 +117,4 @@ void RenderTestScene::render() const {
 RenderTestScene::RenderTestScene() : Scene() {
     init___();
 }
+

@@ -199,7 +199,7 @@ set(UK_INCLUDE "${UK_CORE}/src")
 
 add_library(UK SHARED ${UK_ENGINE_SRC} ${UK_ENGINE_INCLUDES})
 target_include_directories(UK PUBLIC ${COMBINED_INCLUDE} ${UK_INCLUDE})
-target_link_libraries(UK png_static jpeg SDL2main SDL2-static SDL2_mixer EnTT spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
+target_link_libraries(UK jpeg SDL2main SDL2-static SDL2_mixer SDL2_image EnTT spdlog box2d ImGUI LUASCRIPT TRACY tmxlite assimp glm rttr_core_lib litehtml RapidJSON PAK ${COMBINED_LIBS})
 set_target_properties(UK PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)
 set_target_properties(UK PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Output/UK/lib)

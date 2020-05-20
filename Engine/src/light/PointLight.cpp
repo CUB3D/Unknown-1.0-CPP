@@ -57,9 +57,9 @@ void PointLight::show_edit(int pos) {
         ImGui::ColorEdit3("Ambient", ambient, ImGuiColorEditFlags_RGB);
         ImGui::ColorEdit3("Diffuse", diffuse, ImGuiColorEditFlags_RGB);
         ImGui::ColorEdit3("Specular", specular, ImGuiColorEditFlags_RGB);
-        ImGui::SliderFloat("Linear", &this->linear, 0.1, 1);
-        ImGui::SliderFloat("Constant", &this->constant, 0.1, 1);
-        ImGui::SliderFloat("Quadratic", &this->quadratic, 0.1, 1);
+        ImGui::SliderFloat("Linear", &this->linear, 0.01, 1);
+        ImGui::SliderFloat("Constant", &this->constant, 0.01, 1);
+        ImGui::SliderFloat("Quadratic", &this->quadratic, 0.01, 1);
         ImGui::Checkbox("Enabled", &enabled);
 
         this->ambient = glm::vec3(ambient[0], ambient[1], ambient[2]);

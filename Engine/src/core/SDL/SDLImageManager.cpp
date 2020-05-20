@@ -12,8 +12,10 @@ void SDLImageManager::init() {
             UK_ERROR("SDL failed to initialise PNG loading: {}", IMG_GetError());
     //                quit(ErrorCodes::SDL_WINDOW_PNG_INIT_FAIL);
         }
+
+        UK_INFO("Loaded SDL_image");
     #else
-        UK_INFO("Using emscripten, not initialsing SDL_image\n");
+        UK_INFO("Using emscripten, not initialsing SDL_image");
     #endif
 }
 

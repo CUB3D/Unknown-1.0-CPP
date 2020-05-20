@@ -22,6 +22,8 @@ class Camera3D {
 public:
     float cameraSpeed;
 
+    bool lockMouse {false};
+
     Camera3D();
 
     void updateViewMatrix();

@@ -505,10 +505,14 @@ void Unknown::GLBackend::newFrame() {
 void Unknown::GLBackend::endFrame() {
     ZoneScopedN("GL::endFrame");
     TracyGpuZone("GL::endFrame");
+
+
+//    glEnable(GL_FRAMEBUFFER_SRGB);
     FBO.unbind();
 
     FBOshader.setFloat("fboTexture", 0);
     FBO.render(FBOshader);
+//    glDisable(GL_FRAMEBUFFER_SRGB);
 
     {
         ZoneScopedN("GL::SwapWindow");

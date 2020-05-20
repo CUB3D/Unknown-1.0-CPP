@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include <Tracy.hpp>
 #include <TracyOpenGL.hpp>
+#include "core/log/Log.h"
 
 void SkyBox3D::render(RenderingPipeline3D& pipeline) {
     ZoneScopedN("SkyBox3D::Render");
@@ -99,7 +100,7 @@ GLuint SkyBox3D::loadCubeMap(std::vector<std::string>& faces) {
     glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
     for(int i = 0; i < faces.size(); i++) {
-        printf("Loading %s\n", faces[i].c_str());
+        UK_INFO("Loading {}", faces[i].c_str());
 
         SDL_Surface* imageSurface = IMG_Load(faces[i].c_str());
 

@@ -11,7 +11,13 @@ void Camera3D::onMouseMove() {
     SDL_GetRelativeMouseState(&pos.x, &pos.y);
 
     auto& uk = Unknown::getUnknown();
-//    SDL_WarpMouseInWindow(uk.windowManager.window, uk.screenSize->width / 2, uk.screenSize->height / 2);
+    if(lockMouse) {
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+        SDL_WarpMouseInWindow(uk.windowManager.window, uk.screenSize->width / 2, uk.screenSize->height / 2);
+    } else {
+        SDL_SetRelativeMouseMode(SDL_FALSE);
+    }
+
 
     float xOff = pos.x;
     float yOff = pos.y;

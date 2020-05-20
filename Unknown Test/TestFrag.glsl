@@ -147,9 +147,15 @@ vec3 calculatePointLight(PointLight light) {
 
     // Calc specular
     vec3 viewDir = normalize(viewPos - fragmentPosition);
-    vec3 reflectDir = reflect(-lightDir, norm);
 
-    float specularStrength = pow(max(dot(viewDir, reflectDir), 0.0), mat.shine);
+//     Phong
+//    vec3 reflectDir = reflect(-lightDir, norm);
+//    float specularStrength = pow(max(dot(viewDir, reflectDir), 0.0), mat.shine);
+
+    //Blinn-phong
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float specularStrength = pow(max(dot(normal, halfwayDir), 0.0), 16.0);
+
     vec3 specularLight = specularColour * specularStrength * light.specular;
 
     return ambientLight + diffuse + specularLight;
