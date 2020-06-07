@@ -7,8 +7,8 @@
 #include <Unknown.h>
 
 void Camera3D::onMouseMove() {
-    Unknown::Point<int> pos;
-    SDL_GetRelativeMouseState(&pos.x, &pos.y);
+    int xOff, yOff;
+    SDL_GetRelativeMouseState(&xOff, &yOff);
 
     auto& uk = Unknown::getUnknown();
     if(lockMouse) {
@@ -17,10 +17,6 @@ void Camera3D::onMouseMove() {
     } else {
         SDL_SetRelativeMouseMode(SDL_FALSE);
     }
-
-
-    float xOff = pos.x;
-    float yOff = pos.y;
 
     float sens = 0.05f;
     xOff *= sens;

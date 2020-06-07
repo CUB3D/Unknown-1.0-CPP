@@ -7,32 +7,19 @@
 #include "GLBackend.h"
 #include <Tracy.hpp>
 
-std::shared_ptr<Unknown::RenderingBackend> Unknown::getRendererBackend() {
+Unknown::RenderingBackend& Unknown::getRendererBackend() {
     ZoneScopedN("UK::getRendererBackend");
 
     switch(getUnknown().config.rendererMode) {
         case 0: {
-            static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::GLBackend>();
+            static auto backend = ::Unknown::GLBackend {};
             return backend;
         }
         case 1: {
-            static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::SDLBackend>();
+            static auto backend = ::Unknown::SDLBackend {};
             return backend;
         }
-        default: {
-            printf("Error: Unknown backend\n");
-            return nullptr;
-        }
     }
-//
-//#ifdef __EMSCRIPTEN__
-//    //SDL
-//    static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::GLBackend>();
-//#else
-//    static std::shared_ptr<RenderingBackend> backend = std::make_shared<::Unknown::GLBackend>();
-//#endif
-//
-//    return backend;
 }
 
 Unknown::VertexInfo::VertexInfo() : vao(0), vbo(0), bounds({0, 0, 0, 0}), vertexCount(0) {}

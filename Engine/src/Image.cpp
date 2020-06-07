@@ -10,16 +10,16 @@
 
 
 void Unknown::Image::init() {
-    this->textureInfo = getRendererBackend()->loadTexture(this->filename);
+    this->textureInfo = getRendererBackend().loadTexture(this->filename);
 
     this->imageSize.x = this->textureInfo.width;
     this->imageSize.y = this->textureInfo.height;
 
-    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, this->textureInfo.width, this->textureInfo.height);
+    this->vertexInfo = getRendererBackend().createRectVerticies(0, 0, this->textureInfo.width, this->textureInfo.height);
 }
 
 void Unknown::Image::render(const int x, const int y, const double angle, SDL_Rect* clip) const {
-    getRendererBackend()->renderTexture(x, y, angle, this->textureInfo, this->vertexInfo, this->renderScale);
+    getRendererBackend().renderTexture(x, y, angle, this->textureInfo, this->vertexInfo, this->renderScale);
 }
 
 Unknown::Image::Image(const std::string &filename) : filename(filename), renderScale(1, 1) {
@@ -49,7 +49,7 @@ const Unknown::TextureInfo& Unknown::Image::getTextureInfo() const {
 void Unknown::Image::setDimentions(glm::vec2& dimension) {
     this->imageSize = dimension;
     // TODO: destroy old verticies
-    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.x, dimension.y);
+    this->vertexInfo = getRendererBackend().createRectVerticies(0, 0, dimension.x, dimension.y);
 }
 
 const Unknown::VertexInfo &Unknown::Image::getVertexInfo() const {

@@ -261,7 +261,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
                 }
             }
 
-            comp->location = Point<int>(boundsArray[0], boundsArray[1]);
+            comp->location = glm::vec2(boundsArray[0], boundsArray[1]);
             comp->size = glm::vec2(boundsArray[2], boundsArray[3]);
 
             //std::cout << "W = " << comp->size.x << "; H = " << comp->size.y << std::endl;
@@ -309,7 +309,7 @@ std::shared_ptr<MeshContainer> Unknown::Loader::loadModel(const std::string &nam
             std::string s = std::string(str.C_Str());
             auto ss = fmt::format("Assets/model/backpack/backpack/{}", s);
             UK_INFO("Loading mat texture: {}", ss);
-            vec.push_back(::Unknown::getRendererBackend()->loadTexture(ss));
+            vec.push_back(::Unknown::getRendererBackend().loadTexture(ss));
 
         }
     };

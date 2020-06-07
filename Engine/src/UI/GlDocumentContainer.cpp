@@ -144,9 +144,9 @@ void litehtml::glDocumentContainer::draw_background(litehtml::uint_ptr hdc, cons
 
     if(bg.is_root) {
         auto& ss = Unknown::getUnknown().config.targetSize;
-        Unknown::getRendererBackend()->drawRect(0, 0, ss.x, ss.y, 0,col);
+        Unknown::getRendererBackend().drawRect(0, 0, ss.x, ss.y, 0,col);
     } else {
-        Unknown::getRendererBackend()->drawRect(bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height, 0,col);
+        Unknown::getRendererBackend().drawRect(bg.clip_box.x, bg.clip_box.y, bg.clip_box.width, bg.clip_box.height, 0,col);
     }
     printf("BG\n");
 }

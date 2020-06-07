@@ -41,9 +41,9 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	//TODO: remove
     this->screenSize = glm::vec2(width, height);
 
-	getRendererBackend()->intialise(config);
+	getRendererBackend().intialise(config);
 
-    getRendererBackend()->createContext(windowManager.window);
+    getRendererBackend().createContext(windowManager.window);
 
 
 	this->imageManager.init();
@@ -75,7 +75,7 @@ void Unknown::Unknown::initGameLoop() {
 
     this->currentState = UK_LOOP;
 
-	getGameLoop()->init();
+	mainGameLoop.init();
 }
 
 void Unknown::Unknown::doSingleLoopIttr() {
@@ -113,7 +113,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
         this->unprocessed--;
     }
 
-    getRendererBackend()->newFrame();
+    getRendererBackend().newFrame();
 
     auto renderStartTime = std::chrono::high_resolution_clock::now();
     {
@@ -134,7 +134,7 @@ void Unknown::Unknown::doSingleLoopIttr() {
 
     this->frames++;
 
-    getRendererBackend()->endFrame();
+    getRendererBackend().endFrame();
     FrameMark;
 
     if (fpsCounter.isTickComplete()) {
@@ -200,7 +200,7 @@ void Unknown::Unknown::quit(const int exitCode) {
     this->currentState = UK_QUIT;
 
     // All Images must have been destroyed or this will cause a sigsev
-    getRendererBackend()->quit();
+    getRendererBackend().quit();
 
 	SDL_DestroyWindow(this->windowManager.window);
 

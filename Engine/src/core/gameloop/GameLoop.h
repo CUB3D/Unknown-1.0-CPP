@@ -15,6 +15,8 @@ public:
     virtual void init() = 0;
 };
 
-std::shared_ptr<GameLoop> getGameLoop();
+GameLoop& getGameLoop();
+
+extern GameLoop& mainGameLoop;
 
 #endif //UNKNOWN_GAMELOOP_H

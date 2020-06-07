@@ -12,7 +12,7 @@ namespace Unknown {
     class SceneElementPrototype {
     public:
         std::string name;
-        Point<double> position;
+        glm::vec2 position;
     };
 }
 

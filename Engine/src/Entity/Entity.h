@@ -18,7 +18,7 @@ namespace Unknown {
 
     class Entity : public IRenderable, public IUpdateable, public ITagable {
     public:
-        Point<double> position;
+        glm::vec2 position;
         double angle;
         bool enabled;
         bool queueDissable;

@@ -46,7 +46,7 @@ Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
 }
 
 void Unknown::Entity::setPosition(double x, double y, double angle) {
-    this->position = Point<double>(x, y);
+    this->position = glm::vec2(x, y);
     this->angle = angle;
 
     auto physicsComp = getComponent<PhysicsBodyComponent>();

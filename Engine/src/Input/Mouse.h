@@ -4,7 +4,7 @@
 #include <Types/Point.h>
 
 namespace Unknown {
-	Point<int> getMouseLocation();
+	glm::vec2 getMouseLocation();
 }
 
 #endif

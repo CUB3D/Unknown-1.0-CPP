@@ -116,7 +116,7 @@ void Unknown::UIComponent::init()
     //NOOP
 }
 
-Unknown::UIComponent::UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, glm::vec2 size) : font(font), name(name), location(location), size(size), type(type)
+Unknown::UIComponent::UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, glm::vec2, glm::vec2 size) : font(font), name(name), location(location), size(size), type(type)
 {
 
 }
@@ -324,7 +324,7 @@ void Unknown::TextBoxComponent::init()
 //    UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }
 
-Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, glm::vec2 size) : UIComponent(font, UI_TEXTBOX, name, location, size)
+Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, glm::vec2 location, glm::vec2 size) : UIComponent(font, UI_TEXTBOX, name, location, size)
 {
 }
 

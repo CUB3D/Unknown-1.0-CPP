@@ -31,14 +31,14 @@ namespace Unknown
             std::string name;
             UIComponent_Type type;
             glm::vec2 size;
-            Point<int> location;
+            glm::vec2 location;
             std::shared_ptr<Colour> colour;
             std::string parentName;
             std::string content; // consider moving to a subclass
 
 			UIComponent();
 			UIComponent(const UIComponent_Type type);
-			UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, glm::vec2 size);
+			UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, glm::vec2 location, glm::vec2 size);
 
             virtual void render() const;
             virtual void init();
@@ -82,7 +82,7 @@ namespace Unknown
         bool isNumerical = false;
 
         TextBoxComponent();
-        TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, glm::vec2 size);
+        TextBoxComponent(std::string name, std::shared_ptr<Font> font, glm::vec2 location, glm::vec2 size);
 //        void onKeyTyped(Event& evnt);
 //        void onMouseClick(Event &evnt);
         virtual void render() const override;

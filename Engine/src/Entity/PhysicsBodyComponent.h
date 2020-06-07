@@ -28,7 +28,7 @@ namespace Unknown
         b2Shape::Type bodyShape;
 
 
-        Point<double> maxSpeed;
+        glm::vec2 maxSpeed;
         Vector lastForce;
 
         //public:

@@ -66,7 +66,7 @@ namespace Unknown
         virtual void endFrame() = 0;
     };
 
-    std::shared_ptr<RenderingBackend> getRendererBackend();
+    RenderingBackend& getRendererBackend();
 }
 
 

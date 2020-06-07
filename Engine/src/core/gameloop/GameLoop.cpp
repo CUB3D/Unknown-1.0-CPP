@@ -10,11 +10,14 @@
 #include "PCGameLoop.h"
 #endif
 
-std::shared_ptr<GameLoop> getGameLoop() {
+GameLoop& getGameLoop() {
 #ifdef __EMSCRIPTEN__
-    static auto loop = std::make_shared<EmscriptenGameLoop>();
+    static auto l = EmscriptenGameLoop {};
 #else
-    static auto loop = std::make_shared<PCGameLoop>();
+    static auto l = PCGameLoop {};
 #endif
-    return loop;
+    return l;
 }
+
+
+GameLoop& mainGameLoop = getGameLoop();

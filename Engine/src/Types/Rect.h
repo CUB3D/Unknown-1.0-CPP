@@ -29,12 +29,11 @@ namespace Unknown {
             return !(other.x + other.w < x || other.x > x + w || other.y + other.h < y || other.y > y + h);
         }
 
-        Point<T> center() {
-            return Point<T>(x + w / 2, y + h / 2);
+        glm::vec2 center() {
+            return glm::vec2(x + w / 2.0, y + h / 2.0);
         }
 
-        template<typename R>
-        bool contains(Point<R> t) {
+        bool contains(glm::vec2 t) {
             bool X = t.x > x && t.x < x + w;
             bool Y = t.y > y && t.y < y + h;
 
