@@ -8,7 +8,6 @@
 
 #include <GL/GL.h>
 #include <Utils.h>
-#include <Types/Dimension.h>
 #include "RenderingBackend.h"
 #include "Shader.h"
 
@@ -27,9 +26,9 @@ namespace Unknown
         bool created;
     public:
 
-        Dimension<int> frameSize;
+        glm::vec2 frameSize;
 
-        FrameBuffer(const Dimension<int> frameSize);
+        FrameBuffer(const glm::vec2 frameSize);
 
         void createFBO();
 

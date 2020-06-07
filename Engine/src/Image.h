@@ -7,7 +7,6 @@
 
 #include "GL/GL.h"
 #include "Graphics/RenderingBackend.h"
-#include "Types/Dimension.h"
 
 namespace Unknown
 {
@@ -21,8 +20,8 @@ namespace Unknown
 
 
 	public:
-		::Unknown::Dimension<int> imageSize;
-		Dimension<float> renderScale;
+	    glm::vec2 imageSize;
+		glm::vec2 renderScale;
 
 
 		explicit Image(const std::string& filename);
@@ -30,7 +29,7 @@ namespace Unknown
 
 		virtual const TextureInfo& getTextureInfo() const;
 		virtual const VertexInfo& getVertexInfo() const;
-		virtual void setDimentions(Unknown::Dimension<int>& dimension);
+		virtual void setDimentions(glm::vec2& dimension);
 
 		virtual void init();
 		void render(const int x, const int y, const double angle = 0, SDL_Rect* clip = nullptr) const;

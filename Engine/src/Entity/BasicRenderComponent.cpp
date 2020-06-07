@@ -11,10 +11,10 @@
 void Unknown::BasicRenderComponent::render(const Entity &ent, double Xoffset, double Yoffset) const {
     auto& size = ent.prototype.size;
 
-    UK_DRAW_RECT((ent.position.x - size.width / 2) * renderScale - Xoffset,
-                 (ent.position.y - size.height / 2) * renderScale - Yoffset,
-                 (size.width) * renderScale,
-                 (size.height) * renderScale,
+    UK_DRAW_RECT((ent.position.x - size.x / 2) * renderScale - Xoffset,
+                 (ent.position.y - size.y / 2) * renderScale - Yoffset,
+                 (size.x) * renderScale,
+                 (size.y) * renderScale,
                  glm::degrees(ent.angle), this->col);
 }
 
@@ -47,10 +47,10 @@ Unknown::Rect<int> Unknown::BasicRenderComponent::getRenderBounds(const Entity &
     int Xoffset = 0, Yoffset = 0;
     auto& size = ent.prototype.size;
 
-    return Rect<int>((ent.position.x - size.width / 2) * renderScale - Xoffset,
-        (ent.position.y - size.height / 2) * renderScale - Yoffset,
-        (size.width) * renderScale,
-        (size.height) * renderScale);
+    return Rect<int>((ent.position.x - size.x / 2) * renderScale - Xoffset,
+        (ent.position.y - size.y / 2) * renderScale - Yoffset,
+        (size.x) * renderScale,
+        (size.y) * renderScale);
 }
 
 RTTR_REGISTRATION {

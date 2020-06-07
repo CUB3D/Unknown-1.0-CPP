@@ -12,8 +12,8 @@
 void Unknown::Image::init() {
     this->textureInfo = getRendererBackend()->loadTexture(this->filename);
 
-    this->imageSize.width = this->textureInfo.width;
-    this->imageSize.height = this->textureInfo.height;
+    this->imageSize.x = this->textureInfo.width;
+    this->imageSize.y = this->textureInfo.height;
 
     this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, this->textureInfo.width, this->textureInfo.height);
 }
@@ -46,10 +46,10 @@ const Unknown::TextureInfo& Unknown::Image::getTextureInfo() const {
     return this->textureInfo;
 }
 
-void Unknown::Image::setDimentions(Dimension<int>& dimension) {
+void Unknown::Image::setDimentions(glm::vec2& dimension) {
     this->imageSize = dimension;
     // TODO: destroy old verticies
-    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.width, dimension.height);
+    this->vertexInfo = getRendererBackend()->createRectVerticies(0, 0, dimension.x, dimension.y);
 }
 
 const Unknown::VertexInfo &Unknown::Image::getVertexInfo() const {

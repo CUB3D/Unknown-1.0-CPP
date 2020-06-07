@@ -7,15 +7,14 @@
 
 #include <string>
 #include "rttr/registration"
-
-#include <Types/Dimension.h>
+#include <glm/glm.hpp>
 
 namespace Unknown {
     struct EngineConfig {
 
         EngineConfig();
 
-        Dimension<int> targetSize;
+        glm::vec2 targetSize;
 
         std::string title;
         int targetUPS;

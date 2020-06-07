@@ -39,7 +39,7 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
     TracyGpuContext;
 
     // Setup gl viewport
-    glViewport(0, 0, size->width, size->height);
+    glViewport(0, 0, size.x, size.y);
 
     // Load Imgui
     IMGUI_CHECKVERSION();
@@ -49,7 +49,7 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
     ImGui_ImplOpenGL3_Init("#version 300 es");
 
     auto& io = ImGui::GetIO();
-    io.DisplaySize = ImVec2(size->width, size->height);
+    io.DisplaySize = ImVec2(size.x, size.y);
 
     basicRenderer.compile();
     textureRenderer.compile();
@@ -58,7 +58,7 @@ void Unknown::GLBackend::createContext(SDL_Window* window) {
     circleShader = new FileShader("Circle_vert.glsl", "Circle_frag.glsl");
     circleShader->compile();
 
-    this->projectionMatrix = glm::ortho(0.0f, (float) size->width, (float) size->height, 0.0f, 0.0f, 1.0f);
+    this->projectionMatrix = glm::ortho(0.0f, (float) size.x, (float) size.y, 0.0f, 0.0f, 1.0f);
     this->viewMatrix = glm::mat4(1.0f);
 
     //TODO: use ctrp to get view from camera(2D/3D)
@@ -155,7 +155,7 @@ void Unknown::GLBackend::drawCircle(const int cx, const int cy, const int radius
     circleShader->bind();
     circleShader->setColour("inputColour", colour);
     circleShader->setInt("radius", radius);
-    circleShader->setVec2("centre", cx, uk.config.targetSize.height - cy);
+    circleShader->setVec2("centre", cx, uk.config.targetSize.y - cy);
 
     //TODO:
     VertexInfo info = this->createRectVerticies(0, 0, 1000, 1000);
@@ -334,7 +334,7 @@ Unknown::VertexInfo Unknown::GLBackend::createRectVerticies(const float x, const
 // Most of the time angle is retrieve from physics which works in radians already
 void Unknown::GLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                        const VertexInfo &verticies,
-                                       const Dimension<float> renderSize) {
+                                       const glm::vec2 renderSize) {
     ZoneScopedN("GL::RenderTexture");
     TracyGpuZone("RenderTexture");
     auto& uk = getUnknown();
@@ -346,7 +346,7 @@ void Unknown::GLBackend::renderTexture(const int x, const int y, const double an
     glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(x + centerX, y + centerY, 0.0f));
     model = glm::rotate(model, (float) glm::radians(angle), glm::vec3(0, 0, 1.0f));
     model = glm::translate(model, glm::vec3(-centerX, -centerY, 0.0f));
-    model = glm::scale(model, glm::vec3(renderSize.width, renderSize.height, 1.0));
+    model = glm::scale(model, glm::vec3(renderSize.x, renderSize.y, 1.0));
 
     // Projection * view * model
     glm::mat4 proj = projectionMatrix * viewMatrix * model;

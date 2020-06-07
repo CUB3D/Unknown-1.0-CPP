@@ -7,7 +7,7 @@
 #include <TracyOpenGL.hpp>
 #include "core/log/Log.h"
 
-Unknown::FrameBuffer::FrameBuffer(const Unknown::Dimension<int> frameSize) : frameSize(frameSize) {}
+Unknown::FrameBuffer::FrameBuffer(const glm::vec2 frameSize) : frameSize(frameSize) {}
 
 void Unknown::FrameBuffer::bind() const {
     ZoneScopedN("FBO::bind");
@@ -35,13 +35,13 @@ void Unknown::FrameBuffer::createFBO() {
     glGenTextures(1, &textureBufferID);
 
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, textureBufferID);
-    glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, frameSize.width, frameSize.height, GL_TRUE);
+    glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, samples, GL_RGB, frameSize.x, frameSize.y, GL_TRUE);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, textureBufferID, 0);
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 
     glGenRenderbuffers(1, &rboID);
     glBindRenderbuffer(GL_RENDERBUFFER, rboID);
-    glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH32F_STENCIL8, frameSize.width, frameSize.height);
+    glRenderbufferStorageMultisample(GL_RENDERBUFFER, samples, GL_DEPTH32F_STENCIL8, frameSize.x, frameSize.y);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboID);
     glBindBuffer(GL_RENDERBUFFER, 0);
 
@@ -61,7 +61,7 @@ void Unknown::FrameBuffer::createFBO() {
 
     glGenTextures(1, &texBuffer2);
     glBindTexture(GL_TEXTURE_2D, texBuffer2);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frameSize.width, frameSize.height, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, frameSize.x, frameSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texBuffer2, 0);
@@ -126,7 +126,7 @@ void Unknown::FrameBuffer::render(const Shader& s) const {
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, fboID);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, fbo2ID);
-    glBlitFramebuffer(0, 0, frameSize.width, frameSize.height, 0, 0, frameSize.width, frameSize.height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    glBlitFramebuffer(0, 0, frameSize.x, frameSize.y, 0, 0, frameSize.x, frameSize.y, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

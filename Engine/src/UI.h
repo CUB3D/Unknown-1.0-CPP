@@ -30,7 +30,7 @@ namespace Unknown
 			std::shared_ptr<Font> font;
             std::string name;
             UIComponent_Type type;
-            Dimension<int> size;
+            glm::vec2 size;
             Point<int> location;
             std::shared_ptr<Colour> colour;
             std::string parentName;
@@ -38,7 +38,7 @@ namespace Unknown
 
 			UIComponent();
 			UIComponent(const UIComponent_Type type);
-			UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size);
+			UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, glm::vec2 size);
 
             virtual void render() const;
             virtual void init();
@@ -82,7 +82,7 @@ namespace Unknown
         bool isNumerical = false;
 
         TextBoxComponent();
-        TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size);
+        TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, glm::vec2 size);
 //        void onKeyTyped(Event& evnt);
 //        void onMouseClick(Event &evnt);
         virtual void render() const override;

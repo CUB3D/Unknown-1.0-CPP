@@ -11,8 +11,8 @@ Unknown::FontGlyph::FontGlyph(const char c, TTF_Font *font, const Colour &col) {
     texture = getRendererBackend()->createFontTexture(*font, str, col);
     verts = getRendererBackend()->createRectVerticies(0, 0, texture.width, texture.height);
 
-    this->size.width = this->texture.width;
-    this->size.height = this->texture.height;
+    this->size.x = this->texture.width;
+    this->size.y = this->texture.height;
 }
 
 void Unknown::FontGlyph::drawGlyph(const int x, const int y) const {

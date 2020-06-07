@@ -15,8 +15,8 @@ void Unknown::ImageRenderComponent::render(const Entity &ent, double Xoffset, do
 
     auto& size = ent.prototype.size;
 
-    img.render((ent.position.x - size.width / 2) * renderScale - Xoffset,
-               (ent.position.y - size.height / 2) * renderScale - Yoffset, glm::degrees(ent.angle));
+    img.render((ent.position.x - size.x / 2) * renderScale - Xoffset,
+               (ent.position.y - size.y / 2) * renderScale - Yoffset, glm::degrees(ent.angle));
 }
 
 void Unknown::ImageRenderComponent::populateEditor() {
@@ -35,16 +35,16 @@ Unknown::Rect<int> Unknown::ImageRenderComponent::getRenderBounds(const Entity &
     int Yoffset = 0;
     auto& size = ent.prototype.size;
 
-    return ::Unknown::Rect<int>((ent.position.x - size.width / 2) * renderScale - Xoffset,
-                              (ent.position.y - size.height / 2) * renderScale - Yoffset, img.imageSize.width, img.imageSize.height);
+    return ::Unknown::Rect<int>((ent.position.x - size.x / 2) * renderScale - Xoffset,
+                              (ent.position.y - size.y / 2) * renderScale - Yoffset, img.imageSize.x, img.imageSize.y);
 }
 
 void Unknown::ImageRenderComponent::update(Unknown::Entity &ent) {
     auto& size = ent.prototype.size;
 
-    img.renderScale = Dimension<float>(
-        (float) (renderScale * size.width) / (float) img.imageSize.width,
-        (float) (renderScale * size.height) / (float) img.imageSize.height);
+    img.renderScale = glm::vec2(
+        (float) (renderScale * size.x) / (float) img.imageSize.x,
+        (float) (renderScale * size.y) / (float) img.imageSize.y);
 }
 
 RTTR_REGISTRATION {

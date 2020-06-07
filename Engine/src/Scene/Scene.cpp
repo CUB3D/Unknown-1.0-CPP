@@ -7,7 +7,7 @@
 #include <core/log/Log.h>
 
 Unknown::Scene::Scene() : world(b2Vec2(0, 9.8f)),
-cam(getUnknown().screenSize->width, getUnknown().screenSize->height)
+cam(getUnknown().screenSize.x, getUnknown().screenSize.y)
 {
     world.SetContactListener(&contactManager);
 }

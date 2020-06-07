@@ -65,7 +65,7 @@ void Unknown::PhysicsBodyComponent::onEnable(Scene& scene, std::shared_ptr<Entit
     body->SetTransform(b2Vec2(ent->position.x, ent->position.y), ent->angle);
     body->SetAwake(true);
 
-    this->polygon.SetAsBox(size.width / 2.0, size.height / 2.0);
+    this->polygon.SetAsBox(size.x / 2.0, size.y / 2.0);
     this->circle.m_p.Set(0, 0);
 
 

@@ -212,12 +212,12 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 
                         if(token == "maxX")
                         {
-                            position = parent->location.x + parent->size.width;
+                            position = parent->location.x + parent->size.x;
                         }
 
                         if(token == "maxY")
                         {
-                            position = parent->location.y + parent->size.height;
+                            position = parent->location.y + parent->size.y;
                         }
 
                         if(token == "+")
@@ -262,18 +262,18 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
             }
 
             comp->location = Point<int>(boundsArray[0], boundsArray[1]);
-            comp->size = Dimension<int>(boundsArray[2], boundsArray[3]);
+            comp->size = glm::vec2(boundsArray[2], boundsArray[3]);
 
-            //std::cout << "W = " << comp->size.width << "; H = " << comp->size.height << std::endl;
+            //std::cout << "W = " << comp->size.x << "; H = " << comp->size.y << std::endl;
 
-            if(comp->size.width == -1)
+            if(comp->size.x == -1)
             {
-                comp->size.width = getUnknown().screenSize->width;
+                comp->size.x = getUnknown().screenSize.x;
             }
 
-            if(comp->size.height == -1)
+            if(comp->size.y == -1)
             {
-                comp->size.height = getUnknown().screenSize->height;
+                comp->size.y = getUnknown().screenSize.y;
             }
         }
 
@@ -284,7 +284,7 @@ Unknown::Animation* Unknown::Loader::loadAnimation(const char* name)
 
 	for (auto& comp : container.components)
 	{
-		std::cout << "Component: " << comp->name << ", Bounds (" << comp->location.x << ", " << comp->location.y << ", " << comp->size.width << ", " << comp->size.height << ")" << std::endl;
+		std::cout << "Component: " << comp->name << ", Bounds (" << comp->location.x << ", " << comp->location.y << ", " << comp->size.x << ", " << comp->size.y << ")" << std::endl;
 		//std::cout << "Component: " << comp->name << ", Bounds (" << comp->offsetBounds[0] << ", " << comp.offsetBounds[1] << ", " << comp.offsetBounds[2] << ", " << comp.offsetBounds[3] << ")" << std::endl;
 	}
 

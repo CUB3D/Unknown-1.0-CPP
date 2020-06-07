@@ -106,7 +106,7 @@ Unknown::VertexInfo Unknown::SDLBackend::createRectVerticies(const float x, cons
 
 void Unknown::SDLBackend::renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                         const VertexInfo &verticies,
-                                        const Dimension<float> renderSize) {
+                                        const glm::vec2 renderSize) {
     auto& uk = getUnknown();
     SDL_Rect vert = verticies.bounds;
     vert.x = x;

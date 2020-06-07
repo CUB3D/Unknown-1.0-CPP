@@ -8,7 +8,7 @@
 
 
 void SDLWindowManager::init(int width, int height) {
-    this->screenSize = Unknown::Dimension<int>(width, height);
+    this->screenSize = glm::vec2(width, height);
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         UK_ERROR("SDL failed to initialise: {}", SDL_GetError());

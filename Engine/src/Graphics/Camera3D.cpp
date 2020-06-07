@@ -13,7 +13,7 @@ void Camera3D::onMouseMove() {
     auto& uk = Unknown::getUnknown();
     if(lockMouse) {
         SDL_SetRelativeMouseMode(SDL_TRUE);
-        SDL_WarpMouseInWindow(uk.windowManager.window, uk.screenSize->width / 2, uk.screenSize->height / 2);
+        SDL_WarpMouseInWindow(uk.windowManager.window, uk.screenSize.x / 2, uk.screenSize.y / 2);
     } else {
         SDL_SetRelativeMouseMode(SDL_FALSE);
     }

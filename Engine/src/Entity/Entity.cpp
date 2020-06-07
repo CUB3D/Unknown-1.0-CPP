@@ -42,7 +42,7 @@ Unknown::Rect<int> Unknown::Entity::getRenderBounds() {
         return ii->getRenderBounds(*this);
     }
 
-    return Rect<int>(position.x, position.y, prototype.size.width, prototype.size.height);
+    return Rect<int>(position.x, position.y, prototype.size.x, prototype.size.y);
 }
 
 void Unknown::Entity::setPosition(double x, double y, double angle) {

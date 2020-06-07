@@ -8,8 +8,8 @@ Unknown::StaticText::StaticText(TTFont &font, const std::string &text, const Col
     texture = getRendererBackend()->createFontTexture(*font.font, text.c_str(), col);
     verts = getRendererBackend()->createRectVerticies(0, 0, texture.width, texture.height);
 
-    this->size.width = this->texture.width;
-    this->size.height = this->texture.height;
+    this->size.x = this->texture.width;
+    this->size.y = this->texture.height;
 }
 
 void Unknown::StaticText::render(const int x, const int y) const {

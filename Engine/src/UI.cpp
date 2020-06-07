@@ -116,7 +116,7 @@ void Unknown::UIComponent::init()
     //NOOP
 }
 
-Unknown::UIComponent::UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, Dimension<int> size) : font(font), name(name), location(location), size(size), type(type)
+Unknown::UIComponent::UIComponent(std::shared_ptr<Font> font, const UIComponent_Type type, std::string name, Point<int> location, glm::vec2 size) : font(font), name(name), location(location), size(size), type(type)
 {
 
 }
@@ -130,7 +130,7 @@ Unknown::RectComponent::RectComponent() : UIComponent(UI_RECT)
 
 void Unknown::RectComponent::render() const
 {
-    Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *this->colour);
+    Graphics::drawRect(this->location.x, this->location.y, this->size.x, this->size.y, *this->colour);
 }
 
 // SquareComponent
@@ -142,7 +142,7 @@ Unknown::SquareComponent::SquareComponent() : UIComponent(UI_SQUARE)
 
 void Unknown::SquareComponent::render() const
 {
-	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *this->colour);
+	Graphics::drawRect(this->location.x, this->location.y, this->size.x, this->size.y, *this->colour);
 }
 
 // TextComponent
@@ -194,8 +194,8 @@ Unknown::ButtonComponent::ButtonComponent() : UIComponent(UI_BUTTON)  {}
 //	if(evnt.mouse.SDLButtonCode == SDL_BUTTON_LEFT && evnt.mouse.buttonState == InputState::PRESSED) {
 //	    auto& location = evnt.mouse.location;
 //
-//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width) {
-//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height) {
+//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.x) {
+//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.y) {
 //                // If the button has been clicked
 //                std::shared_ptr<UIEvent> evnt = std::make_shared<UIEvent>();
 //                evnt->componentName = this->name;
@@ -218,19 +218,19 @@ void Unknown::ButtonComponent::render() const
         col = *this->colour;
     }
 
-	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.width)
+	if(mouseX >= this->location.x && mouseX <= this->location.x + this->size.x)
 	{
-		if (mouseY >= this->location.y && mouseY <= this->location.y + this->size.height)
+		if (mouseY >= this->location.y && mouseY <= this->location.y + this->size.y)
 		{
 			col = Colour::darken(col, 40);
 		}
 	}
 
-	Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, col);
+	Graphics::drawRect(this->location.x, this->location.y, this->size.x, this->size.y, col);
 
 	if(this->content.size() > 0)
 	{
-		font->drawString(this->content, this->location.x + (this->size.width / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.height / 2 - font->getStringHeight(this->content) / 2);
+		font->drawString(this->content, this->location.x + (this->size.x / 2) - font->getStringWidth(this->content) / 2, this->location.y + this->size.y / 2 - font->getStringHeight(this->content) / 2);
 	}
 }
 
@@ -284,9 +284,9 @@ Unknown::TextBoxComponent::TextBoxComponent() : UIComponent(UI_TEXTBOX)
 //    if(evnt.mouse.buttonState == InputState::PRESSED)
 //    {
 //        auto& location = evnt.mouse.location;
-//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.width)
+//        if (location.x >= this->location.x && location.x <= this->location.x + this->size.x)
 //        {
-//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.height)
+//            if (location.y >= this->location.y && location.y <= this->location.y + this->size.y)
 //            {
 //                // If the button has been clicked
 //                this->isEditing = true;
@@ -300,7 +300,7 @@ Unknown::TextBoxComponent::TextBoxComponent() : UIComponent(UI_TEXTBOX)
 
 void Unknown::TextBoxComponent::render() const
 {
-    Graphics::drawRect(this->location.x, this->location.y, this->size.width, this->size.height, *this->colour);
+    Graphics::drawRect(this->location.x, this->location.y, this->size.x, this->size.y, *this->colour);
     if(this->content.size() > 0)
     {
         font->drawString(this->content, this->location.x + 2, this->location.y);
@@ -311,7 +311,7 @@ void Unknown::TextBoxComponent::render() const
 
         if((time(NULL) % 1000) % 2 ==0)
         {
-            Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.height - 4, BLACK);
+            Graphics::drawRect(this->location.x + font->getStringWidth(this->content) + 2, this->location.y + 2, 2, this->size.y - 4, BLACK);
         }
     }
 }
@@ -324,7 +324,7 @@ void Unknown::TextBoxComponent::init()
 //    UK_ADD_MOUSE_LISTENER_INTERNAL(this->onMouseClick, this->name);
 }
 
-Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, ::Unknown::Dimension<int> size) : UIComponent(font, UI_TEXTBOX, name, location, size)
+Unknown::TextBoxComponent::TextBoxComponent(std::string name, std::shared_ptr<Font> font, ::Unknown::Point<int> location, glm::vec2 size) : UIComponent(font, UI_TEXTBOX, name, location, size)
 {
 }
 

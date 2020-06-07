@@ -39,7 +39,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	windowManager.init(width, height);
 
 	//TODO: remove
-    this->screenSize = std::make_shared<Dimension<int>>(width, height);
+    this->screenSize = glm::vec2(width, height);
 
 	getRendererBackend()->intialise(config);
 
@@ -66,7 +66,7 @@ void Unknown::Unknown::createWindow()
     UK_INFO("Starting engine init");
 	this->config = SettingsParser::parseSettings<EngineConfig>("Config.json");
 
-	createWindow(config.title.c_str(), config.targetSize.width, config.targetSize.height, config.targetUPS);
+	createWindow(config.title.c_str(), config.targetSize.x, config.targetSize.y, config.targetUPS);
 }
 
 
@@ -182,11 +182,11 @@ void Unknown::Unknown::checkEvents() {
 
 		if(eventType == SDL_WINDOWEVENT) {
             if (evnt.window.event == SDL_WINDOWEVENT_RESIZED) {
-                this->screenSize = std::make_shared<Dimension<int>>(evnt.window.data1, evnt.window.data2);
+                this->screenSize = glm::vec2(evnt.window.data1, evnt.window.data2);
 
                 auto evt = ResizeEvent {
-                        this->screenSize->width,
-                        this->screenSize->height
+                        (int) this->screenSize.x,
+                        (int) this->screenSize.y
                 };
                 HookRegistry<ResizeEvent>::getInstance().invoke(evt);
             }

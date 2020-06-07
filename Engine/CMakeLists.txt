@@ -66,7 +66,6 @@ set(UK_ENGINE_INCLUDES
 		src/Singleton.h
 		src/Timer.h
 		src/Types/Colour.h
-		src/Types/Dimension.h
 		src/Types/Direction.h
 		src/Types/Point.h
 		src/Types/Rect.h
@@ -163,7 +162,6 @@ set(UK_ENGINE_SRC
 		src/Scene/SceneManager.cpp
 		src/Settings/SettingsParser.cpp
 		src/Types/Colour.cpp
-		src/Types/Dimension.cpp
 		src/Types/Direction.cpp
 		src/Types/Point.cpp
 		src/Types/Rect.cpp

@@ -14,7 +14,7 @@ namespace Unknown {
     public:
         TextureInfo texture;
         VertexInfo verts;
-        Dimension<int> size;
+        glm::vec2 size;
 
         StaticText(TTFont &font, const std::string &text, const Colour &col);
 

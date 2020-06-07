@@ -5,11 +5,11 @@
 #ifndef UNKNOWN_SDLWINDOWMANAGER_H
 #define UNKNOWN_SDLWINDOWMANAGER_H
 
-#include "Types/Dimension.h"
+#include <glm/glm.hpp>
 
 class SDLWindowManager {
 public:
-    Unknown::Dimension<int> screenSize;
+    glm::vec2 screenSize;
     SDL_Window* window;
     SDL_Renderer* windowRenderer;
 

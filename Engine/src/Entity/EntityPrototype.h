@@ -5,11 +5,11 @@
 #ifndef UNKNOWN_ENTITYPROTOTYPE_H
 #define UNKNOWN_ENTITYPROTOTYPE_H
 
-#include "Types/Dimension.h"
 #include <string>
 #include <vector>
 #include <memory>
 #include "BasePrototype.h"
+#include <glm/glm.hpp>
 
 namespace Unknown {
     class Component;
@@ -18,7 +18,7 @@ namespace Unknown {
     class EntityPrototype {
     public:
         std::string tag;
-        Dimension<double> size;
+        glm::vec2 size;
 
         std::vector<std::shared_ptr<Component>> components;
 

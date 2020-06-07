@@ -56,7 +56,7 @@ namespace Unknown
 	public:
 	    EngineConfig config;
 
-		std::shared_ptr<Dimension<int>> screenSize;
+		glm::vec2 screenSize;
 		::Unknown::SceneManager globalSceneManager;
 		EngineState currentState = UK_PRE_INIT;
 

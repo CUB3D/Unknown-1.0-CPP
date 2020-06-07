@@ -19,7 +19,7 @@ namespace Unknown {
         TextureInfo texture;
         VertexInfo verts;
 
-        Dimension<int> size;
+        glm::vec2 size;
 
         FontGlyph(const char c, TTF_Font *font, const Colour &col);
 

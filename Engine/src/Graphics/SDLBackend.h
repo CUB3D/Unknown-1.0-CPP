@@ -29,7 +29,7 @@ namespace Unknown
         virtual VertexInfo createRectVerticies(const float x, const float y, const float w, const float h) override;
         virtual void renderTexture(const int x, const int y, const double angle, const TextureInfo &texture,
                                    const VertexInfo &verticies,
-                                   const Dimension<float> renderSize) override;
+                                   const glm::vec2 renderSize) override;
 
         virtual void clearScreen() override;
 
