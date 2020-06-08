@@ -6,7 +6,7 @@
 #define PROJECT_SCENEPROTOTYPE_H
 
 #include <string>
-#include <Types/Point.h>
+#include <glm/glm.hpp>
 
 namespace Unknown {
     class SceneElementPrototype {

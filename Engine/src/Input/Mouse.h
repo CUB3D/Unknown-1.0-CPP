@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include <Types/Point.h>
+#include <glm/glm.hpp>
 
 namespace Unknown {
 	glm::vec2 getMouseLocation();

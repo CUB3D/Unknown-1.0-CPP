@@ -68,7 +68,7 @@ void render() {
 
     ImGui::Text("Pre tex %d", glGetError());
     std::string _ = "Player.png";
-    static Unknown::TextureInfo t = Unknown::getRendererBackend()->loadTexture(_);
+    static Unknown::TextureInfo t = Unknown::getRendererBackend().loadTexture(_);
 
     ImGui::Text("Post tex %d", glGetError());
 
@@ -188,9 +188,9 @@ void init()
 
     UK_ADD_SCENE(RenderTestScene, "RTest");
 //    UK_ADD_SCENE(RenderTest2D, "R2D");
-//    UK_ADD_SCENE(PhysicsTestScene, "Phys");
+    UK_ADD_SCENE(PhysicsTestScene, "Phys");
 //    UK_ADD_SCENE(BasicGraphicsTest, "BasicGraphics");
-    UK_LOAD_SCENE("RTest");
+    UK_LOAD_SCENE("Phys");
 }
 
 #include "Filesystem/Filesystem.h"

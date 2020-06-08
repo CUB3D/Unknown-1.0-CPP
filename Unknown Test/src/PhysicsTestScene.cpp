@@ -6,6 +6,7 @@
 #include <scripting/SharedVariable.h>
 #include <core/log/Log.h>
 #include <Font/TTFont.h>
+#include <Entity/BasicRenderComponent.h>
 #include "PhysicsTestScene.h"
 #include "UI2D.h"
 #include "Input/KeyBind.h"
@@ -58,13 +59,37 @@ PhysicsTestScene::PhysicsTestScene() : Scene() {
 //
 //    this->addObject(std::shared_ptr<UIContainer>(&ui, [](auto... dummy){}));
 //
-    this->addObject(UK_LOAD_ENTITY("Ground.json"));
+    this->addObject(UK_LOAD_ENTITY("entities/Ground.json"));
     getObject<Entity>("Ground")->setPosition(17, 28);
 
-    this->addObject(UK_LOAD_ENTITY_AT("OtherPlayerEntity.json", 5, 3));
-    this->addObject(UK_LOAD_ENTITY_AT("PlayerEntity.json", 16, 3));
+   // this->addObject(UK_LOAD_ENTITY_AT("entities/OtherPlayerEntity.json", 5, 3));
+//    this->addObject(UK_LOAD_ENTITY_AT("entities/PlayerEntity.json", 16, 3));
 
-    this->addObject(UK_LOAD_ENTITY("Obstacle.json"));
+    auto playerProto = EntityPrototype {};
+    playerProto.tag = "Player";
+    playerProto.size = glm::vec2(2, 2);
+
+    auto physComp = std::make_shared<PhysicsBodyComponent>();
+    physComp->maxSpeed = glm::vec2(10, 10);
+    physComp->fixtureDefinition.filter.groupIndex = -1;
+    physComp->bodyDefinition.type = b2_dynamicBody;
+    physComp->bodyDefinition.fixedRotation = true;
+    playerProto.components.push_back(physComp);
+
+    auto bren = std::make_shared<BasicRenderComponent>(Colour(255, 0, 0));
+    playerProto.components.push_back(bren);
+
+    auto player = std::make_shared<Entity>(playerProto);
+    player->position = glm::vec2(16, 3);
+    this->addObject(player);
+
+    playerProto.tag = "OtherPlayer";
+    auto op = std::make_shared<Entity>(playerProto);
+    op->position = glm::vec2(16, 3);
+    this->addObject(op);
+
+
+    this->addObject(UK_LOAD_ENTITY("entities/Obstacle.json"));
     getObject<Entity>("Obstacle")->setPosition(15, 18);
 
 

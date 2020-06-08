@@ -46,9 +46,9 @@ void Unknown::FrameBuffer::createFBO() {
     glBindBuffer(GL_RENDERBUFFER, 0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        UK_INFO("Invalid framebuffer\n");
+        UK_INFO("Invalid framebuffer");
     } else {
-        UK_INFO("Framebuffer valid\n");
+        UK_INFO("Framebuffer valid");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -68,9 +68,9 @@ void Unknown::FrameBuffer::createFBO() {
     glBindTexture(GL_TEXTURE_2D, 0);
 
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        UK_INFO("Invalid framebuffer2\n");
+        UK_INFO("Invalid framebuffer2");
     } else {
-        UK_INFO("Framebuffer2 valid\n");
+        UK_INFO("Framebuffer2 valid");
     }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);

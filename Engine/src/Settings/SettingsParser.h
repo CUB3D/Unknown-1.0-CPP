@@ -44,7 +44,7 @@ namespace Unknown {
 
 
         static void parseProperty(rttr::type& propertyType, const rttr::property& property, rttr::variant& propertyParentObject, const rapidjson::Value& value) {
-            //printf("Parsing property %s from %s\n", property.get_name().to_string().c_str(), value.GetString());
+            UK_INFO("Parsing property {} from {}", property.get_name().to_string().c_str(), value.GetString());
 
             if (propertyType == rttr::type::get<int>()) {
                 bool status = property.set_value(propertyParentObject, value.GetInt());
@@ -61,8 +61,12 @@ namespace Unknown {
             } else if(propertyType == rttr::type::get<::Unknown::Image>()) {
                 property.set_value(propertyParentObject, ::Unknown::Image(std::string(value.GetString())));
             } else if(propertyType.is_enumeration()) {
+                UK_INFO("Loading enum");
                 auto enumName = std::string(value.GetString());
-                property.set_value(propertyParentObject, propertyType.get_enumeration().name_to_value(enumName));
+                UK_INFO("Get val");
+                auto val = propertyType.get_enumeration().name_to_value(enumName);
+                UK_INFO("St val to {}", val.to_string());
+                property.set_value(propertyParentObject, val);
             } else if(propertyType.is_sequential_container()) {
                 auto propertyValue = property.get_value(propertyParentObject);
                 auto view = propertyValue.create_sequential_view();

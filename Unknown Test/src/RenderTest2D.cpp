@@ -53,9 +53,9 @@ public:
     Unknown::TextureInfo specularMap;
 
     Renderable2D(std::string textureName, std::string specularMapName) {
-        texture = Unknown::getRendererBackend()->loadTexture(textureName);
-        specularMap = Unknown::getRendererBackend()->loadTexture(specularMapName);
-        verticies = Unknown::getRendererBackend()->createRectVerticies(0, 0, 1, 1);
+        texture = Unknown::getRendererBackend().loadTexture(textureName);
+        specularMap = Unknown::getRendererBackend().loadTexture(specularMapName);
+        verticies = Unknown::getRendererBackend().createRectVerticies(0, 0, 1, 1);
     }
 
     void render() {

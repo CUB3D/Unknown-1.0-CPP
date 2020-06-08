@@ -59,13 +59,13 @@ void Unknown::Scene::reset() {
     this->entities.clear();
     this->contactManager.reset();
 
-    printf("%d\n", world.IsLocked());
+    UK_INFO("World locked? {}", world.IsLocked());
 
-    for(auto b = world.GetBodyList(); b;) {// b->GetNext()) {
-        auto n = b->GetNext();
-        world.DestroyBody(b);
-        b = n;
-    }
+//    for(auto b = world.GetBodyList(); b;) {// b->GetNext()) {
+//        auto n = b->GetNext();
+//        world.DestroyBody(b);
+//        b = n;
+//    }
 
 
     //TODO: reset camera, sometimes crashes

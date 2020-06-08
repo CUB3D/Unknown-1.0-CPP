@@ -67,7 +67,6 @@ set(UK_ENGINE_INCLUDES
 		src/Timer.h
 		src/Types/Colour.h
 		src/Types/Direction.h
-		src/Types/Point.h
 		src/Types/Rect.h
 		src/Types/Vector.h
 		src/UI.h
@@ -163,7 +162,6 @@ set(UK_ENGINE_SRC
 		src/Settings/SettingsParser.cpp
 		src/Types/Colour.cpp
 		src/Types/Direction.cpp
-		src/Types/Point.cpp
 		src/Types/Rect.cpp
 		src/Types/Vector.cpp
 		src/UI/GlDocumentContainer.cpp

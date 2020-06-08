@@ -31,7 +31,7 @@ Unknown::Loader::loadEntityAt(const std::string &name, double x, double y) {
 //TODO: rename to loadentityproto
 std::shared_ptr<Unknown::Entity> Unknown::Loader::loadEntity(const std::string &name)
 {
-    UK_INFO("Load Entity:", name);
+    UK_INFO("Load Entity: {}", name);
     //TODO: Scene graph loader
     //TODO: remove massive comment
     //TODO: find way to handle the string->enum conversion (for bodydef) (wonder if rttr handles enums)
@@ -385,11 +385,12 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
 
     if(componentList != document.MemberEnd()) {
         for(auto& comp : componentList->value.GetObject()) {
+            UK_INFO("loading component: {}", comp.name.GetString());
             // Create instance of the component
             auto componentType = rttr::type::get_by_name(std::string(comp.name.GetString()));
 
             if(!componentType.is_valid()) {
-                UK_ERROR("Invalid type", comp.name.GetString(), "for entity", name);
+                UK_ERROR("Invalid type {} for entity {}", comp.name.GetString(), name);
                 continue;
             }
 
@@ -403,6 +404,7 @@ Unknown::EntityPrototype Unknown::Loader::loadEntityPrototype(const std::string 
                     SettingsParser::parseProperty(type, property, componentInstance, (*jsonProperty).value);
                 }
             }
+
 
 
 //            for(auto& jsonProperty : comp.value.GetObject()) {

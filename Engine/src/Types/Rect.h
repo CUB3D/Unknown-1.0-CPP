@@ -5,8 +5,7 @@
 #ifndef UNKNOWN_RECT_H
 #define UNKNOWN_RECT_H
 
-#include "Point.h"
-
+#include <glm/glm.hpp>
 
 namespace Unknown {
     template<typename T>

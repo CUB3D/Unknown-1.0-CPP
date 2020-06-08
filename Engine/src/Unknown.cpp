@@ -34,7 +34,7 @@ void Unknown::Unknown::createWindow(const char* title, const int width, const in
 	ZoneScopedN("UK::CreateWindow");
 	this->currentState = UK_INIT;
 
-	UK_INFO("Creating window\n");
+	UK_INFO("Creating window");
 
 	windowManager.init(width, height);
 

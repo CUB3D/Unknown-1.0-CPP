@@ -9,7 +9,7 @@
 #include <IUpdateable.h>
 #include <vector>
 #include <ITagable.h>
-#include <Types/Point.h>
+#include <glm/glm.hpp>
 #include "EntityPrototype.h"
 #include <memory>
 
